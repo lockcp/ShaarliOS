@@ -1,0 +1,59 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_8_0
+#warning "This project uses features only available in iOS SDK 8.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+
+
+#ifndef DEBUG
+#error explicitly define - either 0 or 1
+#endif
+
+#if DEBUG
+#define RELEASE_VERSION 0
+// #define MRLogD(fmt, ...)      NSLog(fmt, __VA_ARGS__)
+#define MRLogD(fmt, ...)      NSLog(@"#%d %s " fmt, __LINE__, __FUNCTION__, __VA_ARGS__)
+#define MRLogTStart()         const NSTimeInterval debug_timer_start = [[NSProcessInfo processInfo] systemUptime]
+#define MRLogT(s, ... )       MRLogD(@"dt=%f " s, ([[NSProcessInfo processInfo] systemUptime] - debug_timer_start), __VA_ARGS__)
+#else
+#define RELEASE_VERSION 1
+#define MRLogD( s, ... )
+#define MRLogTStart()
+#define MRLogT(s, ... )
+#endif
+
+#define MRLogW(fmt, ...)       NSLog(@"WARN  #%d %s " fmt, __LINE__, __FUNCTION__, __VA_ARGS__)
+#define MRLogE(fmt, ...)       NSLog(@"ERROR #%d %s " fmt, __LINE__, __FUNCTION__, __VA_ARGS__)
+
+// Switch NSAssert checks on and off according to DEBUG_MODE
+#if DEBUG
+#ifdef NS_BLOCK_ASSERTIONS
+#error Don't define -DNS_BLOCK_ASSERTIONS=0 in Project Settings->GCC 4.2 Language->Other C Flags
+#endif
+#else
+// we can either
+// - set the macro here
+#define NS_BLOCK_ASSERTIONS 1
+// - or just check the NS_BLOCK_ASSERTIONS setting (must be done in build settings then)
+#ifndef NS_BLOCK_ASSERTIONS
+#error Define -DNS_BLOCK_ASSERTIONS=1 in Project Settings->GCC 4.2 Language->Other C Flags
+#endif
+#if !NS_BLOCK_ASSERTIONS
+#error Define -DNS_BLOCK_ASSERTIONS=1 in Project Settings->GCC 4.2 Language->Other C Flags
+#endif
+#endif
+
+#define SHAARLI_COMPANION_APP_URL @"http://app.mro.name/shaarlicompanion"
+
+#endif
+

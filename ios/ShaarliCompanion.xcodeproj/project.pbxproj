@@ -10,6 +10,15 @@
 		1601E3DB1AB9E68700D3E27D /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareViewController.m */; };
 		1601E3DD1AB9E68700D3E27D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */; };
 		1601E3E01AB9E68700D3E27D /* Share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1601E3D51AB9E68700D3E27D /* Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1601E3F11AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */; };
+		1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */; };
+		1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */; };
+		1601E3F81AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */; };
+		1601E3F91AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */; };
+		1601E3FA1AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */; };
+		1601E3FB1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */; };
+		1601E3FC1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */; };
+		1601E3FD1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */; };
 		16E0A7911AB9E2280085B2C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7901AB9E2280085B2C0 /* main.m */; };
 		16E0A7941AB9E2280085B2C0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7931AB9E2280085B2C0 /* AppDelegate.m */; };
 		16E0A7971AB9E2280085B2C0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7961AB9E2280085B2C0 /* ViewController.m */; };
@@ -59,6 +68,13 @@
 		1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		1601E3ED1AB9EC7800D3E27D /* ShaarliCompanion-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShaarliCompanion-Prefix.pch"; sourceTree = "<group>"; };
+		1601E3EF1AB9ED3B00D3E27D /* NSBundle+MroSemVer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+MroSemVer.h"; sourceTree = "<group>"; };
+		1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+MroSemVer.m"; sourceTree = "<group>"; };
+		1601E3F41AB9ED4600D3E27D /* NSObject+KVOSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KVOSO.h"; sourceTree = "<group>"; };
+		1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KVOSO.m"; sourceTree = "<group>"; };
+		1601E3F61AB9ED4600D3E27D /* SOKeyValueObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOKeyValueObserver.h; sourceTree = "<group>"; };
+		1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOKeyValueObserver.m; sourceTree = "<group>"; };
 		16E0A78B1AB9E2280085B2C0 /* ShaarliCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A78F1AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E0A7901AB9E2280085B2C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -118,6 +134,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		1601E3EE1AB9ED1700D3E27D /* infra */ = {
+			isa = PBXGroup;
+			children = (
+				1601E3EF1AB9ED3B00D3E27D /* NSBundle+MroSemVer.h */,
+				1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */,
+				1601E3F41AB9ED4600D3E27D /* NSObject+KVOSO.h */,
+				1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */,
+				1601E3F61AB9ED4600D3E27D /* SOKeyValueObserver.h */,
+				1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */,
+			);
+			path = infra;
+			sourceTree = "<group>";
+		};
 		16E0A7821AB9E2280085B2C0 = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +173,7 @@
 		16E0A78D1AB9E2280085B2C0 /* ShaarliCompanion */ = {
 			isa = PBXGroup;
 			children = (
+				1601E3EE1AB9ED1700D3E27D /* infra */,
 				16E0A7921AB9E2280085B2C0 /* AppDelegate.h */,
 				16E0A7931AB9E2280085B2C0 /* AppDelegate.m */,
 				16E0A7951AB9E2280085B2C0 /* ViewController.h */,
@@ -161,6 +191,7 @@
 			children = (
 				16E0A78F1AB9E2280085B2C0 /* Info.plist */,
 				16E0A7901AB9E2280085B2C0 /* main.m */,
+				1601E3ED1AB9EC7800D3E27D /* ShaarliCompanion-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -316,6 +347,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1601E3DB1AB9E68700D3E27D /* ShareViewController.m in Sources */,
+				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				1601E3FA1AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
+				1601E3FD1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,8 +358,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				16E0A7971AB9E2280085B2C0 /* ViewController.m in Sources */,
+				1601E3FB1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
+				1601E3F11AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
 				16E0A7941AB9E2280085B2C0 /* AppDelegate.m in Sources */,
 				16E0A7911AB9E2280085B2C0 /* main.m in Sources */,
+				1601E3F81AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +371,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				16E0A7AB1AB9E2280085B2C0 /* ShaarliCompanionTests.m in Sources */,
+				1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				1601E3F91AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
+				1601E3FC1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +421,6 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -393,7 +432,6 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -424,6 +462,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "ShaarliCompanion/ShaarliCompanion-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -464,6 +503,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREFIX_HEADER = "ShaarliCompanion/ShaarliCompanion-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
