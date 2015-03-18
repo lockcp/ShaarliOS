@@ -1,9 +1,9 @@
 //
-//  ShaarliCompanionTests.m
-//  ShaarliCompanionTests
+// ShaarliCompanionTests.m
+// ShaarliCompanionTests
 //
-//  Created by Marcus Rohrmoser on 18.03.15.
-//  Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
+// Created by Marcus Rohrmoser on 18.03.15.
+// Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -15,26 +15,35 @@
 
 @implementation ShaarliCompanionTests
 
-- (void)setUp {
+-(void)setUp
+{
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
-- (void)tearDown {
+
+-(void)tearDown
+{
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExample {
+
+-(void)testExample
+{
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
 }
 
-- (void)testPerformanceExample {
+
+-(void)testPerformanceExample
+{
     // This is an example of a performance test case.
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+         // Put the code you want to measure the time of here.
+     }
+    ];
 }
+
 
 @end
