@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1601E3DB1AB9E68700D3E27D /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareViewController.m */; };
+		1601E3DB1AB9E68700D3E27D /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
 		1601E3DD1AB9E68700D3E27D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */; };
 		1601E3E01AB9E68700D3E27D /* Share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1601E3D51AB9E68700D3E27D /* Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1601E3F11AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */; };
@@ -19,9 +19,32 @@
 		1601E3FB1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */; };
 		1601E3FC1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */; };
 		1601E3FD1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */; };
+		1601E4001ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */; };
+		1601E4011ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */; };
+		1601E4021ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */; };
+		161C4B4B1B5BFD39002B177F /* testdata in Resources */ = {isa = PBXBuildFile; fileRef = 161C4B4A1B5BFD39002B177F /* testdata */; };
+		161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */; };
+		1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
+		1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
+		1621DDD31B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
+		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
+		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
+		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
+		165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
+		165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
+		165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
+		16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
+		16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
+		16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
+		16D18FAD1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA31B5B023D005173C6 /* PDKeychainBindingsController.m */; };
+		16D18FAE1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA31B5B023D005173C6 /* PDKeychainBindingsController.m */; };
+		16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA31B5B023D005173C6 /* PDKeychainBindingsController.m */; };
+		16D18FB91B5B02EC005173C6 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 16D18F9F1B5B023D005173C6 /* LICENSE */; };
+		16D18FBA1B5B02EC005173C6 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 16D18F9F1B5B023D005173C6 /* LICENSE */; };
+		16D18FBB1B5B02ED005173C6 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 16D18F9F1B5B023D005173C6 /* LICENSE */; };
 		16E0A7911AB9E2280085B2C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7901AB9E2280085B2C0 /* main.m */; };
 		16E0A7941AB9E2280085B2C0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7931AB9E2280085B2C0 /* AppDelegate.m */; };
-		16E0A7971AB9E2280085B2C0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7961AB9E2280085B2C0 /* ViewController.m */; };
+		16E0A7971AB9E2280085B2C0 /* MainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E0A7961AB9E2280085B2C0 /* MainVC.m */; };
 		16E0A79A1AB9E2280085B2C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16E0A7981AB9E2280085B2C0 /* Main.storyboard */; };
 		16E0A79C1AB9E2280085B2C0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16E0A79B1AB9E2280085B2C0 /* Images.xcassets */; };
 		16E0A79F1AB9E2280085B2C0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16E0A79D1AB9E2280085B2C0 /* LaunchScreen.xib */; };
@@ -62,8 +85,8 @@
 /* Begin PBXFileReference section */
 		1601E3D51AB9E68700D3E27D /* Share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1601E3D81AB9E68700D3E27D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1601E3D91AB9E68700D3E27D /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
-		1601E3DA1AB9E68700D3E27D /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		1601E3D91AB9E68700D3E27D /* ShareVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareVC.h; sourceTree = "<group>"; };
+		1601E3DA1AB9E68700D3E27D /* ShareVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareVC.m; sourceTree = "<group>"; };
 		1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -75,13 +98,30 @@
 		1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KVOSO.m"; sourceTree = "<group>"; };
 		1601E3F61AB9ED4600D3E27D /* SOKeyValueObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOKeyValueObserver.h; sourceTree = "<group>"; };
 		1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOKeyValueObserver.m; sourceTree = "<group>"; };
+		1601E3FE1ABA030F00D3E27D /* NSUserDefaults+Share.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+Share.h"; sourceTree = "<group>"; };
+		1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+Share.m"; sourceTree = "<group>"; };
+		161C4B4A1B5BFD39002B177F /* testdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testdata; sourceTree = "<group>"; };
+		161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliMTest.m; sourceTree = "<group>"; };
+		1621DDCF1B6164EC00238503 /* SettingsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsVC.h; sourceTree = "<group>"; };
+		1621DDD01B6164EC00238503 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsVC.m; sourceTree = "<group>"; };
+		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliM.h; sourceTree = "<group>"; };
+		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliM.m; sourceTree = "<group>"; };
+		16D18F9F1B5B023D005173C6 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		16D18FA01B5B023D005173C6 /* PDKeychainBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDKeychainBindings.h; sourceTree = "<group>"; };
+		16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDKeychainBindings.m; sourceTree = "<group>"; };
+		16D18FA21B5B023D005173C6 /* PDKeychainBindingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDKeychainBindingsController.h; sourceTree = "<group>"; };
+		16D18FA31B5B023D005173C6 /* PDKeychainBindingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDKeychainBindingsController.m; sourceTree = "<group>"; };
+		16D18FA41B5B023D005173C6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		16D18FA51B5B023D005173C6 /* update.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sh; sourceTree = "<group>"; };
+		16D18FA61B5B023D005173C6 /* version.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.log; sourceTree = "<group>"; };
 		16E0A78B1AB9E2280085B2C0 /* ShaarliCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A78F1AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E0A7901AB9E2280085B2C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16E0A7921AB9E2280085B2C0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		16E0A7931AB9E2280085B2C0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		16E0A7951AB9E2280085B2C0 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		16E0A7961AB9E2280085B2C0 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		16E0A7951AB9E2280085B2C0 /* MainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainVC.h; sourceTree = "<group>"; };
+		16E0A7961AB9E2280085B2C0 /* MainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainVC.m; sourceTree = "<group>"; };
 		16E0A7991AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16E0A79B1AB9E2280085B2C0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		16E0A79E1AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -95,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +143,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				163952731B599EA60059E553 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,8 +161,8 @@
 		1601E3D61AB9E68700D3E27D /* Share */ = {
 			isa = PBXGroup;
 			children = (
-				1601E3D91AB9E68700D3E27D /* ShareViewController.h */,
-				1601E3DA1AB9E68700D3E27D /* ShareViewController.m */,
+				1601E3D91AB9E68700D3E27D /* ShareVC.h */,
+				1601E3DA1AB9E68700D3E27D /* ShareVC.m */,
 				1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */,
 				1601E3D71AB9E68700D3E27D /* Supporting Files */,
 			);
@@ -143,8 +186,33 @@
 				1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */,
 				1601E3F61AB9ED4600D3E27D /* SOKeyValueObserver.h */,
 				1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */,
+				1601E3FE1ABA030F00D3E27D /* NSUserDefaults+Share.h */,
+				1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */,
 			);
 			path = infra;
+			sourceTree = "<group>";
+		};
+		16D18F9D1B5B023D005173C6 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				16D18F9E1B5B023D005173C6 /* PDKeychainBindingsController */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		16D18F9E1B5B023D005173C6 /* PDKeychainBindingsController */ = {
+			isa = PBXGroup;
+			children = (
+				16D18F9F1B5B023D005173C6 /* LICENSE */,
+				16D18FA01B5B023D005173C6 /* PDKeychainBindings.h */,
+				16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */,
+				16D18FA21B5B023D005173C6 /* PDKeychainBindingsController.h */,
+				16D18FA31B5B023D005173C6 /* PDKeychainBindingsController.m */,
+				16D18FA41B5B023D005173C6 /* README.md */,
+				16D18FA51B5B023D005173C6 /* update.sh */,
+				16D18FA61B5B023D005173C6 /* version.log */,
+			);
+			path = PDKeychainBindingsController;
 			sourceTree = "<group>";
 		};
 		16E0A7821AB9E2280085B2C0 = {
@@ -156,7 +224,9 @@
 				16E0A78D1AB9E2280085B2C0 /* ShaarliCompanion */,
 				16E0A7A71AB9E2280085B2C0 /* ShaarliCompanionTests */,
 				1601E3D61AB9E68700D3E27D /* Share */,
+				16D18F9D1B5B023D005173C6 /* ThirdParty */,
 				16E0A78C1AB9E2280085B2C0 /* Products */,
+				163952701B599BBE0059E553 /* libxml2.dylib */,
 			);
 			sourceTree = "<group>";
 		};
@@ -176,12 +246,16 @@
 				1601E3EE1AB9ED1700D3E27D /* infra */,
 				16E0A7921AB9E2280085B2C0 /* AppDelegate.h */,
 				16E0A7931AB9E2280085B2C0 /* AppDelegate.m */,
-				16E0A7951AB9E2280085B2C0 /* ViewController.h */,
-				16E0A7961AB9E2280085B2C0 /* ViewController.m */,
+				16E0A7951AB9E2280085B2C0 /* MainVC.h */,
+				16E0A7961AB9E2280085B2C0 /* MainVC.m */,
 				16E0A7981AB9E2280085B2C0 /* Main.storyboard */,
 				16E0A79B1AB9E2280085B2C0 /* Images.xcassets */,
 				16E0A79D1AB9E2280085B2C0 /* LaunchScreen.xib */,
 				16E0A78E1AB9E2280085B2C0 /* Supporting Files */,
+				165B45A21B5952B8008A2714 /* ShaarliM.h */,
+				165B45A31B5952B8008A2714 /* ShaarliM.m */,
+				1621DDCF1B6164EC00238503 /* SettingsVC.h */,
+				1621DDD01B6164EC00238503 /* SettingsVC.m */,
 			);
 			path = ShaarliCompanion;
 			sourceTree = "<group>";
@@ -200,7 +274,9 @@
 			isa = PBXGroup;
 			children = (
 				16E0A7AA1AB9E2280085B2C0 /* ShaarliCompanionTests.m */,
+				161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */,
 				16E0A7A81AB9E2280085B2C0 /* Supporting Files */,
+				161C4B4A1B5BFD39002B177F /* testdata */,
 			);
 			path = ShaarliCompanionTests;
 			sourceTree = "<group>";
@@ -318,6 +394,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16D18FBB1B5B02ED005173C6 /* LICENSE in Resources */,
 				1601E3DD1AB9E68700D3E27D /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,6 +405,7 @@
 			files = (
 				16E0A79A1AB9E2280085B2C0 /* Main.storyboard in Resources */,
 				16E0A79F1AB9E2280085B2C0 /* LaunchScreen.xib in Resources */,
+				16D18FB91B5B02EC005173C6 /* LICENSE in Resources */,
 				16E0A79C1AB9E2280085B2C0 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -336,6 +414,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				161C4B4B1B5BFD39002B177F /* testdata in Resources */,
+				16D18FBA1B5B02EC005173C6 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,10 +426,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1601E3DB1AB9E68700D3E27D /* ShareViewController.m in Sources */,
+				16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
+				1601E3DB1AB9E68700D3E27D /* ShareVC.m in Sources */,
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
+				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
+				1621DDD31B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3FA1AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 				1601E3FD1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
+				1601E4021ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,11 +442,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16E0A7971AB9E2280085B2C0 /* ViewController.m in Sources */,
+				16E0A7971AB9E2280085B2C0 /* MainVC.m in Sources */,
+				1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3FB1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
 				1601E3F11AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				16D18FAD1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
+				1601E4001ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 				16E0A7941AB9E2280085B2C0 /* AppDelegate.m in Sources */,
 				16E0A7911AB9E2280085B2C0 /* main.m in Sources */,
+				16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
+				165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3F81AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,10 +460,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
+				1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */,
 				16E0A7AB1AB9E2280085B2C0 /* ShaarliCompanionTests.m in Sources */,
 				1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				16D18FAE1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
+				165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3F91AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 				1601E3FC1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
+				161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */,
+				1601E4011ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +570,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"${SDKROOT}/usr/include/libxml2",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -510,6 +611,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"${SDKROOT}/usr/include/libxml2",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";

@@ -6,13 +6,18 @@
 // Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
 //
 
-#import "ShareViewController.h"
+#import "ShareVC.h"
+#import "NSUserDefaults+Share.h"
 
-@interface ShareViewController()
-
+@interface ShareVC()<UITextFieldDelegate,UITextViewDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *urlTxt;
+@property (weak, nonatomic) IBOutlet UITextField *titleTxt;
+@property (weak, nonatomic) IBOutlet UITextView *descriptionTxt;
+@property (weak, nonatomic) IBOutlet UITextField *tagsTxt;
+@property (weak, nonatomic) IBOutlet UIButton *shaareBtn;
 @end
 
-@implementation ShareViewController
+@implementation ShareVC
 
 -(void)viewDidLoad
 {
@@ -23,7 +28,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    MRLogD(@"-", nil);
+    MRLogD(@"%@", [NSUserDefaults shaarliDefaults], nil);
     [super viewWillAppear:animated];
 }
 

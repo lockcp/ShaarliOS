@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ShaarliM.h"
 
-@interface ViewController : UIViewController
-
-
+@interface MainVC : UIViewController
+    /** Dependency injection */
+@property (strong, nonatomic) ShaarliM *shaarli;
+@property (assign, nonatomic) BOOL settingsEnabled;
 @end

@@ -24,3 +24,5 @@ GCC_WARN_UNUSED_VARIABLE = YES
 CLANG_WARN__DUPLICATE_METHOD_MATCH = YES
 
 GCC_WARN_PEDANTIC = YES
+// https://startpage.com/do/search?q=%22use+of+GNU+statement+expression+extension%22&lui=deutsch&l=deutsch
+WARNING_CFLAGS = -Wno-gnu

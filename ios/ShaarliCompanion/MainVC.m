@@ -6,25 +6,64 @@
 // Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "MainVC.h"
+#import "SettingsVC.h"
 
-@interface ViewController()
-
+@interface MainVC()
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *settingsBtn;
 @end
 
-@implementation ViewController
+@implementation MainVC
 
 -(void)viewDidLoad
 {
+    MRLogD(@"", nil);
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    NSParameterAssert(self.settingsBtn);
 }
 
 
 -(void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+
+-(BOOL)settingsEnabled
+{
+    return self.settingsBtn.enabled;
+}
+
+
+-(void)setSettingsEnabled:(BOOL)value
+{
+    self.settingsBtn.enabled = value;
+}
+
+
++(NSSet *)keyPathsForValuesAffectingSettingsEnabled
+{
+    return [NSSet setWithObject:@"settingsBtn.enabled"];
+}
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    MRLogD(@"", nil);
+    NSParameterAssert(self.shaarli);
+    [super viewWillAppear:animated];
+}
+
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    MRLogD(@"%@: %@ -> %@", segue, segue.sourceViewController, segue.destinationViewController, nil);
+    if( [segue.destinationViewController isKindOfClass:[SettingsVC class]] ) {
+        SettingsVC *svc = (SettingsVC *)segue.destinationViewController;
+        svc.shaarli = self.shaarli;
+        return;
+    }
+    NSAssert(NO, @"Fallthrough", nil);
 }
 
 

@@ -7,17 +7,30 @@
 //
 
 #import "AppDelegate.h"
+#import "NSBundle+MroSemVer.h"
+#import "MainVC.h"
 
 @interface AppDelegate()
-
+@property (assign, readonly, nonatomic) MainVC *vc;
 @end
 
 @implementation AppDelegate
 
+-(MainVC *)vc
+{
+    NSParameterAssert([self.window.rootViewController isKindOfClass:[UINavigationController class]]);
+    UINavigationController *nvc = (UINavigationController *)self.window.rootViewController;
+    MainVC *vc = (MainVC *)nvc.viewControllers[0];
+    return vc;
+}
+
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    MRLogD(@"%@", [NSBundle semVer], nil);
+    ShaarliM *s = [[ShaarliM alloc] init];
+    [s load];
+    self.vc.shaarli = s;
     return YES;
 }
 
