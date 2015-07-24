@@ -7,8 +7,9 @@
 //
 
 #import "ShaarliM.h"
-#import "PDKeychainBindings.h"
 #import <libxml2/libxml/HTMLparser.h>
+
+#define USE_KEYCHAIN 1
 
 #pragma mark -
 
@@ -84,6 +85,9 @@ NSDictionary *parseFormFields(NSData *data, id <NSFastEnumeration> fields)
 }
 
 
+#import "PDKeychainBindings.h"
+#import "NSUserDefaults+Share.h"
+
 #pragma mark -
 
 
@@ -91,6 +95,7 @@ NSDictionary *parseFormFields(NSData *data, id <NSFastEnumeration> fields)
 @property (strong, nonatomic) NSURL *endpointUrl;
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
+@property (strong, nonatomic) NSString *title;
 @end
 
 @implementation ShaarliM
@@ -128,25 +133,46 @@ NSDictionary *parseFormFields(NSData *data, id <NSFastEnumeration> fields)
 
 -(void)load
 {
-    MRLogD(@"", nil);
+    NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
+    NSParameterAssert(d);
+    self.title = [d valueForKey:@"title"];
+#if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
     self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"passWord"];
     self.endpointUrl = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
+#else
+    self.userName = [d valueForKey:@"userName"];
+    self.passWord = [d valueForKey:@"passWord"];
+    self.endpointUrl = [d URLForKey:@"endpointUrl"];
+#endif
 #if 0
     self.endpointUrl = [NSURL URLWithString:@"http://links.mro.name"];
     self.userName = @"mro";
     self.passWord = @"Jahahw7zahKi";
+    self.title = self.endpointStr;
     [self save];
 #endif
+    MRLogD(@"%@", self.title, nil);
+    MRLogD(@"%@", self.userName, nil);
 }
 
 
 -(void)save
 {
     MRLogD(@"", nil);
+    NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
+    NSParameterAssert(d);
+    [d setValue:self.title forKey:@"title"];
+#if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"passWord"];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointUrl.absoluteString forKey:@"endpointUrl"];
+#else
+    [d setValue:self.userName forKey:@"userName"];
+    [d setValue:self.passWord forKey:@"passWord"];
+    [d setURL:self.endpointUrl forKey:@"endpointUrl"];
+#endif
+    [d synchronize];
 }
 
 

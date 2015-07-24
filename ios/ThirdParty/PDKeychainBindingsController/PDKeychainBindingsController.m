@@ -8,6 +8,10 @@
 #import "PDKeychainBindingsController.h"
 #import <Security/Security.h>
 
+// #define SERVICE_NAME [[NSBundle mainBundle] bundleIdentifier]
+#define SERVICE_NAME @"name.mro.ShaarliCompanion"
+
+
 @implementation PDKeychainBindingsController {
 #if !TARGET_OS_IPHONE
 	     SecKeychainRef		_secKeychainRef;
@@ -128,7 +132,7 @@ handleError:
 #pragma mark - Keychain Access
 
 - (NSString*)serviceName {
-	return [[NSBundle mainBundle] bundleIdentifier];
+    return SERVICE_NAME;
 }
 
 - (NSString*)stringForKey:(NSString*)key {
