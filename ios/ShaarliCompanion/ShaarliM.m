@@ -150,6 +150,7 @@ NSDictionary *parseFormFields(NSData *data, id <NSFastEnumeration> fields)
     self.userName = @"mro";
     self.passWord = @"Jahahw7zahKi";
     self.title = self.endpointStr;
+    self.title = @"links.mro";
     [self save];
 #endif
     MRLogD(@"%@", self.title, nil);

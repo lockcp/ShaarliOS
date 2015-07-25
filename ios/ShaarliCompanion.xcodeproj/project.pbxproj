@@ -33,6 +33,9 @@
 		165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
+		16ABE6001B640CC10054F12F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FD1B640CC10054F12F /* Icon.png */; };
+		16ABE6011B640CC10054F12F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FE1B640CC10054F12F /* Icon@2x.png */; };
+		16ABE6021B640CC10054F12F /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FF1B640CC10054F12F /* Icon@3x.png */; };
 		16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
 		16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
 		16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
@@ -109,6 +112,9 @@
 		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliM.m; sourceTree = "<group>"; };
 		1697BB701B62D7D200A7D515 /* ShaarliCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliCompanion.entitlements; sourceTree = "<group>"; };
 		1697BB711B62D7F100A7D515 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Share.entitlements; sourceTree = "<group>"; };
+		16ABE5FD1B640CC10054F12F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		16ABE5FE1B640CC10054F12F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		16ABE5FF1B640CC10054F12F /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		16D18F9F1B5B023D005173C6 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		16D18FA01B5B023D005173C6 /* PDKeychainBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDKeychainBindings.h; sourceTree = "<group>"; };
 		16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDKeychainBindings.m; sourceTree = "<group>"; };
@@ -176,6 +182,9 @@
 			isa = PBXGroup;
 			children = (
 				1601E3D81AB9E68700D3E27D /* Info.plist */,
+				16ABE5FD1B640CC10054F12F /* Icon.png */,
+				16ABE5FE1B640CC10054F12F /* Icon@2x.png */,
+				16ABE5FF1B640CC10054F12F /* Icon@3x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -321,6 +330,7 @@
 				16E0A7881AB9E2280085B2C0 /* Frameworks */,
 				16E0A7891AB9E2280085B2C0 /* Resources */,
 				1601E3D01AB9E56D00D3E27D /* Embed App Extensions */,
+				163C53141B63E749009DFF35 /* Git Sha -> Info.plist */,
 			);
 			buildRules = (
 			);
@@ -414,6 +424,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16ABE6001B640CC10054F12F /* Icon.png in Resources */,
+				16ABE6011B640CC10054F12F /* Icon@2x.png in Resources */,
+				16ABE6021B640CC10054F12F /* Icon@3x.png in Resources */,
 				16D18FBB1B5B02ED005173C6 /* LICENSE in Resources */,
 				1601E3DD1AB9E68700D3E27D /* MainInterface.storyboard in Resources */,
 			);
@@ -440,6 +453,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		163C53141B63E749009DFF35 /* Git Sha -> Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Git Sha -> Info.plist";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/sh\n# inspired by\n# - http://kswizz.com/post/2686511526/git-xcode-versioning\n# - http://stackoverflow.com/a/12658311\ncd \"$PROJECT_DIR\"\n# say hello\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersionGitSHA $(git rev-parse --short HEAD)\" \"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"";
+			shellScript = "# write git version SHA into Info.plist\n#\n# inspired by\n# - http://kswizz.com/post/2686511526/git-xcode-versioning\n# - http://stackoverflow.com/a/12658311\ncd \"$PROJECT_DIR\"\n# say hello\ninfo_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\ngitsha=$(git rev-parse --short HEAD)\nversion=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleVersion\" \"$info_plist\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersionGitSHA $gitsha\" \"$info_plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString '$version+$gitsha'\" \"$info_plist\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1601E3D11AB9E68700D3E27D /* Sources */ = {
@@ -532,8 +562,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Share/Share.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -541,7 +569,6 @@
 				INFOPLIST_FILE = Share/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -550,12 +577,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Share/Share.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Share/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -578,8 +602,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 0.0;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marcus Rohrmoser (C58CCHV87H)";
+				CURRENT_PROJECT_VERSION = 0.0.2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -625,8 +649,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 0.0;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marcus Rohrmoser (C58CCHV87H)";
+				CURRENT_PROJECT_VERSION = 0.0.2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -653,13 +677,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ShaarliCompanion/ShaarliCompanion.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ShaarliCompanion/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -668,13 +689,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ShaarliCompanion/ShaarliCompanion.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ShaarliCompanion/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

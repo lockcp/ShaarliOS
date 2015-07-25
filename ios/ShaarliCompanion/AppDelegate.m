@@ -28,6 +28,12 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     MRLogD(@"%@", [NSBundle semVer], nil);
+    {
+        NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
+        // MRLogD(@"%@", [d valueForKeyPath:@"CFBundleURLTypes.CFBundleURLSchemes.@firstObject"], nil);
+        NSParameterAssert([SELF_URL_PREFIX isEqualToString:d[@"CFBundleURLTypes"][0][@"CFBundleURLSchemes"][0]]);
+        NSParameterAssert([BUNDLE_ID isEqualToString:d[@"CFBundleIdentifier"]]);
+    }
     ShaarliM *s = [[ShaarliM alloc] init];
     [s load];
     self.vc.shaarli = s;

@@ -15,7 +15,7 @@
     static NSUserDefaults *_shareDefaults = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-                      _shareDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.name.mro.ShaarliCompanion"];
+                      _shareDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group." BUNDLE_ID];
                   }
                   );
     NSParameterAssert(_shareDefaults);

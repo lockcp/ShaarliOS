@@ -53,6 +53,8 @@
 #endif
 #endif
 
+#define BUNDLE_ID @"name.mro.ShaarliCompanion"
+#define SELF_URL_PREFIX @"name-mro-shaarlicompanion"
 #define SHAARLI_COMPANION_APP_URL @"http://app.mro.name/shaarlicompanion"
 
 #endif

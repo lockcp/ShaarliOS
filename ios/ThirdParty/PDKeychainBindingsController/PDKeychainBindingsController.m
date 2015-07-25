@@ -9,7 +9,7 @@
 #import <Security/Security.h>
 
 // #define SERVICE_NAME [[NSBundle mainBundle] bundleIdentifier]
-#define SERVICE_NAME @"name.mro.ShaarliCompanion"
+#define SERVICE_NAME BUNDLE_ID
 
 
 @implementation PDKeychainBindingsController {
