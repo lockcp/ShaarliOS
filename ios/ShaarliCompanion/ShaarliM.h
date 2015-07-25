@@ -24,7 +24,8 @@
 -(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass completion:( void (^)(ShaarliM * me, NSError * error) )completion;
 
 -(void)postURL:(NSURL *)url title:(NSString *)title tags:(id <NSFastEnumeration>)tags description:(NSString *)desc private:
-   (BOOL)privat completion:( void (^)(ShaarliM * me, NSError * error) )completion;
+   (BOOL)privat session:(NSURLSession *)session completion:( void (^)(ShaarliM * me, NSError * error) )completion;
+
 -(void)fetchTagCloud:( void (^)(ShaarliM * me, NSError * error) )completion;
 
 

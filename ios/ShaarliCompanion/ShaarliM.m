@@ -149,7 +149,6 @@ NSDictionary *parseFormFields(NSData *data, id <NSFastEnumeration> fields)
     self.endpointUrl = [NSURL URLWithString:@"http://links.mro.name"];
     self.userName = @"mro";
     self.passWord = @"Jahahw7zahKi";
-    self.title = self.endpointStr;
     self.title = @"links.mro";
     [self save];
 #endif
@@ -241,9 +240,10 @@ NSDictionary *parseFormFields(NSData *data, id <NSFastEnumeration> fields)
 
 
 -(void)postURL:(NSURL *)url title:(NSString *)title tags:(id <NSFastEnumeration>)tags description:(NSString *)desc private:
-   (BOOL)private completion:( void (^)(ShaarliM * me, NSError * error) )completion
+   (BOOL)private session:(NSURLSession *)session completion:( void (^)(ShaarliM * me, NSError * error) )completion
 {
-    NSURLSession *session = [NSURLSession sharedSession];
+    if( !session )
+        session = [NSURLSession sharedSession];
     NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.userName);
     NSParameterAssert(self.passWord);

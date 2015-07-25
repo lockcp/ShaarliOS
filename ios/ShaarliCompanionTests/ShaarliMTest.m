@@ -56,7 +56,7 @@
     s.passWord = @"Jahahw7zahKi";
 
     [s postURL:[NSURL URLWithString:@"http://example.com"] title:@"example" tags:@[] description:@"description" private:
-     YES completion:^(ShaarliM * me, NSError * error) {
+     YES session:nil completion:^(ShaarliM * me, NSError * error) {
          MRLogD (@"done", nil);
      }
     ];

@@ -127,37 +127,32 @@
 -(void)didSelectPost
 {
     MRLogD(@"-", nil);
-    // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-
     NSParameterAssert(1 == self.extensionContext.inputItems.count);
     NSExtensionItem *item = self.extensionContext.inputItems[0];
-    // MRLogD(@"title %@", item.attributedTitle.string, nil);
-    MRLogD(@"content %@", item.attributedContentText.string, nil);
-    NSDictionary *ui = item.userInfo;
-    __block NSURL *url = nil;
     for( NSItemProvider *itemProvider in item.attachments ) {
-        NSString *t = (__bridge NSString *)kUTTypeText;
-        MRLogD(@"registeredTypeIdentifiers %@", itemProvider.registeredTypeIdentifiers, nil);
+        NSString *t = @"public.url"; // (__bridge NSString *)kUTTypeText;
+        // MRLogD(@"registeredTypeIdentifiers %@", itemProvider.registeredTypeIdentifiers, nil);
         if( [itemProvider hasItemConformingToTypeIdentifier:t] )
-            [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url_, NSError * error) {
-                 MRLogD (@"huhu %@", url_, nil);
-                 NSAssert (NO, @"Yikes!", nil);
-                 url = url_;
+            [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
+                 MRLogD (@"SHAARE %@", @ { @"url":url, @"title":itemTitle.value, @"tags":itemTags.value, @"private":itemPrivate.value, @"desc":self.contentText }, nil);
+                 NSString *confName = BUNDLE_ID @".backgroundpost";
+                 NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
+                 NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
+
+                 const BOOL priv = ![NSLocalizedString (@"Public", @"Shaare") isEqualToString:itemPrivate.value];
+                 [self.shaarli postURL:url title:itemTitle.value tags:nil description:self.contentText private:
+                  priv session:session completion:^(ShaarliM * me, NSError * error) {
+                      // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
+                      // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+                      [self.extensionContext completeRequestReturningItems:@[item] completionHandler:^(BOOL expired) {
+                           MRLogD (@"expired: %s", expired ? "yes":"no", nil);
+                       }
+                      ];
+                  }
+                 ];
              }
             ];
     }
-
-    NSString *confName = [[[[NSBundle bundleForClass:[self class]] infoDictionary] valueForKey:@"CFBundleIdentifier"] stringByAppendingString:@".backgroundpost"];
-    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
-
-    // [self.shaarli postURL:<#(NSURL *)#> title:<#(NSString *)#> tags:<#(id<NSFastEnumeration>)#> description:<#(NSString *)#> private:<#(BOOL)#> session:session completion:<#^(ShaarliM *me, NSError *error)completion#>]
-
-    // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-    [self.extensionContext completeRequestReturningItems:@[item] completionHandler:^(BOOL expired) {
-         MRLogD (@"-", nil);
-     }
-    ];
 }
 
 
@@ -174,7 +169,13 @@
 
 -(void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
-    MRLogD(@"", nil);
+    MRLogD(@"%@, %@", session, error, nil);
+}
+
+
+-(void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    MRLogD(@"%@", session, nil);
 }
 
 
