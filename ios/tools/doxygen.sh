@@ -78,10 +78,10 @@ else
     echo "!!! Cannot find plantuml - so no UML diagrams." >&2
 fi
 
-PROJECT_BUNDLE_ID="name.mro.ShaarliCompanion"
-PROJECT_NAME="ShaarliCompanion"
+PROJECT_BUNDLE_ID="name.mro.ShaarliOS"
+PROJECT_NAME="ShaarliOS"
 PROJECT_VERSION="$(cat VERSION)"
-PROJECT_SOURCE="ShaarliCompanion Share"
+PROJECT_SOURCE="ShaarliOS Share"
 
 cd `dirname $0`/..
 if [[ "$PROJECT_NAME" == "" ]] ; then

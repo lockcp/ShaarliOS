@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "16E0A78A1AB9E2280085B2C0"
-               BuildableName = "ShaarliCompanion.app"
-               BlueprintName = "ShaarliCompanion"
-               ReferencedContainer = "container:ShaarliCompanion.xcodeproj">
+               BuildableName = "ShaarliOS.app"
+               BlueprintName = "ShaarliOS"
+               ReferencedContainer = "container:ShaarliOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "16E0A7A31AB9E2280085B2C0"
-               BuildableName = "ShaarliCompanionTests.xctest"
-               BlueprintName = "ShaarliCompanionTests"
-               ReferencedContainer = "container:ShaarliCompanion.xcodeproj">
+               BuildableName = "ShaarliOSTests.xctest"
+               BlueprintName = "ShaarliOSTests"
+               ReferencedContainer = "container:ShaarliOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "16E0A7A31AB9E2280085B2C0"
-               BuildableName = "ShaarliCompanionTests.xctest"
-               BlueprintName = "ShaarliCompanionTests"
-               ReferencedContainer = "container:ShaarliCompanion.xcodeproj">
+               BuildableName = "ShaarliOSTests.xctest"
+               BlueprintName = "ShaarliOSTests"
+               ReferencedContainer = "container:ShaarliOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "16E0A78A1AB9E2280085B2C0"
-            BuildableName = "ShaarliCompanion.app"
-            BlueprintName = "ShaarliCompanion"
-            ReferencedContainer = "container:ShaarliCompanion.xcodeproj">
+            BuildableName = "ShaarliOS.app"
+            BlueprintName = "ShaarliOS"
+            ReferencedContainer = "container:ShaarliOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "16E0A78A1AB9E2280085B2C0"
-            BuildableName = "ShaarliCompanion.app"
-            BlueprintName = "ShaarliCompanion"
-            ReferencedContainer = "container:ShaarliCompanion.xcodeproj">
+            BuildableName = "ShaarliOS.app"
+            BlueprintName = "ShaarliOS"
+            ReferencedContainer = "container:ShaarliOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,9 +96,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "16E0A78A1AB9E2280085B2C0"
-            BuildableName = "ShaarliCompanion.app"
-            BlueprintName = "ShaarliCompanion"
-            ReferencedContainer = "container:ShaarliCompanion.xcodeproj">
+            BuildableName = "ShaarliOS.app"
+            BlueprintName = "ShaarliOS"
+            ReferencedContainer = "container:ShaarliOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

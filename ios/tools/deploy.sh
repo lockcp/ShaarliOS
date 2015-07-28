@@ -5,9 +5,9 @@ if [ ! -f "$1" ] ; then
 	exit 1
 fi
 
-app=ShaarliCompanion
+app=ShaarliOS
 host=simply
-base="/var/www/lighttpd/drop.mro.name/public_html/dev"
+base="/var/www/lighttpd/drop.mro.name/public_html/dev/$app"
 tmp="/tmp/deploy.Info.plist"
 
 # extract CFBundleVersion from Info.plist:
@@ -19,7 +19,7 @@ fi
 version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$tmp")
 
 # prepare dir and upload
-dst="${base}/${app}/deploy/v${version}/Debug/"
+dst="${base}/deploy/v${version}/Debug/"
 ssh "${host}" "mkdir -p '${dst}' && chmod a+rwx '${dst}' && rm '${dst}'*"
 rsync --progress "$1" "${host}:${dst}/${app}.ipa"
 ssh "${host}" "ls -l '${dst}'"
@@ -27,7 +27,7 @@ ssh "${host}" "ls -l '${dst}'"
 say -v Fiona "${app} version ${version} deployed, now comes doxygen docs upload"
 
 cd "$(dirname "$0")"
-sh doxygen.sh && rsync --progress --delete -avPz ../build/doxygen/ "${host}:${base}/${app}/docs/v${version}"
+sh doxygen.sh && rsync --progress --delete -avPz ../build/doxygen/ "${host}:${base}/docs/v${version}"
 
 open "http://drop.mro.name/dev/${app}/docs/v${version}/"
 

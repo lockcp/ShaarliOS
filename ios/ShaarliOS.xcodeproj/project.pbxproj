@@ -94,7 +94,7 @@
 		1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		1601E3ED1AB9EC7800D3E27D /* ShaarliCompanion-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShaarliCompanion-Prefix.pch"; sourceTree = "<group>"; };
+		1601E3ED1AB9EC7800D3E27D /* ShaarliOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShaarliOS-Prefix.pch"; sourceTree = "<group>"; };
 		1601E3EF1AB9ED3B00D3E27D /* NSBundle+MroSemVer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+MroSemVer.h"; sourceTree = "<group>"; };
 		1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+MroSemVer.m"; sourceTree = "<group>"; };
 		1601E3F41AB9ED4600D3E27D /* NSObject+KVOSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KVOSO.h"; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliM.h; sourceTree = "<group>"; };
 		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliM.m; sourceTree = "<group>"; };
-		1697BB701B62D7D200A7D515 /* ShaarliCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliCompanion.entitlements; sourceTree = "<group>"; };
+		1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliOS.entitlements; sourceTree = "<group>"; };
 		1697BB711B62D7F100A7D515 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Share.entitlements; sourceTree = "<group>"; };
 		16ABE5FD1B640CC10054F12F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		16ABE5FE1B640CC10054F12F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 		16D18FA41B5B023D005173C6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		16D18FA51B5B023D005173C6 /* update.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sh; sourceTree = "<group>"; };
 		16D18FA61B5B023D005173C6 /* version.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.log; sourceTree = "<group>"; };
-		16E0A78B1AB9E2280085B2C0 /* ShaarliCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		16E0A78B1AB9E2280085B2C0 /* ShaarliOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A78F1AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E0A7901AB9E2280085B2C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16E0A7921AB9E2280085B2C0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		16E0A7991AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16E0A79B1AB9E2280085B2C0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		16E0A79E1AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		16E0A7A41AB9E2280085B2C0 /* ShaarliCompanionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShaarliCompanionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		16E0A7A41AB9E2280085B2C0 /* ShaarliOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShaarliOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A7A91AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E0A7AA1AB9E2280085B2C0 /* ShaarliCompanionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShaarliCompanionTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -233,8 +233,8 @@
 				1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */,
 				1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */,
 				1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */,
-				16E0A78D1AB9E2280085B2C0 /* ShaarliCompanion */,
-				16E0A7A71AB9E2280085B2C0 /* ShaarliCompanionTests */,
+				16E0A78D1AB9E2280085B2C0 /* ShaarliOS */,
+				16E0A7A71AB9E2280085B2C0 /* ShaarliOSTests */,
 				1601E3D61AB9E68700D3E27D /* Share */,
 				16D18F9D1B5B023D005173C6 /* ThirdParty */,
 				16E0A78C1AB9E2280085B2C0 /* Products */,
@@ -245,17 +245,17 @@
 		16E0A78C1AB9E2280085B2C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				16E0A78B1AB9E2280085B2C0 /* ShaarliCompanion.app */,
-				16E0A7A41AB9E2280085B2C0 /* ShaarliCompanionTests.xctest */,
+				16E0A78B1AB9E2280085B2C0 /* ShaarliOS.app */,
+				16E0A7A41AB9E2280085B2C0 /* ShaarliOSTests.xctest */,
 				1601E3D51AB9E68700D3E27D /* Share.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		16E0A78D1AB9E2280085B2C0 /* ShaarliCompanion */ = {
+		16E0A78D1AB9E2280085B2C0 /* ShaarliOS */ = {
 			isa = PBXGroup;
 			children = (
-				1697BB701B62D7D200A7D515 /* ShaarliCompanion.entitlements */,
+				1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */,
 				1601E3EE1AB9ED1700D3E27D /* infra */,
 				16E0A7921AB9E2280085B2C0 /* AppDelegate.h */,
 				16E0A7931AB9E2280085B2C0 /* AppDelegate.m */,
@@ -270,7 +270,7 @@
 				1621DDCF1B6164EC00238503 /* SettingsVC.h */,
 				1621DDD01B6164EC00238503 /* SettingsVC.m */,
 			);
-			path = ShaarliCompanion;
+			path = ShaarliOS;
 			sourceTree = "<group>";
 		};
 		16E0A78E1AB9E2280085B2C0 /* Supporting Files */ = {
@@ -278,12 +278,12 @@
 			children = (
 				16E0A78F1AB9E2280085B2C0 /* Info.plist */,
 				16E0A7901AB9E2280085B2C0 /* main.m */,
-				1601E3ED1AB9EC7800D3E27D /* ShaarliCompanion-Prefix.pch */,
+				1601E3ED1AB9EC7800D3E27D /* ShaarliOS-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		16E0A7A71AB9E2280085B2C0 /* ShaarliCompanionTests */ = {
+		16E0A7A71AB9E2280085B2C0 /* ShaarliOSTests */ = {
 			isa = PBXGroup;
 			children = (
 				16E0A7AA1AB9E2280085B2C0 /* ShaarliCompanionTests.m */,
@@ -291,7 +291,7 @@
 				16E0A7A81AB9E2280085B2C0 /* Supporting Files */,
 				161C4B4A1B5BFD39002B177F /* testdata */,
 			);
-			path = ShaarliCompanionTests;
+			path = ShaarliOSTests;
 			sourceTree = "<group>";
 		};
 		16E0A7A81AB9E2280085B2C0 /* Supporting Files */ = {
@@ -322,9 +322,9 @@
 			productReference = 1601E3D51AB9E68700D3E27D /* Share.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		16E0A78A1AB9E2280085B2C0 /* ShaarliCompanion */ = {
+		16E0A78A1AB9E2280085B2C0 /* ShaarliOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 16E0A7AE1AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliCompanion" */;
+			buildConfigurationList = 16E0A7AE1AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliOS" */;
 			buildPhases = (
 				16E0A7871AB9E2280085B2C0 /* Sources */,
 				16E0A7881AB9E2280085B2C0 /* Frameworks */,
@@ -337,14 +337,14 @@
 			dependencies = (
 				1601E3DF1AB9E68700D3E27D /* PBXTargetDependency */,
 			);
-			name = ShaarliCompanion;
+			name = ShaarliOS;
 			productName = ShaarliCompanion;
-			productReference = 16E0A78B1AB9E2280085B2C0 /* ShaarliCompanion.app */;
+			productReference = 16E0A78B1AB9E2280085B2C0 /* ShaarliOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		16E0A7A31AB9E2280085B2C0 /* ShaarliCompanionTests */ = {
+		16E0A7A31AB9E2280085B2C0 /* ShaarliOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 16E0A7B11AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliCompanionTests" */;
+			buildConfigurationList = 16E0A7B11AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliOSTests" */;
 			buildPhases = (
 				16E0A7A01AB9E2280085B2C0 /* Sources */,
 				16E0A7A11AB9E2280085B2C0 /* Frameworks */,
@@ -355,9 +355,9 @@
 			dependencies = (
 				16E0A7A61AB9E2280085B2C0 /* PBXTargetDependency */,
 			);
-			name = ShaarliCompanionTests;
+			name = ShaarliOSTests;
 			productName = ShaarliCompanionTests;
-			productReference = 16E0A7A41AB9E2280085B2C0 /* ShaarliCompanionTests.xctest */;
+			productReference = 16E0A7A41AB9E2280085B2C0 /* ShaarliOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -399,7 +399,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 16E0A7861AB9E2280085B2C0 /* Build configuration list for PBXProject "ShaarliCompanion" */;
+			buildConfigurationList = 16E0A7861AB9E2280085B2C0 /* Build configuration list for PBXProject "ShaarliOS" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -412,8 +412,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				16E0A78A1AB9E2280085B2C0 /* ShaarliCompanion */,
-				16E0A7A31AB9E2280085B2C0 /* ShaarliCompanionTests */,
+				16E0A78A1AB9E2280085B2C0 /* ShaarliOS */,
+				16E0A7A31AB9E2280085B2C0 /* ShaarliOSTests */,
 				1601E3D41AB9E68700D3E27D /* Share */,
 			);
 		};
@@ -533,7 +533,7 @@
 		};
 		16E0A7A61AB9E2280085B2C0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 16E0A78A1AB9E2280085B2C0 /* ShaarliCompanion */;
+			target = 16E0A78A1AB9E2280085B2C0 /* ShaarliOS */;
 			targetProxy = 16E0A7A51AB9E2280085B2C0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -608,7 +608,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = "ShaarliCompanion/ShaarliCompanion-Prefix.pch";
+				GCC_PREFIX_HEADER = "ShaarliOS/ShaarliOS-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -654,7 +654,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREFIX_HEADER = "ShaarliCompanion/ShaarliCompanion-Prefix.pch";
+				GCC_PREFIX_HEADER = "ShaarliOS/ShaarliOS-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -676,11 +676,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ShaarliCompanion/ShaarliCompanion.entitlements;
-				INFOPLIST_FILE = ShaarliCompanion/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = ShaarliCompanion/ShaarliOS.entitlements;
+				INFOPLIST_FILE = ShaarliOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ShaarliOS;
 			};
 			name = Debug;
 		};
@@ -688,11 +688,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ShaarliCompanion/ShaarliCompanion.entitlements;
-				INFOPLIST_FILE = ShaarliCompanion/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = ShaarliCompanion/ShaarliOS.entitlements;
+				INFOPLIST_FILE = ShaarliOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ShaarliOS;
 			};
 			name = Release;
 		};
@@ -708,9 +708,9 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = ShaarliCompanionTests/Info.plist;
+				INFOPLIST_FILE = ShaarliOSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ShaarliOSTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShaarliCompanion.app/ShaarliCompanion";
 			};
 			name = Debug;
@@ -723,9 +723,9 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = ShaarliCompanionTests/Info.plist;
+				INFOPLIST_FILE = ShaarliOSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ShaarliOSTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShaarliCompanion.app/ShaarliCompanion";
 			};
 			name = Release;
@@ -742,7 +742,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		16E0A7861AB9E2280085B2C0 /* Build configuration list for PBXProject "ShaarliCompanion" */ = {
+		16E0A7861AB9E2280085B2C0 /* Build configuration list for PBXProject "ShaarliOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				16E0A7AC1AB9E2280085B2C0 /* Debug */,
@@ -751,7 +751,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		16E0A7AE1AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliCompanion" */ = {
+		16E0A7AE1AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				16E0A7AF1AB9E2280085B2C0 /* Debug */,
@@ -760,7 +760,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		16E0A7B11AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliCompanionTests" */ = {
+		16E0A7B11AB9E2280085B2C0 /* Build configuration list for PBXNativeTarget "ShaarliOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				16E0A7B21AB9E2280085B2C0 /* Debug */,
