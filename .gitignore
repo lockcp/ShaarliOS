@@ -4,3 +4,4 @@ ios/*.xcodeproj/project.xcworkspace/xcshareddata/*.xccheckout
 ios/*.xcodeproj/xcuserdata/*.xcuserdatad/
 ios/assets/build/
 ios/build/
+shaarli-logo.png
