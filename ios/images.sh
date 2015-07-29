@@ -7,9 +7,10 @@ inkscape=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
 $inkscape --help >/dev/null 2>&1 || { echo "Inkscape is not installed." && exit 1; }
 optipng -help >/dev/null 2>&1 || { echo "optipng is not installed." && exit 1; }
 
-OPTS="--export-background=black --export-area-page --export-width=1024 --export-height=1024 --without-gui"
+OPTS="--export-area-page --export-width=1024 --export-height=1024 --without-gui"
 
 src="iTunesArtwork.dev.svg"
+src="../shaarli-petal.svg"
 
 dst="iTunesArtwork.png"
 "$inkscape" --export-png="$(pwd)/$dst" $OPTS --file="$(pwd)/$src"
