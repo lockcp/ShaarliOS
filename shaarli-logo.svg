@@ -408,6 +408,8 @@
         </dc:contributor>
         <cc:license
            rdf:resource="http://www.opensource.org/licenses/zlib-license.php" />
+        <dc:source>http://sebsauvage.net/files/shaarli_logo.zip</dc:source>
+        <dc:relation>http://sebsauvage.net/wiki/doku.php?id=php:shaarli:discussion</dc:relation>
       </cc:Work>
     </rdf:RDF>
   </metadata>
