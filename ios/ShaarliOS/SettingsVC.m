@@ -56,6 +56,11 @@
     self.secure.on = self.shaarli.endpointSecure;
     self.userName.text = self.shaarli.userName;
     self.passWord.text = self.shaarli.passWord;
+
+    self.lblTitle.text = self.shaarli.title;
+    self.lblTitle.textColor = self.lblTitle.text ? self.userName.textColor : [UIColor redColor];
+    self.lblTitle.text = self.lblTitle.text ? self.lblTitle.text : NSLocalizedString(@"Not connected yət.", @"SettingsVC.m");
+
     [self.spinner stopAnimating];
 }
 
@@ -133,14 +138,18 @@
          MRLogD (@"-", nil);
          if( error ) {
              UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-             [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-                                   [self.navigationController popViewControllerAnimated:YES];
-                               }
-              ]];
-             [self.spinner stopAnimating];
+             [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];
+             dispatch_async (dispatch_get_main_queue (), ^{
+                                 [self presentViewController:alert animated:YES completion:nil];
+                                 [self.spinner stopAnimating];
+                             }
+                             );
          } else {
-             [self.navigationController popViewControllerAnimated:YES];
-             [self.spinner stopAnimating];
+             dispatch_async (dispatch_get_main_queue (), ^{
+                                 [self.navigationController popViewControllerAnimated:YES];
+                                 [self.spinner stopAnimating];
+                             }
+                             );
          }
      }
     ];

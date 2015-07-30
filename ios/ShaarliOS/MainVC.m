@@ -66,15 +66,17 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    MRLogD(@"%@", self.centerY, nil);
+    MRLogD(@"-", nil);
     NSParameterAssert(self.shaarli);
     [super viewWillAppear:animated];
+    self.title = self.shaarli.title;
 }
 
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    // animate logo to bottom
     [UIView animateWithDuration:0.5f animations:^{
          self.vContainer.alpha = 0.25;
 

@@ -53,9 +53,18 @@
 #endif
 #endif
 
+
+
 #define BUNDLE_ID @"name.mro.ShaarliOS"
 #define SELF_URL_PREFIX @"name-mro-shaarlios"
 #define SHAARLI_COMPANION_APP_URL @"http://app.mro.name/ShaarliOS"
+
+#define SHAARLI_ERROR_DOMAIN BUNDLE_ID
+#define SHAARLI_ERROR_BANNED 2
+#define SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED 3
+#define SHAARLI_ERROR_TITLE_EXPECTED 4
+#define SHAARLI_ERROR_NO_TOKEN 5
+
 
 #endif
 
