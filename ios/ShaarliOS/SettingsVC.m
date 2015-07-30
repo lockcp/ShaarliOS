@@ -13,6 +13,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *endpoint;
 @property (weak, nonatomic) IBOutlet UISwitch *secure;
 @property (weak, nonatomic) IBOutlet UITextField *userName;
+@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
+@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (weak, nonatomic) IBOutlet UITextField *passWord;
 @end
 
@@ -37,6 +40,10 @@
     NSParameterAssert(self.secure);
     NSParameterAssert(self.userName);
     NSParameterAssert(self.passWord);
+    NSParameterAssert(self.lblTitle);
+    NSParameterAssert(self.btnSignIn);
+    NSParameterAssert(self.spinner);
+    [self.tableView addSubview:self.spinner];
 }
 
 
@@ -49,13 +56,13 @@
     self.secure.on = self.shaarli.endpointSecure;
     self.userName.text = self.shaarli.userName;
     self.passWord.text = self.shaarli.passWord;
+    [self.spinner stopAnimating];
 }
 
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.navigationController.delegate = self;
 }
 
 
@@ -73,27 +80,28 @@
  * http://stackoverflow.com/questions/23171906/uinavigationbar-intercept-back-button-and-back-swipe-gesture
  * http://stackoverflow.com/questions/8564924/confirm-back-button-on-uinavigationcontroller
  */
--(void)navigationController:(UINavigationController *)navigationController willShowViewController:(MainVC *)viewController animated:(BOOL)animated
-{
-    MRLogD(@"%@", viewController, nil);
-    navigationController.delegate = nil;
-    if( [self.endpoint.text isEqualToString:self.shaarli.endpointStr] && self.secure.on == self.shaarli.endpointSecure && [self.userName.text isEqualToString:self.shaarli.userName] && [self.passWord.text isEqualToString:self.shaarli.passWord] ) {
-        return;
-    }
-
-    viewController.settingsEnabled = NO;
-    [self.shaarli updateEndpoint:self.endpoint.text secure:self.secure.on user:self.userName.text pass:self.passWord.text completion:^(ShaarliM * me, NSError * error) {
-         MRLogD (@"", nil);
-         viewController.settingsEnabled = YES;
-         if( error ) {
-             UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-             [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];
-             [viewController presentViewController:alert animated:animated completion:nil];
-         }
-     }
-    ];
-}
-
+/*
+ * -(void)navigationController:(UINavigationController *)navigationController willShowViewController:(MainVC *)viewController animated:(BOOL)animated
+ * {
+ *  MRLogD(@"%@", viewController, nil);
+ *  navigationController.delegate = nil;
+ *  if( [self.endpoint.text isEqualToString:self.shaarli.endpointStr] && self.secure.on == self.shaarli.endpointSecure && [self.userName.text isEqualToString:self.shaarli.userName] && [self.passWord.text isEqualToString:self.shaarli.passWord] ) {
+ *      return;
+ *  }
+ *
+ *  viewController.settingsEnabled = NO;
+ *  [self.shaarli updateEndpoint:self.endpoint.text secure:self.secure.on user:self.userName.text pass:self.passWord.text completion:^(ShaarliM * me, NSError * error) {
+ *       MRLogD (@"", nil);
+ *       viewController.settingsEnabled = YES;
+ *       if( error ) {
+ *           UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+ *           [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];
+ *           [viewController presentViewController:alert animated:animated completion:nil];
+ *       }
+ *   }
+ *  ];
+ * }
+ */
 
 #pragma UITextFieldDelegate
 
@@ -107,8 +115,35 @@
     else if( textField == self.userName )
         [self.passWord becomeFirstResponder];
     else if( textField == self.passWord )
-        [self.navigationController popViewControllerAnimated:YES];
+        [self actionSignIn:textField];  // dispatch async?
     return YES;
+}
+
+
+#pragma mark Actions
+
+
+-(IBAction)actionSignIn:(id)sender
+{
+    MRLogD(@"-", nil);
+    self.spinner.frame = self.tableView.bounds;
+    [self.spinner startAnimating];
+    // disable back button while spinning?
+    [self.shaarli updateEndpoint:self.endpoint.text secure:self.secure.on user:self.userName.text pass:self.passWord.text completion:^(ShaarliM * me, NSError * error) {
+         MRLogD (@"-", nil);
+         if( error ) {
+             UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+             [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                                   [self.navigationController popViewControllerAnimated:YES];
+                               }
+              ]];
+             [self.spinner stopAnimating];
+         } else {
+             [self.navigationController popViewControllerAnimated:YES];
+             [self.spinner stopAnimating];
+         }
+     }
+    ];
 }
 
 
