@@ -31,6 +31,7 @@
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		1652D98F1B68BD8000B044C3 /* ShaarliOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */; };
+		165460821B697BCE001DAA32 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 165460811B697BCE001DAA32 /* iTunesArtwork.png */; };
 		165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
@@ -109,6 +110,7 @@
 		1621DDD01B6164EC00238503 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsVC.m; sourceTree = "<group>"; };
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliOSTests.m; sourceTree = "<group>"; };
+		165460811B697BCE001DAA32 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliM.h; sourceTree = "<group>"; };
 		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliM.m; sourceTree = "<group>"; };
 		1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliOS.entitlements; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 		16E0A78D1AB9E2280085B2C0 /* ShaarliOS */ = {
 			isa = PBXGroup;
 			children = (
+				165460811B697BCE001DAA32 /* iTunesArtwork.png */,
 				1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */,
 				1601E3EE1AB9ED1700D3E27D /* infra */,
 				16E0A7921AB9E2280085B2C0 /* AppDelegate.h */,
@@ -439,6 +442,7 @@
 				16E0A79A1AB9E2280085B2C0 /* Main.storyboard in Resources */,
 				16E0A79F1AB9E2280085B2C0 /* LaunchScreen.xib in Resources */,
 				16D18FB91B5B02EC005173C6 /* LICENSE in Resources */,
+				165460821B697BCE001DAA32 /* iTunesArtwork.png in Resources */,
 				16E0A79C1AB9E2280085B2C0 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
