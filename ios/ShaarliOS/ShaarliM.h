@@ -12,6 +12,9 @@
 #define F_TOKEN @"token"
 #define M_HAS_LOGOUT @"has_logout"
 
+#define POST_SOURCE @"http://app.mro.name/ShaarliOS"
+#define POST_STEP_1 @"post#1"
+
 @interface NSString(HttpGetParams)
 -(NSString *)stringByAddingPercentEscapesForHttpFormUrl;
 @end
@@ -30,7 +33,7 @@
 @end
 
 
-@interface ShaarliM : NSObject
+@interface ShaarliM : NSObject <NSURLSessionDelegate>
 @property (readonly, strong, nonatomic) NSURL *endpointUrl;
 @property (readonly, strong, nonatomic) NSString *endpointStr;
 @property (readonly, assign, nonatomic) BOOL endpointSecure;

@@ -37,7 +37,7 @@
     ShaarliM *s = [[ShaarliM alloc] init];
     [s load];
     self.vc.shaarli = s;
-    [s postTest];
+    // [s postTest];
     return YES;
 }
 
@@ -76,9 +76,9 @@
 
 -(void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:( void (^)() )completionHandler
 {
-    MRLogD(@"%@", identifier, nil);
+    MRLogE(@"%@", identifier, nil);
     completionHandler();
-    NSParameterAssert(NO);
+    // NSParameterAssert(NO);
 }
 
 

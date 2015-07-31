@@ -273,7 +273,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 #pragma mark -
 
 
-@interface ShaarliM() <NSURLSessionDataDelegate>
+@interface ShaarliM()
 @property (strong, nonatomic) NSURL *endpointUrl;
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
@@ -501,60 +501,6 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
--(void)_postURL:(NSURL *)url title:(NSString *)title tags:(id <NSFastEnumeration>)tags description:(NSString *)desc private:
-   (BOOL)private session:(NSURLSession *)session completion:( void (^)(ShaarliM * me, NSError * error) )completion
-{
-    if( !session )
-        session = [NSURLSession sharedSession];
-    else {
-        MRLogD(@"re-use session '%@', %@", session.sessionDescription, session.configuration.sharedContainerIdentifier, nil);
-    }
-    NSParameterAssert(self.endpointUrl);
-    NSParameterAssert(self.userName);
-    NSParameterAssert(self.passWord);
-    NSParameterAssert(url);
-
-    // test access to post/add link
-    NSURL *u2 = [NSURL URLWithString:[@"?post=" stringByAppendingString:[url.absoluteString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:self.endpointUrl];
-    [[session dataTaskWithURL:u2 completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-          MRLogD (@"complete %@", error, nil);
-          if( !error ) {
-              NSMutableDictionary *form = [parseShaarliHtml (data, nil)[M_FORM] mutableCopy];
-              NSParameterAssert (form[F_TOKEN]);
-              NSParameterAssert (form[@"lf_linkdate"]);
-              // pull out lf_linkdate, too
-              NSMutableURLRequest *r2 = [NSMutableURLRequest requestWithURL:u2];
-              r2.HTTPMethod = @"POST";
-              NSParameterAssert (form[F_TOKEN]);
-              /*
-               * lf_description  descr
-               * lf_private      on
-               * lf_tags         t1 t2
-               * lf_title        title
-               * lf_url	         http://foo
-               * returnurl       http://links.mro.name/?do=addlink
-               * save_edit	     Save
-               * lf_linkdate     20150718_003725    local time / server time?
-               * token	         c867d40b2afd895bf7c1f569a20c607f9ffc8f50
-               */
-              form[@"lf_private"] = private ? @"on":@"off";
-
-              // allow manual edit!
-
-              r2.HTTPBody = [form postData];
-              [[session dataTaskWithRequest:r2 completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-                    MRLogD (@"complete %@", error, nil);
-                    if( !error ) {
-                        MRLogD (@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
-                    }
-                }
-               ] resume];
-          }
-      }
-     ] resume];
-}
-
-
 -(void)login:( void (^)(ShaarliM * me, NSError * error) )completionHandler
 {
     MRLogD(@"", nil);
@@ -616,7 +562,56 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
-#pragma NSURLSessionDelegate
+#pragma mark PostTest
+
+
+#define POST_STEP_2 @"post#2"
+#define POST_STEP_3 @"post#3"
+#define POST_STEP_4 @"post#4"
+
+
+
+-(void)postTest
+{
+    MRLogD(@"-", nil);
+
+    NSString *confName = BUNDLE_ID @".backgroundpost";
+    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
+    // conf = [NSURLSessionConfiguration defaultSessionConfiguration];
+    conf.sharedContainerIdentifier = @"group." BUNDLE_ID; // http://stackoverflow.com/a/26319143
+    conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain;
+    conf.networkServiceType = NSURLNetworkServiceTypeBackground;
+    conf.allowsCellularAccess = YES;
+
+
+
+
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
+    session.sessionDescription = @"Shaarli Post";
+
+    NSParameterAssert(session.configuration.HTTPCookieStorage);
+    NSParameterAssert(session.configuration.HTTPCookieStorage == [NSHTTPCookieStorage sharedHTTPCookieStorage]);
+    NSParameterAssert(NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain == session.configuration.HTTPCookieAcceptPolicy);
+    NSParameterAssert(session.configuration.HTTPShouldSetCookies);
+    NSParameterAssert(self == session.delegate);
+
+    for( NSHTTPCookie *cook in session.configuration.HTTPCookieStorage.cookies ) {
+        MRLogD(@"deleteCookie %@", cook, nil);
+        [session.configuration.HTTPCookieStorage deleteCookie:cook];
+    }
+
+    NSString *par = @"?";
+    par = [par stringByAppendingString:[@ { @"post":@"http://ww.heise.de/a", @"title":@"Ti tlə", @"description":[[NSDate date] description], @"source":POST_SOURCE }
+                                        stringByAddingPercentEscapesForHttpFormUrl]];
+
+    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
+    NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
+    dt.taskDescription = POST_STEP_1;
+    [dt resume];
+}
+
+
+#pragma mark NSURLSessionDelegate
 
 
 /* The last message a session receives.  A session will only become
@@ -658,54 +653,18 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 -(void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
     MRLogD(@"%@", session.sessionDescription, nil);
-    NSParameterAssert(NO);
-}
-
-
-#pragma mark PostTest
-
-
-#define POST_STEP_1 @"post#1"
-#define POST_STEP_2 @"post#2"
-#define POST_STEP_3 @"post#3"
-#define POST_STEP_4 @"post#4"
-
-#define POST_SOURCE @"http://app.mro.name/ShaarliOS"
-
-
--(void)postTest
-{
-    MRLogD(@"-", nil);
-
-    NSString *confName = BUNDLE_ID @".backgroundpost";
-    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
-    conf = [NSURLSessionConfiguration defaultSessionConfiguration];
-    conf.sharedContainerIdentifier = @"group." BUNDLE_ID; // http://stackoverflow.com/a/26319143
-    conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyAlways;
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
-    session.sessionDescription = @"Shaarli Post";
-    NSParameterAssert(session.configuration.HTTPCookieStorage);
-    NSParameterAssert(session.configuration.HTTPCookieStorage == [NSHTTPCookieStorage sharedHTTPCookieStorage]);
-    NSParameterAssert(NSHTTPCookieAcceptPolicyAlways == session.configuration.HTTPCookieAcceptPolicy);
-    NSParameterAssert(session.configuration.HTTPShouldSetCookies);
-    NSParameterAssert(self == session.delegate);
-    for( NSHTTPCookie *cook in session.configuration.HTTPCookieStorage.cookies ) {
-        MRLogD(@"deleteCookie %@", cook, nil);
-        [session.configuration.HTTPCookieStorage deleteCookie:cook];
-    }
-
-    NSString *par = @"?";
-    par = [par stringByAppendingString:[@ { @"post":@"http://ww.heise.de/a", @"title":@"Ti tlə", @"description":[[NSDate date] description], @"source":POST_SOURCE }
-                                        stringByAddingPercentEscapesForHttpFormUrl]];
-
-    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
-    NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
-    dt.taskDescription = POST_STEP_1;
-    [dt resume];
+    // NSParameterAssert(NO);
 }
 
 
 #pragma mark NSURLSessionTaskDelegate
+
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:( void (^)(NSURLRequest *) )completionHandler
+{
+    MRLogD(@"REDIRECT to %@", request.URL, nil);
+    completionHandler(request);
+}
 
 
 /* Sent as the last message related to a specific task.  Error may be
@@ -745,8 +704,11 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSArray *cookies = [session.configuration.HTTPCookieStorage cookiesForURL:task.currentRequest.URL];
     MRLogD(@"cookies %@", cookies, nil);
 
+    NSParameterAssert(task.originalRequest.HTTPShouldHandleCookies);
+    // NSParameterAssert(NSURLNetworkServiceTypeBackground == task.originalRequest.networkServiceType);
+
     NSData *data = [NSData dataWithContentsOfURL:location];
-    // NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *ret = [self parseHtmlData:data error:nil];
     NSMutableDictionary *post = ret[M_FORM];
     MRLogD(@"%@ %@", task.taskDescription, ret, nil);
@@ -792,22 +754,31 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
             [post setValue:params[@"tags"] forKey:@"lf_" @"tags"];
             [post setValue:params[@"private"] forKey:@"lf_" @"private"];
 #if DEBUG
-            [post setValue:@"on" forKey:@"lf_" @"private"];
+            // [post setValue:@"on" forKey:@"lf_" @"private"];
 #endif
             req.HTTPBody = [post postData];
             NSURLSessionTask *dt = [session downloadTaskWithRequest:req];
             dt.taskDescription = POST_STEP_3;
             [dt resume];
         } else {
-            MRLogD(@"Error", nil);
+            MRLogD(@"Error: I expected to be logged in now. Looks cookies don't work properly.", nil);
+            NSAssert(nil == [task.currentRequest.URL dictionaryWithHttpFormUrl][@"do"], @"Looks the redirect from POST -> GET didn't pick up.");
+            if( nil != [task.currentRequest.URL dictionaryWithHttpFormUrl][@"do"] ) {
+                NSMutableDictionary *pa = [[task.originalRequest.URL dictionaryWithHttpFormUrl] mutableCopy];
+                [pa removeObjectForKey:@"do"];
+                NSURL *u = [NSURL URLWithString:[@"?" stringByAppendingString:[pa stringByAddingPercentEscapesForHttpFormUrl]] relativeToURL:task.originalRequest.URL];
+                NSURLSessionTask *dt = [session downloadTaskWithURL:u];
+                dt.taskDescription = task.taskDescription;
+                [dt resume];
+            }
         }
         return;
     }
     if( [POST_STEP_3 isEqualToString:task.taskDescription] ) {
         if( [ret[M_HAS_LOGOUT] boolValue] ) {
-            MRLogD(@"Success!", nil);
+            MRLogD(@"Success! Signal creation of '%@'", task.currentRequest.URL.fragment, nil);
         } else {
-            MRLogD(@"Error", nil);
+            MRLogD(@"Error: I expected to be logged in now. Looks cookies don't work properly.", nil);
         }
         return;
     }
