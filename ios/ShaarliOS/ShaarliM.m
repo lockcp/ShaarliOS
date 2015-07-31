@@ -11,9 +11,95 @@
 
 #define USE_KEYCHAIN 1
 
-@interface NSURL(ProtectionSpace)
-@property (nonatomic, readonly, assign) NSURLProtectionSpace *protectionSpace;
+@implementation NSString(HttpGetParams)
+
+/**
+ * https://web.archive.org/web/20090430095243/http://simonwoodside.com/weblog/2009/4/22/how_to_really_url_encode/
+ * https://madebymany.com/blog/url-encoding-an-nsstring-on-ios
+ */
+-(NSString *)stringByAddingPercentEscapesForHttpFormUrl
+{
+#if 1
+    // http://stackoverflow.com/a/8086845
+    return (NSString *)CFBridgingRelease( CFURLCreateStringByAddingPercentEscapes(
+                                              NULL,
+                                              (__bridge CFStringRef)self,
+                                              NULL,
+                                              CFSTR("!*'();:@&=+$,/?%#[]\" "),
+                                              kCFStringEncodingUTF8) );
+#else
+    CFStringRef src = (__bridge CFStringRef)self;
+    CFStringRef keep = CFSTR("!$&'()*+,-./:;=?@_~");
+    CFStringRef dst = CFURLCreateStringByAddingPercentEscapes( NULL, src, NULL, keep, CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding) );
+    NSString *ret = (__bridge NSString *)dst;
+    CFRelease(dst);
+    return ret;
+#endif
+}
+
+
 @end
+
+
+
+@implementation NSDictionary(HttpGetParams)
+-(NSString *)stringByAddingPercentEscapesForHttpFormUrl
+{
+    NSMutableString *s = [NSMutableString stringWithCapacity:100];
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL * stop) {
+         if( 0 < s.length )
+             [s appendString:@"&"];
+         [s appendString:[key stringByAddingPercentEscapesForHttpFormUrl]];
+         [s appendString:@"="];
+         [s appendString:[obj stringByAddingPercentEscapesForHttpFormUrl]];
+     }
+    ];
+    return s;
+}
+@end
+
+
+@implementation NSDictionary(HttpPostData)
+
+-(NSData *)postData
+{
+    return [[self stringByAddingPercentEscapesForHttpFormUrl] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+
+@end
+
+@implementation NSURL(HttpGetParams)
+
+
+-(NSDictionary *)dictionaryWithHttpFormUrl
+{
+    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:5];
+    for( NSString *part in[self.query componentsSeparatedByString : @"&"] ) {
+        const NSRange r = [part rangeOfString:@"="];
+        if( NSNotFound == r.location )
+            ret[[part stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] = @ (YES);
+        else {
+            // http://stackoverflow.com/questions/3423545/objective-c-iphone-percent-encode-a-string#comment8231731_3426140
+            // http://stackoverflow.com/questions/2678551/when-to-encode-space-to-plus-or-20
+            NSString *key = [[part substringToIndex:r.location] stringByReplacingOccurrencesOfString:@"+" withString:@"%20"];
+            NSString *value = [[part substringFromIndex:r.location + r.length] stringByReplacingOccurrencesOfString:@"+" withString:@"%20"];
+            ret[[key stringByRemovingPercentEncoding]] = [value stringByRemovingPercentEncoding];
+        }
+    }
+    return ret;
+}
+
+
+-(NSDictionary *)queryDictionary
+{
+    return [self dictionaryWithHttpFormUrl];
+}
+
+
+@end
+
+
 @implementation NSURL(ProtectionSpace)
 
 -(NSURLProtectionSpace *)protectionSpace
@@ -30,21 +116,6 @@
 
 #pragma mark -
 
-@implementation NSDictionary(PostData)
-
--(NSData *)postData
-{
-    NSMutableString *s = [NSMutableString stringWithCapacity:100];
-    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL * stop) {
-         [s appendFormat:@"%@=%@&", [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], [obj stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-     }
-    ];
-    return [s dataUsingEncoding:NSUTF8StringEncoding];
-}
-
-
-@end
-
 
 #pragma mark libxml2 LoginForm
 
@@ -55,12 +126,7 @@
 
 #define M_TITLE @"title"
 #define M_TEXT @"text"
-#define M_FORM @"form"
 #define M_ID_HEADERFORM @"headerform"
-
-#define F_TOKEN @"token"
-
-#define M_HAS_LOGOUT @"has_logout"
 
 static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, const xmlChar **attributes)
 {
@@ -72,8 +138,6 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
 
-            if( 0 == strcmp("href", name) && 0 == strcmp("?", value) )
-                d[T_A] = M_TITLE;
             if( 0 == strcmp("href", name) && 0 == strcmp("?do=logout", value) )
                 // https://github.com/dimtion/Shaarlier/commit/e55b150770b67561d0e07c8b1d5ab88b4f1ce52b#commitcomment-12407612
                 d[M_HAS_LOGOUT] = @ (YES);
@@ -88,6 +152,7 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
 
             if( 0 == strcmp("id", name) && 0 == strcmp("shaarli_title", value) )
                 d[T_SPAN] = M_TITLE;
+            [d[M_TEXT] setString:@""];
         }
         return;
     }
@@ -96,8 +161,10 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
 
-            if( 0 == strcmp("id", name) && 0 == strcmp("headerform", value) )
+            if( 0 == strcmp("id", name) && 0 == strcmp("headerform", value) ) {
                 d[T_DIV] = M_ID_HEADERFORM;
+                [d[M_TEXT] setString:@""];
+            }
         }
         return;
     }
@@ -165,7 +232,7 @@ static void ShaarliHtml_Characters(void *voidContext, const xmlChar *ch, int len
     assert(voidContext && "ouch");
     NSMutableDictionary *d = (__bridge NSMutableDictionary *)voidContext;
 
-    if( [M_TITLE isEqualToString:d[T_A]] || [M_ID_HEADERFORM isEqualToString:d[T_DIV]] ) {
+    if( [M_TITLE isEqualToString:d[T_SPAN]] || [M_ID_HEADERFORM isEqualToString:d[T_DIV]] ) {
         NSMutableString *str = d[M_TEXT];
         if( !str )
             str = d[M_TEXT] = [NSMutableString stringWithCapacity:200];
@@ -185,7 +252,7 @@ static htmlSAXHandler FormField_Handler = {
 };
 
 /** parse form data (token!) from the HTML response: */
-NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
+NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:4];
     htmlParserCtxtPtr ctxt = htmlCreatePushParserCtxt(&FormField_Handler, (__bridge void *)d, (const char *)[data bytes], (int)data.length, "", XML_CHAR_ENCODING_NONE);
@@ -318,7 +385,7 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
               completion (self, error);
               return;
           }
-          NSDictionary *r = parseShaarliHtml (data, @[F_TOKEN]);
+          NSDictionary *r = parseShaarliHtml (data, nil);
           if( [r[M_HAS_LOGOUT] boolValue] && !force ) {
               // check if there's a logout link - we're already logged in then.
               NSParameterAssert (cre0);
@@ -387,6 +454,12 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
 }
 
 
+-(NSDictionary *)parseHtmlData:(NSData *)data error:(NSError **)error
+{
+    return parseShaarliHtml(data, error);
+}
+
+
 #pragma mark -
 
 
@@ -418,6 +491,25 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
         MRLogD(@"re-use session '%@', %@", session.sessionDescription, session.configuration.sharedContainerIdentifier, nil);
     }
     NSParameterAssert(self.endpointUrl);
+    NSParameterAssert(url);
+
+    // test access to post/add link
+    NSURL *u2 = [NSURL URLWithString:[@"?post=" stringByAppendingString:[url.absoluteString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:self.endpointUrl];
+    [[session dataTaskWithURL:u2] resume];
+
+    completion(self, nil);
+}
+
+
+-(void)_postURL:(NSURL *)url title:(NSString *)title tags:(id <NSFastEnumeration>)tags description:(NSString *)desc private:
+   (BOOL)private session:(NSURLSession *)session completion:( void (^)(ShaarliM * me, NSError * error) )completion
+{
+    if( !session )
+        session = [NSURLSession sharedSession];
+    else {
+        MRLogD(@"re-use session '%@', %@", session.sessionDescription, session.configuration.sharedContainerIdentifier, nil);
+    }
+    NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.userName);
     NSParameterAssert(self.passWord);
     NSParameterAssert(url);
@@ -427,7 +519,7 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
     [[session dataTaskWithURL:u2 completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
           MRLogD (@"complete %@", error, nil);
           if( !error ) {
-              NSMutableDictionary *form = [parseShaarliHtml (data, @[F_TOKEN, @"lf_linkdate"])[M_FORM] mutableCopy];
+              NSMutableDictionary *form = [parseShaarliHtml (data, nil)[M_FORM] mutableCopy];
               NSParameterAssert (form[F_TOKEN]);
               NSParameterAssert (form[@"lf_linkdate"]);
               // pull out lf_linkdate, too
@@ -492,7 +584,7 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
           if( error )
               completionHandler (self, error);
           else {
-              NSString *token = parseShaarliHtml (data, @[F_TOKEN])[M_FORM][F_TOKEN];
+              NSString *token = parseShaarliHtml (data, nil)[M_FORM][F_TOKEN];
               NSParameterAssert (token);
 
               NSMutableURLRequest *r = [NSMutableURLRequest requestWithURL:u];
@@ -533,7 +625,7 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
  */
 -(void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
-    MRLogD(@"-", nil);
+    MRLogD(@"%@", session.sessionDescription, nil);
     NSParameterAssert(NO);
 }
 
@@ -550,7 +642,7 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
 -(void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
    completionHandler:( void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * credential) )completionHandler
 {
-    MRLogD(@"-", nil);
+    MRLogD(@"%@", session.sessionDescription, nil);
     NSParameterAssert(NO);
 }
 
@@ -565,8 +657,162 @@ NSDictionary *parseShaarliHtml(NSData *data, id <NSFastEnumeration> fields)
  */
 -(void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    MRLogD(@"-", nil);
+    MRLogD(@"%@", session.sessionDescription, nil);
     NSParameterAssert(NO);
+}
+
+
+#pragma mark PostTest
+
+
+#define POST_STEP_1 @"post#1"
+#define POST_STEP_2 @"post#2"
+#define POST_STEP_3 @"post#3"
+#define POST_STEP_4 @"post#4"
+
+#define POST_SOURCE @"http://app.mro.name/ShaarliOS"
+
+
+-(void)postTest
+{
+    MRLogD(@"-", nil);
+
+    NSString *confName = BUNDLE_ID @".backgroundpost";
+    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
+    conf = [NSURLSessionConfiguration defaultSessionConfiguration];
+    conf.sharedContainerIdentifier = @"group." BUNDLE_ID; // http://stackoverflow.com/a/26319143
+    conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyAlways;
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
+    session.sessionDescription = @"Shaarli Post";
+    NSParameterAssert(session.configuration.HTTPCookieStorage);
+    NSParameterAssert(session.configuration.HTTPCookieStorage == [NSHTTPCookieStorage sharedHTTPCookieStorage]);
+    NSParameterAssert(NSHTTPCookieAcceptPolicyAlways == session.configuration.HTTPCookieAcceptPolicy);
+    NSParameterAssert(session.configuration.HTTPShouldSetCookies);
+    NSParameterAssert(self == session.delegate);
+    for( NSHTTPCookie *cook in session.configuration.HTTPCookieStorage.cookies ) {
+        MRLogD(@"deleteCookie %@", cook, nil);
+        [session.configuration.HTTPCookieStorage deleteCookie:cook];
+    }
+
+    NSString *par = @"?";
+    par = [par stringByAppendingString:[@ { @"post":@"http://ww.heise.de/a", @"title":@"Ti tlə", @"description":[[NSDate date] description], @"source":POST_SOURCE }
+                                        stringByAddingPercentEscapesForHttpFormUrl]];
+
+    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
+    NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
+    dt.taskDescription = POST_STEP_1;
+    [dt resume];
+}
+
+
+#pragma mark NSURLSessionTaskDelegate
+
+
+/* Sent as the last message related to a specific task.  Error may be
+ * nil, which implies that no error occurred and this task is complete.
+ */
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    // handle (low level network) error and signal posting complete.
+    NSParameterAssert(!error);
+}
+
+
+#pragma mark NSUrlSessionDataDelegate
+
+
+/* The task has received a response and no further messages will be
+ * received until the completion block is called. The disposition
+ * allows you to cancel a request or to turn a data task into a
+ * download task. This delegate message is optional - if you do not
+ * implement it, you can get the response as a property of the task.
+ *
+ * This method will not be called for background upload tasks (which cannot be converted to download tasks).
+ */
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:( void (^)(NSURLSessionResponseDisposition disposition) )completionHandler
+{
+    completionHandler(NSURLSessionResponseBecomeDownload);
+}
+
+
+#pragma mark NSURLSessionDownloadDelegate
+
+
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didFinishDownloadingToURL:(NSURL *)location
+{
+    MRLogD(@"%@ ORIGINAL: %@ %@", task.taskDescription, task.originalRequest.HTTPMethod, task.originalRequest.URL, nil);
+    MRLogD(@"%@ CURRENT : %@ %@", task.taskDescription, task.currentRequest.HTTPMethod, task.currentRequest.URL, nil);
+    NSArray *cookies = [session.configuration.HTTPCookieStorage cookiesForURL:task.currentRequest.URL];
+    MRLogD(@"cookies %@", cookies, nil);
+
+    NSData *data = [NSData dataWithContentsOfURL:location];
+    // NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSDictionary *ret = [self parseHtmlData:data error:nil];
+    NSMutableDictionary *post = ret[M_FORM];
+    MRLogD(@"%@ %@", task.taskDescription, ret, nil);
+    if( !post[F_TOKEN] ) {
+        MRLogD(@"NO TOKEN! @todo add a error to NSUserDefaults Error queue.", nil);
+        MRLogD(@"%@\n%@", task.currentRequest.URL, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
+        MRLogD(@"Error", nil);
+        return;
+    }
+    NSParameterAssert(40 == [post[F_TOKEN] length]);
+    if( [POST_STEP_1 isEqualToString:task.taskDescription] ) {
+        if( ![ret[M_HAS_LOGOUT] boolValue] ) {
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:task.currentRequest.URL];
+            req.HTTPMethod = @"POST";
+
+            NSDictionary *cd = [session.configuration.URLCredentialStorage credentialsForProtectionSpace:[req.URL protectionSpace]];
+            NSParameterAssert(1 == cd.count);
+            NSURLCredential *cre = [[cd objectEnumerator] nextObject];
+
+            post[@"login"] = cre.user;
+            post[@"password"] = cre.password;
+            post[@"returnurl"] = task.originalRequest.URL.absoluteString;
+            req.HTTPBody = [post postData];
+            NSURLSessionTask *dt = [session downloadTaskWithRequest:req];
+            dt.taskDescription = POST_STEP_2;
+            [dt resume];
+        } else {
+            MRLogD(@"%@ %@", task.taskDescription, ret, nil);
+            MRLogD(@"Error", nil);
+        }
+        return;
+    }
+    if( [POST_STEP_2 isEqualToString:task.taskDescription] ) {
+        if( [ret[M_HAS_LOGOUT] boolValue] ) {
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:task.currentRequest.URL];
+            req.HTTPMethod = @"POST";
+            NSDictionary *params = [req.URL dictionaryWithHttpFormUrl];
+            [post setValue:params[@"post"] forKey:@"lf_" @"url"];
+            [post setValue:params[@"title"] forKey:@"lf_" @"title"];
+            [post setValue:params[@"description"] forKey:@"lf_" @"description"];
+            [post setValue:params[@"source"] forKey:@"lf_" @"source"];
+
+            [post setValue:params[@"tags"] forKey:@"lf_" @"tags"];
+            [post setValue:params[@"private"] forKey:@"lf_" @"private"];
+#if DEBUG
+            [post setValue:@"on" forKey:@"lf_" @"private"];
+#endif
+            req.HTTPBody = [post postData];
+            NSURLSessionTask *dt = [session downloadTaskWithRequest:req];
+            dt.taskDescription = POST_STEP_3;
+            [dt resume];
+        } else {
+            MRLogD(@"Error", nil);
+        }
+        return;
+    }
+    if( [POST_STEP_3 isEqualToString:task.taskDescription] ) {
+        if( [ret[M_HAS_LOGOUT] boolValue] ) {
+            MRLogD(@"Success!", nil);
+        } else {
+            MRLogD(@"Error", nil);
+        }
+        return;
+    }
+    MRLogD(@"%@ Fallthrough", task.taskDescription, nil);
+    MRLogD(@"Error", nil);
 }
 
 

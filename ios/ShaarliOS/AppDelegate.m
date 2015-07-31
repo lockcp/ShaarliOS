@@ -37,6 +37,7 @@
     ShaarliM *s = [[ShaarliM alloc] init];
     [s load];
     self.vc.shaarli = s;
+    [s postTest];
     return YES;
 }
 
@@ -70,6 +71,14 @@
 -(void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+-(void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:( void (^)() )completionHandler
+{
+    MRLogD(@"%@", identifier, nil);
+    completionHandler();
+    NSParameterAssert(NO);
 }
 
 
