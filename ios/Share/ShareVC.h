@@ -10,5 +10,4 @@
 #import <Social/Social.h>
 
 @interface ShareVC : SLComposeServiceViewController
-
 @end

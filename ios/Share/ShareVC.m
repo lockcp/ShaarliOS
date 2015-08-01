@@ -8,7 +8,7 @@
 
 #import "ShareVC.h"
 #import <MobileCoreServices/UTCoreTypes.h>
-#import "NSUserDefaults+Share.h"
+// #import "NSUserDefaults+Share.h"
 #import "ShaarliM.h"
 
 
@@ -91,12 +91,11 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    MRLogD(@"%@", [NSUserDefaults shaarliDefaults], nil);
     [super viewWillAppear:animated];
     self.view.tintColor = [UIColor colorWithRed:128 / 255.0f green:173 / 255.0f blue:72 / 255.0f alpha:1.0f];
     NSParameterAssert(self.shaarli);
 
-    self.title = @"Shaarə"; // self.shaarli.title;
+    self.title = [NSString stringWithFormat:NSLocalizedString(@"Shaarli %@", @"Share"), self.shaarli.title];
 }
 
 
@@ -104,10 +103,21 @@
 {
     MRLogD(@"-", nil);
     [super viewDidAppear:animated];
-    // self.payload[@"title"] = [self.extensionContext.inputItems[0] attributedContentText].string;
     NSParameterAssert(itemTitle);
     itemTitle.value = self.contentText;
-    // self.textView.text = @"";
+
+    if( !self.shaarli.isSetUp ) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No Shaarli", @"Share") message:NSLocalizedString(@"There is no Shaarli account configured. You can add one in the ShaarliOS in-app settings.", @"Share") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Share") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                              [self cancel];
+                          }
+         ]];
+        dispatch_async (dispatch_get_main_queue (), ^{
+                            [self presentViewController:alert animated:YES completion:nil];
+                        }
+                        );
+        return;
+    }
 }
 
 

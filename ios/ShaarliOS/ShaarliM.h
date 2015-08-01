@@ -32,15 +32,15 @@
 @end
 
 @interface ShaarliM : NSObject <NSURLSessionDelegate>
-@property (readonly, strong, nonatomic) NSURL *endpointUrl;
-@property (readonly, strong, nonatomic) NSString *endpointStr;
-@property (readonly, assign, nonatomic) BOOL endpointSecure;
+    // configured
 @property (readonly, strong, nonatomic) NSString *userName;
 @property (readonly, strong, nonatomic) NSString *passWord;
-
+@property (readonly, strong, nonatomic) NSURL *endpointUrl;
+@property (readonly, strong, nonatomic) NSString *endpointStr;
+@property (readonly, assign, nonatomic) BOOL isSetUp;
+@property (readonly, assign, nonatomic) BOOL endpointSecure;
+// parsed
 @property (readonly, strong, nonatomic) NSString *title;
-@property (readonly, assign, nonatomic) BOOL isLoggedIn;
-
 
 -(void)load;
 -(void)save;

@@ -323,6 +323,18 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
++(NSSet *)keyPathsForValuesAffectingIsSetUp
+{
+    return [NSSet setWithObject:@"endpointUrl"];
+}
+
+
+-(BOOL)isSetUp
+{
+    return nil != self.endpointUrl;
+}
+
+
 -(void)load
 {
     NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
