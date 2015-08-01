@@ -95,7 +95,7 @@
     self.view.tintColor = [UIColor colorWithRed:128 / 255.0f green:173 / 255.0f blue:72 / 255.0f alpha:1.0f];
     NSParameterAssert(self.shaarli);
 
-    self.title = [NSString stringWithFormat:NSLocalizedString(@"Shaarli %@", @"Share"), self.shaarli.title];
+    self.title = self.shaarli.title;
 }
 
 

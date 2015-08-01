@@ -349,7 +349,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     self.passWord = [d valueForKey:@"passWord"];
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
-
+    NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
@@ -358,6 +358,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 -(void)save
 {
     MRLogD(@"", nil);
+    NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
     NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
     NSParameterAssert(d);
     [d setValue:self.title forKey:@"title"];

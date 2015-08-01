@@ -77,7 +77,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="centerY" destination="12Y-li-NZ0" id="q8e-Zh-Xjk"/>
-                        <outlet property="settingsBtn" destination="Cwf-WH-1cl" id="8sE-ov-SIx"/>
                         <outlet property="vContainer" destination="iT6-oo-ncS" id="BMv-Jr-E90"/>
                     </connections>
                 </viewController>

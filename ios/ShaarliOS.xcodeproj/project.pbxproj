@@ -26,7 +26,6 @@
 		161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */; };
 		1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
 		1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
-		1621DDD31B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
 		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
@@ -490,7 +489,6 @@
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
-				1621DDD31B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3FA1AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 				1601E3FD1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
 				1601E4021ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,

@@ -22,10 +22,7 @@
 
 @interface MainVC()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *centerY;
-
 @property (weak, nonatomic) IBOutlet UIView *vContainer;
-
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *settingsBtn;
 @end
 
 @implementation MainVC
@@ -34,33 +31,8 @@
 {
     MRLogD(@"", nil);
     [super viewDidLoad];
-    NSParameterAssert(self.settingsBtn);
     NSParameterAssert(self.vContainer);
     NSParameterAssert(self.centerY);
-}
-
-
--(void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-
--(BOOL)settingsEnabled
-{
-    return self.settingsBtn.enabled;
-}
-
-
--(void)setSettingsEnabled:(BOOL)value
-{
-    self.settingsBtn.enabled = value;
-}
-
-
-+(NSSet *)keyPathsForValuesAffectingSettingsEnabled
-{
-    return [NSSet setWithObject:@"settingsBtn.enabled"];
 }
 
 
