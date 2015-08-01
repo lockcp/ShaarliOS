@@ -282,6 +282,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
 @property (strong, nonatomic) NSString *title;
+
+@property (weak, nonatomic) id <ShaarliPostDelegate> postDelegate;
 @end
 
 @implementation ShaarliM
@@ -338,6 +340,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 -(void)load
 {
     NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
+    [d synchronize];
     NSParameterAssert(d);
     self.title = [d valueForKey:@"title"];
 #if USE_KEYCHAIN
@@ -349,7 +352,9 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     self.passWord = [d valueForKey:@"passWord"];
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
-    NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
+    if( !( (nil == self.title) == (nil == self.endpointUrl) ) )
+        MRLogW(@"strange configuration", nil);
+    // NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
@@ -555,14 +560,16 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
    (BOOL)private session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg
 {
     NSString *par = @"?";
+    NSParameterAssert(nil == self.postDelegate);
+    NSParameterAssert(delg);
+    self.postDelegate = delg;
     par = [par stringByAppendingString:[@ { @"post":url.absoluteString, @"title":title, @"description":desc, @"source":POST_SOURCE }
                                         stringByAddingPercentEscapesForHttpFormUrl]];
-
     NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
     NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
     dt.taskDescription = POST_STEP_1;
     [dt resume];
-    [delg shaarli:self didFinishPostWithError:nil];
+    // see -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didFinishDownloadingToURL:(NSURL *)location
 }
 
 
@@ -654,6 +661,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didFinishDownloadingToURL:(NSURL *)location
 {
+    NSParameterAssert(self.postDelegate);
     MRLogD(@"%@ ORIGINAL: %@ %@", task.taskDescription, task.originalRequest.HTTPMethod, task.originalRequest.URL, nil);
     MRLogD(@"%@ CURRENT : %@ %@", task.taskDescription, task.currentRequest.HTTPMethod, task.currentRequest.URL, nil);
     NSArray *cookies = [session.configuration.HTTPCookieStorage cookiesForURL:task.currentRequest.URL];
@@ -668,9 +676,10 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSMutableDictionary *post = ret[M_FORM];
     MRLogD(@"%@ %@", task.taskDescription, ret, nil);
     if( !post[F_TOKEN] ) {
-        MRLogD(@"NO TOKEN! @todo add a error to NSUserDefaults Error queue.", nil);
-        MRLogD(@"%@\n%@", task.currentRequest.URL, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
-        MRLogD(@"Error", nil);
+        NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"Couldn't find token in page.", @"ShaarliM") }
+                     ];
+        [self.postDelegate shaarli:self didFinishPostWithError:e];
+        self.postDelegate = nil;
         return;
     }
     NSParameterAssert(40 == [post[F_TOKEN] length]);
@@ -691,8 +700,10 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
             dt.taskDescription = POST_STEP_2;
             [dt resume];
         } else {
-            MRLogD(@"%@ %@", task.taskDescription, ret, nil);
-            MRLogD(@"Error", nil);
+            NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"Wasn't logged in.", @"ShaarliM") }
+                         ];
+            [self.postDelegate shaarli:self didFinishPostWithError:e];
+            self.postDelegate = nil;
         }
         return;
     }
@@ -716,29 +727,30 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
             dt.taskDescription = POST_STEP_3;
             [dt resume];
         } else {
-            MRLogD(@"Error: I expected to be logged in now. Looks cookies don't work properly.", nil);
-            NSAssert(nil == [task.currentRequest.URL dictionaryWithHttpFormUrl][@"do"], @"Looks the redirect from POST -> GET didn't pick up.");
-            if( nil != [task.currentRequest.URL dictionaryWithHttpFormUrl][@"do"] ) {
-                NSMutableDictionary *pa = [[task.originalRequest.URL dictionaryWithHttpFormUrl] mutableCopy];
-                [pa removeObjectForKey:@"do"];
-                NSURL *u = [NSURL URLWithString:[@"?" stringByAppendingString:[pa stringByAddingPercentEscapesForHttpFormUrl]] relativeToURL:task.originalRequest.URL];
-                NSURLSessionTask *dt = [session downloadTaskWithURL:u];
-                dt.taskDescription = task.taskDescription;
-                [dt resume];
-            }
+            NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"I expected to be logged in now. Looks cookies don't work properly.", @"ShaarliM") }
+                         ];
+            [self.postDelegate shaarli:self didFinishPostWithError:e];
+            self.postDelegate = nil;
         }
         return;
     }
     if( [POST_STEP_3 isEqualToString:task.taskDescription] ) {
+        NSError *e = nil;
         if( [ret[M_HAS_LOGOUT] boolValue] ) {
             MRLogD(@"Success! Signal creation of '%@'", task.currentRequest.URL.fragment, nil);
         } else {
-            MRLogD(@"Error: I expected to be logged in now. Looks cookies don't work properly.", nil);
+            e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"I expected to be logged in now. Looks cookies don't work properly.", @"ShaarliM") }
+                ];
         }
+        [self.postDelegate shaarli:self didFinishPostWithError:e];
+        self.postDelegate = nil;
         return;
     }
-    MRLogD(@"%@ Fallthrough", task.taskDescription, nil);
-    MRLogD(@"Error", nil);
+    NSParameterAssert(NO);
+    NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_POST_FALLTHROUGH userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"This is most likely a programming error.", @"ShaarliM") }
+                 ];
+    [self.postDelegate shaarli:self didFinishPostWithError:e];
+    self.postDelegate = nil;
 }
 
 
