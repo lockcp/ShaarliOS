@@ -8,7 +8,6 @@
 
 #import "ShareVC.h"
 #import <MobileCoreServices/UTCoreTypes.h>
-// #import "NSUserDefaults+Share.h"
 #import "ShaarliM.h"
 
 
@@ -143,6 +142,7 @@
     NSParameterAssert(1 == self.extensionContext.inputItems.count);
     NSExtensionItem *item = self.extensionContext.inputItems[0];
     for( NSItemProvider *itemProvider in item.attachments ) {
+        // see predicate from http://stackoverflow.com/a/27932776
         NSString *t = @"public.url"; // (__bridge NSString *)kUTTypeText;
         if( [itemProvider hasItemConformingToTypeIdentifier:t] )
             [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
@@ -152,6 +152,11 @@
              }
             ];
     }
+#if 0
+    NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:-1 userInfo:@ { NSLocalizedDescriptionKey:NSLocalizedString (@"Found no item to share.", @"ShareVC") }
+                 ];
+    [self shaarli:nil didFinishPostWithError:e];
+#endif
 }
 
 
@@ -168,25 +173,20 @@
 
 -(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error
 {
-#if 1
     if( error ) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Shaarlying failed", @"ShareVC") message:[NSString stringWithFormat:NSLocalizedString(@"%@\n\nFailing call was %@", @"ShareVC"), error.localizedDescription, error.userInfo[NSURLErrorKey]] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"ShareVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-                              [super didSelectPost];
+                              // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
+                              // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+                              [super cancel];
                           }
          ]];
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    [super didSelectPost];
-#else
     // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
     // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-    [self.extensionContext completeRequestReturningItems:@[item] completionHandler:^(BOOL expired) {
-         MRLogD (@"expired: %s", expired ? "yes":"no", nil);
-     }
-    ];
-#endif
+    [super didSelectPost];
 }
 
 
