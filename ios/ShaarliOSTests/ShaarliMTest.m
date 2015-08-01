@@ -10,6 +10,10 @@
 #import "XCTestCase+Tools.h"
 #import "ShaarliM.h"
 
+#define M_FORM @"form"
+#define F_TOKEN @"token"
+#define M_HAS_LOGOUT @"has_logout"
+
 NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 
 @interface ShaarliM() <NSURLSessionDataDelegate>
@@ -66,31 +70,6 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
         @"descr=iption" : @"Des crip tion"
     };
     XCTAssertEqualObjects(@"descr%3Diption=Des%20crip%20tion", [p stringByAddingPercentEscapesForHttpFormUrl], @"hu");
-}
-
-
--(void)_testLogin
-{
-    XCTAssertEqualObjects(@"ShaarliMTest", NSStringFromClass([self class]), @"foo");
-    XCTAssertEqualObjects(@"testLogin", NSStringFromSelector(_cmd), @"foo");
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
-}
-
-
--(void)testPost
-{
-    ShaarliM *s = [[ShaarliM alloc] init];
-
-    s.endpointUrl = [NSURL URLWithString:@"http://links.mro.name"];
-    s.userName = @"mro";
-    s.passWord = @"Jahahw7zahKi";
-
-    [s postURL:[NSURL URLWithString:@"http://example.com"] title:@"example" tags:@[] description:@"description" private:
-     YES session:nil completion:^(ShaarliM * me, NSError * error) {
-         MRLogD (@"done", nil);
-     }
-    ];
 }
 
 

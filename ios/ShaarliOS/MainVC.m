@@ -83,7 +83,6 @@
          NSLayoutConstraint *c = [self.centerY constraintWithMultiplier:0.75];
          [self.view removeConstraint:self.centerY];
          [self.view addConstraint:self.centerY = c];
-
          [self.view layoutIfNeeded];
      }
     ];

@@ -8,13 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define M_FORM @"form"
-#define F_TOKEN @"token"
-#define M_HAS_LOGOUT @"has_logout"
-
-#define POST_SOURCE @"http://app.mro.name/ShaarliOS"
-#define POST_STEP_1 @"post#1"
-
 @interface NSString(HttpGetParams)
 -(NSString *)stringByAddingPercentEscapesForHttpFormUrl;
 @end
@@ -32,6 +25,11 @@
 @property (nonatomic, readonly, assign) NSURLProtectionSpace *protectionSpace;
 @end
 
+@class ShaarliM;
+
+@protocol ShaarliPostDelegate <NSObject>
+-(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error;
+@end
 
 @interface ShaarliM : NSObject <NSURLSessionDelegate>
 @property (readonly, strong, nonatomic) NSURL *endpointUrl;
@@ -47,18 +45,9 @@
 -(void)load;
 -(void)save;
 -(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass completion:( void (^)(ShaarliM * me, NSError * error) )completion;
--(NSDictionary *)parseHtmlData:(NSData *)data error:(NSError **)error;
-
--(void)postURL:(NSURL *)url title:(NSString *)title tags:(id <NSFastEnumeration>)tags description:(NSString *)desc private:
-   (BOOL)privat session:(NSURLSession *)session completion:( void (^)(ShaarliM * me, NSError * error) )completion;
-
--(void)fetchTagCloud:( void (^)(ShaarliM * me, NSError * error) )completion;
-
-
--(void)login:( void (^)(ShaarliM * me, NSError * error) )completionHandler;
--(BOOL)logout:(NSError **)err;
--(BOOL)refresh:(NSError **)err;
-
+-(NSURLSession *)postSession;
+-(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc tags:(id <NSFastEnumeration>)tags private:
+   (BOOL)private session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg;
 
 -(void)postTest;
 

@@ -12,7 +12,7 @@
 #import "ShaarliM.h"
 
 
-@interface ShareVC() <UITextFieldDelegate, UITextViewDelegate> {
+@interface ShareVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliPostDelegate> {
     SLComposeSheetConfigurationItem *itemTitle;
     SLComposeSheetConfigurationItem *itemTags;
     SLComposeSheetConfigurationItem *itemPrivate;
@@ -30,7 +30,7 @@
     if( !self.shaarli ) {
         _shaarli = [[ShaarliM alloc] init];
         [self.shaarli load];
-        NSParameterAssert(self.shaarli.title);
+        // NSParameterAssert(self.shaarli.title);
     }
 }
 
@@ -128,29 +128,7 @@
 -(void)didSelectPost
 {
     MRLogD(@"-", nil);
-
-
-    NSString *confName = BUNDLE_ID @".backgroundpost";
-    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
-    conf = [NSURLSessionConfiguration defaultSessionConfiguration];
-    conf.sharedContainerIdentifier = @"group." BUNDLE_ID; // http://stackoverflow.com/a/26319143
-    conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain;
-    conf.networkServiceType = NSURLNetworkServiceTypeBackground;
-    conf.allowsCellularAccess = YES;
-
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self.shaarli delegateQueue:nil];
-    session.sessionDescription = @"Shaarli Post";
-
-    NSParameterAssert(session.configuration.HTTPCookieStorage);
-    NSParameterAssert(session.configuration.HTTPCookieStorage == [NSHTTPCookieStorage sharedHTTPCookieStorage]);
-    NSParameterAssert(NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain == session.configuration.HTTPCookieAcceptPolicy);
-    NSParameterAssert(session.configuration.HTTPShouldSetCookies);
-    NSParameterAssert(self.shaarli == session.delegate);
-
-    for( NSHTTPCookie *cook in session.configuration.HTTPCookieStorage.cookies ) {
-        MRLogD(@"deleteCookie %@", cook, nil);
-        [session.configuration.HTTPCookieStorage deleteCookie:cook];
-    }
+    NSURLSession *session = [self.shaarli postSession];
 
     NSParameterAssert(1 == self.extensionContext.inputItems.count);
     NSExtensionItem *item = self.extensionContext.inputItems[0];
@@ -159,25 +137,8 @@
         if( [itemProvider hasItemConformingToTypeIdentifier:t] )
             [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
                  const BOOL priv = ![NSLocalizedString (@"Public", @"Shaare") isEqualToString:itemPrivate.value];
-
-                 NSString *par = @"?";
-                 par = [par stringByAppendingString:[@ { @"post":url.absoluteString, @"title":itemTitle.value, @"description":self.contentText, @"source":POST_SOURCE }
-                                                     stringByAddingPercentEscapesForHttpFormUrl]];
-
-                 NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.shaarli.endpointUrl];
-                 NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
-                 dt.taskDescription = POST_STEP_1;
-                 [dt resume];
-#if 0
-                 // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
-                 // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-                 [self.extensionContext completeRequestReturningItems:@[item] completionHandler:^(BOOL expired) {
-                      MRLogD (@"expired: %s", expired ? "yes":"no", nil);
-                  }
-                 ];
-#else
-                 [super didSelectPost];
-#endif
+                 [self.shaarli postUrl:url title:itemTitle.value description:self.contentText tags:nil private:
+                  priv session:session delegate:self];
              }
             ];
     }
@@ -189,6 +150,24 @@
     MRLogD(@"-", nil);
     NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil];
     [self.extensionContext cancelRequestWithError:error];
+}
+
+
+#pragma mark ShaarliPostDelegate
+
+
+-(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error
+{
+#if 0
+    // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
+    // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+    [self.extensionContext completeRequestReturningItems:@[item] completionHandler:^(BOOL expired) {
+         MRLogD (@"expired: %s", expired ? "yes":"no", nil);
+     }
+    ];
+#else
+    [super didSelectPost];
+#endif
 }
 
 

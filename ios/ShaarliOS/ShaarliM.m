@@ -7,7 +7,6 @@
 //
 
 #import "ShaarliM.h"
-#import <libxml2/libxml/HTMLparser.h>
 
 #define USE_KEYCHAIN 1
 
@@ -119,6 +118,9 @@
 
 #pragma mark libxml2 LoginForm
 
+#define M_FORM @"form"
+#define F_TOKEN @"token"
+#define M_HAS_LOGOUT @"has_logout"
 
 #define T_A @"a"
 #define T_DIV @"div"
@@ -127,6 +129,8 @@
 #define M_TITLE @"title"
 #define M_TEXT @"text"
 #define M_ID_HEADERFORM @"headerform"
+
+#import <libxml2/libxml/HTMLparser.h>
 
 static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, const xmlChar **attributes)
 {
@@ -289,6 +293,12 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
+-(NSDictionary *)parseHtmlData:(NSData *)data error:(NSError **)error
+{
+    return parseShaarliHtml(data, error);
+}
+
+
 +(NSSet *)keyPathsForValuesAffectingEndpointSecure
 {
     return [NSSet setWithObject:@"endpointUrl.scheme"];
@@ -327,13 +337,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     self.passWord = [d valueForKey:@"passWord"];
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
-#if 0
-    self.endpointUrl = [NSURL URLWithString:@"http://links.mro.name"];
-    self.userName = @"mro";
-    self.passWord = @"Jahahw7zahKi";
-    self.title = @"links.mro";
-    [self save];
-#endif
+
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
@@ -389,6 +393,10 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
           if( [r[M_HAS_LOGOUT] boolValue] && !force ) {
               // check if there's a logout link - we're already logged in then.
               NSParameterAssert (cre0);
+              if( !error ) {
+                  self.title = r[M_TITLE];
+                  [self save];
+              }
               completion (self, error);
               return;
           }
@@ -454,121 +462,43 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
--(NSDictionary *)parseHtmlData:(NSData *)data error:(NSError **)error
+-(NSURLSession *)postSession
 {
-    return parseShaarliHtml(data, error);
+#if 0
+    NSString *confName = BUNDLE_ID @".backgroundpost";
+    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
+#else
+    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration defaultSessionConfiguration];
+#endif
+    conf.sharedContainerIdentifier = @"group." BUNDLE_ID; // http://stackoverflow.com/a/26319143
+    conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain;
+    conf.networkServiceType = NSURLNetworkServiceTypeBackground;
+    conf.allowsCellularAccess = YES;
+
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
+    session.sessionDescription = @"Shaarli Post";
+
+    NSParameterAssert(session.configuration.HTTPCookieStorage);
+    NSParameterAssert(session.configuration.HTTPCookieStorage == [NSHTTPCookieStorage sharedHTTPCookieStorage]);
+    NSParameterAssert(NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain == session.configuration.HTTPCookieAcceptPolicy);
+    NSParameterAssert(session.configuration.HTTPShouldSetCookies);
+    NSParameterAssert(self == session.delegate);
+    for( NSHTTPCookie *cook in session.configuration.HTTPCookieStorage.cookies ) {
+        MRLogD(@"deleteCookie %@", cook, nil);
+        [session.configuration.HTTPCookieStorage deleteCookie:cook];
+    }
+
+    return session;
 }
 
 
 #pragma mark -
 
-
-
--(void)fetchTagCloud:( void (^)(ShaarliM * me, NSError * error) )completionHandler
-{
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSParameterAssert(self.userName);
-    NSParameterAssert(self.passWord);
-    NSParameterAssert(self.endpointUrl);
-    // test access to tag cloud
-    NSURL *u1 = [NSURL URLWithString:@"?do=tagcloud" relativeToURL:self.endpointUrl];
-    [[session dataTaskWithURL:u1 completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-          MRLogD (@"complete %@", error, nil);
-          if( !error ) {
-              // MRLogD (@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
-          }
-      }
-     ] resume];
-}
-
-
--(void)postURL:(NSURL *)url title:(NSString *)title tags:(id <NSFastEnumeration>)tags description:(NSString *)desc private:
-   (BOOL)private session:(NSURLSession *)session completion:( void (^)(ShaarliM * me, NSError * error) )completion
-{
-    if( !session )
-        session = [NSURLSession sharedSession];
-    else {
-        MRLogD(@"re-use session '%@', %@", session.sessionDescription, session.configuration.sharedContainerIdentifier, nil);
-    }
-    NSParameterAssert(self.endpointUrl);
-    NSParameterAssert(url);
-
-    // test access to post/add link
-    NSURL *u2 = [NSURL URLWithString:[@"?post=" stringByAppendingString:[url.absoluteString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:self.endpointUrl];
-    [[session dataTaskWithURL:u2] resume];
-
-    completion(self, nil);
-}
-
-
--(void)login:( void (^)(ShaarliM * me, NSError * error) )completionHandler
-{
-    MRLogD(@"", nil);
-
-    // http://www.objc.io/issues/5-ios7/from-nsurlconnection-to-nsurlsession/
-    // http://www.raywenderlich.com/51127/nsurlsession-tutorial
-
-    NSParameterAssert(self.endpointUrl);
-    NSParameterAssert(self.userName);
-    NSParameterAssert(self.passWord);
-
-    // 1. GET the ?do=login action to get the token and returnurl as part of the form
-    NSURLSession *session = [NSURLSession sharedSession];
-
-    // NSURLCredential *cre = [NSURLCredential credentialWithUser:self.userName password:self.passWord persistence:NSURLCredentialPersistenceForSession];
-    NSDictionary *d = [session.configuration.URLCredentialStorage credentialsForProtectionSpace:self.endpointUrl.protectionSpace];
-    NSURLCredential *cre = d[self.userName];
-    NSParameterAssert(nil == cre);
-    cre = [NSURLCredential credentialWithUser:self.userName password:self.passWord persistence:NSURLCredentialPersistenceSynchronizable];
-    MRLogD(@"%@", cre, nil);
-    [session.configuration.URLCredentialStorage setCredential:cre forProtectionSpace:self.endpointUrl.protectionSpace];
-
-    // http://www.raywenderlich.com/51127/nsurlsession-tutorial
-    NSURL *u = [NSURL URLWithString:@"?do=login" relativeToURL:self.endpointUrl];
-    [[session dataTaskWithURL:u completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-          MRLogD (@"complete %@", error, nil);
-          if( error )
-              completionHandler (self, error);
-          else {
-              NSString *token = parseShaarliHtml (data, nil)[M_FORM][F_TOKEN];
-              NSParameterAssert (token);
-
-              NSMutableURLRequest *r = [NSMutableURLRequest requestWithURL:u];
-              r.HTTPMethod = @"POST";
-              r.HTTPBody = [@ { @"login":self.userName, @"password":self.passWord, F_TOKEN:token }
-                            postData];
-              [[session dataTaskWithRequest:r completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-                    // check result?
-                    completionHandler (self, error);
-                }
-               ] resume];
-          }
-      }
-     ] resume];
-}
-
-
--(BOOL)logout:(NSError **)err
-{
-    MRLogD(@"", nil);
-    return NO;
-}
-
-
--(BOOL)refresh:(NSError **)err
-{
-    MRLogD(@"", nil);
-    return NO;
-}
-
-
-#pragma mark PostTest
-
-
+#define POST_SOURCE @"http://app.mro.name/ShaarliOS"
+#define POST_STEP_1 @"post#1"
 #define POST_STEP_2 @"post#2"
 #define POST_STEP_3 @"post#3"
 #define POST_STEP_4 @"post#4"
-
 
 
 -(void)postTest
@@ -582,9 +512,6 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain;
     conf.networkServiceType = NSURLNetworkServiceTypeBackground;
     conf.allowsCellularAccess = YES;
-
-
-
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
     session.sessionDescription = @"Shaarli Post";
@@ -608,6 +535,21 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
     dt.taskDescription = POST_STEP_1;
     [dt resume];
+}
+
+
+-(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc tags:(id <NSFastEnumeration>)tags private:
+   (BOOL)private session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg
+{
+    NSString *par = @"?";
+    par = [par stringByAppendingString:[@ { @"post":url.absoluteString, @"title":title, @"description":desc, @"source":POST_SOURCE }
+                                        stringByAddingPercentEscapesForHttpFormUrl]];
+
+    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
+    NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
+    dt.taskDescription = POST_STEP_1;
+    [dt resume];
+    [delg shaarli:self didFinishPostWithError:nil];
 }
 
 
@@ -754,7 +696,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
             [post setValue:params[@"tags"] forKey:@"lf_" @"tags"];
             [post setValue:params[@"private"] forKey:@"lf_" @"private"];
 #if DEBUG
-            // [post setValue:@"on" forKey:@"lf_" @"private"];
+            [post setValue:@"on" forKey:@"lf_" @"private"];
 #endif
             req.HTTPBody = [post postData];
             NSURLSessionTask *dt = [session downloadTaskWithRequest:req];
