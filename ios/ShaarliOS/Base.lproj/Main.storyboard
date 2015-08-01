@@ -71,7 +71,7 @@
                     <navigationItem key="navigationItem" id="Not-Uw-rOV">
                         <barButtonItem key="leftBarButtonItem" title="Settings" id="Cwf-WH-1cl">
                             <connections>
-                                <segue destination="kT6-WH-0iV" kind="show" id="29n-WF-JhY"/>
+                                <segue destination="kT6-WH-0iV" kind="show" identifier="SettingsVC" id="29n-WF-JhY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

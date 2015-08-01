@@ -86,6 +86,9 @@
          [self.view layoutIfNeeded];
      }
     ];
+
+    if( !self.shaarli.isSetUp )
+        [self performSegueWithIdentifier:NSStringFromClass([SettingsVC class]) sender:self];
 }
 
 
