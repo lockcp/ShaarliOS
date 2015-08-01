@@ -9,24 +9,16 @@
 #import "SettingsVC.h"
 #import "MainVC.h"
 
-@interface SettingsVC() <UINavigationControllerDelegate, UITextFieldDelegate>
+@interface SettingsVC() <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *endpoint;
 @property (weak, nonatomic) IBOutlet UISwitch *secure;
 @property (weak, nonatomic) IBOutlet UITextField *userName;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
-@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (weak, nonatomic) IBOutlet UITextField *passWord;
 @end
 
 @implementation SettingsVC
-
-
--(void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 
 #pragma UIViewController
@@ -41,7 +33,6 @@
     NSParameterAssert(self.userName);
     NSParameterAssert(self.passWord);
     NSParameterAssert(self.lblTitle);
-    NSParameterAssert(self.btnSignIn);
     NSParameterAssert(self.spinner);
     [self.tableView addSubview:self.spinner];
 }
@@ -62,51 +53,12 @@
     self.lblTitle.text = self.lblTitle.text ? self.lblTitle.text : NSLocalizedString(@"Not connected yət.", @"SettingsVC.m");
 
     [self.spinner stopAnimating];
+
+    self.title = NSLocalizedString(@"Settings", @"SettingsVC");
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(actionCancel:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionSignIn:)];
 }
 
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    MRLogD(@"%@: %@ -> %@", segue, segue.sourceViewController, segue.destinationViewController, nil);
-}
-
-
-#pragma UINavigationControllerDelegate
-
-
-/**
- * http://stackoverflow.com/a/14256348
- * http://stackoverflow.com/questions/23171906/uinavigationbar-intercept-back-button-and-back-swipe-gesture
- * http://stackoverflow.com/questions/8564924/confirm-back-button-on-uinavigationcontroller
- */
-/*
- * -(void)navigationController:(UINavigationController *)navigationController willShowViewController:(MainVC *)viewController animated:(BOOL)animated
- * {
- *  MRLogD(@"%@", viewController, nil);
- *  navigationController.delegate = nil;
- *  if( [self.endpoint.text isEqualToString:self.shaarli.endpointStr] && self.secure.on == self.shaarli.endpointSecure && [self.userName.text isEqualToString:self.shaarli.userName] && [self.passWord.text isEqualToString:self.shaarli.passWord] ) {
- *      return;
- *  }
- *
- *  viewController.settingsEnabled = NO;
- *  [self.shaarli updateEndpoint:self.endpoint.text secure:self.secure.on user:self.userName.text pass:self.passWord.text completion:^(ShaarliM * me, NSError * error) {
- *       MRLogD (@"", nil);
- *       viewController.settingsEnabled = YES;
- *       if( error ) {
- *           UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
- *           [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];
- *           [viewController presentViewController:alert animated:animated completion:nil];
- *       }
- *   }
- *  ];
- * }
- */
 
 #pragma UITextFieldDelegate
 
@@ -128,29 +80,41 @@
 #pragma mark Actions
 
 
+-(IBAction)actionCancel:(id)sender
+{
+    MRLogD(@"-", nil);
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
 -(IBAction)actionSignIn:(id)sender
 {
     MRLogD(@"-", nil);
+    const BOOL wasSetUp = self.shaarli.isSetUp;
+
+    // spinner purposely covers all screen, so all other buttons are blocked meanwhile.
     self.spinner.frame = self.tableView.bounds;
     [self.spinner startAnimating];
-    // disable back button while spinning?
     [self.shaarli updateEndpoint:self.endpoint.text secure:self.secure.on user:self.userName.text pass:self.passWord.text completion:^(ShaarliM * me, NSError * error) {
-         MRLogD (@"-", nil);
-         if( error ) {
-             UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-             [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];
-             dispatch_async (dispatch_get_main_queue (), ^{
+         dispatch_async (dispatch_get_main_queue (), ^{
+                             MRLogD (@"-", nil);
+                             [self.spinner stopAnimating];
+                             if( error ) {
+                                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+                                 [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];
                                  [self presentViewController:alert animated:YES completion:nil];
-                                 [self.spinner stopAnimating];
+                             } else if( !wasSetUp && self.shaarli.isSetUp ) {
+                                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Setup done", @"SettingsVC") message:[NSString stringWithFormat:NSLocalizedString (@"Nice, now you can activate the extension in 'Activities' and post links to %@.", @"SettingsVC"), self.shaarli.title] preferredStyle:UIAlertControllerStyleAlert];
+                                 [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"OK", @"SettingsVC") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                       [self.navigationController popViewControllerAnimated:YES];
+                                                   }
+                                  ]];
+                                 [self presentViewController:alert animated:YES completion:nil];
+                                 return;
                              }
-                             );
-         } else {
-             dispatch_async (dispatch_get_main_queue (), ^{
-                                 [self.navigationController popViewControllerAnimated:YES];
-                                 [self.spinner stopAnimating];
-                             }
-                             );
-         }
+                             [self.navigationController popViewControllerAnimated:YES];
+                         }
+                         );
      }
     ];
 }

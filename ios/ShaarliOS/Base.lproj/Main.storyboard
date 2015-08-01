@@ -257,46 +257,15 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection id="4bw-Ny-wqb">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" id="CUg-BV-OXt">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CUg-BV-OXt" id="2aw-HM-pnO">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZq-fg-XL8">
-                                                    <rect key="frame" x="8" y="8" width="304" height="27"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="Sign In">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="actionSignIn:" destination="kT6-WH-0iV" eventType="touchUpInside" id="1I7-r2-x0U"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstItem="uZq-fg-XL8" firstAttribute="bottom" secondItem="2aw-HM-pnO" secondAttribute="bottomMargin" id="9MJ-wi-Q9u"/>
-                                                <constraint firstItem="uZq-fg-XL8" firstAttribute="top" secondItem="2aw-HM-pnO" secondAttribute="topMargin" id="Yjy-6T-a37"/>
-                                                <constraint firstItem="uZq-fg-XL8" firstAttribute="leading" secondItem="2aw-HM-pnO" secondAttribute="leadingMargin" id="dap-ka-M8u"/>
-                                                <constraint firstItem="uZq-fg-XL8" firstAttribute="trailing" secondItem="2aw-HM-pnO" secondAttribute="trailingMargin" id="nf3-lV-CCO"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="kT6-WH-0iV" id="y8q-a8-X7b"/>
                             <outlet property="delegate" destination="kT6-WH-0iV" id="6Te-BU-wM7"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="btnSignIn" destination="uZq-fg-XL8" id="STj-CM-anL"/>
                         <outlet property="endpoint" destination="GIi-0Q-V5p" id="Gpc-o1-nqq"/>
                         <outlet property="lblTitle" destination="Dve-Iu-CxP" id="STE-AW-usf"/>
                         <outlet property="passWord" destination="L7z-8R-XqD" id="JaM-Ci-0Jk"/>
