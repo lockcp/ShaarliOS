@@ -24,11 +24,17 @@
                                 <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iT6-oo-ncS" userLabel="V0">
-                                <rect key="frame" x="80" y="71" width="160" height="284"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iT6-oo-ncS" userLabel="V0">
+                                <rect key="frame" x="80" y="85" width="160" height="284"/>
                                 <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iTunesArtwork.png" translatesAutoresizingMaskIntoConstraints="NO" id="5bo-AP-x4y">
+                                        <rect key="frame" x="0.0" y="0.0" width="160" height="223"/>
+                                        <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                            <rect key="frame" x="72" y="151" width="329" height="203"/>
+                                        </variation>
+                                    </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ShaarliOS" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="941-OM-dXS">
-                                        <rect key="frame" x="0.0" y="244" width="160" height="40"/>
+                                        <rect key="frame" x="0.0" y="223" width="160" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="05q-jj-bpY"/>
                                         </constraints>
@@ -39,17 +45,20 @@
                                             <rect key="frame" x="62" y="314" width="339" height="40"/>
                                         </variation>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iTunesArtwork.png" translatesAutoresizingMaskIntoConstraints="NO" id="5bo-AP-x4y">
-                                        <rect key="frame" x="0.0" y="0.0" width="160" height="244"/>
-                                        <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                            <rect key="frame" x="72" y="151" width="329" height="203"/>
-                                        </variation>
-                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="1.0.0+10b7c77" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z84-bU-If9" userLabel="version">
+                                        <rect key="frame" x="4" y="263" width="152" height="21"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Z84-bU-If9" secondAttribute="bottom" id="3Pi-gK-tmv"/>
                                     <constraint firstAttribute="trailing" secondItem="941-OM-dXS" secondAttribute="trailing" id="4KS-yq-VWX"/>
+                                    <constraint firstAttribute="trailing" secondItem="Z84-bU-If9" secondAttribute="trailing" constant="4" id="Dro-B5-xFf"/>
                                     <constraint firstItem="5bo-AP-x4y" firstAttribute="top" secondItem="iT6-oo-ncS" secondAttribute="top" id="Gnj-yP-i5d"/>
-                                    <constraint firstAttribute="bottom" secondItem="941-OM-dXS" secondAttribute="bottom" id="K84-lm-8Tu"/>
+                                    <constraint firstAttribute="bottom" secondItem="941-OM-dXS" secondAttribute="bottom" constant="21" id="K84-lm-8Tu"/>
+                                    <constraint firstItem="Z84-bU-If9" firstAttribute="leading" secondItem="iT6-oo-ncS" secondAttribute="leading" constant="4" id="Nmb-qv-URd"/>
                                     <constraint firstItem="941-OM-dXS" firstAttribute="leading" secondItem="iT6-oo-ncS" secondAttribute="leading" id="aEq-VY-uOp"/>
                                     <constraint firstItem="5bo-AP-x4y" firstAttribute="leading" secondItem="iT6-oo-ncS" secondAttribute="leading" id="gdm-OB-8vq"/>
                                     <constraint firstItem="941-OM-dXS" firstAttribute="top" secondItem="5bo-AP-x4y" secondAttribute="bottom" id="qw2-Ku-DLV"/>
@@ -77,6 +86,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="centerY" destination="12Y-li-NZ0" id="q8e-Zh-Xjk"/>
+                        <outlet property="lblVersion" destination="Z84-bU-If9" id="ddy-My-wqy"/>
                         <outlet property="vContainer" destination="iT6-oo-ncS" id="BMv-Jr-E90"/>
                     </connections>
                 </viewController>

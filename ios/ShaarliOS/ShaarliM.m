@@ -676,7 +676,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSMutableDictionary *post = ret[M_FORM];
     MRLogD(@"%@ %@", task.taskDescription, ret, nil);
     if( !post[F_TOKEN] ) {
-        NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"Couldn't find token in page.", @"ShaarliM") }
+        NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:task.originalRequest.URL, NSLocalizedDescriptionKey:NSLocalizedString(@"Couldn't find token in shaarli API reply.", @"ShaarliM") }
                      ];
         [self.postDelegate shaarli:self didFinishPostWithError:e];
         self.postDelegate = nil;

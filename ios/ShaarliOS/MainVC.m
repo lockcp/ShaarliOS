@@ -8,6 +8,7 @@
 
 #import "MainVC.h"
 #import "SettingsVC.h"
+#import "NSBundle+MroSemVer.h"
 
 @implementation NSLayoutConstraint(ChangeMultiplier)
 
@@ -22,6 +23,7 @@
 
 @interface MainVC()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *centerY;
+@property (weak, nonatomic) IBOutlet UILabel *lblVersion;
 @property (weak, nonatomic) IBOutlet UIView *vContainer;
 @end
 
@@ -42,6 +44,8 @@
     NSParameterAssert(self.shaarli);
     [super viewWillAppear:animated];
     self.title = self.shaarli.title;
+    self.lblVersion.text = [NSBundle semVer];
+    self.lblVersion.alpha = 0;
 }
 
 
@@ -51,6 +55,7 @@
     // animate logo to bottom
     [UIView animateWithDuration:0.5f animations:^{
          self.vContainer.alpha = 0.25;
+         self.lblVersion.alpha = 1.0;
 
          NSLayoutConstraint *c = [self.centerY constraintWithMultiplier:0.75];
          [self.view removeConstraint:self.centerY];
