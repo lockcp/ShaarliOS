@@ -382,7 +382,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 
 -(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass completion:( void (^)(ShaarliM * me, NSError * error) )completion
 {
-    const BOOL force = NO;
+    const BOOL force = YES;
 
     NSURLSession *session = [NSURLSession sharedSession];
     NSParameterAssert(session.configuration);
@@ -439,7 +439,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 
           // check for credential in store
           // MRLogD (@"credentials in storage: %@", session.configuration.URLCredentialStorage.allCredentials, nil);
-          NSURLCredential *cre1 = cre0 ? cre0:[NSURLCredential credentialWithUser:user password:pass persistence:NSURLCredentialPersistenceSynchronizable];
+          NSURLCredential *cre1 = [NSURLCredential credentialWithUser:user password:pass persistence:NSURLCredentialPersistenceSynchronizable];
           NSParameterAssert (cre1.user && [cre1.user isEqualToString:user]);
           NSParameterAssert (cre1.password && [cre1.password isEqualToString:pass]);
 
