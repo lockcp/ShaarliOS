@@ -10,12 +10,14 @@
 #import "MainVC.h"
 
 @interface SettingsVC() <UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *endpoint;
-@property (weak, nonatomic) IBOutlet UISwitch *secure;
-@property (weak, nonatomic) IBOutlet UITextField *userName;
+@property (weak, nonatomic) IBOutlet UITextField *txtEndpoint;
+@property (weak, nonatomic) IBOutlet UISwitch *swiSecure;
+@property (weak, nonatomic) IBOutlet UITextField *txtUserName;
+@property (weak, nonatomic) IBOutlet UITextField *txtPassWord;
+@property (weak, nonatomic) IBOutlet UILabel *lblDefaultPrivate;
+@property (weak, nonatomic) IBOutlet UISwitch *swiPrivateDefault;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
-@property (weak, nonatomic) IBOutlet UITextField *passWord;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spiLogin;
 @end
 
 @implementation SettingsVC
@@ -28,13 +30,15 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    NSParameterAssert(self.endpoint);
-    NSParameterAssert(self.secure);
-    NSParameterAssert(self.userName);
-    NSParameterAssert(self.passWord);
     NSParameterAssert(self.lblTitle);
-    NSParameterAssert(self.spinner);
-    [self.tableView addSubview:self.spinner];
+    NSParameterAssert(self.txtEndpoint);
+    NSParameterAssert(self.swiSecure);
+    NSParameterAssert(self.txtUserName);
+    NSParameterAssert(self.txtPassWord);
+    NSParameterAssert(self.swiPrivateDefault);
+    NSParameterAssert(self.lblDefaultPrivate);
+    NSParameterAssert(self.spiLogin);
+    [self.tableView addSubview:self.spiLogin];
 }
 
 
@@ -43,16 +47,18 @@
     MRLogD(@"", nil);
     [super viewWillAppear:animated];
     NSParameterAssert(self.shaarli);
-    self.endpoint.text = self.shaarli.endpointStr;
-    self.secure.on = self.shaarli.endpointSecure;
-    self.userName.text = self.shaarli.userName;
-    self.passWord.text = self.shaarli.passWord;
 
     self.lblTitle.text = self.shaarli.title;
-    self.lblTitle.textColor = self.lblTitle.text ? self.userName.textColor : [UIColor redColor];
+    self.lblTitle.textColor = self.lblTitle.text ? self.txtUserName.textColor : [UIColor redColor];
     self.lblTitle.text = self.lblTitle.text ? self.lblTitle.text : NSLocalizedString(@"Not connected yət.", @"SettingsVC.m");
 
-    [self.spinner stopAnimating];
+    self.txtEndpoint.text = self.shaarli.endpointStr;
+    self.swiSecure.on = self.shaarli.endpointSecure;
+    self.txtUserName.text = self.shaarli.userName;
+    self.txtPassWord.text = self.shaarli.passWord;
+    self.swiPrivateDefault.on = self.shaarli.privateDefault;
+
+    [self.spiLogin stopAnimating];
 
     self.title = NSLocalizedString(@"Settings", @"SettingsVC");
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(actionCancel:)];
@@ -67,11 +73,11 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     MRLogD(@"%@", textField.text, nil);
-    if( textField == self.endpoint )
-        [self.userName becomeFirstResponder];
-    else if( textField == self.userName )
-        [self.passWord becomeFirstResponder];
-    else if( textField == self.passWord )
+    if( textField == self.txtEndpoint )
+        [self.txtUserName becomeFirstResponder];
+    else if( textField == self.txtUserName )
+        [self.txtPassWord becomeFirstResponder];
+    else if( textField == self.txtPassWord )
         [self actionSignIn:textField];  // dispatch async?
     return YES;
 }
@@ -93,12 +99,12 @@
     const BOOL wasSetUp = self.shaarli.isSetUp;
 
     // spinner purposely covers all screen, so all other buttons are blocked meanwhile.
-    self.spinner.frame = self.tableView.bounds;
-    [self.spinner startAnimating];
-    [self.shaarli updateEndpoint:self.endpoint.text secure:self.secure.on user:self.userName.text pass:self.passWord.text completion:^(ShaarliM * me, NSError * error) {
+    self.spiLogin.frame = self.tableView.bounds;
+    [self.spiLogin startAnimating];
+    [self.shaarli updateEndpoint:self.txtEndpoint.text secure:self.swiSecure.on user:self.txtUserName.text pass:self.txtPassWord.text privateDefault:self.swiPrivateDefault.on completion:^(ShaarliM * me, NSError * error) {
          dispatch_async (dispatch_get_main_queue (), ^{
                              MRLogD (@"-", nil);
-                             [self.spinner stopAnimating];
+                             [self.spiLogin stopAnimating];
                              if( error ) {
                                  UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString (@"Connection failed", @"SettingsVC") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
                                  [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString (@"Cancel", @"SettingsVC") style:UIAlertActionStyleCancel handler:nil]];

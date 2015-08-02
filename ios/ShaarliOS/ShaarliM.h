@@ -29,6 +29,10 @@
 
 @protocol ShaarliPostDelegate <NSObject>
 -(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error;
+/** fetched late during post. */
+@property (readonly, assign, nonatomic) BOOL postPrivate;
+/** fetched late during post. */
+@property (readonly, strong, nonatomic) id <NSFastEnumeration> postTags;
 @end
 
 @interface ShaarliM : NSObject <NSURLSessionDelegate>
@@ -39,15 +43,15 @@
 @property (readonly, strong, nonatomic) NSString *endpointStr;
 @property (readonly, assign, nonatomic) BOOL isSetUp;
 @property (readonly, assign, nonatomic) BOOL endpointSecure;
+@property (readonly, assign, nonatomic) BOOL privateDefault;
 // parsed
 @property (readonly, strong, nonatomic) NSString *title;
 
 -(void)load;
 -(void)save;
--(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass completion:( void (^)(ShaarliM * me, NSError * error) )completion;
+-(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault completion:( void (^)(ShaarliM * me, NSError * error) )completion;
 -(NSURLSession *)postSession;
--(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc tags:(id <NSFastEnumeration>)tags private:
-   (BOOL)private session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg;
+-(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg;
 
 -(void)postTest;
 

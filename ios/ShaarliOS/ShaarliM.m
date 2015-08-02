@@ -282,6 +282,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
 @property (strong, nonatomic) NSString *title;
+@property (assign, nonatomic) BOOL privateDefault;
 
 @property (weak, nonatomic) id <ShaarliPostDelegate> postDelegate;
 @end
@@ -343,6 +344,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     [d synchronize];
     NSParameterAssert(d);
     self.title = [d valueForKey:@"title"];
+    self.privateDefault = [d boolForKey:@"privateDefault"];
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
     self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"passWord"];
@@ -353,7 +355,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
     if( !( (nil == self.title) == (nil == self.endpointUrl) ) )
-        MRLogW(@"strange configuration", nil);
+        MRLogW(@"strange configuration. title='%@' endpoint='%@'", self.title, self.endpointUrl, nil);
     NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
@@ -367,6 +369,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
     NSParameterAssert(d);
     [d setValue:self.title forKey:@"title"];
+    [d setBool:self.privateDefault forKey:@"privateDefault"];
 #if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"passWord"];
@@ -380,7 +383,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
--(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass completion:( void (^)(ShaarliM * me, NSError * error) )completion
+-(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault completion:( void (^)(ShaarliM * me, NSError * error) )completion
 {
     const BOOL force = YES;
 
@@ -462,6 +465,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
                     self.title = res[M_TITLE];
                     self.userName = cre1.user;
                     self.passWord = cre1.password;
+                    self.privateDefault = privateDefault;
                     [session.configuration.URLCredentialStorage setCredential:cre1 forProtectionSpace:ps];
 #ifndef NS_BLOCK_ASSERTIONS
                     NSParameterAssert ([user isEqual:self.userName]);
@@ -556,8 +560,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
--(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc tags:(id <NSFastEnumeration>)tags private:
-   (BOOL)private session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg
+-(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg
 {
     NSString *par = @"?";
     NSParameterAssert(nil == self.postDelegate);
@@ -719,9 +722,10 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 
             [post setValue:params[@"tags"] forKey:@"lf_" @"tags"];
             [post setValue:params[@"private"] forKey:@"lf_" @"private"];
-#if DEBUG
-            [post setValue:@"on" forKey:@"lf_" @"private"];
-#endif
+            if( self.postDelegate.postPrivate )
+                [post setValue:@"on" forKey:@"lf_" @"private"];
+            else
+                [post removeObjectForKey:@"lf_" @"private"];
             req.HTTPBody = [post postData];
             NSURLSessionTask *dt = [session downloadTaskWithRequest:req];
             dt.taskDescription = POST_STEP_3;

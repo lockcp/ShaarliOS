@@ -17,7 +17,6 @@
     SLComposeSheetConfigurationItem *itemPrivate;
 }
 @property (readonly, strong, nonatomic) ShaarliM *shaarli;
-
 @end
 
 @implementation ShareVC
@@ -37,9 +36,6 @@
 -(NSArray *)configurationItems
 {
     MRLogD(@"-", nil);
-    // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-
-
     itemTitle = [[SLComposeSheetConfigurationItem alloc] init];
     itemTitle.title = NSLocalizedString(@"Title", @"ShaareVC");
     itemTitle.value = self.contentText;
@@ -58,27 +54,21 @@
 
     itemPrivate = [[SLComposeSheetConfigurationItem alloc] init];
     [itemPrivate setTitle:NSLocalizedString (@"Private", @"ShaareVC")];
-    itemPrivate.value = NSLocalizedString (@"Private", @"ShaareVC");
+    itemPrivate.value = self.shaarli.privateDefault ? NSLocalizedString (@"Private", @"ShaareVC") : NSLocalizedString (@"Public", @"ShaareVC");
     __weak typeof (itemPrivate)wr = itemPrivate;
+    __weak typeof (self)ws = self;
     [itemPrivate setTapHandler:^(void) {
-         MRLogD (@"", nil);
-         const BOOL priv = [NSLocalizedString (@"Private", @"ShaareVC") isEqualToString:wr.value];
-         wr.value = priv ? NSLocalizedString (@"Public", @"ShaareVC"):NSLocalizedString (@"Private", @"ShaareVC");
+         wr.value = !ws.postPrivate ? NSLocalizedString (@"Private", @"ShaareVC"):NSLocalizedString (@"Public", @"ShaareVC");
      }
     ];
 
-#if 0
+#if 1
     SLComposeSheetConfigurationItem *itemShaar = [[SLComposeSheetConfigurationItem alloc] init];
     itemShaar.title = NSLocalizedString (@"Shaarə", @"ShaareVC");
     itemShaar.value = self.shaarli.title;
     [itemShaar setTapHandler:^(void) {
          MRLogD (@"", nil);
-         NSURL *b = [NSURL URLWithString:SELF_URL_PREFIX @"://command/"];
-         NSURL *c = [NSURL URLWithString:@"./https://google.com?q=a&a=b#c" relativeToURL:b];
-         [self.extensionContext openURL:c completionHandler:^(BOOL success) {
-              MRLogD (@"%d %@", success, c.absoluteString, nil);
-          }
-         ];
+         [self.extensionContext openURL:[NSURL URLWithString:@"http://www.heise.de"] completionHandler:nil];
      }
     ];
     return @[itemTitle, itemTags, itemPrivate, itemShaar];
@@ -146,9 +136,7 @@
         NSString *t = @"public.url"; // (__bridge NSString *)kUTTypeText;
         if( [itemProvider hasItemConformingToTypeIdentifier:t] )
             [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
-                 const BOOL priv = ![NSLocalizedString (@"Public", @"Shaare") isEqualToString:itemPrivate.value];
-                 [self.shaarli postUrl:url title:itemTitle.value description:self.contentText tags:nil private:
-                  priv session:session delegate:self];
+                 [self.shaarli postUrl:url title:itemTitle.value description:self.contentText session:session delegate:self];
              }
             ];
     }
@@ -169,6 +157,18 @@
 
 
 #pragma mark ShaarliPostDelegate
+
+
+-(BOOL)postPrivate
+{
+    return ![NSLocalizedString (@"Public", @"Shaare") isEqualToString:itemPrivate.value];
+}
+
+
+-(id <NSFastEnumeration>)postTags
+{
+    return nil;
+}
 
 
 -(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error

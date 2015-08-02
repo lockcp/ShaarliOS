@@ -20,6 +20,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 @property (strong, nonatomic) NSURL *endpointUrl;
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
+@property (assign, nonatomic) BOOL privateDefault;
 @end
 
 
