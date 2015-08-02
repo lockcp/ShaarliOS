@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head><title>links.mro</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<link rel="alternate" type="application/rss+xml" href="http://links.mro.name/?do=rss" title="RSS Feed" />
+<link rel="alternate" type="application/atom+xml" href="http://links.mro.name/?do=atom" title="ATOM Feed" />
+<!-- link href="images/favicon.ico#" rel="shortcut icon" type="image/x-icon" / -->
+<link href="images/favicon-32x32.png" rel="shortcut icon" type="image/png" />
+<link href="images/favicon-128x128.png" rel="apple-touch-icon" type="image/png" />
+<link type="text/css" rel="stylesheet" href="tpl/./../inc/reset.css" />
+<link type="text/css" rel="stylesheet" href="inc/shaarli.css?version=0.0.43beta" />
+
+
+<script src="inc/jquery-1.11.2.min.js"></script><script src="inc/jquery-ui-1.11.2.min.js"></script>
+</head>
+<body
+onload="document.linkform.lf_description.focus();"
+ >
+<div id="pageheader">
+	
+    <div id="logo" title="Share your links !" onclick="document.location='?';"></div>
+    <div id="linkcount" class="nomobile">Shaare your links...<br>
+        1311 links</div>
+    <span id="shaarli_title"><a href="?">links.mro</a></span>
+  
+
+    <a href="?" class="nomobile">Home</a>
+    
+        <a href="?do=logout">Logout</a><a href="?do=tools">Tools</a><a href="?do=addlink"><b>Add link</b></a>
+    
+    <a href="http://links.mro.name/?do=rss" class="nomobile">RSS Feed</a>
+    
+        <a href="http://links.mro.name/?do=atom" class="nomobile">ATOM Feed</a>
+    
+    <a href="?do=tagcloud">Tag cloud</a>
+    <a href="?do=picwall">Picture wall</a>
+    <a href="?do=daily">Daily</a>
+
+    <div class="clear"></div>
+
+
+
+	<div id="editlinkform">
+	    <form method="post" name="linkform">
+	        <input type="hidden" name="lf_linkdate" value="20150719_173950">
+	        <i>URL</i><br><input type="text" name="lf_url" value="?tgI8rw" class="lf_input"><br>
+	        <i>Title</i><br><input type="text" name="lf_title" value="Note: " class="lf_input"><br>
+	        <i>Description</i><br><textarea name="lf_description" rows="4" cols="25"></textarea><br>
+	        <i>Tags</i><br><input type="text" id="lf_tags" name="lf_tags" value="" class="lf_input"><br>
+	        
+            <input type="checkbox"  name="lf_private" id="lf_private">
+            &nbsp;<label for="lf_private"><i>Private</i></label><br>
+            
+	        <input type="submit" value="Save" name="save_edit" class="bigbutton">
+	        <input type="submit" value="Cancel" name="cancel_edit" class="bigbutton">
+	        
+	        <input type="hidden" name="token" value="e90b4ab4846c221880872003ba47859183da4e6e">
+	        <input type="hidden" name="returnurl" value="http://links.mro.name/?do=login&amp;post=">
+	    </form>
+	</div>
+</div>
+<div id="footer">
+    <b><a href="https://github.com/shaarli/Shaarli">Shaarli</a></b> - The personal, minimalist, super-fast, no-database delicious clone by the <a href="https://github.com/shaarli/Shaarli">Shaarli</a> community.
+</div>
+
+
+<script>function confirmDeleteLink() { var agree=confirm("Are you sure you want to delete this link ?"); if (agree) return true ; else return false ; }</script>
+
+
+
+<script>
+$(document).ready(function()
+{
+    $('#lf_tags').autocomplete({source:'http://links.mro.name/?ws=tags',minLength:1});
+});
+</script>
+
+</body>
+</html>

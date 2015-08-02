@@ -29,7 +29,6 @@
 		162A51341B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
 		162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
 		162A51361B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
-		162A51381B6E5283001CFF52 /* ShaarliParseStateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51371B6E5283001CFF52 /* ShaarliParseStateTest.m */; };
 		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
@@ -57,6 +56,10 @@
 		16E0A79A1AB9E2280085B2C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16E0A7981AB9E2280085B2C0 /* Main.storyboard */; };
 		16E0A79C1AB9E2280085B2C0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16E0A79B1AB9E2280085B2C0 /* Images.xcassets */; };
 		16E0A79F1AB9E2280085B2C0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16E0A79D1AB9E2280085B2C0 /* LaunchScreen.xib */; };
+		16E59BCE1B6EAF2A0035271D /* ShaarliStateParseTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */; };
+		16E59BD01B6EBCEF0035271D /* response.xslt in Resources */ = {isa = PBXBuildFile; fileRef = 16E59BCF1B6EBCEF0035271D /* response.xslt */; };
+		16E59BD21B6EBD1C0035271D /* ShaarliResponseXsltTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */; };
+		16E59BD41B6EBDBE0035271D /* libxslt.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E59BD31B6EBDBE0035271D /* libxslt.1.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,7 +117,7 @@
 		1621DDD01B6164EC00238503 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SettingsVC.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		162A51321B6E50C7001CFF52 /* MROStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MROStateMachine.h; sourceTree = "<group>"; };
 		162A51331B6E50C7001CFF52 /* MROStateMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MROStateMachine.m; sourceTree = "<group>"; };
-		162A51371B6E5283001CFF52 /* ShaarliParseStateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliParseStateTest.m; sourceTree = "<group>"; };
+		162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliStateParseTest.m; sourceTree = "<group>"; };
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliOSTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		165460811B697BCE001DAA32 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
@@ -147,6 +150,9 @@
 		16E0A79E1AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		16E0A7A41AB9E2280085B2C0 /* ShaarliOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShaarliOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A7A91AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16E59BCF1B6EBCEF0035271D /* response.xslt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = response.xslt; sourceTree = "<group>"; };
+		16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliResponseXsltTest.m; sourceTree = "<group>"; };
+		16E59BD31B6EBDBE0035271D /* libxslt.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxslt.1.dylib; path = usr/lib/libxslt.1.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16E59BD41B6EBDBE0035271D /* libxslt.1.dylib in Frameworks */,
 				163952731B599EA60059E553 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,6 +250,7 @@
 		16E0A7821AB9E2280085B2C0 = {
 			isa = PBXGroup;
 			children = (
+				16E59BD31B6EBDBE0035271D /* libxslt.1.dylib */,
 				1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */,
 				1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */,
 				1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */,
@@ -302,7 +310,8 @@
 			children = (
 				161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */,
 				1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */,
-				162A51371B6E5283001CFF52 /* ShaarliParseStateTest.m */,
+				162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */,
+				16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */,
 				166A4E241B6B734000F5D5F7 /* XCTestCase+Tools.h */,
 				166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */,
 				16E0A7A81AB9E2280085B2C0 /* Supporting Files */,
@@ -315,6 +324,7 @@
 			isa = PBXGroup;
 			children = (
 				16E0A7A91AB9E2280085B2C0 /* Info.plist */,
+				16E59BCF1B6EBCEF0035271D /* response.xslt */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -466,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				161C4B4B1B5BFD39002B177F /* testdata in Resources */,
+				16E59BD01B6EBCEF0035271D /* response.xslt in Resources */,
 				16D18FBA1B5B02EC005173C6 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -530,7 +541,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
-				162A51381B6E5283001CFF52 /* ShaarliParseStateTest.m in Sources */,
 				16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
@@ -538,9 +548,11 @@
 				165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3F91AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 				1601E3FC1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
+				16E59BCE1B6EAF2A0035271D /* ShaarliStateParseTest.m in Sources */,
 				166A4E261B6B734000F5D5F7 /* XCTestCase+Tools.m in Sources */,
 				161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */,
 				1652D98F1B68BD8000B044C3 /* ShaarliOSTests.m in Sources */,
+				16E59BD21B6EBD1C0035271D /* ShaarliResponseXsltTest.m in Sources */,
 				1601E4011ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -187,6 +187,12 @@ static inline NSString *esc2dot(NSString *s)
 }
 
 
+-(NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p> %@", [self class], self, self.currentState.name, nil];
+}
+
+
 -(BOOL)isBuilt
 {
     return self.tempTransitions == nil;

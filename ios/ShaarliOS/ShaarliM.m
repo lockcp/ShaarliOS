@@ -228,7 +228,7 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
 }
 
 
-void ShaarliTextRefill(NSMutableDictionary *d, NSString *mark, NSString *tag)
+static void ShaarliTextRefill(NSMutableDictionary *d, NSString *mark, NSString *tag)
 {
     NSMutableData *dat = d[M_TEXT];
     NSString *str = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
