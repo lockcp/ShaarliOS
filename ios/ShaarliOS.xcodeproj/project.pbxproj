@@ -59,7 +59,6 @@
 		16E59BCE1B6EAF2A0035271D /* ShaarliStateParseTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */; };
 		16E59BD01B6EBCEF0035271D /* response.xslt in Resources */ = {isa = PBXBuildFile; fileRef = 16E59BCF1B6EBCEF0035271D /* response.xslt */; };
 		16E59BD21B6EBD1C0035271D /* ShaarliResponseXsltTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */; };
-		16E59BD41B6EBDBE0035271D /* libxslt.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E59BD31B6EBDBE0035271D /* libxslt.1.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,7 +175,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16E59BD41B6EBDBE0035271D /* libxslt.1.dylib in Frameworks */,
 				163952731B599EA60059E553 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
