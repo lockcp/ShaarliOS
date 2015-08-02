@@ -354,7 +354,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 #endif
     if( !( (nil == self.title) == (nil == self.endpointUrl) ) )
         MRLogW(@"strange configuration", nil);
-    // NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
+    NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
