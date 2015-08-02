@@ -1,6 +1,6 @@
 //
 // ShaarliMTest.m
-// ShaarliCompanion
+// ShaarliOS
 //
 // Created by Marcus Rohrmoser on 19.07.15.
 // Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
@@ -44,7 +44,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 }
 
 
--(void)testPostData
+-(void)_testPostData
 {
     NSDictionary *d = @ {
         @"key0" : @"val ue",
@@ -132,6 +132,32 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
         XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
         XCTAssertEqualObjects(@"You have been banned from login after too many failed attempts. Try later.", ret[@"headerform"], @"");
         XCTAssertEqual(0, [ret[M_FORM] count], @"entries' count");
+    }
+}
+
+
+-(void)testParseHtmlTags
+{
+    NSDictionary *ret = parseShaarliHtml([self dataWithContentsOfFixture:@"03.tagcloud" withExtension:@"html"], nil);
+    // MRLogD(@"%@", ret, nil);
+    XCTAssertEqual(2, ret.count, @"entries' count");
+    XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+    NSArray *tags = ret[@"tags"];
+    MRLogD(@"%@", tags, nil);
+    XCTAssertEqual(1794, tags.count, @"");
+    {
+        NSArray *sorted = [tags sortedArrayUsingComparator:^NSComparisonResult (NSDictionary * t1, NSDictionary * t2) {
+                               const NSComparisonResult r0 = [t2[@"count"] compare:t1[@"count"]];
+                               if( r0 != NSOrderedSame )
+                                   return r0;
+                               return [t1[@"label"] compare:t2[@"label"] options:0];
+                           }
+                          ];
+        XCTAssertEqualObjects (@"Software", [sorted firstObject][@"label"], @"");
+        XCTAssertEqualObjects (@ (170), [sorted firstObject][@"count"], @"");
+
+        XCTAssertEqualObjects (@"§99StGB", [sorted lastObject][@"label"], @"");
+        XCTAssertEqualObjects (@ (1), [sorted lastObject][@"count"], @"");
     }
 }
 

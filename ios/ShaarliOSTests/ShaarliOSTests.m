@@ -1,6 +1,6 @@
 //
-// ShaarliCompanionTests.m
-// ShaarliCompanionTests
+// ShaarliOSTests.m
+// ShaarliOSTests
 //
 // Created by Marcus Rohrmoser on 18.03.15.
 // Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-@interface ShaarliCompanionTests : XCTestCase
+@interface ShaarliOSTests : XCTestCase
 
 @end
 
-@implementation ShaarliCompanionTests
+@implementation ShaarliOSTests
 
 -(void)setUp
 {

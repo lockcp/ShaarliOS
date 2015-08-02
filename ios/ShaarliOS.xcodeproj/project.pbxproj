@@ -26,6 +26,10 @@
 		161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */; };
 		1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
 		1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
+		162A51341B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
+		162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
+		162A51361B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
+		162A51381B6E5283001CFF52 /* ShaarliParseStateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51371B6E5283001CFF52 /* ShaarliParseStateTest.m */; };
 		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
@@ -102,17 +106,20 @@
 		1601E3F51AB9ED4600D3E27D /* NSObject+KVOSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KVOSO.m"; sourceTree = "<group>"; };
 		1601E3F61AB9ED4600D3E27D /* SOKeyValueObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOKeyValueObserver.h; sourceTree = "<group>"; };
 		1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOKeyValueObserver.m; sourceTree = "<group>"; };
-		1601E3FE1ABA030F00D3E27D /* NSUserDefaults+Share.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+Share.h"; sourceTree = "<group>"; };
-		1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+Share.m"; sourceTree = "<group>"; };
+		1601E3FE1ABA030F00D3E27D /* NSUserDefaults+Share.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSUserDefaults+Share.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSUserDefaults+Share.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		161C4B4A1B5BFD39002B177F /* testdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testdata; sourceTree = "<group>"; };
-		161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliMTest.m; sourceTree = "<group>"; };
-		1621DDCF1B6164EC00238503 /* SettingsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsVC.h; sourceTree = "<group>"; };
-		1621DDD01B6164EC00238503 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsVC.m; sourceTree = "<group>"; };
+		161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliMTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		1621DDCF1B6164EC00238503 /* SettingsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SettingsVC.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		1621DDD01B6164EC00238503 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SettingsVC.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		162A51321B6E50C7001CFF52 /* MROStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MROStateMachine.h; sourceTree = "<group>"; };
+		162A51331B6E50C7001CFF52 /* MROStateMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MROStateMachine.m; sourceTree = "<group>"; };
+		162A51371B6E5283001CFF52 /* ShaarliParseStateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliParseStateTest.m; sourceTree = "<group>"; };
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliOSTests.m; sourceTree = "<group>"; };
+		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliOSTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		165460811B697BCE001DAA32 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
-		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliM.h; sourceTree = "<group>"; };
-		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliM.m; sourceTree = "<group>"; };
+		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ShaarliM.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliM.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		166A4E241B6B734000F5D5F7 /* XCTestCase+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestCase+Tools.h"; sourceTree = "<group>"; };
 		166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+Tools.m"; sourceTree = "<group>"; };
 		1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliOS.entitlements; sourceTree = "<group>"; };
@@ -130,11 +137,11 @@
 		16D18FA61B5B023D005173C6 /* version.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.log; sourceTree = "<group>"; };
 		16E0A78B1AB9E2280085B2C0 /* ShaarliOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A78F1AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		16E0A7901AB9E2280085B2C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		16E0A7921AB9E2280085B2C0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		16E0A7931AB9E2280085B2C0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		16E0A7951AB9E2280085B2C0 /* MainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainVC.h; sourceTree = "<group>"; };
-		16E0A7961AB9E2280085B2C0 /* MainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainVC.m; sourceTree = "<group>"; };
+		16E0A7901AB9E2280085B2C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		16E0A7921AB9E2280085B2C0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		16E0A7931AB9E2280085B2C0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		16E0A7951AB9E2280085B2C0 /* MainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MainVC.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		16E0A7961AB9E2280085B2C0 /* MainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MainVC.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		16E0A7991AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16E0A79B1AB9E2280085B2C0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		16E0A79E1AB9E2280085B2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -204,6 +211,8 @@
 				1601E3F71AB9ED4600D3E27D /* SOKeyValueObserver.m */,
 				1601E3FE1ABA030F00D3E27D /* NSUserDefaults+Share.h */,
 				1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */,
+				162A51321B6E50C7001CFF52 /* MROStateMachine.h */,
+				162A51331B6E50C7001CFF52 /* MROStateMachine.m */,
 			);
 			path = infra;
 			sourceTree = "<group>";
@@ -293,6 +302,7 @@
 			children = (
 				161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */,
 				1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */,
+				162A51371B6E5283001CFF52 /* ShaarliParseStateTest.m */,
 				166A4E241B6B734000F5D5F7 /* XCTestCase+Tools.h */,
 				166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */,
 				16E0A7A81AB9E2280085B2C0 /* Supporting Files */,
@@ -487,6 +497,7 @@
 				16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1601E3DB1AB9E68700D3E27D /* ShareVC.m in Sources */,
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				162A51361B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3FA1AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
@@ -499,6 +510,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				162A51341B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
 				16E0A7971AB9E2280085B2C0 /* MainVC.m in Sources */,
 				1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3FB1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
@@ -517,6 +529,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
+				162A51381B6E5283001CFF52 /* ShaarliParseStateTest.m in Sources */,
 				16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,

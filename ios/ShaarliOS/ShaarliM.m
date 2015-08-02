@@ -1,6 +1,6 @@
 //
 // ShaarliM.m
-// ShaarliCompanion
+// ShaarliOS
 //
 // Created by Marcus Rohrmoser on 17.07.15.
 // Copyright (c) 2015 Marcus Rohrmoser. All rights reserved.
@@ -128,7 +128,13 @@
 
 #define M_TITLE @"title"
 #define M_TEXT @"text"
+#define M_TAGS @"tags"
 #define M_ID_HEADERFORM @"headerform"
+#define M_ID_CLOUDTAG @"cloudtag"
+
+#define M_TAG_COUNT @"tag count"
+#define M_TAG_HREF @"tag href"
+#define M_TAG_LABEL @"tag label"
 
 #import <libxml2/libxml/HTMLparser.h>
 
@@ -145,18 +151,39 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
             if( 0 == strcmp("href", name) && 0 == strcmp("?do=logout", value) )
                 // https://github.com/dimtion/Shaarlier/commit/e55b150770b67561d0e07c8b1d5ab88b4f1ce52b#commitcomment-12407612
                 d[M_HAS_LOGOUT] = @ (YES);
+            if( 0 == strcmp("href", name) && 0 == strncmp("?searchtags=", value, 12) ) {
+                assert(d[M_TAG_COUNT] && "");
+                assert(d[M_TAGS] && "");
+                assert([M_ID_CLOUDTAG isEqualToString:d[T_DIV]] && "");
+                assert(nil == d[T_A] && "");
+                assert(nil == d[T_SPAN] && "");
+                // https://github.com/dimtion/Shaarlier/commit/e55b150770b67561d0e07c8b1d5ab88b4f1ce52b#commitcomment-12407612
+                d[T_A] = M_TAG_HREF;
+                d[M_TAG_HREF] = @ (value);
+            }
         }
         return;
     }
-    // shaarli_title
     if( 0 == strcmp("span", (const char *)name) ) {
         for( int i = 0; attributes[i + 1]; i += 2 ) {
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
 
             if( 0 == strcmp("id", name) && 0 == strcmp("shaarli_title", value) )
+                // shaarli_title
                 d[T_SPAN] = M_TITLE;
-            [d[M_TEXT] setString:@""];
+            if( [M_ID_CLOUDTAG isEqualToString:d[T_DIV]] && 0 == strcmp("class", name) && 0 == strcmp("count", value) ) {
+                assert(nil == d[M_TAG_COUNT] && "");
+                assert(nil == d[M_TAG_HREF] && "");
+                assert(nil == d[M_TAG_LABEL] && "");
+                assert(nil == d[T_SPAN] && "");
+                assert(nil == d[T_A] && "");
+                assert(0 == [d[M_TEXT] length] && "");
+                // span with a class='count'
+                d[T_SPAN] = M_TAG_COUNT;
+            }
+
+            [d[M_TEXT] setData:nil];
         }
         return;
     }
@@ -167,7 +194,12 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
 
             if( 0 == strcmp("id", name) && 0 == strcmp("headerform", value) ) {
                 d[T_DIV] = M_ID_HEADERFORM;
-                [d[M_TEXT] setString:@""];
+                [d[M_TEXT] setData:nil];
+            }
+            if( 0 == strcmp("id", name) && 0 == strcmp("cloudtag", value) ) {
+                d[T_DIV] = M_ID_CLOUDTAG;
+                assert(nil == d[M_TAGS] && "hu");
+                d[M_TAGS] = [NSMutableArray arrayWithCapacity:200];
             }
         }
         return;
@@ -198,10 +230,11 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
 
 void ShaarliTextRefill(NSMutableDictionary *d, NSString *mark, NSString *tag)
 {
-    NSMutableString *str = d[M_TEXT];
+    NSMutableData *dat = d[M_TEXT];
+    NSString *str = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
     d[mark] = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     [d removeObjectForKey:tag];
-    [str setString:@""];
+    [dat setData:nil];
 }
 
 
@@ -214,6 +247,25 @@ static void ShaarliHtml_EndElement(void *voidContext, const xmlChar *name)
         ShaarliTextRefill(d, M_TITLE, T_SPAN);
     if( 0 == strcmp("div", (const char *)name) && [M_ID_HEADERFORM isEqualToString:d[T_DIV]] )
         ShaarliTextRefill(d, M_ID_HEADERFORM, T_DIV);
+    if( 0 == strcmp("span", (const char *)name) && [M_TAG_COUNT isEqualToString:d[T_SPAN]] )
+        ShaarliTextRefill(d, M_TAG_COUNT, T_SPAN);
+    if( 0 == strcmp("a", (const char *)name) && d[T_A] && d[M_TAG_COUNT] && d[M_TAG_HREF] ) {
+        ShaarliTextRefill(d, M_TAG_LABEL, T_A);
+        assert(d[M_TAG_COUNT] && "");
+        assert(d[M_TAG_HREF] && "");
+        assert(d[M_TAG_LABEL] && "");
+        NSDictionary *tag = @ {
+            @"count" :  @ ([d[M_TAG_COUNT] integerValue]),
+            @"href" : d[M_TAG_HREF],
+            @"label" : d[M_TAG_LABEL],
+        };
+        [d[M_TAGS] addObject:tag];
+        [d removeObjectForKey:M_TAG_COUNT];
+        [d removeObjectForKey:M_TAG_HREF];
+        [d removeObjectForKey:M_TAG_LABEL];
+    }
+    if( 0 == strcmp("div", (const char *)name) && [M_ID_CLOUDTAG isEqualToString:d[T_DIV]] )
+        [d removeObjectForKey:T_DIV];
 }
 
 
@@ -236,14 +288,11 @@ static void ShaarliHtml_Characters(void *voidContext, const xmlChar *ch, int len
     assert(voidContext && "ouch");
     NSMutableDictionary *d = (__bridge NSMutableDictionary *)voidContext;
 
-    if( [M_TITLE isEqualToString:d[T_SPAN]] || [M_ID_HEADERFORM isEqualToString:d[T_DIV]] ) {
-        NSMutableString *str = d[M_TEXT];
-        if( !str )
-            str = d[M_TEXT] = [NSMutableString stringWithCapacity:200];
-        char tmp[len + 1];
-        tmp[len] = '\0';
-        strncpy(tmp, (const char *)ch, len);
-        [str appendFormat:@"%s", tmp];
+    if( [M_TAG_COUNT isEqualToString:d[T_SPAN]] || (d[M_TAG_COUNT] && d[T_A]) || [M_TITLE isEqualToString:d[T_SPAN]] || [M_ID_HEADERFORM isEqualToString:d[T_DIV]] ) {
+        NSMutableData *dat = d[M_TEXT];
+        if( !dat )
+            dat = d[M_TEXT] = [NSMutableData dataWithCapacity:200];
+        [dat appendBytes:ch length:len];
     }
 }
 
