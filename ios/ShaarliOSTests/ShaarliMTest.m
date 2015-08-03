@@ -55,6 +55,37 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 }
 
 
+-(void)testStringByStrippingTags
+{
+    NSMutableArray *a = [NSMutableArray arrayWithCapacity:10];
+    {
+        [a removeAllObjects];
+        XCTAssertEqualObjects(@"", [@"" stringByStrippingTags:a], @"");
+        XCTAssertEqual(0, a.count, @"");
+    }
+    {
+        [a removeAllObjects];
+        XCTAssertEqualObjects(@" \n ", [@" \n " stringByStrippingTags:a], @"");
+        XCTAssertEqual(0, a.count, @"");
+    }
+    {
+        [a removeAllObjects];
+        XCTAssertEqualObjects(@"", [@"  #ShaarliOS  " stringByStrippingTags:a], @"");
+        XCTAssertEqual(1, a.count, @"");
+        XCTAssertEqualObjects(@"ShaarliOS", a[0], @"");
+    }
+    {
+        [a removeAllObjects];
+        XCTAssertEqualObjects(@" foo", [@" foo #ShaarliOS #b  #c ##d " stringByStrippingTags:a], @"");
+        XCTAssertEqual(4, a.count, @"");
+        XCTAssertEqualObjects(@"ShaarliOS", a[0], @"");
+        XCTAssertEqualObjects(@"b", a[1], @"");
+        XCTAssertEqualObjects(@"c", a[2], @"");
+        XCTAssertEqualObjects(@"#d", a[3], @"");
+    }
+}
+
+
 -(void)testHttpGetParams
 {
     NSURL *url = [NSURL URLWithString:@"http://links.mro.name/?post=http%3A%2F%2Fww.heise.de%2Fa&title=Ti+tle&description=Des%20crip%20tio=n&source=http%3A%2F%2Fapp.mro.name%2FShaarliOS"];

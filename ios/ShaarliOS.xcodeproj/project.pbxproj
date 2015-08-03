@@ -26,9 +26,7 @@
 		161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */; };
 		1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
 		1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
-		162A51341B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
 		162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
-		162A51361B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
 		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
@@ -506,7 +504,6 @@
 				16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1601E3DB1AB9E68700D3E27D /* ShareVC.m in Sources */,
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
-				162A51361B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3FA1AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
@@ -519,7 +516,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				162A51341B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
 				16E0A7971AB9E2280085B2C0 /* MainVC.m in Sources */,
 				1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3FB1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,

@@ -10,6 +10,37 @@
 
 #define USE_KEYCHAIN 1
 
+@implementation NSString(StripShaarliTags)
+
+-(NSString *)stringByStrippingTags:(NSMutableArray *)tags
+{
+    NSError *err = nil;
+    NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:@"\\s*(?:#(\\S+))\\s*$" options:NSRegularExpressionAnchorsMatchLines error:&err];
+    NSParameterAssert(nil == err);
+    const NSUInteger idx = tags.count;
+    __block NSRange all = NSMakeRange(0, self.length);
+    for(;; ) {
+        __block NSInteger count = 0;
+        [rex enumerateMatchesInString:self options:NSMatchingReportProgress range:all usingBlock:^(NSTextCheckingResult * res, NSMatchingFlags flags, BOOL * stop) {
+             if( 0 == res.numberOfRanges )
+                 return;
+             count++;
+             NSParameterAssert (2 == res.numberOfRanges);
+             const NSRange r0 = [res rangeAtIndex:0];
+             const NSRange r1 = [res rangeAtIndex:1];
+             all.length = r0.location;
+             [tags insertObject:[self substringWithRange:r1] atIndex:idx];
+         }
+        ];
+        if( count == 0 )
+            break;
+    }
+    return [self substringWithRange:all];
+}
+
+
+@end
+
 @implementation NSString(HttpGetParams)
 
 /**
@@ -332,6 +363,9 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 @property (strong, nonatomic) NSString *passWord;
 @property (strong, nonatomic) NSString *title;
 @property (assign, nonatomic) BOOL privateDefault;
+@property (assign, nonatomic) BOOL tagsActive;
+@property (strong, nonatomic) NSString *tagsDefault;
+
 
 @property (weak, nonatomic) id <ShaarliPostDelegate> postDelegate;
 @end
@@ -394,6 +428,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSParameterAssert(d);
     self.title = [d valueForKey:@"title"];
     self.privateDefault = [d boolForKey:@"privateDefault"];
+    self.tagsActive = [d objectForKey:@"tagsActive"] ? [d boolForKey:@"tagsActive"] : YES;
+    self.tagsDefault = [d objectForKey:@"tagsDefault"] ? [d stringForKey:@"tagsDefault"] : @"#ShaarliOS";
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
     self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"passWord"];
@@ -404,8 +440,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
     if( !( (nil == self.title) == (nil == self.endpointUrl) ) )
+        // don't assert because HTML markup might bring title in another tag:
         MRLogW(@"strange configuration. title='%@' endpoint='%@'", self.title, self.endpointUrl, nil);
-    NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
@@ -419,6 +455,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
     NSParameterAssert(d);
     [d setValue:self.title forKey:@"title"];
     [d setBool:self.privateDefault forKey:@"privateDefault"];
+    [d setBool:self.tagsActive forKey:@"tagsActive"];
+    [d setObject:self.tagsDefault forKey:@"tagsDefault"];
 #if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"passWord"];
@@ -432,7 +470,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 }
 
 
--(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault completion:( void (^)(ShaarliM * me, NSError * error) )completion
+-(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault
+   tagsActive:(BOOL)tagsA tagsDefault:(NSString *)tagsD completion:( void (^)(ShaarliM * me, NSError * error) )completion
 {
     const BOOL force = YES;
 
@@ -515,6 +554,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
                     self.userName = cre1.user;
                     self.passWord = cre1.password;
                     self.privateDefault = privateDefault;
+                    self.tagsActive = tagsA;
+                    self.tagsDefault = tagsD;
                     [session.configuration.URLCredentialStorage setCredential:cre1 forProtectionSpace:ps];
 #ifndef NS_BLOCK_ASSERTIONS
                     NSParameterAssert ([user isEqual:self.userName]);
@@ -766,10 +807,13 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
             NSDictionary *params = [req.URL dictionaryWithHttpFormUrl];
             [post setValue:params[@"post"] forKey:@"lf_" @"url"];
             [post setValue:params[@"title"] forKey:@"lf_" @"title"];
-            [post setValue:params[@"description"] forKey:@"lf_" @"description"];
+            if( self.tagsActive ) {
+                NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
+                [post setValue:[params[@"description"] stringByStrippingTags:tags] forKey:@"lf_" @"description"];
+                [post setValue:[tags componentsJoinedByString:@" "] forKey:@"lf_" @"tags"];
+            } else
+                [post setValue:params[@"description"] forKey:@"lf_" @"description"];
             [post setValue:params[@"source"] forKey:@"lf_" @"source"];
-
-            [post setValue:params[@"tags"] forKey:@"lf_" @"tags"];
             [post setValue:params[@"private"] forKey:@"lf_" @"private"];
             if( self.postDelegate.postPrivate )
                 [post setValue:@"on" forKey:@"lf_" @"private"];

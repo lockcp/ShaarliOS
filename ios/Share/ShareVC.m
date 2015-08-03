@@ -13,7 +13,6 @@
 
 @interface ShareVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliPostDelegate> {
     SLComposeSheetConfigurationItem *itemTitle;
-    SLComposeSheetConfigurationItem *itemTags;
     SLComposeSheetConfigurationItem *itemPrivate;
 }
 @property (readonly, strong, nonatomic) ShaarliM *shaarli;
@@ -39,42 +38,19 @@
     itemTitle = [[SLComposeSheetConfigurationItem alloc] init];
     itemTitle.title = NSLocalizedString(@"Title", @"ShaareVC");
     itemTitle.value = self.contentText;
-    [itemTitle setTapHandler:^(void) {
-         MRLogD (@"", nil);
-     }
-    ];
-
-    itemTags = [[SLComposeSheetConfigurationItem alloc] init];
-    itemTags.title = NSLocalizedString (@"Tags", @"ShaareVC");
-    itemTags.value = @"";
-    [itemTags setTapHandler:^(void) {
-         MRLogD (@"", nil);
-     }
-    ];
 
     itemPrivate = [[SLComposeSheetConfigurationItem alloc] init];
-    [itemPrivate setTitle:NSLocalizedString (@"Private", @"ShaareVC")];
-    itemPrivate.value = self.shaarli.privateDefault ? NSLocalizedString (@"Private", @"ShaareVC") : NSLocalizedString (@"Public", @"ShaareVC");
-    __weak typeof (itemPrivate)wr = itemPrivate;
-    __weak typeof (self)ws = self;
+    [itemPrivate setTitle:NSLocalizedString(@"Private", @"ShaareVC")];
+    itemPrivate.value = self.shaarli.privateDefault ? NSLocalizedString(@"Private 🔐", @"ShaareVC") : NSLocalizedString(@"Public 🔓", @"ShaareVC");
+    __weak typeof(itemPrivate) wr = itemPrivate;
+    __weak typeof(self) ws = self;
+
     [itemPrivate setTapHandler:^(void) {
-         wr.value = !ws.postPrivate ? NSLocalizedString (@"Private", @"ShaareVC"):NSLocalizedString (@"Public", @"ShaareVC");
+         wr.value = !ws.postPrivate ? NSLocalizedString (@"Private 🔐", @"ShaareVC"):NSLocalizedString (@"Public 🔓", @"ShaareVC");
      }
     ];
 
-#if 1
-    SLComposeSheetConfigurationItem *itemShaar = [[SLComposeSheetConfigurationItem alloc] init];
-    itemShaar.title = NSLocalizedString (@"Shaarə", @"ShaareVC");
-    itemShaar.value = self.shaarli.title;
-    [itemShaar setTapHandler:^(void) {
-         MRLogD (@"", nil);
-         [self.extensionContext openURL:[NSURL URLWithString:@"http://www.heise.de"] completionHandler:nil];
-     }
-    ];
-    return @[itemTitle, itemTags, itemPrivate, itemShaar];
-#else
-    return @[itemTitle, itemTags, itemPrivate];
-#endif
+    return @[itemTitle, itemPrivate];
 }
 
 
@@ -83,8 +59,12 @@
     [super viewWillAppear:animated];
     self.view.tintColor = [UIColor colorWithRed:128 / 255.0f green:173 / 255.0f blue:72 / 255.0f alpha:1.0f];
     NSParameterAssert(self.shaarli);
+    NSParameterAssert(itemTitle);
 
     self.title = self.shaarli.title;
+    itemTitle.value = self.contentText;
+    if( self.shaarli.tagsActive && self.shaarli.tagsDefault.length > 0 )
+        self.textView.text = [self.contentText stringByAppendingFormat:@"\n%@ ", self.shaarli.tagsDefault];
 }
 
 
@@ -92,9 +72,6 @@
 {
     MRLogD(@"-", nil);
     [super viewDidAppear:animated];
-    NSParameterAssert(itemTitle);
-    itemTitle.value = self.contentText;
-
     if( !self.shaarli.isSetUp ) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No Shaarli", @"Share") message:NSLocalizedString(@"There is no Shaarli account configured. You can add one in the ShaarliOS in-app settings.", @"Share") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Share") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
@@ -161,7 +138,7 @@
 
 -(BOOL)postPrivate
 {
-    return ![NSLocalizedString (@"Public", @"Shaare") isEqualToString:itemPrivate.value];
+    return ![NSLocalizedString (@"Public 🔓", @"Shaare") isEqualToString:itemPrivate.value];
 }
 
 

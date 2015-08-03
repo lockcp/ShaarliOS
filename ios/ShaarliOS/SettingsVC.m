@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblDefaultPrivate;
 @property (weak, nonatomic) IBOutlet UISwitch *swiPrivateDefault;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
+@property (weak, nonatomic) IBOutlet UISwitch *swiTags;
+@property (weak, nonatomic) IBOutlet UITextField *txtTags;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spiLogin;
 @end
 
@@ -37,6 +39,8 @@
     NSParameterAssert(self.txtPassWord);
     NSParameterAssert(self.swiPrivateDefault);
     NSParameterAssert(self.lblDefaultPrivate);
+    NSParameterAssert(self.swiTags);
+    NSParameterAssert(self.txtTags);
     NSParameterAssert(self.spiLogin);
     [self.tableView addSubview:self.spiLogin];
 }
@@ -57,6 +61,8 @@
     self.txtUserName.text = self.shaarli.userName;
     self.txtPassWord.text = self.shaarli.passWord;
     self.swiPrivateDefault.on = self.shaarli.privateDefault;
+    self.swiTags.on = self.shaarli.tagsActive;
+    self.txtTags.text = self.shaarli.tagsDefault;
 
     [self.spiLogin stopAnimating];
 
@@ -78,6 +84,8 @@
     else if( textField == self.txtUserName )
         [self.txtPassWord becomeFirstResponder];
     else if( textField == self.txtPassWord )
+        [self.txtTags becomeFirstResponder];
+    else if( textField == self.txtTags )
         [self actionSignIn:textField];  // dispatch async?
     return YES;
 }
@@ -98,10 +106,17 @@
     MRLogD(@"-", nil);
     const BOOL wasSetUp = self.shaarli.isSetUp;
 
+    if( self.swiTags.on ) {
+        NSMutableArray *a = [NSMutableArray arrayWithCapacity:10];
+        [self.txtTags.text stringByStrippingTags:a];
+        self.txtTags.text = [@"#" stringByAppendingString:[a componentsJoinedByString:@" #"]];
+    } else
+        self.txtTags.text = @"";
+
     // spinner purposely covers all screen, so all other buttons are blocked meanwhile.
     self.spiLogin.frame = self.tableView.bounds;
     [self.spiLogin startAnimating];
-    [self.shaarli updateEndpoint:self.txtEndpoint.text secure:self.swiSecure.on user:self.txtUserName.text pass:self.txtPassWord.text privateDefault:self.swiPrivateDefault.on completion:^(ShaarliM * me, NSError * error) {
+    [self.shaarli updateEndpoint:self.txtEndpoint.text secure:self.swiSecure.on user:self.txtUserName.text pass:self.txtPassWord.text privateDefault:self.swiPrivateDefault.on tagsActive:self.swiTags.on tagsDefault:self.txtTags.text completion:^(ShaarliM * me, NSError * error) {
          dispatch_async (dispatch_get_main_queue (), ^{
                              MRLogD (@"-", nil);
                              [self.spiLogin stopAnimating];

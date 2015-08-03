@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSString(StripShaarliTags)
+-(NSString *)stringByStrippingTags:(NSMutableArray *)tags;
+@end
 @interface NSString(HttpGetParams)
 -(NSString *)stringByAddingPercentEscapesForHttpFormUrl;
 @end
@@ -44,12 +47,15 @@
 @property (readonly, assign, nonatomic) BOOL isSetUp;
 @property (readonly, assign, nonatomic) BOOL endpointSecure;
 @property (readonly, assign, nonatomic) BOOL privateDefault;
+@property (readonly, assign, nonatomic) BOOL tagsActive;
+@property (readonly, strong, nonatomic) NSString *tagsDefault;
 // parsed
 @property (readonly, strong, nonatomic) NSString *title;
 
 -(void)load;
 -(void)save;
--(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault completion:( void (^)(ShaarliM * me, NSError * error) )completion;
+-(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault
+   tagsActive:(BOOL)tagsA tagsDefault:(NSString *)tagsD completion:( void (^)(ShaarliM * me, NSError * error) )completion;
 -(NSURLSession *)postSession;
 -(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg;
 
