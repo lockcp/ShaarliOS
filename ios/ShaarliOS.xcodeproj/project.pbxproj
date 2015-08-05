@@ -101,7 +101,7 @@
 		1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		1601E3ED1AB9EC7800D3E27D /* ShaarliOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShaarliOS-Prefix.pch"; sourceTree = "<group>"; };
+		1601E3ED1AB9EC7800D3E27D /* ShaarliOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "ShaarliOS-Prefix.pch"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1601E3EF1AB9ED3B00D3E27D /* NSBundle+MroSemVer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+MroSemVer.h"; sourceTree = "<group>"; };
 		1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+MroSemVer.m"; sourceTree = "<group>"; };
 		1601E3F41AB9ED4600D3E27D /* NSObject+KVOSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KVOSO.h"; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 		1621DDD01B6164EC00238503 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SettingsVC.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		162A51321B6E50C7001CFF52 /* MROStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MROStateMachine.h; sourceTree = "<group>"; };
 		162A51331B6E50C7001CFF52 /* MROStateMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MROStateMachine.m; sourceTree = "<group>"; };
-		162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliStateParseTest.m; sourceTree = "<group>"; };
+		162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliStateParseTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliOSTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		165460811B697BCE001DAA32 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 		16E0A7A41AB9E2280085B2C0 /* ShaarliOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShaarliOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E0A7A91AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E59BCF1B6EBCEF0035271D /* response.xslt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = response.xslt; sourceTree = "<group>"; };
-		16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliResponseXsltTest.m; sourceTree = "<group>"; };
+		16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliResponseXsltTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,13 +230,13 @@
 		169BCA0B1B72269400311870 /* 1Password */ = {
 			isa = PBXGroup;
 			children = (
-				169BCA0C1B72269400311870 /* 1Password.xcassets */,
 				169BCA0D1B72269400311870 /* LICENSE.txt */,
+				169BCA101B72269400311870 /* README.md */,
+				169BCA121B72269400311870 /* version.log */,
+				169BCA111B72269400311870 /* update.sh */,
+				169BCA0C1B72269400311870 /* 1Password.xcassets */,
 				169BCA0E1B72269400311870 /* OnePasswordExtension.h */,
 				169BCA0F1B72269400311870 /* OnePasswordExtension.m */,
-				169BCA101B72269400311870 /* README.md */,
-				169BCA111B72269400311870 /* update.sh */,
-				169BCA121B72269400311870 /* version.log */,
 			);
 			path = 1Password;
 			sourceTree = "<group>";
@@ -254,13 +254,13 @@
 			isa = PBXGroup;
 			children = (
 				16D18F9F1B5B023D005173C6 /* LICENSE */,
+				16D18FA41B5B023D005173C6 /* README.md */,
+				16D18FA61B5B023D005173C6 /* version.log */,
+				16D18FA51B5B023D005173C6 /* update.sh */,
 				16D18FA01B5B023D005173C6 /* PDKeychainBindings.h */,
 				16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */,
 				16D18FA21B5B023D005173C6 /* PDKeychainBindingsController.h */,
 				16D18FA31B5B023D005173C6 /* PDKeychainBindingsController.m */,
-				16D18FA41B5B023D005173C6 /* README.md */,
-				16D18FA51B5B023D005173C6 /* update.sh */,
-				16D18FA61B5B023D005173C6 /* version.log */,
 			);
 			path = PDKeychainBindingsController;
 			sourceTree = "<group>";

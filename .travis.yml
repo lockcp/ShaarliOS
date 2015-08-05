@@ -1,0 +1,12 @@
+# sign in at https://travis-ci.org/#
+before_script:
+  - sh ios/ThirdParty/PDKeychainBindingsController/update.sh
+  - sh ios/ThirdParty/1Password/update.sh
+# http://docs.travis-ci.com/user/languages/objective-c/
+language: objective-c
+xcode_sdk:
+  - iphonesimulator
+xcode_project: ios/ShaarliOS.xcodeproj
+xcode_scheme:
+  - ShaarliOS
+  - Share

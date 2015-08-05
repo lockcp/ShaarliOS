@@ -5,3 +5,4 @@ ios/*.xcodeproj/xcuserdata/*.xcuserdatad/
 ios/assets/build/
 ios/build/
 shaarli-logo.png
+build/
