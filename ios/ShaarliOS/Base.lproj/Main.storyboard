@@ -113,8 +113,8 @@
                                                     <action selector="actionPost:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zm1-bZ-VQy"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vc2-4N-vqT">
-                                                <rect key="frame" x="122" y="12" width="44" height="21"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Note" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vc2-4N-vqT">
+                                                <rect key="frame" x="125" y="12" width="38" height="21"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
