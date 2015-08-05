@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1601E3DB1AB9E68700D3E27D /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
-		1601E3DD1AB9E68700D3E27D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */; };
 		1601E3E01AB9E68700D3E27D /* Share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1601E3D51AB9E68700D3E27D /* Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1601E3F11AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */; };
 		1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3F01AB9ED3B00D3E27D /* NSBundle+MroSemVer.m */; };
@@ -22,6 +20,8 @@
 		1601E4001ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */; };
 		1601E4011ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */; };
 		1601E4021ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3FF1ABA030F00D3E27D /* NSUserDefaults+Share.m */; };
+		1614BA9B1B71FC190042DCE7 /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
+		1614BA9C1B71FC1A0042DCE7 /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
 		161C4B4B1B5BFD39002B177F /* testdata in Resources */ = {isa = PBXBuildFile; fileRef = 161C4B4A1B5BFD39002B177F /* testdata */; };
 		161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */; };
 		1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
@@ -36,6 +36,7 @@
 		165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		166A4E261B6B734000F5D5F7 /* XCTestCase+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */; };
+		1671FB061B700D5E00C829D5 /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
 		16ABE6001B640CC10054F12F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FD1B640CC10054F12F /* Icon.png */; };
 		16ABE6011B640CC10054F12F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FE1B640CC10054F12F /* Icon@2x.png */; };
 		16ABE6021B640CC10054F12F /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FF1B640CC10054F12F /* Icon@3x.png */; };
@@ -95,7 +96,6 @@
 		1601E3D81AB9E68700D3E27D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1601E3D91AB9E68700D3E27D /* ShareVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareVC.h; sourceTree = "<group>"; };
 		1601E3DA1AB9E68700D3E27D /* ShareVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareVC.m; sourceTree = "<group>"; };
-		1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -149,7 +149,6 @@
 		16E0A7A91AB9E2280085B2C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E59BCF1B6EBCEF0035271D /* response.xslt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = response.xslt; sourceTree = "<group>"; };
 		16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliResponseXsltTest.m; sourceTree = "<group>"; };
-		16E59BD31B6EBDBE0035271D /* libxslt.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxslt.1.dylib; path = usr/lib/libxslt.1.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,7 +185,6 @@
 				1697BB711B62D7F100A7D515 /* Share.entitlements */,
 				1601E3D91AB9E68700D3E27D /* ShareVC.h */,
 				1601E3DA1AB9E68700D3E27D /* ShareVC.m */,
-				1601E3DC1AB9E68700D3E27D /* MainInterface.storyboard */,
 				1601E3D71AB9E68700D3E27D /* Supporting Files */,
 			);
 			path = Share;
@@ -246,7 +244,6 @@
 		16E0A7821AB9E2280085B2C0 = {
 			isa = PBXGroup;
 			children = (
-				16E59BD31B6EBDBE0035271D /* libxslt.1.dylib */,
 				1601E3EA1AB9EB2000D3E27D /* Common.xcconfig */,
 				1601E3EB1AB9EB2000D3E27D /* Debug.xcconfig */,
 				1601E3EC1AB9EB2000D3E27D /* Release.xcconfig */,
@@ -451,7 +448,6 @@
 				16ABE6011B640CC10054F12F /* Icon@2x.png in Resources */,
 				16ABE6021B640CC10054F12F /* Icon@3x.png in Resources */,
 				16D18FBB1B5B02ED005173C6 /* LICENSE in Resources */,
-				1601E3DD1AB9E68700D3E27D /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,8 +497,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1671FB061B700D5E00C829D5 /* ShareVC.m in Sources */,
 				16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
-				1601E3DB1AB9E68700D3E27D /* ShareVC.m in Sources */,
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
@@ -524,6 +520,7 @@
 				1601E4001ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 				16E0A7941AB9E2280085B2C0 /* AppDelegate.m in Sources */,
 				16E0A7911AB9E2280085B2C0 /* main.m in Sources */,
+				1614BA9B1B71FC190042DCE7 /* ShareVC.m in Sources */,
 				16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3F81AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
@@ -542,6 +539,7 @@
 				165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3F91AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 				1601E3FC1AB9ED4600D3E27D /* SOKeyValueObserver.m in Sources */,
+				1614BA9C1B71FC1A0042DCE7 /* ShareVC.m in Sources */,
 				16E59BCE1B6EAF2A0035271D /* ShaarliStateParseTest.m in Sources */,
 				166A4E261B6B734000F5D5F7 /* XCTestCase+Tools.m in Sources */,
 				161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */,

@@ -13,7 +13,7 @@
 
 @interface ShareVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliPostDelegate> {
     SLComposeSheetConfigurationItem *itemTitle;
-    SLComposeSheetConfigurationItem *itemPrivate;
+    SLComposeSheetConfigurationItem *itemAudience;
 }
 @property (readonly, strong, nonatomic) ShaarliM *shaarli;
 @end
@@ -39,18 +39,18 @@
     itemTitle.title = NSLocalizedString(@"Title", @"ShaareVC");
     itemTitle.value = self.contentText;
 
-    itemPrivate = [[SLComposeSheetConfigurationItem alloc] init];
-    [itemPrivate setTitle:NSLocalizedString(@"Private", @"ShaareVC")];
-    itemPrivate.value = self.shaarli.privateDefault ? NSLocalizedString(@"Private 🔐", @"ShaareVC") : NSLocalizedString(@"Public 🔓", @"ShaareVC");
-    __weak typeof(itemPrivate) wr = itemPrivate;
+    itemAudience = [[SLComposeSheetConfigurationItem alloc] init];
+    [itemAudience setTitle:NSLocalizedString(@"Audience", @"ShaareVC")];
+    itemAudience.value = self.shaarli.privateDefault ? NSLocalizedString(@"Private 🔐", @"ShaareVC") : NSLocalizedString(@"Public 🔓", @"ShaareVC");
+    __weak typeof(itemAudience) wr = itemAudience;
     __weak typeof(self) ws = self;
 
-    [itemPrivate setTapHandler:^(void) {
+    [itemAudience setTapHandler:^(void) {
          wr.value = !ws.postPrivate ? NSLocalizedString (@"Private 🔐", @"ShaareVC"):NSLocalizedString (@"Public 🔓", @"ShaareVC");
      }
     ];
 
-    return @[itemTitle, itemPrivate];
+    return @[itemTitle, itemAudience];
 }
 
 
@@ -138,13 +138,7 @@
 
 -(BOOL)postPrivate
 {
-    return ![NSLocalizedString (@"Public 🔓", @"Shaare") isEqualToString:itemPrivate.value];
-}
-
-
--(id <NSFastEnumeration>)postTags
-{
-    return nil;
+    return ![NSLocalizedString (@"Public 🔓", @"Shaare") isEqualToString:itemAudience.value];
 }
 
 

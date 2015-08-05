@@ -613,50 +613,13 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
 #define POST_STEP_4 @"post#4"
 
 
--(void)postTest
-{
-    MRLogD(@"-", nil);
-
-    NSString *confName = BUNDLE_ID @".backgroundpost";
-    NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
-    // conf = [NSURLSessionConfiguration defaultSessionConfiguration];
-    conf.sharedContainerIdentifier = @"group." BUNDLE_ID; // http://stackoverflow.com/a/26319143
-    conf.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain;
-    conf.networkServiceType = NSURLNetworkServiceTypeBackground;
-    conf.allowsCellularAccess = YES;
-
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
-    session.sessionDescription = @"Shaarli Post";
-
-    NSParameterAssert(session.configuration.HTTPCookieStorage);
-    NSParameterAssert(session.configuration.HTTPCookieStorage == [NSHTTPCookieStorage sharedHTTPCookieStorage]);
-    NSParameterAssert(NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain == session.configuration.HTTPCookieAcceptPolicy);
-    NSParameterAssert(session.configuration.HTTPShouldSetCookies);
-    NSParameterAssert(self == session.delegate);
-
-    for( NSHTTPCookie *cook in session.configuration.HTTPCookieStorage.cookies ) {
-        MRLogD(@"deleteCookie %@", cook, nil);
-        [session.configuration.HTTPCookieStorage deleteCookie:cook];
-    }
-
-    NSString *par = @"?";
-    par = [par stringByAppendingString:[@ { @"post":@"http://ww.heise.de/a", @"title":@"Ti tlə", @"description":[[NSDate date] description], @"source":POST_SOURCE }
-                                        stringByAddingPercentEscapesForHttpFormUrl]];
-
-    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
-    NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];
-    dt.taskDescription = POST_STEP_1;
-    [dt resume];
-}
-
-
 -(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg
 {
     NSString *par = @"?";
     NSParameterAssert(nil == self.postDelegate);
     NSParameterAssert(delg);
     self.postDelegate = delg;
-    par = [par stringByAppendingString:[@ { @"post":url.absoluteString, @"title":title, @"description":desc, @"source":POST_SOURCE }
+    par = [par stringByAppendingString:[@ { @"post":(url ? url.absoluteString:@""), @"title":title, @"description":desc, @"source":POST_SOURCE }
                                         stringByAddingPercentEscapesForHttpFormUrl]];
     NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
     NSURLSessionTask *dt = [session downloadTaskWithURL:cmd];

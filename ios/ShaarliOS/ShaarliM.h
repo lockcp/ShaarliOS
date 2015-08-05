@@ -34,8 +34,6 @@
 -(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error;
 /** fetched late during post. */
 @property (readonly, assign, nonatomic) BOOL postPrivate;
-/** fetched late during post. */
-@property (readonly, strong, nonatomic) id <NSFastEnumeration> postTags;
 @end
 
 @interface ShaarliM : NSObject <NSURLSessionDelegate>
