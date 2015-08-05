@@ -36,9 +36,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>0.0.6</string>
+	<string>0.0.7</string>
 	<key>CFBundleVersionGitSHA</key>
-	<string>0.0.6</string>
+	<string>0.0.7</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
