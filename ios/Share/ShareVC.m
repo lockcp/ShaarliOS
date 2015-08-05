@@ -156,6 +156,12 @@
 }
 
 
+-(NSString *)postDescription
+{
+    return self.contentText;
+}
+
+
 -(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error
 {
     if( error ) {

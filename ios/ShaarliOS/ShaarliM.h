@@ -46,6 +46,8 @@
 @protocol ShaarliPostDelegate <NSObject>
 -(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error;
 /** fetched late during post. */
+@property (readonly, strong, nonatomic) NSString *postDescription;
+/** fetched late during post. */
 @property (readonly, assign, nonatomic) BOOL postPrivate;
 @end
 

@@ -790,7 +790,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error)
             [post setValue:params[@"title"] forKey:@"lf_" @"title"];
             if( self.tagsActive ) {
                 NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
-                [post setValue:[params[@"description"] stringByStrippingTags:tags] forKey:@"lf_" @"description"];
+                [post setValue:[self.postDelegate.postDescription stringByStrippingTags:tags] forKey:@"lf_" @"description"];
                 [post setValue:[tags componentsJoinedByString:@" "] forKey:@"lf_" @"tags"];
             } else
                 [post setValue:params[@"description"] forKey:@"lf_" @"description"];
