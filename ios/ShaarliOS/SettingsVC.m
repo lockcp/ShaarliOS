@@ -8,6 +8,8 @@
 
 #import "SettingsVC.h"
 #import "MainVC.h"
+#import "OnePasswordExtension.h"
+
 
 @interface SettingsVC() <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *txtEndpoint;
@@ -20,6 +22,9 @@
 @property (weak, nonatomic) IBOutlet UISwitch *swiTags;
 @property (weak, nonatomic) IBOutlet UITextField *txtTags;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spiLogin;
+
+// https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
+@property (weak, nonatomic) IBOutlet UIButton *btn1Password;
 @end
 
 @implementation SettingsVC
@@ -43,6 +48,9 @@
     NSParameterAssert(self.txtTags);
     NSParameterAssert(self.spiLogin);
     [self.tableView addSubview:self.spiLogin];
+
+    self.btn1Password.enabled = [[OnePasswordExtension sharedExtension] isAppExtensionAvailable];
+    self.btn1Password.alpha = self.btn1Password.enabled ? 1.0 : 0.5;
 }
 
 
@@ -140,5 +148,21 @@
     ];
 }
 
+//
+-(IBAction)actionFindLoginFrom1Password:(id)sender
+{
+    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.shaarli.endpointUrl forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
+         if( loginDictionary.count == 0 ) {
+             if( error.code != AppExtensionErrorCodeCancelledByUser ) {
+                 NSLog (@"Error invoking 1Password App Extension for find login: %@", error);
+             }
+             return;
+         }
+
+         self.txtUserName.text = loginDictionary[AppExtensionUsernameKey];
+         self.txtPassWord.text = loginDictionary[AppExtensionPasswordKey];
+     }
+    ];
+}
 
 @end

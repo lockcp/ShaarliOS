@@ -37,6 +37,8 @@
 		165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		166A4E261B6B734000F5D5F7 /* XCTestCase+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */; };
 		1671FB061B700D5E00C829D5 /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
+		169BCA131B72269400311870 /* 1Password.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 169BCA0C1B72269400311870 /* 1Password.xcassets */; };
+		169BCA151B72269400311870 /* OnePasswordExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 169BCA0F1B72269400311870 /* OnePasswordExtension.m */; };
 		16ABE6001B640CC10054F12F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FD1B640CC10054F12F /* Icon.png */; };
 		16ABE6011B640CC10054F12F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FE1B640CC10054F12F /* Icon@2x.png */; };
 		16ABE6021B640CC10054F12F /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FF1B640CC10054F12F /* Icon@3x.png */; };
@@ -124,6 +126,13 @@
 		166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+Tools.m"; sourceTree = "<group>"; };
 		1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliOS.entitlements; sourceTree = "<group>"; };
 		1697BB711B62D7F100A7D515 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Share.entitlements; sourceTree = "<group>"; };
+		169BCA0C1B72269400311870 /* 1Password.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = 1Password.xcassets; sourceTree = "<group>"; };
+		169BCA0D1B72269400311870 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		169BCA0E1B72269400311870 /* OnePasswordExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePasswordExtension.h; sourceTree = "<group>"; };
+		169BCA0F1B72269400311870 /* OnePasswordExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePasswordExtension.m; sourceTree = "<group>"; };
+		169BCA101B72269400311870 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		169BCA111B72269400311870 /* update.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sh; sourceTree = "<group>"; };
+		169BCA121B72269400311870 /* version.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.log; sourceTree = "<group>"; };
 		16ABE5FD1B640CC10054F12F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		16ABE5FE1B640CC10054F12F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		16ABE5FF1B640CC10054F12F /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
@@ -218,9 +227,24 @@
 			path = infra;
 			sourceTree = "<group>";
 		};
+		169BCA0B1B72269400311870 /* 1Password */ = {
+			isa = PBXGroup;
+			children = (
+				169BCA0C1B72269400311870 /* 1Password.xcassets */,
+				169BCA0D1B72269400311870 /* LICENSE.txt */,
+				169BCA0E1B72269400311870 /* OnePasswordExtension.h */,
+				169BCA0F1B72269400311870 /* OnePasswordExtension.m */,
+				169BCA101B72269400311870 /* README.md */,
+				169BCA111B72269400311870 /* update.sh */,
+				169BCA121B72269400311870 /* version.log */,
+			);
+			path = 1Password;
+			sourceTree = "<group>";
+		};
 		16D18F9D1B5B023D005173C6 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				169BCA0B1B72269400311870 /* 1Password */,
 				16D18F9E1B5B023D005173C6 /* PDKeychainBindingsController */,
 			);
 			path = ThirdParty;
@@ -457,6 +481,7 @@
 			files = (
 				16E0A79A1AB9E2280085B2C0 /* Main.storyboard in Resources */,
 				16E0A79F1AB9E2280085B2C0 /* LaunchScreen.xib in Resources */,
+				169BCA131B72269400311870 /* 1Password.xcassets in Resources */,
 				16D18FB91B5B02EC005173C6 /* LICENSE in Resources */,
 				165460821B697BCE001DAA32 /* iTunesArtwork.png in Resources */,
 				16E0A79C1AB9E2280085B2C0 /* Images.xcassets in Resources */,
@@ -522,6 +547,7 @@
 				16E0A7911AB9E2280085B2C0 /* main.m in Sources */,
 				1614BA9B1B71FC190042DCE7 /* ShareVC.m in Sources */,
 				16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
+				169BCA151B72269400311870 /* OnePasswordExtension.m in Sources */,
 				165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E3F81AB9ED4600D3E27D /* NSObject+KVOSO.m in Sources */,
 			);

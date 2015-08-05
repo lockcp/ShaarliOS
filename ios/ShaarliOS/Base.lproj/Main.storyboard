@@ -485,7 +485,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="=TD~2_(#R.5\" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L7z-8R-XqD">
-                                                    <rect key="frame" x="76" y="8" width="236" height="30"/>
+                                                    <rect key="frame" x="76" y="8" width="201" height="30"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -495,14 +495,25 @@
                                                         <outlet property="delegate" destination="kT6-WH-0iV" id="nim-KE-9f8"/>
                                                     </connections>
                                                 </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zgy-hH-P0f" userLabel="1Password">
+                                                    <rect key="frame" x="285" y="8" width="27" height="27"/>
+                                                    <state key="normal" image="onepassword-button-light">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="actionFindLoginFrom1Password:" destination="kT6-WH-0iV" eventType="touchUpInside" id="73E-s6-0Bc"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstItem="gbq-bh-b2s" firstAttribute="leading" secondItem="kOJ-0p-QgE" secondAttribute="leadingMargin" id="0G5-8c-HAC"/>
                                                 <constraint firstItem="L7z-8R-XqD" firstAttribute="leading" secondItem="gbq-bh-b2s" secondAttribute="trailing" constant="8" id="LP0-Mg-BGN"/>
+                                                <constraint firstItem="Zgy-hH-P0f" firstAttribute="trailing" secondItem="kOJ-0p-QgE" secondAttribute="trailingMargin" id="N6B-oA-gxA"/>
+                                                <constraint firstAttribute="centerY" secondItem="Zgy-hH-P0f" secondAttribute="centerY" id="bDE-GH-4Az"/>
                                                 <constraint firstAttribute="centerY" secondItem="gbq-bh-b2s" secondAttribute="centerY" constant="-1" id="ccw-ov-pYu"/>
+                                                <constraint firstItem="Zgy-hH-P0f" firstAttribute="leading" secondItem="L7z-8R-XqD" secondAttribute="trailing" constant="8" id="pxQ-IQ-4xr"/>
                                                 <constraint firstItem="L7z-8R-XqD" firstAttribute="baseline" secondItem="gbq-bh-b2s" secondAttribute="baseline" id="vV0-Vn-00C"/>
-                                                <constraint firstItem="L7z-8R-XqD" firstAttribute="trailing" secondItem="kOJ-0p-QgE" secondAttribute="trailingMargin" id="yw8-Av-zpi"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -606,6 +617,7 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="btn1Password" destination="Zgy-hH-P0f" id="fdm-0u-dWh"/>
                         <outlet property="lblDefaultPrivate" destination="kkE-fF-4kw" id="OEO-f1-Cxv"/>
                         <outlet property="lblTitle" destination="Dve-Iu-CxP" id="STE-AW-usf"/>
                         <outlet property="spiLogin" destination="RF2-Yn-Jd5" id="AZb-oF-UrU"/>
@@ -627,7 +639,7 @@
                     <color key="color" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                 </activityIndicatorView>
             </objects>
-            <point key="canvasLocation" x="808" y="526"/>
+            <point key="canvasLocation" x="808" y="523"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wB3-xA-tdN">
@@ -649,5 +661,6 @@
     </scenes>
     <resources>
         <image name="iTunesArtwork.png" width="1024" height="1024"/>
+        <image name="onepassword-button-light" width="27" height="27"/>
     </resources>
 </document>
