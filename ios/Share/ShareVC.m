@@ -64,7 +64,7 @@
     self.title = self.shaarli.title;
     itemTitle.value = self.contentText;
     if( self.shaarli.tagsActive && self.shaarli.tagsDefault.length > 0 )
-        self.textView.text = [self.contentText stringByAppendingFormat:@"\n%@ ", self.shaarli.tagsDefault];
+        self.textView.text = [@"" stringByAppendingFormat:@"%@ \n", self.shaarli.tagsDefault];
     self.textView.keyboardType = UIKeyboardTypeTwitter;
 }
 

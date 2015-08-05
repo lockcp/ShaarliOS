@@ -76,7 +76,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
     }
     {
         [a removeAllObjects];
-        XCTAssertEqualObjects(@" foo", [@" foo #ShaarliOS #b  #c ##d " stringByStrippingTags:a], @"");
+        XCTAssertEqualObjects(@"foo", [@"#ShaarliOS #b  #c ##d \nfoo" stringByStrippingTags:a], @"");
         XCTAssertEqual(4, a.count, @"");
         XCTAssertEqualObjects(@"ShaarliOS", a[0], @"");
         XCTAssertEqualObjects(@"b", a[1], @"");

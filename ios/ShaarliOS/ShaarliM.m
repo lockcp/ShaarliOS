@@ -15,9 +15,8 @@
 -(NSString *)stringByStrippingTags:(NSMutableArray *)tags
 {
     NSError *err = nil;
-    NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:@"\\s*(?:#(\\S+))\\s*$" options:NSRegularExpressionAnchorsMatchLines error:&err];
+    NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*#(\\S+)\\s*" options:NSRegularExpressionAnchorsMatchLines error:&err];
     NSParameterAssert(nil == err);
-    const NSUInteger idx = tags.count;
     __block NSRange all = NSMakeRange(0, self.length);
     for(;; ) {
         __block NSInteger count = 0;
@@ -28,8 +27,14 @@
              NSParameterAssert (2 == res.numberOfRanges);
              const NSRange r0 = [res rangeAtIndex:0];
              const NSRange r1 = [res rangeAtIndex:1];
-             all.length = r0.location;
-             [tags insertObject:[self substringWithRange:r1] atIndex:idx];
+             NSParameterAssert (all.length >= r0.length);
+             NSParameterAssert (all.location + r0.length <= self.length);
+             all.location += r0.length;
+             all.length -= r0.length;
+
+             all.location = r0.location + r0.length;
+
+             [tags addObject:[self substringWithRange:r1]];
          }
         ];
         if( count == 0 )
