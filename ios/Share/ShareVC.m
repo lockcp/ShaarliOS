@@ -53,7 +53,7 @@
     itemTitle.value = self.contentText;
 
     itemAudience = [[SLComposeSheetConfigurationItem alloc] init];
-    [itemAudience setTitle:NSLocalizedString(@"Audience", @"ShaareVC")];
+    itemAudience.title = NSLocalizedString(@"Audience", @"ShaareVC");
     itemAudience.value = self.shaarli.privateDefault ? NSLocalizedString(@"Private 🔐", @"ShaareVC") : NSLocalizedString(@"Public 🔓", @"ShaareVC");
     __weak typeof(itemAudience) wr = itemAudience;
     __weak typeof(self) ws = self;
@@ -74,11 +74,13 @@
     NSParameterAssert(self.shaarli);
     NSParameterAssert(itemTitle);
 
+    self.textView.keyboardType = UIKeyboardTypeTwitter;
     self.title = self.shaarli.title;
     itemTitle.value = self.contentText;
     if( self.shaarli.tagsActive && self.shaarli.tagsDefault.length > 0 )
-        self.textView.text = [@"" stringByAppendingFormat:@"%@ \n", self.shaarli.tagsDefault];
-    self.textView.keyboardType = UIKeyboardTypeTwitter;
+        self.textView.text = [@"" stringByAppendingFormat:@"%@ ", self.shaarli.tagsDefault];
+    else
+        self.textView.text = @"";
 }
 
 

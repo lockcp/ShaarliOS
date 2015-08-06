@@ -178,7 +178,7 @@
 -(IBAction)actionCancel:(id)sender
 {
     MRLogD(@"-", nil);
-    self.txtDescr.text = self.shaarli.tagsActive ? [NSString stringWithFormat:@"%@ \n", self.shaarli.tagsDefault] : @"";
+    self.txtDescr.text = self.shaarli.tagsActive ? [NSString stringWithFormat:@"%@ ", self.shaarli.tagsDefault] : @"";
     self.txtTitle.text = NSLocalizedString(@"A new Note", @"MainVC");
     self.btnAudience.selected = self.shaarli.privateDefault;
     [self.txtDescr resignFirstResponder];
