@@ -46,8 +46,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *txtTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnAudience;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constrPostHeight;
-
+// http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
+@property (weak, nonatomic) UIView *activeField;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 @implementation MainVC
@@ -57,10 +58,8 @@
     if( self = [super initWithCoder:aDecoder] ) {
         // register for Keyboard visibility events
         // https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html#//apple_ref/doc/uid/TP40009542-CH5-SW7
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidAppear:) name:UIKeyboardDidShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDisappear:) name:UIKeyboardWillHideNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidDisappear:) name:UIKeyboardDidHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     }
     return self;
 }
@@ -68,10 +67,8 @@
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
 }
 
 
@@ -92,8 +89,6 @@
     NSParameterAssert(self.txtDescr);
     NSParameterAssert(self.txtTitle);
     NSParameterAssert(self.btnAudience);
-
-    // NSParameterAssert(self.constrPostHeight);
 }
 
 
@@ -106,8 +101,6 @@
     self.lblVersion.text = [NSBundle semVer];
     self.lblVersion.alpha = 0;
     self.viewShaare.alpha = 0;
-
-    // [self actionCancel:nil]; // clear
 }
 
 
@@ -219,6 +212,17 @@
 
 #pragma mark UITextViewDelegate
 
+-(void)textViewDidBeginEditing:(UITextView *)sender
+{
+    self.activeField = sender;
+}
+
+
+-(void)textViewDidEndEditing:(UITextView *)sender
+{
+    self.activeField = nil;
+}
+
 
 #pragma mark UITextFieldDelegate
 
@@ -233,48 +237,79 @@
 }
 
 
+-(void)textFieldDidBeginEditing:(UITextField *)sender
+{
+    self.activeField = sender;
+}
+
+
+-(void)textFieldDidEndEditing:(UITextField *)sender
+{
+    self.activeField = nil;
+}
+
+
 #pragma mark Keyboard
 
+
+// inspired by
+// http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
 // http://www.think-in-g.net/ghawk/blog/2012/09/practicing-auto-layout-an-example-of-keyboard-sensitive-layout/
--(void)keyboardWillAppear:(NSNotification *)notification
+-(void)keyboardWillShow:(NSNotification *)notification
 {
-    MRLogD(@"-", nil);
-    NSDictionary *info = [notification userInfo];
-    NSValue *kbFrame = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
-    const NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    NSParameterAssert(kbFrame);
-    const CGRect keyboardFrame = [kbFrame CGRectValue];
+    UIScrollView *scrollV = self.scrollView;
+    UIView *active = self.activeField;
+    NSParameterAssert(scrollV);
 
-    self.constrPostHeight.constant = keyboardFrame.origin.y - 1;
-    [self.view layoutIfNeeded];
-    return;
+    {
+        NSDictionary *info = [notification userInfo];
+        // const NSTimeInterval dt = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+        const CGRect keyboardRaw = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+
+        const CGFloat marginY = 2;
+        UIView *refViw = scrollV.superview; // the view that can be moved up until frame.origin.y = marginY
+        NSParameterAssert(refViw);
+        const CGRect keyboard = [refViw convertRect:keyboardRaw fromView:nil];
+
+        // Test if scrollV and keyboard collide - if NO we're fine.
+        const CGRect scrollBounds0 = [scrollV convertRect:scrollV.bounds toView:refViw];
+        const CGRect overlap0 = CGRectIntersection(scrollBounds0, keyboard);
+        if( CGRectIsNull(overlap0) )
+            return;
+
+        {
+            // if colliding, move up
+            CGRect f = refViw.frame;
+            f.origin.y = MAX( marginY, f.origin.y - CGRectGetMaxY(overlap0) );
+            refViw.frame = f;
+        }
+        {
+            // if still colliding, add inset to scrollView.
+            const CGRect scrollBounds1 = [scrollV convertRect:scrollV.bounds toView:refViw];
+            const CGRect overlap1 = CGRectIntersection(scrollBounds1, keyboard);
+            if( CGRectIsNull(overlap1) )
+                return;
+            const UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, 0.0f, overlap1.size.height, 0.0f);
+            scrollV.contentInset = scrollV.scrollIndicatorInsets = contentInsets;
+        }
+    }
+
+    NSParameterAssert(active);
+    // finally scroll to top of active input field:
+    CGRect visible = [active convertRect:CGRectIntersection(active.bounds, scrollV.bounds) toView:scrollV];
+    // MRLogD(@"%.0f,%.0f %.0fx%.0f", visible.origin.x, visible.origin.y, visible.size.width, visible.size.height, nil);
+    visible.size.height = 1;
+    [scrollV scrollRectToVisible:visible animated:YES];
 }
 
 
-/** @todo Animation dynamics bug but at least yields proper frame (for now).
- * Should rather sit on WillAppear but interferes with autolayout.
- */
--(void)keyboardDidAppear:(NSNotification *)notification
+-(void)keyboardWillHide:(NSNotification *)notification
 {
     MRLogD(@"-", nil);
-}
-
-
--(void)keyboardWillDisappear:(NSNotification *)notification
-{
-    MRLogD(@"-", nil);
-    self.constrPostHeight.constant = 283;
-    [self.view setNeedsUpdateConstraints];
-    [self.view layoutIfNeeded];
-}
-
-
-/** @todo Animation dynamics bug but at least yields proper frame (for now).
- * Should rather sit on WillDisappear but interferes with autolayout.
- */
--(void)keyboardDidDisappear:(NSNotification *)notification
-{
-    MRLogD(@"-", nil);
+    // back to original insets and view frame:
+    self.scrollView.scrollIndicatorInsets = self.scrollView.contentInset = UIEdgeInsetsZero;
+    [self.scrollView.superview.superview setNeedsLayout];
+    [self.scrollView.superview.superview layoutIfNeeded];
 }
 
 
