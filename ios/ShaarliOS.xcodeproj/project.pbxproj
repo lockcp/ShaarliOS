@@ -181,7 +181,6 @@
 		1601E3D61AB9E68700D3E27D /* Share */ = {
 			isa = PBXGroup;
 			children = (
-				1697BB711B62D7F100A7D515 /* Share.entitlements */,
 				1601E3D91AB9E68700D3E27D /* ShareVC.h */,
 				1601E3DA1AB9E68700D3E27D /* ShareVC.m */,
 				1601E3D71AB9E68700D3E27D /* Supporting Files */,
@@ -193,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				1601E3D81AB9E68700D3E27D /* Info.plist */,
+				1697BB711B62D7F100A7D515 /* Share.entitlements */,
 				16ABE5FD1B640CC10054F12F /* Icon.png */,
 				16ABE5FE1B640CC10054F12F /* Icon@2x.png */,
 				16ABE5FF1B640CC10054F12F /* Icon@3x.png */,
@@ -279,21 +279,19 @@
 		16E0A78D1AB9E2280085B2C0 /* ShaarliOS */ = {
 			isa = PBXGroup;
 			children = (
-				165460811B697BCE001DAA32 /* iTunesArtwork.png */,
-				1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */,
+				16E0A79D1AB9E2280085B2C0 /* LaunchScreen.xib */,
+				16E0A7981AB9E2280085B2C0 /* Main.storyboard */,
+				16E0A79B1AB9E2280085B2C0 /* Images.xcassets */,
 				1601E3EE1AB9ED1700D3E27D /* infra */,
 				16E0A7921AB9E2280085B2C0 /* AppDelegate.h */,
 				16E0A7931AB9E2280085B2C0 /* AppDelegate.m */,
 				16E0A7951AB9E2280085B2C0 /* MainVC.h */,
 				16E0A7961AB9E2280085B2C0 /* MainVC.m */,
-				16E0A7981AB9E2280085B2C0 /* Main.storyboard */,
-				16E0A79B1AB9E2280085B2C0 /* Images.xcassets */,
-				16E0A79D1AB9E2280085B2C0 /* LaunchScreen.xib */,
+				1621DDCF1B6164EC00238503 /* SettingsVC.h */,
+				1621DDD01B6164EC00238503 /* SettingsVC.m */,
 				16E0A78E1AB9E2280085B2C0 /* Supporting Files */,
 				165B45A21B5952B8008A2714 /* ShaarliM.h */,
 				165B45A31B5952B8008A2714 /* ShaarliM.m */,
-				1621DDCF1B6164EC00238503 /* SettingsVC.h */,
-				1621DDD01B6164EC00238503 /* SettingsVC.m */,
 			);
 			path = ShaarliOS;
 			sourceTree = "<group>";
@@ -302,8 +300,10 @@
 			isa = PBXGroup;
 			children = (
 				16E0A78F1AB9E2280085B2C0 /* Info.plist */,
+				1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */,
 				16E0A7901AB9E2280085B2C0 /* main.m */,
 				1601E3ED1AB9EC7800D3E27D /* ShaarliOS-Prefix.pch */,
+				165460811B697BCE001DAA32 /* iTunesArtwork.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

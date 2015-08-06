@@ -22,7 +22,6 @@
 #import "MainVC.h"
 #import "SettingsVC.h"
 #import "NSBundle+MroSemVer.h"
-#import "ShareVC.h"
 
 @implementation NSLayoutConstraint(ChangeMultiplier)
 
@@ -41,9 +40,8 @@
 @property (weak, nonatomic) IBOutlet UIView *vContainer;
 @property (weak, nonatomic) IBOutlet UIButton *btnPetal;
 
-@property (weak, nonatomic) IBOutlet UIView *viewPost;
+@property (weak, nonatomic) IBOutlet UIView *viewShaare;
 @property (weak, nonatomic) IBOutlet UIButton *btnShaare;
-@property (weak, nonatomic) IBOutlet UILabel *lblShaare;
 @property (weak, nonatomic) IBOutlet UITextView *txtDescr;
 @property (weak, nonatomic) IBOutlet UITextField *txtTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnAudience;
@@ -88,15 +86,14 @@
     NSParameterAssert(self.centerY);
     NSParameterAssert(self.btnPetal);
 
-    NSParameterAssert(self.viewPost);
+    NSParameterAssert(self.viewShaare);
     NSParameterAssert(self.btnShaare);
     NSParameterAssert(self.btnPetal);
-    NSParameterAssert(self.lblShaare);
     NSParameterAssert(self.txtDescr);
     NSParameterAssert(self.txtTitle);
     NSParameterAssert(self.btnAudience);
 
-    NSParameterAssert(self.constrPostHeight);
+    // NSParameterAssert(self.constrPostHeight);
 }
 
 
@@ -108,9 +105,9 @@
     self.title = self.shaarli.title;
     self.lblVersion.text = [NSBundle semVer];
     self.lblVersion.alpha = 0;
-    self.viewPost.alpha = 0;
+    self.viewShaare.alpha = 0;
 
-    [self actionCancel:nil]; // clear
+    // [self actionCancel:nil]; // clear
 }
 
 
@@ -122,7 +119,6 @@
     [UIView animateWithDuration:0.5f animations:^{
          self.vContainer.alpha = 0.5;
          self.lblVersion.alpha = 1.0;
-         self.viewPost.alpha = 1.0;
 
          NSLayoutConstraint *c = [self.centerY constraintWithMultiplier:0.75];
          [self.view removeConstraint:self.centerY];
@@ -135,6 +131,8 @@
         [self performSegueWithIdentifier:NSStringFromClass([SettingsVC class]) sender:self];
         return;
     }
+    // start with note form ready..
+    [self actionShowShaare:nil];
 }
 
 
@@ -153,12 +151,38 @@
 #pragma mark Post a Note (via ShareVC)
 
 
--(IBAction)actionPetal:(id)sender
+-(IBAction)actionShowShaare:(id)sender
 {
     MRLogD(@"-", nil);
-    NSParameterAssert(NO);
-    ShareVC *svc = [[ShareVC alloc] init];
-    [self presentViewController:svc animated:YES completion:nil];
+    self.btnShaare.enabled = YES;
+    self.txtDescr.text = self.shaarli.tagsActive ? [NSString stringWithFormat:@"%@ ", self.shaarli.tagsDefault] : @"";
+    self.txtTitle.text = @"";
+    self.btnAudience.selected = self.shaarli.privateDefault;
+
+    self.viewShaare.alpha = 0;
+    self.viewShaare.hidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+         self.viewShaare.alpha = 1;
+     }
+     completion:^(BOOL finished) {
+         [self.txtDescr becomeFirstResponder];
+     }
+    ];
+}
+
+
+-(IBAction)actionHideShaare:(id)sender
+{
+    MRLogD(@"-", nil);
+    [self.txtDescr resignFirstResponder];
+    [self.txtTitle resignFirstResponder];
+    [UIView animateWithDuration:0.5 animations:^{
+         self.viewShaare.alpha = 0;
+     }
+     completion:^(BOOL finished) {
+         self.viewShaare.hidden = YES;
+     }
+    ];
 }
 
 
@@ -178,21 +202,17 @@
 -(IBAction)actionCancel:(id)sender
 {
     MRLogD(@"-", nil);
-    self.txtDescr.text = self.shaarli.tagsActive ? [NSString stringWithFormat:@"%@ ", self.shaarli.tagsDefault] : @"";
-    self.txtTitle.text = NSLocalizedString(@"A new Note", @"MainVC");
-    self.btnAudience.selected = self.shaarli.privateDefault;
-    [self.txtDescr resignFirstResponder];
-    [self.txtTitle resignFirstResponder];
-    self.btnShaare.enabled = YES;
+    [self actionHideShaare:sender];
 }
 
 
 -(IBAction)actionPost:(id)sender
 {
     MRLogD(@"-", nil);
-
-    NSURLSession *session = [self.shaarli postSession];
     self.btnShaare.enabled = NO;
+    [self.txtDescr resignFirstResponder];
+    [self.txtTitle resignFirstResponder];
+    NSURLSession *session = [self.shaarli postSession];
     [self.shaarli postUrl:nil title:self.txtTitle.text description:self.txtDescr.text session:session delegate:self];
 }
 
@@ -288,9 +308,9 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    // clear form
+    // success, clear form
     dispatch_async (dispatch_get_main_queue (), ^{
-                        [self actionCancel:nil];
+                        [self actionHideShaare:nil];
                     }
                     );
 }
