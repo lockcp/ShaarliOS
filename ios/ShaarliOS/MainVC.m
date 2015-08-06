@@ -258,8 +258,8 @@
 -(void)keyboardWillShow:(NSNotification *)notification
 {
     UIScrollView *scrollV = self.scrollView;
-    UIView *active = self.activeField;
     NSParameterAssert(scrollV);
+    UIView *active = self.activeField;
 
     {
         NSDictionary *info = [notification userInfo];
@@ -294,12 +294,13 @@
         }
     }
 
-    NSParameterAssert(active);
-    // finally scroll to top of active input field:
-    CGRect visible = [active convertRect:CGRectIntersection(active.bounds, scrollV.bounds) toView:scrollV];
-    // MRLogD(@"%.0f,%.0f %.0fx%.0f", visible.origin.x, visible.origin.y, visible.size.width, visible.size.height, nil);
-    visible.size.height = 1;
-    [scrollV scrollRectToVisible:visible animated:YES];
+    if( active ) {
+        // finally scroll to top of active input field:
+        CGRect visible = [active convertRect:CGRectIntersection(active.bounds, scrollV.bounds) toView:scrollV];
+        // MRLogD(@"%.0f,%.0f %.0fx%.0f", visible.origin.x, visible.origin.y, visible.size.width, visible.size.height, nil);
+        visible.size.height = 1;
+        [scrollV scrollRectToVisible:visible animated:YES];
+    }
 }
 
 
