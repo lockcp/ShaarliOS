@@ -164,7 +164,7 @@
 //
 -(IBAction)actionFindLoginFrom1Password:(id)sender
 {
-    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.shaarli.endpointUrl forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
+    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.shaarli.endpointUrl.absoluteString forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
          if( loginDictionary.count == 0 ) {
              if( error.code != AppExtensionErrorCodeCancelledByUser ) {
                  NSLog (@"Error invoking 1Password App Extension for find login: %@", error);
