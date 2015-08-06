@@ -112,8 +112,13 @@
 -(BOOL)isContentValid
 {
     MRLogD(@"-", nil);
-    // Do validation of contentText and/or NSExtensionContext attachments here
     return YES;
+}
+
+
+-(UIView *)loadPreviewView
+{
+    return nil;
 }
 
 
