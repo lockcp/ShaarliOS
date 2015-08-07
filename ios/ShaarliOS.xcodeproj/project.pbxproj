@@ -24,6 +24,7 @@
 		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
+		1640B85A1B749D71009D3FED /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 1640B8591B749D71009D3FED /* about.html */; };
 		1652D98F1B68BD8000B044C3 /* ShaarliOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */; };
 		165460821B697BCE001DAA32 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 165460811B697BCE001DAA32 /* iTunesArtwork.png */; };
 		165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
@@ -108,6 +109,7 @@
 		162A51331B6E50C7001CFF52 /* MROStateMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MROStateMachine.m; sourceTree = "<group>"; };
 		162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliStateParseTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		1640B8591B749D71009D3FED /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = about.html; sourceTree = "<group>"; };
 		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliOSTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		165460811B697BCE001DAA32 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ShaarliM.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -304,6 +306,7 @@
 				16E0A7901AB9E2280085B2C0 /* main.m */,
 				1601E3ED1AB9EC7800D3E27D /* ShaarliOS-Prefix.pch */,
 				165460811B697BCE001DAA32 /* iTunesArtwork.png */,
+				1640B8591B749D71009D3FED /* about.html */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				16E0A79F1AB9E2280085B2C0 /* LaunchScreen.xib in Resources */,
 				169BCA131B72269400311870 /* 1Password.xcassets in Resources */,
 				16D18FB91B5B02EC005173C6 /* LICENSE in Resources */,
+				1640B85A1B749D71009D3FED /* about.html in Resources */,
 				165460821B697BCE001DAA32 /* iTunesArtwork.png in Resources */,
 				16E0A79C1AB9E2280085B2C0 /* Images.xcassets in Resources */,
 			);

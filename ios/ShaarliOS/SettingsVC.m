@@ -22,9 +22,10 @@
 #import "SettingsVC.h"
 #import "MainVC.h"
 #import "OnePasswordExtension.h"
+#import "NSBundle+MroSemVer.h"
 
 
-@interface SettingsVC() <UITextFieldDelegate>
+@interface SettingsVC() <UITextFieldDelegate, UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *txtEndpoint;
 @property (weak, nonatomic) IBOutlet UISwitch *swiSecure;
 @property (weak, nonatomic) IBOutlet UITextField *txtUserName;
@@ -38,6 +39,9 @@
 
 // https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
 @property (weak, nonatomic) IBOutlet UIButton *btn1Password;
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *cellAbout;
+@property (weak, nonatomic) IBOutlet UIWebView *wwwAbout;
 @end
 
 @implementation SettingsVC
@@ -59,8 +63,14 @@
     NSParameterAssert(self.lblDefaultPrivate);
     NSParameterAssert(self.swiTags);
     NSParameterAssert(self.txtTags);
+    NSParameterAssert(self.wwwAbout.scrollView);
+    NSParameterAssert(self.cellAbout);
     NSParameterAssert(self.spiLogin);
     [self.tableView addSubview:self.spiLogin];
+
+    self.wwwAbout.scrollView.scrollEnabled = NO;
+    self.wwwAbout.scrollView.bounces = NO;
+    [self.wwwAbout loadRequest:[NSURLRequest requestWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"about" withExtension:@"html"]]];
 
     self.btn1Password.enabled = [[OnePasswordExtension sharedExtension] isAppExtensionAvailable];
     self.btn1Password.alpha = self.btn1Password.enabled ? 1.0 : 0.5;
@@ -161,6 +171,7 @@
     ];
 }
 
+
 //
 -(IBAction)actionFindLoginFrom1Password:(id)sender
 {
@@ -177,5 +188,32 @@
      }
     ];
 }
+
+
+
+#pragma mark UIWebViewDelegate
+
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    MRLogD(@"%.0f", webView.scrollView.contentSize.height, nil);
+    // self.cellAbout.
+    NSString *ret = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"injectVersion('%@');", [NSBundle semVer]]];
+    NSParameterAssert([@"" isEqualToString:ret]);
+    MRLogD(@"%@", ret);
+}
+
+
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    MRLogD(@"%@", request, nil);
+    NSString *scheme = request.URL.scheme;
+    if( NSNotFound != [@[@"file"] indexOfObject:scheme] )
+        return YES;
+    if( [[UIApplication sharedApplication] canOpenURL:request.URL] )
+        [[UIApplication sharedApplication] openURL:request.URL];
+    return NO;
+}
+
 
 @end
