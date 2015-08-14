@@ -51,15 +51,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.1250687"
-     inkscape:cx="37.519821"
+     inkscape:zoom="6.2501374"
+     inkscape:cx="30.208914"
      inkscape:cy="37.459297"
      inkscape:document-units="px"
-     inkscape:current-layer="g3867"
+     inkscape:current-layer="g4162"
      showgrid="false"
-     inkscape:window-width="1626"
-     inkscape:window-height="1006"
-     inkscape:window-x="54"
+     inkscape:window-width="1280"
+     inkscape:window-height="980"
+     inkscape:window-x="229"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      fit-margin-top="5.3"
@@ -107,16 +107,16 @@ http://thatguynamedandy.com/</dc:title>
   <g
      style="display:inline"
      transform="translate(-520.86567,354.2311)"
-     id="g3867"
+     id="g4162"
      inkscape:groupmode="layer"
-     inkscape:label="Petal"
+     inkscape:label="Petal Contour"
      sodipodi:insensitive="true">
     <path
        inkscape:export-ydpi="200.11871"
        inkscape:export-xdpi="200.11871"
        inkscape:export-filename="C:\data\seb\sebsauvage.net\shaarli\logo Shaarli idleman fond blanc\g3583.png"
        inkscape:connector-curvature="0"
-       id="path3893"
+       id="path4164"
        d="m 554.51954,-307.19553 c -7.5784,-0.46784 -10.6755,10.08558 -4.626,14.19825 6.4831,5.13984 16.9776,-2.57743 12.9884,-10.24836 -1.4384,-3.20261 -5.1136,-4.25984 -8.3624,-3.94989 z"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:194.83255005px;line-height:125%;font-family:'comic andy';-inkscape-font-specification:'comic andy';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none" />
     <path
@@ -124,23 +124,25 @@ http://thatguynamedandy.com/</dc:title>
        inkscape:export-xdpi="200.11871"
        inkscape:export-filename="C:\data\seb\sebsauvage.net\shaarli\logo Shaarli idleman fond blanc\g3583.png"
        inkscape:connector-curvature="0"
-       id="path3917"
-       d="m 560.24144,-348.84969 c -4.7431,8e-5 -9.3884,1.94508 -12.1562,5.65625 -2.3938,3.20927 -3.2655,7.28209 -3.5,11.84374 -5.2417,0.10768 -9.658,0.71067 -13.2813,2.53125 -3.7519,1.88519 -6.5576,5.75636 -6.9063,9.9375 l -0.062,0 c -0.013,0.1027 0.011,0.20947 0,0.3125 0,0.043 -0.03,0.0819 -0.031,0.125 l 0.031,0 c -0.383,3.94189 0.8037,8.08581 3.625,10.84375 1.7434,1.70445 3.9242,2.79035 6.3124,3.59375 l -0.875,2.4375 -0.062,0.125 -0.031,0.125 c -1.0239,3.32791 -0.9882,7.09444 0.8437,10.15625 1.8322,3.06181 4.9132,4.85334 8.3438,5.90625 l 0.7188,0.21875 0.75,0 2.2812,0 c 4.1038,5e-5 8.0184,-1.11288 11.1562,-3.5 1.388,-1.05587 2.5677,-2.38102 3.5938,-3.8125 2.738,2.5559 6.0541,4.80834 10,6.78125 l 0.5,0.25 0.5312,0.15625 c 3.235,0.79227 6.3972,0.95306 9.4063,-0.1875 2.9956,-1.13542 5.3523,-3.78973 6.4375,-6.71875 l 0.031,0 0,-0.0312 c 1.3188,-3.58119 1.0754,-7.65809 -0.4687,-11.1875 -0.3593,-0.82136 -0.9637,-1.56048 -1.4375,-2.34375 0.7988,-0.35352 1.5774,-0.75006 2.3125,-1.28125 3.1456,-2.2731 4.4669,-6.43958 4.1563,-10.25 l 0.031,0 c 0,-0.12851 -0.061,-0.24691 -0.062,-0.375 -0.017,-0.15367 0.023,-0.31671 0,-0.46875 l -0.062,0 c -0.2506,-3.85862 -2.6242,-7.47641 -5.875,-9.5625 -3.1968,-2.05143 -7.2278,-3.19745 -12.0625,-4.03124 -0.5947,-4.02941 -1.4462,-7.64148 -3.125,-10.53125 -2.2702,-3.9078 -6.5646,-6.71865 -11.0625,-6.71875 z m 18.3125,50.62499 c 0.2654,0.97712 0.2969,1.7705 -0.031,2.65625 l 0,0.0312 c -0.3181,0.86918 -0.3036,0.72198 -0.625,0.84375 -0.2585,0.098 -1.2073,0.14918 -2.5624,-0.0625 0.3313,-0.1475 0.7366,-0.14338 1.0312,-0.34375 l 0.4375,-0.28125 0.375,-0.40625 c 0.5814,-0.62017 0.9776,-1.55372 1.375,-2.4375 z"
-       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:165.01513672px;line-height:125%;font-family:'comic andy';-inkscape-font-specification:'comic andy';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#305f00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:10;marker:none;enable-background:accumulate" />
-    <text
-       inkscape:export-ydpi="200.11871"
-       inkscape:export-xdpi="200.11871"
-       inkscape:export-filename="C:\data\seb\sebsauvage.net\shaarli\logo Shaarli idleman fond blanc\g3583.png"
-       sodipodi:linespacing="125%"
-       id="text3919"
-       y="-217.74434"
-       x="548.15942"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:165.01513672px;line-height:125%;font-family:'comic andy';-inkscape-font-specification:'comic andy';letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4009);fill-opacity:1;stroke:none"
-       xml:space="preserve"><tspan
-         y="-217.74434"
-         x="548.15942"
-         id="tspan3921"
-         sodipodi:role="line"
-         style="fill:url(#linearGradient4009);fill-opacity:1">*</tspan></text>
+       id="path4166"
+       d="m 560.24144,-348.84969 c -4.7431,8e-5 -9.3884,1.94508 -12.1562,5.65625 -2.3938,3.20927 -3.2655,7.28209 -3.5,11.84374 -5.2417,0.10768 -9.658,0.71067 -13.2813,2.53125 -3.7519,1.88519 -6.5576,5.75636 -6.9063,9.9375 l -0.062,0 c -0.013,0.1027 0.011,0.20947 0,0.3125 0,0.043 -0.03,0.0819 -0.031,0.125 l 0.031,0 c -0.383,3.94189 0.8037,8.08581 3.625,10.84375 1.7434,1.70445 3.9242,2.79035 6.3124,3.59375 l -0.875,2.4375 -0.062,0.125 -0.031,0.125 c -1.0239,3.32791 -0.9882,7.09444 0.8437,10.15625 1.8322,3.06181 4.9132,4.85334 8.3438,5.90625 l 0.7188,0.21875 0.75,0 2.2812,0 c 4.1038,5e-5 8.0184,-1.11288 11.1562,-3.5 1.388,-1.05587 2.5677,-2.38102 3.5938,-3.8125 2.738,2.5559 6.0541,4.80834 10,6.78125 l 0.5,0.25 0.5312,0.15625 c 3.235,0.79227 6.3972,0.95306 9.4063,-0.1875 2.9956,-1.13542 5.3523,-3.78973 6.4375,-6.71875 l 0.031,0 0,-0.0312 c 1.3188,-3.58119 1.0754,-7.65809 -0.4687,-11.1875 -0.3593,-0.82136 -0.9637,-1.56048 -1.4375,-2.34375 0.7988,-0.35352 1.5774,-0.75006 2.3125,-1.28125 3.1456,-2.2731 4.4669,-6.43958 4.1563,-10.25 l 0.031,0 c 0,-0.12851 -0.061,-0.24691 -0.062,-0.375 -0.017,-0.15367 0.023,-0.31671 0,-0.46875 l -0.062,0 c -0.2506,-3.85862 -2.6242,-7.47641 -5.875,-9.5625 -3.1968,-2.05143 -7.2278,-3.19745 -12.0625,-4.03124 -0.5947,-4.02941 -1.4462,-7.64148 -3.125,-10.53125 -2.2702,-3.9078 -6.5646,-6.71865 -11.0625,-6.71875 z"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:165.01513672px;line-height:125%;font-family:'comic andy';-inkscape-font-specification:'comic andy';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#305f00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:10;marker:none;enable-background:accumulate"
+       sodipodi:nodetypes="cccscccccccccccccccccsccscccccccccccscscc" />
+  </g>
+  <g
+     style="display:inline"
+     transform="translate(-520.86567,354.2311)"
+     id="g3867"
+     inkscape:groupmode="layer"
+     inkscape:label="Petal Gradient"
+     sodipodi:insensitive="true">
+    <path
+       d="m 560.24549,-343.84233 q 8.54083,0 9.83001,16.9205 l 2.33664,0 q 15.22844,2.33664 15.0673,9.66885 1.28918,8.6214 -11.03861,7.97681 9.42713,8.2991 6.7682,15.47017 -2.09492,5.72074 -9.99116,3.78696 -8.70197,-4.35098 -12.32779,-9.99115 l -1.5309,0 q -3.3841,9.99115 -13.13353,9.99115 l -2.25606,0 q -8.13796,-2.49778 -5.88189,-9.83 l 2.82008,-7.81566 -0.80574,0 q -11.92492,-1.69205 -10.79688,-10.55516 0.32229,-8.13796 16.35648,-8.21853 4.43155,-0.48344 3.70639,-2.82008 0,-14.58386 10.87746,-14.58386 z m -4.5927,16.03418 -0.16115,4.51214 q -0.24172,3.3841 -2.17549,3.3841 l -12.73066,0.72516 q -2.98123,0.0806 -2.98123,2.41721 0,2.25607 3.22295,2.41722 11.19976,-0.56402 10.47459,1.5309 l -2.25606,4.83443 q -5.72074,8.62139 -2.82009,10.1523 3.86754,2.33664 10.95804,-12.08607 1.69205,-1.53091 2.82008,0 4.99558,5.31787 8.21853,8.70197 3.30353,3.3841 5.31787,2.01434 2.41721,-2.57836 -1.28918,-5.55959 -3.62582,-3.0618 -8.2991,-8.37967 -0.48344,-1.77263 0.24172,-1.77263 15.79246,1.04746 15.14787,-2.01434 0.48345,-3.3841 -13.69754,-3.3841 -2.17549,0.40287 -3.54525,-1.04746 l 0,-7.89623 q 0,-6.60706 -3.14238,-6.52648 -3.3841,-0.80574 -3.30352,7.9768 z"
+       style="fill:url(#linearGradient4009);fill-opacity:1"
+       id="path4175"
+       inkscape:connector-curvature="0" />
+    <g
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:165.01513672px;line-height:125%;font-family:'comic andy';-inkscape-font-specification:'comic andy';letter-spacing:0px;word-spacing:0px;display:inline;fill:url(#linearGradient4009);fill-opacity:1;stroke:none"
+       id="text4168" />
   </g>
 </svg>
