@@ -1,0 +1,9 @@
+shaarli
+share
+link
+URL
+social
+microblog
+blog
+notes
+delicious
