@@ -14,6 +14,16 @@ Share links with ease from every iOS app.
 <img title="iPhone 4: Share" alt="iPhone 4: Share" src="appstore/screenshots/en-US/3_iphone35_share.png" width="80px"/>
 <img title="iPhad 2: Note" alt="iPhad 2: Note" src="appstore/screenshots/en-US/1_ipad_note.png" width="160px"/>
 
+## Compatibility
+
+Most Shaarli versions, both
+[community](https://github.com/shaarli/Shaarli) and
+[vanilla](https://github.com/sebsauvage/Shaarli) work as backends on all
+current PHP versions. See [this report for a detailed
+list](https://travis-ci.org/mro/Shaarli-API-test).
+
+If your version is missing, [drop me a line](https://github.com/mro/Shaarli-API-test/issues/new).
+
 ## License
 
 - `shaarli-*.svg` by [idleman](http://blog.idleman.fr/), [zlib/libpng OSI licence](http://www.opensource.org/licenses/zlib-license.php),
