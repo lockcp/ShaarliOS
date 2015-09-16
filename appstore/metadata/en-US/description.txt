@@ -1,4 +1,4 @@
-The missing iOS URL share extension for Shaarli - the personal, minimalist, super-fast, no-database delicious clone - http://sebsauvage.net/wiki/doku.php?id=php:shaarli).
+The missing iOS URL share extension for Shaarli - the personal, minimalist, super-fast, no-database delicious clone - https://github.com/shaarli/Shaarli).
 
 Share links with ease from every iOS app.
 

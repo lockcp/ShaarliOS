@@ -1,5 +1,5 @@
 
-# The missing iOS 8+ share extension to [Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:shaarli)
+# The missing iOS 8+ share extension to [Shaarli](https://github.com/shaarli/Shaarli#readme)
 
 Share links with ease from every iOS app.
 
@@ -41,8 +41,8 @@ me a line](https://github.com/mro/Shaarli-API-test/issues/new).
 
 except the material used and listed above, I'm happy to thank
 
-- [vanilla Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:shaarli) by [sebsauvage](http://sebsauvage.net/),
 - [community Shaarli](https://github.com/shaarli/Shaarli) by [the github shaarli contributors](https://github.com/shaarli/Shaarli/graphs/contributors),
+- [vanilla Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:shaarli) by [sebsauvage](http://sebsauvage.net/),
 - [Dimitri van Heesch's doxygen](http://www.stack.nl/~dimitri/doxygen/),
 - [Ben Gardner's uncrustify](http://uncrustify.sourceforge.net/),
 - all the [contributors to git](https://github.com/git/git/graphs/contributors),
