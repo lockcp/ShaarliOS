@@ -16,21 +16,20 @@ Share links with ease from every iOS app.
 
 ## Compatibility
 
-All functional Shaarli versions, both [community
-fork](https://github.com/shaarli/Shaarli/releases) and
+All functional Shaarli versions, both
+[community fork](https://github.com/shaarli/Shaarli/releases) and
 [vanilla](https://github.com/sebsauvage/Shaarli/releases), on more than
 [all current PHP versions](http://php.net/supported-versions.php), all
 [themes and templates](https://github.com/shaarli/shaarli-themes). See
-[this report for a detailed
-list](https://travis-ci.org/mro/Shaarli-API-test).
+[this report for a detailed list](https://travis-ci.org/mro/Shaarli-API-test).
 
-If your version is missing or you found a Shaarli that doesn't work, [drop
-me a line](https://github.com/mro/Shaarli-API-test/issues/new).
+If your version is missing or you found a Shaarli that doesn't work,
+[drop me a line](https://github.com/mro/Shaarli-API-test/issues/new).
 
 ## Bug Reports
 
 If you encounter a bug, I'd be grateful if you 
-[open an issue here](https://github.com/mro/Shaarli-API-test/issues/new?title=Bug&body=Thank%20you%20very%20much%20for%20your%20bug%20report.%20I%20am%20very%20sorry%20for%20the%20inconvenience.%0D%0A%0D%0ATo%20be%20able%20to%20quickly%20hunt%20down%20and%20eliminate%20the%20bug,%20please%20include%20some%20additional%20information:%0D%0A%0D%0A-%20can%20you%20attach%20a%20screenshot%20of%20the%20bug%20and%20the%20last%20visible%20screen%20prior%20the%20bug%20(will%20be%20treated%20confidential)?%0D%0A-%20what%20is%20the%20Shaarli%20version%20you%20use%20(preferably%20the%20download%20URL%20you%20got%20it%20from)?%0D%0A-%20which%20template%20are%20you%20using%20(if%20other%20than%20the%20default,%20also%20preferably%20the%20download%20URL)?%0D%0A-%20are%20you%20using%20https,%20if%20so:%20who%20issued%20your%20certificate?%0D%0A-%20can%20you%20attach%20device%20logs%20or%20crash%20reports?%0D%0A%0D%0AThank%20you%20very%20much,%0D%0A%20%20%20%20Marcus%20Rohrmoser)
+[open an issue here](https://github.com/mro/ShaarliOS/issues/new?title=Bug&body=Thank%20you%20very%20much%20for%20your%20bug%20report.%20I%20am%20very%20sorry%20for%20the%20inconvenience.%0D%0A%0D%0ATo%20be%20able%20to%20quickly%20hunt%20down%20and%20eliminate%20the%20bug,%20please%20include%20some%20additional%20information:%0D%0A%0D%0A-%20can%20you%20attach%20a%20screenshot%20of%20the%20bug%20and%20the%20last%20visible%20screen%20prior%20the%20bug%20(will%20be%20treated%20confidential)?%0D%0A-%20what%20is%20the%20Shaarli%20version%20you%20use%20(preferably%20the%20download%20URL%20you%20got%20it%20from)?%0D%0A-%20which%20template%20are%20you%20using%20(if%20other%20than%20the%20default,%20also%20preferably%20the%20download%20URL)?%0D%0A-%20are%20you%20using%20https,%20if%20so:%20who%20issued%20your%20certificate?%0D%0A-%20can%20you%20attach%20device%20logs%20or%20crash%20reports?%0D%0A%0D%0AThank%20you%20very%20much,%0D%0A%20%20%20%20Marcus%20Rohrmoser)
 or — if not a github user —
 [let me know via email](mailto:shaarlios@mro.name?subject=[ShaarliOS]%20Bugreport&body=Thank%20you%20very%20much%20for%20your%20bug%20report.%20I%20am%20very%20sorry%20for%20the%20inconvenience.%0D%0A%0D%0ATo%20be%20able%20to%20quickly%20hunt%20down%20and%20eliminate%20the%20bug,%20please%20include%20some%20additional%20information:%0D%0A%0D%0A-%20can%20you%20attach%20a%20screenshot%20of%20the%20bug%20and%20the%20last%20visible%20screen%20prior%20the%20bug%20(will%20be%20treated%20confidential)?%0D%0A-%20what%20is%20the%20Shaarli%20version%20you%20use%20(preferably%20the%20download%20URL%20you%20got%20it%20from)?%0D%0A-%20which%20template%20are%20you%20using%20(if%20other%20than%20the%20default,%20also%20preferably%20the%20download%20URL)?%0D%0A-%20are%20you%20using%20https,%20if%20so:%20who%20issued%20your%20certificate?%0D%0A-%20can%20you%20attach%20device%20logs%20or%20crash%20reports?%0D%0A%0D%0AThank%20you%20very%20much,%0D%0A%20%20%20%20Marcus%20Rohrmoser).
 
