@@ -206,4 +206,24 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 }
 
 
+-(void)testGithubIssue5
+{
+    {
+        NSDictionary *ret = parseShaarliHtml([self dataWithContentsOfFixture:@"github-issue#5" withExtension:@"html"], nil);
+        XCTAssertNotNil(ret);
+        XCTAssertEqual(0, ret.count, @"May be empty, but mustn't crash", nil);
+    }
+    {
+        NSDictionary *ret = parseShaarliHtml([NSData data], nil);
+        XCTAssertNotNil(ret);
+        XCTAssertEqual(0, ret.count, @"May be empty, but mustn't crash", nil);
+    }
+    {
+        NSDictionary *ret = parseShaarliHtml(nil, nil);
+        XCTAssertNotNil(ret);
+        XCTAssertEqual(0, ret.count, @"May be empty, but mustn't crash", nil);
+    }
+}
+
+
 @end

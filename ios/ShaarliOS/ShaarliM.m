@@ -193,7 +193,7 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
     NSMutableDictionary *d = (__bridge NSMutableDictionary *)voidContext;
 
     if( 0 == strcmp("a", (const char *)name) ) {
-        for( int i = 0; attributes[i + 1]; i += 2 ) {
+        for( int i = 0; attributes && attributes[i] && attributes[i + 1]; i += 2 ) {
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
 
@@ -214,7 +214,7 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
         return;
     }
     if( 0 == strcmp("span", (const char *)name) ) {
-        for( int i = 0; attributes[i + 1]; i += 2 ) {
+        for( int i = 0; attributes && attributes[i] && attributes[i + 1]; i += 2 ) {
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
 
@@ -237,7 +237,7 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
         return;
     }
     if( 0 == strcmp("div", (const char *)name) ) {
-        for( int i = 0; attributes[i + 1]; i += 2 ) {
+        for( int i = 0; attributes && attributes[i] && attributes[i + 1]; i += 2 ) {
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
 
@@ -260,7 +260,7 @@ static void ShaarliHtml_StartElement(void *voidContext, const xmlChar *name, con
             form = d[M_FORM] = [[NSMutableDictionary alloc] initWithCapacity:5];
         // refill name + value attributes into hash
         NSMutableDictionary *at = [NSMutableDictionary dictionaryWithCapacity:2];
-        for( int i = 0; attributes[i + 1]; i += 2 ) {
+        for( int i = 0; attributes && attributes[i] && attributes[i + 1]; i += 2 ) {
             const char *name = (const char *)attributes[i];
             const char *value = (const char *)attributes[i + 1];
             // MRLogD(@"%s=%s", attributes[i], attributes[i + 1], nil);
