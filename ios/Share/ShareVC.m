@@ -22,6 +22,7 @@
 #import "ShareVC.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 #import "ShaarliM.h"
+#import "ShaarliCmdPost.h"
 
 
 @interface ShareVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliPostDelegate> {
@@ -29,6 +30,7 @@
     SLComposeSheetConfigurationItem *itemAudience;
 }
 @property (readonly, strong, nonatomic) ShaarliM *shaarli;
+@property (readwrite, strong, nonatomic) ShaarliCmdPost *post;
 @end
 
 @implementation ShareVC
@@ -81,6 +83,28 @@
         self.textView.text = [@"" stringByAppendingFormat:@"%@ ", self.shaarli.tagsDefault];
     else
         self.textView.text = @"";
+
+    ShaarliCmdPost *re = [[ShaarliCmdPost alloc] init];
+    re.session = self.shaarli.postSession;
+    re.endpointUrl = self.shaarli.endpointUrl;
+    re.delegate = self;
+    self.post = re;
+
+    NSParameterAssert(1 == self.extensionContext.inputItems.count);
+    NSExtensionItem *item = self.extensionContext.inputItems[0];
+    for( NSItemProvider *itemProvider in item.attachments ) {
+        // see predicate from http://stackoverflow.com/a/27932776
+        NSString *t = @"public.url"; // (__bridge NSString *)kUTTypeText;
+        if( [itemProvider hasItemConformingToTypeIdentifier:t] )
+            [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
+                 if( !error )
+                     [re startPostForURL:url title:nil desc:nil];
+                 else {
+                     MRLogW (@"Error: %@", error, nil);
+                 }
+             }
+            ];
+    }
 }
 
 
@@ -125,24 +149,7 @@
 -(void)didSelectPost
 {
     MRLogD(@"-", nil);
-    NSURLSession *session = [self.shaarli postSession];
-
-    NSParameterAssert(1 == self.extensionContext.inputItems.count);
-    NSExtensionItem *item = self.extensionContext.inputItems[0];
-    for( NSItemProvider *itemProvider in item.attachments ) {
-        // see predicate from http://stackoverflow.com/a/27932776
-        NSString *t = @"public.url"; // (__bridge NSString *)kUTTypeText;
-        if( [itemProvider hasItemConformingToTypeIdentifier:t] )
-            [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
-                 [self.shaarli postUrl:url title:itemTitle.value description:self.contentText session:session delegate:self];
-             }
-            ];
-    }
-#if 0
-    NSError *e = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:-1 userInfo:@ { NSLocalizedDescriptionKey:NSLocalizedString (@"Found no item to share.", @"ShareVC") }
-                 ];
-    [self shaarli:nil didFinishPostWithError:e];
-#endif
+    [self.post finishPostForm:nil toURL:nil];
 }
 
 

@@ -57,6 +57,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 }
 
 
+#if 0
 -(void)_testPostData
 {
     NSDictionary *d = @ {
@@ -66,6 +67,9 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
     };
     XCTAssertEqualObjects(@"key2=val%26ue&key1=val%3Fue&key0=val%20ue", [[NSString alloc] initWithData:[d postData] encoding:NSUTF8StringEncoding], @"");
 }
+
+
+#endif
 
 
 -(void)testStringByStrippingTags
@@ -99,6 +103,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 }
 
 
+#if 0
 -(void)testHttpGetParams
 {
     NSURL *url = [NSURL URLWithString:@"http://links.mro.name/?post=http%3A%2F%2Fww.heise.de%2Fa&title=Ti+tle&description=Des%20crip%20tio=n&source=http%3A%2F%2Fapp.mro.name%2FShaarliOS"];
@@ -224,6 +229,9 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
         XCTAssertEqual(0, ret.count, @"May be empty, but mustn't crash", nil);
     }
 }
+
+
+#endif
 
 
 @end

@@ -21,6 +21,17 @@
 		1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
 		1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1621DDD01B6164EC00238503 /* SettingsVC.m */; };
 		162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 162A51331B6E50C7001CFF52 /* MROStateMachine.m */; };
+		162DBEA21BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */; };
+		162DBEA31BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */; };
+		162DBEA41BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */; };
+		162DBEA71BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */; };
+		162DBEA81BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */; };
+		162DBEA91BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */; };
+		162DBEAB1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAA1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m */; };
+		162DBEAE1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */; };
+		162DBEAF1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */; };
+		162DBEB01BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */; };
+		162DBEB21BCBBA2600AB8B9C /* ShaarliCmdPostTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEB11BCBBA2600AB8B9C /* ShaarliCmdPostTest.m */; };
 		163952711B599BBE0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952721B599E9D0059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
 		163952731B599EA60059E553 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 163952701B599BBE0059E553 /* libxml2.dylib */; };
@@ -30,6 +41,7 @@
 		165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
 		165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */ = {isa = PBXBuildFile; fileRef = 165B45A31B5952B8008A2714 /* ShaarliM.m */; };
+		165BC06F1BCAB8DE00F5D3A1 /* ShaarliResponseXPathTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 165BC06E1BCAB8DE00F5D3A1 /* ShaarliResponseXPathTest.m */; };
 		166A4E261B6B734000F5D5F7 /* XCTestCase+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */; };
 		1671FB061B700D5E00C829D5 /* ShareVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1601E3DA1AB9E68700D3E27D /* ShareVC.m */; };
 		169BCA131B72269400311870 /* 1Password.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 169BCA0C1B72269400311870 /* 1Password.xcassets */; };
@@ -108,12 +120,21 @@
 		162A51321B6E50C7001CFF52 /* MROStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MROStateMachine.h; sourceTree = "<group>"; };
 		162A51331B6E50C7001CFF52 /* MROStateMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MROStateMachine.m; sourceTree = "<group>"; };
 		162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliStateParseTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		162DBEA01BCB94AA00AB8B9C /* ShaarliCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliCmd.h; sourceTree = "<group>"; };
+		162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliCmd.m; sourceTree = "<group>"; };
+		162DBEA51BCB94C300AB8B9C /* ShaarliCmdLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliCmdLogin.h; sourceTree = "<group>"; };
+		162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliCmdLogin.m; sourceTree = "<group>"; };
+		162DBEAA1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliCmdLoginTest.m; sourceTree = "<group>"; };
+		162DBEAC1BCBBA0700AB8B9C /* ShaarliCmdPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliCmdPost.h; sourceTree = "<group>"; };
+		162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliCmdPost.m; sourceTree = "<group>"; };
+		162DBEB11BCBBA2600AB8B9C /* ShaarliCmdPostTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliCmdPostTest.m; sourceTree = "<group>"; };
 		163952701B599BBE0059E553 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		1640B8591B749D71009D3FED /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = about.html; sourceTree = "<group>"; };
 		1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliOSTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		165460811B697BCE001DAA32 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		165B45A21B5952B8008A2714 /* ShaarliM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ShaarliM.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		165B45A31B5952B8008A2714 /* ShaarliM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ShaarliM.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		165BC06E1BCAB8DE00F5D3A1 /* ShaarliResponseXPathTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliResponseXPathTest.m; sourceTree = "<group>"; };
 		166A4E241B6B734000F5D5F7 /* XCTestCase+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestCase+Tools.h"; sourceTree = "<group>"; };
 		166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+Tools.m"; sourceTree = "<group>"; };
 		1697BB701B62D7D200A7D515 /* ShaarliOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShaarliOS.entitlements; sourceTree = "<group>"; };
@@ -215,6 +236,28 @@
 			path = infra;
 			sourceTree = "<group>";
 		};
+		162DBE9E1BCB942D00AB8B9C /* API */ = {
+			isa = PBXGroup;
+			children = (
+				162DBEA01BCB94AA00AB8B9C /* ShaarliCmd.h */,
+				162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */,
+				162DBEA51BCB94C300AB8B9C /* ShaarliCmdLogin.h */,
+				162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */,
+				162DBEAC1BCBBA0700AB8B9C /* ShaarliCmdPost.h */,
+				162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		162DBE9F1BCB946100AB8B9C /* API */ = {
+			isa = PBXGroup;
+			children = (
+				162DBEAA1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m */,
+				162DBEB11BCBBA2600AB8B9C /* ShaarliCmdPostTest.m */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		169BCA0B1B72269400311870 /* 1Password */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,6 +335,7 @@
 				1621DDCF1B6164EC00238503 /* SettingsVC.h */,
 				1621DDD01B6164EC00238503 /* SettingsVC.m */,
 				16E0A78E1AB9E2280085B2C0 /* Supporting Files */,
+				162DBE9E1BCB942D00AB8B9C /* API */,
 				165B45A21B5952B8008A2714 /* ShaarliM.h */,
 				165B45A31B5952B8008A2714 /* ShaarliM.m */,
 			);
@@ -314,9 +358,11 @@
 		16E0A7A71AB9E2280085B2C0 /* ShaarliOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */,
 				1652D98E1B68BD8000B044C3 /* ShaarliOSTests.m */,
+				161C4B4C1B5BFD6E002B177F /* ShaarliMTest.m */,
+				162DBE9F1BCB946100AB8B9C /* API */,
 				162A51371B6E5283001CFF52 /* ShaarliStateParseTest.m */,
+				165BC06E1BCAB8DE00F5D3A1 /* ShaarliResponseXPathTest.m */,
 				16E59BD11B6EBD1C0035271D /* ShaarliResponseXsltTest.m */,
 				166A4E241B6B734000F5D5F7 /* XCTestCase+Tools.h */,
 				166A4E251B6B734000F5D5F7 /* XCTestCase+Tools.m */,
@@ -515,7 +561,10 @@
 				1671FB061B700D5E00C829D5 /* ShareVC.m in Sources */,
 				16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				162DBEA41BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
+				162DBEA91BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */,
+				162DBEB01BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E4021ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 			);
@@ -526,16 +575,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				16E0A7971AB9E2280085B2C0 /* MainVC.m in Sources */,
+				162DBEAE1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */,
 				1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3F11AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
 				16D18FAD1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				1601E4001ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 				16E0A7941AB9E2280085B2C0 /* AppDelegate.m in Sources */,
 				16E0A7911AB9E2280085B2C0 /* main.m in Sources */,
+				162DBEA21BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */,
 				1614BA9B1B71FC190042DCE7 /* ShareVC.m in Sources */,
 				16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				169BCA151B72269400311870 /* OnePasswordExtension.m in Sources */,
 				165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */,
+				162DBEA71BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,17 +596,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				162A51351B6E50C7001CFF52 /* MROStateMachine.m in Sources */,
+				165BC06F1BCAB8DE00F5D3A1 /* ShaarliResponseXPathTest.m in Sources */,
 				16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
 				16D18FAE1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */,
+				162DBEAB1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m in Sources */,
 				1614BA9C1B71FC1A0042DCE7 /* ShareVC.m in Sources */,
 				16E59BCE1B6EAF2A0035271D /* ShaarliStateParseTest.m in Sources */,
 				166A4E261B6B734000F5D5F7 /* XCTestCase+Tools.m in Sources */,
+				162DBEB21BCBBA2600AB8B9C /* ShaarliCmdPostTest.m in Sources */,
 				161C4B4D1B5BFD6E002B177F /* ShaarliMTest.m in Sources */,
 				1652D98F1B68BD8000B044C3 /* ShaarliOSTests.m in Sources */,
 				16E59BD21B6EBD1C0035271D /* ShaarliResponseXsltTest.m in Sources */,
+				162DBEA81BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */,
+				162DBEAF1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */,
+				162DBEA31BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */,
 				1601E4011ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

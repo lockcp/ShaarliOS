@@ -22,6 +22,7 @@
 #import "MainVC.h"
 #import "SettingsVC.h"
 #import "NSBundle+MroSemVer.h"
+#import "ShaarliCmdPost.h"
 
 @implementation NSLayoutConstraint(ChangeMultiplier)
 
@@ -49,6 +50,8 @@
 // http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
 @property (weak, nonatomic) UIView *activeField;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+@property (strong, nonatomic) ShaarliCmdPost *post;
 @end
 
 @implementation MainVC
@@ -205,8 +208,46 @@
     self.btnShaare.enabled = NO;
     [self.txtDescr resignFirstResponder];
     [self.txtTitle resignFirstResponder];
-    NSURLSession *session = [self.shaarli postSession];
-    [self.shaarli postUrl:nil title:self.txtTitle.text description:self.txtDescr.text session:session delegate:self];
+
+    // NSURLSession *session = [self.shaarli postSession];
+    // [self.shaarli postUrl:nil title:self.txtTitle.text description:self.txtDescr.text session:session delegate:self];
+
+    ShaarliCmdPost *re = [[ShaarliCmdPost alloc] init];
+    re.session = self.shaarli.postSession;
+    re.endpointUrl = self.shaarli.endpointUrl;
+    re.delegate = self;
+    self.post = re;
+
+    [re startPostForURL:nil title:self.txtTitle.text desc:self.txtDescr.text];
+}
+
+
+#pragma mark ShaarliPostDelegate
+
+
+-(void)didPostLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)dst error:(NSError *)error
+{
+    MRLogD(@"%@", form, nil);
+
+    if( self.shaarli.tagsActive ) {
+        NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
+        [form setValue:[self.txtDescr.text stringByStrippingTags:tags] forKey:@"lf_description"];
+        [form setValue:[tags componentsJoinedByString:@" "] forKey:@"lf_tags"];
+    } else
+        [form setValue:self.txtDescr.text forKey:@"lf_description"];
+    if( self.btnAudience.selected )
+        [form setValue:@"on" forKey:@"lf_private"];
+    else
+        [form removeObjectForKey:@"lf_private"];
+
+    [self.post finishPostForm:form toURL:dst];
+}
+
+
+-(void)didFinishPostFormToURL:(NSURL *)dst error:(NSError *)error
+{
+    MRLogD(@"%@ %@", dst, error, nil);
+    // Update GUI
 }
 
 

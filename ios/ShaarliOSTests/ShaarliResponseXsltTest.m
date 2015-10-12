@@ -24,7 +24,7 @@
 
 #import <libxml2/libxml/HTMLparser.h>
 
-/** getting xslt iss a bit a pain: http://stackoverflow.com/questions/7895157/applying-xslt-to-an-xml-coming-from-a-webservice-in-ios
+/** getting xslt is a bit a pain: http://stackoverflow.com/questions/7895157/applying-xslt-to-an-xml-coming-from-a-webservice-in-ios
  */
 
 @interface ShaarliResponseXsltTest : XCTestCase

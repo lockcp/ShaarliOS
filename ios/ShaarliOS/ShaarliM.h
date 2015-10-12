@@ -24,32 +24,6 @@
 @interface NSString(StripShaarliTags)
 -(NSString *)stringByStrippingTags:(NSMutableArray *)tags;
 @end
-@interface NSString(HttpGetParams)
--(NSString *)stringByAddingPercentEscapesForHttpFormUrl;
-@end
-@interface NSURL(HttpGetParams)
--(NSDictionary *)dictionaryWithHttpFormUrl;
-@end
-@interface NSDictionary(HttpGetParams)
--(NSString *)stringByAddingPercentEscapesForHttpFormUrl;
-@end
-@interface NSDictionary(HttpPostData)
--(NSData *)postData;
-@end
-
-@interface NSURL(ProtectionSpace)
-@property (nonatomic, readonly, assign) NSURLProtectionSpace *protectionSpace;
-@end
-
-@class ShaarliM;
-
-@protocol ShaarliPostDelegate <NSObject>
--(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error;
-/** fetched late during post. */
-@property (readonly, strong, nonatomic) NSString *postDescription;
-/** fetched late during post. */
-@property (readonly, assign, nonatomic) BOOL postPrivate;
-@end
 
 @interface ShaarliM : NSObject <NSURLSessionDelegate>
     // configured
@@ -69,9 +43,7 @@
 -(void)save;
 -(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault
    tagsActive:(BOOL)tagsA tagsDefault:(NSString *)tagsD completion:( void (^)(ShaarliM * me, NSError * error) )completion;
--(NSURLSession *)postSession;
--(void)postUrl:(NSURL *)url title:(NSString *)title description:(NSString *)desc session:(NSURLSession *)session delegate:(id <ShaarliPostDelegate>)delg;
 
--(void)postTest;
+-(NSURLSession *)postSession;
 
 @end
