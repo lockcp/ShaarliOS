@@ -16,7 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/build"
 
 inkscape=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
 
@@ -25,8 +25,7 @@ optipng -help >/dev/null 2>&1 || { echo "optipng is not installed." && exit 1; }
 
 OPTS="--export-area-page --export-width=1024 --export-height=1024 --without-gui"
 
-src="iTunesArtwork.dev.svg"
-src="../shaarli-petal.svg"
+src="../../shaarli-petal.svg"
 
 dst="iTunesArtwork.png"
 "$inkscape" --export-png="$(pwd)/$dst" $OPTS --file="$(pwd)/$src"
