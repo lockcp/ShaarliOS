@@ -137,6 +137,8 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
                         name = x2o(attr->children->content, enc);
                     else if( 0 == strcmp( "value", x2c(attr->name) ) )
                         value = x2o(attr->children->content, enc);
+                    else if( 0 == strcmp( "checked", x2c(attr->name) ) )
+                        value = @"on";
                     if( name && value )
                         break;
                 }
