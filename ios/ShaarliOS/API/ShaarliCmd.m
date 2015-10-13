@@ -143,7 +143,11 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
                         break;
                 }
             } else if( 0 == strcmp( "textarea", x2c(n->name) ) ) {
-                value = x2o(n->content, enc);
+                {
+                    xmlChar *s = xmlNodeGetContent(n);
+                    value = x2o(s, enc);
+                    xmlFree(s);
+                }
                 for( xmlAttr *attr = n->properties; attr; attr = attr->next ) {
                     assert(XML_TEXT_NODE == attr->children->type && "odd node type");
                     assert(NULL == attr->children->next && "expected no siblings");
