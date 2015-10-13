@@ -28,7 +28,7 @@
 #pragma mark -
 
 
-@implementation NSString(StripShaarliTags)
+@implementation NSString(ShaarliTags)
 
 -(NSString *)stringByStrippingTags:(NSMutableArray *)tags
 {
@@ -60,7 +60,6 @@
     }
     return [self substringWithRange:all];
 }
-
 
 @end
 
@@ -276,6 +275,7 @@
 
 -(NSURLSession *)postSession
 {
+    NSParameterAssert(self.endpointUrl);
 #if 0
     NSString *confName = BUNDLE_ID @".backgroundpost";
     NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];

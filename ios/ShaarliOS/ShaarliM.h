@@ -21,7 +21,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString(StripShaarliTags)
+@interface NSString(ShaarliTags)
 -(NSString *)stringByStrippingTags:(NSMutableArray *)tags;
 @end
 

@@ -21,7 +21,7 @@
 
 #import "ShaarliCmd.h"
 
-@protocol ShaarliPostDelegate <NSObject>
+@protocol ShaarliCmdPostDelegate <NSObject>
 -(void)didPostLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)url error:(NSError *)error;
 -(void)didFinishPostFormToURL:(NSURL *)dst error:(NSError *)error;
 @end
@@ -30,7 +30,7 @@
 
 @property (nonatomic, readwrite, strong) NSURLSession *session;
 @property (nonatomic, readwrite, strong) NSURL *endpointUrl;
-@property (nonatomic, readwrite, assign) id <ShaarliPostDelegate> delegate;
+@property (nonatomic, readwrite, assign) id <ShaarliCmdPostDelegate> delegate;
 
 -(void)startPostForURL:(NSURL *)url title:(NSString *)title desc:(NSString *)desc;
 -(void)finishPostForm:(NSMutableDictionary *)form toURL:(NSURL *)url;

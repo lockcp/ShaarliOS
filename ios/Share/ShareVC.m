@@ -25,13 +25,29 @@
 #import "ShaarliCmdPost.h"
 
 
-@interface ShareVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliPostDelegate> {
+static inline NSString *stringFromPrivacy(const BOOL priv)
+{
+    return priv ? NSLocalizedString(@"Private 🔐", @"ShaareVC") : NSLocalizedString(@"Public 🔓", @"ShaareVC");
+}
+
+
+static inline const BOOL privacyFromString(NSString *s)
+{
+    return ![stringFromPrivacy (NO) isEqualToString:s];
+}
+
+
+@interface ShareVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliCmdPostDelegate> {
     SLComposeSheetConfigurationItem *itemTitle;
     SLComposeSheetConfigurationItem *itemAudience;
 }
 @property (readonly, strong, nonatomic) ShaarliM *shaarli;
 @property (readwrite, strong, nonatomic) ShaarliCmdPost *post;
+
+@property (readwrite, strong, nonatomic) NSMutableDictionary *postForm; // maybe move to ShaarliCmdPost ?
+@property (readwrite, strong, nonatomic) NSURL *postURL; // maybe move to ShaarliCmdPost ?
 @end
+
 
 @implementation ShareVC
 
@@ -42,7 +58,6 @@
     if( !self.shaarli ) {
         _shaarli = [[ShaarliM alloc] init];
         [self.shaarli load];
-        // NSParameterAssert(self.shaarli.title);
     }
 }
 
@@ -56,12 +71,11 @@
 
     itemAudience = [[SLComposeSheetConfigurationItem alloc] init];
     itemAudience.title = NSLocalizedString(@"Audience", @"ShaareVC");
-    itemAudience.value = self.shaarli.privateDefault ? NSLocalizedString(@"Private 🔐", @"ShaareVC") : NSLocalizedString(@"Public 🔓", @"ShaareVC");
+    itemAudience.value = stringFromPrivacy(NO);
     __weak typeof(itemAudience) wr = itemAudience;
-    __weak typeof(self) ws = self;
 
     [itemAudience setTapHandler:^(void) {
-         wr.value = !ws.postPrivate ? NSLocalizedString (@"Private 🔐", @"ShaareVC"):NSLocalizedString (@"Public 🔓", @"ShaareVC");
+         wr.value = stringFromPrivacy ( !privacyFromString (wr.value) );
      }
     ];
 
@@ -76,14 +90,19 @@
     NSParameterAssert(self.shaarli);
     NSParameterAssert(itemTitle);
 
-    self.textView.keyboardType = UIKeyboardTypeTwitter;
     self.title = self.shaarli.title;
+    self.textView.keyboardType = UIKeyboardTypeTwitter;
+
     itemTitle.value = self.contentText;
     if( self.shaarli.tagsActive && self.shaarli.tagsDefault.length > 0 )
         self.textView.text = [@"" stringByAppendingFormat:@"%@ ", self.shaarli.tagsDefault];
     else
         self.textView.text = @"";
+    itemAudience.value = stringFromPrivacy(self.shaarli.privateDefault);
 
+    if( !self.shaarli.isSetUp )
+        return;
+    NSParameterAssert(self.shaarli.isSetUp);
     ShaarliCmdPost *re = [[ShaarliCmdPost alloc] init];
     re.session = self.shaarli.postSession;
     re.endpointUrl = self.shaarli.endpointUrl;
@@ -129,7 +148,7 @@
 
 -(void)presentationAnimationDidFinish
 {
-    MRLogD(@"we may need to update the display.", nil);
+    MRLogD(@"-", nil);
 }
 
 
@@ -149,7 +168,24 @@
 -(void)didSelectPost
 {
     MRLogD(@"-", nil);
-    [self.post finishPostForm:nil toURL:nil];
+
+    NSMutableDictionary *form = self.postForm;
+    NSURL *dst = self.postURL;
+    NSParameterAssert(form);
+    NSParameterAssert(dst);
+
+    if( self.shaarli.tagsActive ) {
+        NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
+        [form setValue:[self.contentText stringByStrippingTags:tags] forKey:@"lf_description"];
+        [form setValue:[tags componentsJoinedByString:@" "] forKey:@"lf_tags"];
+    } else
+        [form setValue:self.contentText forKey:@"lf_description"];
+    if( privacyFromString(itemAudience.value) )
+        [form setValue:@"on" forKey:@"lf_private"];
+    else
+        [form removeObjectForKey:@"lf_private"];
+
+    [self.post finishPostForm:form toURL:dst];
 }
 
 
@@ -158,40 +194,66 @@
     MRLogD(@"-", nil);
     NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil];
     [self.extensionContext cancelRequestWithError:error];
+    self.post = nil;
 }
 
 
-#pragma mark ShaarliPostDelegate
-
-
--(BOOL)postPrivate
+-(void)cancelWithError:(NSError *)error
 {
-    return ![NSLocalizedString (@"Public 🔓", @"Shaare") isEqualToString:itemAudience.value];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Shaarlying failed", @"ShareVC") message:[NSString stringWithFormat:NSLocalizedString(@"%@\n\nFailing call was %@", @"ShareVC"), error.localizedDescription, error.userInfo[NSURLErrorKey]] preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"ShareVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                          // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
+                          // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+                          [super cancel];
+                          self.post = nil;
+                      }
+     ]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
--(NSString *)postDescription
-{
-    return self.contentText;
-}
+#pragma mark ShaarliCmdPostDelegate
 
 
--(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error
+-(void)didPostLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)dst error:(NSError *)error
 {
+    MRLogD(@"%@ %@", form, error, nil);
     if( error ) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Shaarlying failed", @"ShareVC") message:[NSString stringWithFormat:NSLocalizedString(@"%@\n\nFailing call was %@", @"ShareVC"), error.localizedDescription, error.userInfo[NSURLErrorKey]] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"ShareVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-                              // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
-                              // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-                              [super cancel];
-                          }
-         ]];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self cancelWithError:error];
+        return;
+    }
+    self.postForm = form;
+    self.postURL = dst;
+
+    // Update GUI
+    itemAudience.value = stringFromPrivacy([@"on" isEqualToString:form[@"lf_private"]]);
+    NSString *txt = form[@"lf_description"];
+    if( self.shaarli.tagsActive ) {
+        NSString *tags = [form[@"lf_tags"] stringByReplacingOccurrencesOfString:@" " withString:@" #"];
+        if( 0 < tags.length )
+            tags = [@"#" stringByAppendingString:tags];
+        else
+            tags = self.shaarli.tagsDefault;
+        if( 0 < tags.length )
+            tags = [tags stringByAppendingString:@" "];
+
+        txt = [tags stringByAppendingString:txt];
+    }
+    self.textView.text = txt;
+}
+
+
+-(void)didFinishPostFormToURL:(NSURL *)dst error:(NSError *)error
+{
+    MRLogD(@"%@ %@", dst, error, nil);
+    if( error ) {
+        [self cancelWithError:error];
         return;
     }
     // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
     // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
     [super didSelectPost];
+    self.post = nil;
 }
 
 

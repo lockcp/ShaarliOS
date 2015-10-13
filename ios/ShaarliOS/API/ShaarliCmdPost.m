@@ -44,21 +44,19 @@
 
 -(void)postLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)url
 {
-    MRLogD(@"foo", nil);
+    MRLogD(@"-", nil);
     NSParameterAssert(self.session);
     NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.delegate);
 
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
     req.HTTPMethod = @"POST";
-    // post[@"returnurl"] = task.originalRequest.URL.absoluteString;
     req.HTTPBody = [form postData];
     NSURLSessionTask *dt = [self.session downloadTaskWithRequest:req completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
-                                MRLogD (@"%@", response.URL, nil);
-                                MRLogD (@"%@", location, nil);
-                                MRLogD (@"%@", error, nil);
                                 NSMutableDictionary *form = error ? nil:[self fetchPostFormForPostURLParse:location error:&error];
-                                [self.delegate didPostLoginForm:form toURL:response.URL error:error];
+                                dispatch_async (dispatch_get_main_queue (), ^{ [self.delegate didPostLoginForm:form toURL:response.URL error:error];
+                                                }
+                                                );
                             }
                            ];
     [dt resume];
@@ -112,9 +110,6 @@
     par = [par stringByAppendingString:[d stringByAddingPercentEscapesForHttpFormUrl]];
     NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
     NSURLSessionTask *dt = [self.session downloadTaskWithURL:cmd completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
-                                MRLogD (@"%@", response.URL, nil);
-                                MRLogD (@"%@", location, nil);
-                                MRLogD (@"%@", error, nil);
                                 if( !error ) {
                                     NSMutableDictionary *form = [self parseLoginForm:location error:&error];
 
@@ -129,7 +124,9 @@
                                     form[@"returnurl"] = [cmd absoluteString];
                                     [self postLoginForm:form toURL:response.URL];
                                 } else
-                                    [self.delegate didPostLoginForm:nil toURL:response.URL error:error];
+                                    dispatch_async (dispatch_get_main_queue (), ^{ [self.delegate didPostLoginForm:nil toURL:response.URL error:error];
+                                                    }
+                                                    );
                             }
                            ];
     [dt resume];
@@ -150,9 +147,6 @@
     req.HTTPBody = [form postData];
 
     NSURLSessionTask *dt = [self.session downloadTaskWithRequest:req completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
-                                MRLogD (@"%@", response.URL, nil);
-                                MRLogD (@"%@", location, nil);
-                                MRLogD (@"%@", error, nil);
                                 if( !error ) {
                                     NSURL *newUrl = [NSURL URLWithString:[form[@"lf_url"] stringByReplacingOccurrencesOfString:@"?" withString:@"/?#"] relativeToURL:self.endpointUrl];
                                     if( ![response.URL.absoluteString isEqualToString:[newUrl absoluteString]] ) {
@@ -164,7 +158,9 @@
                                         }
                                     }
                                 }
-                                [self.delegate didFinishPostFormToURL:response.URL error:error];
+                                dispatch_async (dispatch_get_main_queue (), ^{ [self.delegate didFinishPostFormToURL:response.URL error:error];
+                                                }
+                                                );
                             }
                            ];
     [dt resume];

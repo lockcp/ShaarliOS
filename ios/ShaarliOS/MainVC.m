@@ -26,7 +26,7 @@
 
 @implementation NSLayoutConstraint(ChangeMultiplier)
 
-// visal form center http://stackoverflow.com/a/13148012/349514
+// visual form center http://stackoverflow.com/a/13148012/349514
 -(NSLayoutConstraint *)constraintWithMultiplier:(CGFloat)multiplier
 {
     return [NSLayoutConstraint constraintWithItem:self.firstItem attribute:self.firstAttribute relatedBy:self.relation toItem:self.secondItem attribute:self.secondAttribute multiplier:multiplier constant:self.constant];
@@ -35,7 +35,7 @@
 
 @end
 
-@interface MainVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliPostDelegate>
+@interface MainVC() <UITextFieldDelegate, UITextViewDelegate, ShaarliCmdPostDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *centerY;
 @property (weak, nonatomic) IBOutlet UILabel *lblVersion;
 @property (weak, nonatomic) IBOutlet UIView *vContainer;
@@ -222,12 +222,30 @@
 }
 
 
+-(void)cancelWithError:(NSError *)error
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Shaarlying failed", @"MainVC") message:[NSString stringWithFormat:NSLocalizedString(@"%@\n\nFailing call was %@", @"MainVC"), error.localizedDescription, error.userInfo[NSURLErrorKey]] preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"MainVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                          // http://www.pixeldock.com/blog/ios8-share-extension-completionhandler-for-loaditemfortypeidentifier-is-never-called/
+                          // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+                          [self actionCancel:nil];
+                      }
+     ]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+
 #pragma mark ShaarliPostDelegate
 
 
 -(void)didPostLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)dst error:(NSError *)error
 {
     MRLogD(@"%@", form, nil);
+
+    if( error ) {
+        [self cancelWithError:error];
+        return;
+    }
 
     if( self.shaarli.tagsActive ) {
         NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
@@ -247,11 +265,20 @@
 -(void)didFinishPostFormToURL:(NSURL *)dst error:(NSError *)error
 {
     MRLogD(@"%@ %@", dst, error, nil);
-    // Update GUI
+    if( error ) {
+        [self cancelWithError:error];
+        return;
+    }
+    // success, clear form
+    dispatch_async(dispatch_get_main_queue(), ^{
+                       [self actionHideShaare:nil];
+                   }
+                   );
 }
 
 
 #pragma mark UITextViewDelegate
+
 
 -(void)textViewDidBeginEditing:(UITextView *)sender
 {
