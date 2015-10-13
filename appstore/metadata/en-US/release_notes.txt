@@ -1,0 +1,3 @@
+- fix a crash (github#5)
+- fix a bug (github#7)
+- use field presets (github#4)
