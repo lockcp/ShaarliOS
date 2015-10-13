@@ -109,20 +109,22 @@ static inline const BOOL privacyFromString(NSString *s)
     re.delegate = self;
     self.post = re;
 
-    NSParameterAssert(1 == self.extensionContext.inputItems.count);
-    NSExtensionItem *item = self.extensionContext.inputItems[0];
-    for( NSItemProvider *itemProvider in item.attachments ) {
-        // see predicate from http://stackoverflow.com/a/27932776
-        NSString *t = @"public.url"; // (__bridge NSString *)kUTTypeText;
-        if( [itemProvider hasItemConformingToTypeIdentifier:t] )
-            [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
-                 if( !error )
-                     [re startPostForURL:url title:nil desc:nil];
-                 else {
-                     MRLogW (@"Error: %@", error, nil);
+    for( NSExtensionItem *item in self.extensionContext.inputItems ) {
+        for( NSItemProvider *itemProvider in item.attachments ) {
+            // see predicate from http://stackoverflow.com/a/27932776
+            NSString *t = (NSString *)kUTTypeURL;
+            if( [itemProvider hasItemConformingToTypeIdentifier:t] ) {
+                [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
+                     if( !error )
+                         [re startPostForURL:url title:itemTitle.value desc:self.contentText];
+                     else {
+                         MRLogW (@"Error: %@", error, nil);
+                     }
                  }
-             }
-            ];
+                ];
+                return;
+            }
+        }
     }
 }
 
