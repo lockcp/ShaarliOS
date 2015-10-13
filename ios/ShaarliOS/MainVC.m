@@ -270,10 +270,7 @@
         return;
     }
     // success, clear form
-    dispatch_async(dispatch_get_main_queue(), ^{
-                       [self actionHideShaare:nil];
-                   }
-                   );
+    [self actionHideShaare:nil];
 }
 
 
@@ -381,42 +378,5 @@
     [self.scrollView.superview.superview layoutIfNeeded];
 }
 
-
-#pragma mark ShaarliPostDelegate
-
-
--(BOOL)postPrivate
-{
-    return self.btnAudience.selected;
-}
-
-
--(NSString *)postDescription
-{
-    return self.txtDescr.text;
-}
-
-
--(void)shaarli:(ShaarliM *)shaarli didFinishPostWithError:(NSError *)error
-{
-    if( error ) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Shaarlying failed", @"ShareVC") message:[NSString stringWithFormat:NSLocalizedString(@"%@\n\nFailing call was %@", @"ShareVC"), error.localizedDescription, error.userInfo[NSURLErrorKey]] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"ShareVC") style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-                              // clear form
-                              dispatch_async (dispatch_get_main_queue (), ^{
-                                                  [self actionCancel:nil];
-                                              }
-                                              );
-                          }
-         ]];
-        [self presentViewController:alert animated:YES completion:nil];
-        return;
-    }
-    // success, clear form
-    dispatch_async (dispatch_get_main_queue (), ^{
-                        [self actionHideShaare:nil];
-                    }
-                    );
-}
 
 @end

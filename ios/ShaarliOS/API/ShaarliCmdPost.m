@@ -135,7 +135,7 @@
 
 -(void)finishPostForm:(NSMutableDictionary *)form toURL:(NSURL *)url
 {
-    MRLogD(@"foo", nil);
+    MRLogD(@"-", nil);
     NSParameterAssert(self.session);
     NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.delegate);
@@ -153,7 +153,7 @@
                                         // look for the lf_url in the results list (see https://github.com/shaarli/Shaarli/issues/356 ).
                                         const BOOL ok = [self parsePostResult:location url:form[@"lf_url"] error:&error];
                                         if( !ok ) {
-                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:url, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link in shaarli API reply.", @"ShaarliPostCmd.m") }
+                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:url, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliPostCmd.m") }
                                                     ];
                                         }
                                     }
