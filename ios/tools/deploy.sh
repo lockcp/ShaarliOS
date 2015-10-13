@@ -32,7 +32,9 @@ if [ $? -ne 0 ] ; then
 	echo "Unzip issue: unzip -p \"$1\" \"Payload/${app}.app/Info.plist\" > \"$tmp\"" 1>&2
 	exit 2
 fi
-version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$tmp")
+version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$tmp")
+gitsha=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleGitSHA' "$tmp" 2>/dev/null)
+[ "" = "$gitsha" ] || { version="${version}+${gitsha}"; }
 
 # prepare dir and upload
 dst="${base}/deploy/v${version}/Debug/"

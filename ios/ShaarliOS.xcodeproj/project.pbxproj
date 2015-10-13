@@ -549,7 +549,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh\n# inspired by\n# - http://kswizz.com/post/2686511526/git-xcode-versioning\n# - http://stackoverflow.com/a/12658311\ncd \"$PROJECT_DIR\"\n# say hello\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersionGitSHA $(git rev-parse --short HEAD)\" \"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"";
-			shellScript = "# write git version SHA into Info.plist\n#\n# inspired by\n# - http://kswizz.com/post/2686511526/git-xcode-versioning\n# - http://stackoverflow.com/a/12658311\ncd \"$PROJECT_DIR\"\n# say hello\ninfo_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\ngitsha=$(git rev-parse --short HEAD)\nversion=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleVersion\" \"$info_plist\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersionGitSHA $gitsha\" \"$info_plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString '$version+$gitsha'\" \"$info_plist\"";
+			shellScript = "# write git version SHA into Info.plist\n#\n# inspired by\n# - http://kswizz.com/post/2686511526/git-xcode-versioning\n# - http://stackoverflow.com/a/12658311\ncd \"$PROJECT_DIR\"\n# say hello\ninfo_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\ngitsha=$(git rev-parse --short HEAD)\n# version=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleVersion\" \"$info_plist\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleGitSHA $gitsha\" \"$info_plist\"\n# /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString '$version'\" \"$info_plist\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

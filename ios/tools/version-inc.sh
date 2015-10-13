@@ -56,4 +56,5 @@ else
 fi
 
 agvtool new-version -all $major.$minor.$patch
+agvtool new-marketing-version $major.$minor.$patch
 echo "v$(agvtool what-version -terse)"
