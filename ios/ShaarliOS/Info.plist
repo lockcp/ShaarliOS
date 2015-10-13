@@ -34,9 +34,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>0.0.9</string>
+	<string>1.0.1</string>
 	<key>CFBundleVersionGitSHA</key>
-	<string>0.0.9</string>
+	<string>1.0.1</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
