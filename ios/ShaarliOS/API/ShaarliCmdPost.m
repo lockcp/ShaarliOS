@@ -83,7 +83,10 @@
         return NO;
     if( ![self parseAnyResponse:nil data:d error:error] )
         return NO;
-    NSString *xpath = [NSString stringWithFormat:@"boolean(0 < count(/html/body//a[@href='%@']))", lf_url];
+    while( [lf_url hasPrefix:@"?"] || [lf_url hasPrefix:@"#"] )
+        lf_url = [lf_url substringFromIndex:1];
+    // the latter is a bit coarse, but the link was subject to change multiple times https://github.com/shaarli/Shaarli/issues/356
+    NSString *xpath = [NSString stringWithFormat:@"boolean(0 < count(/html/body//a[contains(@href, '%@')]))", lf_url];
     return [self booleanForXPath:xpath error:error];
 }
 
