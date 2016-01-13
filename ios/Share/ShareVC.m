@@ -43,6 +43,7 @@ static inline const BOOL privacyFromString(NSString *s)
 }
 @property (readonly, strong, nonatomic) ShaarliM *shaarli;
 @property (readwrite, strong, nonatomic) ShaarliCmdPost *post;
+@property (readwrite, assign, nonatomic) BOOL wasTouched;
 
 @property (readwrite, strong, nonatomic) NSMutableDictionary *postForm; // maybe move to ShaarliCmdPost ?
 @property (readwrite, strong, nonatomic) NSURL *postURL; // maybe move to ShaarliCmdPost ?
@@ -73,9 +74,11 @@ static inline const BOOL privacyFromString(NSString *s)
     itemAudience.title = NSLocalizedString(@"Audience", @"ShaareVC");
     itemAudience.value = stringFromPrivacy(NO);
     __weak typeof(itemAudience) wr = itemAudience;
+    __weak typeof(self) weakSelf = self;
 
     [itemAudience setTapHandler:^(void) {
          wr.value = stringFromPrivacy ( !privacyFromString (wr.value) );
+         weakSelf.wasTouched = YES;
      }
     ];
 
@@ -93,11 +96,15 @@ static inline const BOOL privacyFromString(NSString *s)
     self.title = self.shaarli.title;
     self.textView.keyboardType = UIKeyboardTypeTwitter;
 
+    self.wasTouched = NO;
     itemTitle.value = self.contentText;
-    if( self.shaarli.tagsActive && self.shaarli.tagsDefault.length > 0 )
-        self.textView.text = [@"" stringByAppendingFormat:@"%@ ", self.shaarli.tagsDefault];
-    else
-        self.textView.text = @"";
+    NSString *tagsDefault = self.shaarli.tagsActive ? self.shaarli.tagsDefault : @"";
+    {
+        NSString *txt = @"🔄";
+        if( 0 < tagsDefault.length )
+            txt = [[tagsDefault stringByAppendingString:@" "] stringByAppendingString:txt];
+        self.textView.text = txt;
+    }
     itemAudience.value = stringFromPrivacy(self.shaarli.privateDefault);
 
     if( !self.shaarli.isSetUp )
@@ -115,9 +122,9 @@ static inline const BOOL privacyFromString(NSString *s)
             NSString *t = (NSString *)kUTTypeURL;
             if( [itemProvider hasItemConformingToTypeIdentifier:t] ) {
                 [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
-                     if( !error )
-                         [re startPostForURL:url title:itemTitle.value desc:self.contentText];
-                     else {
+                     if( !error ) {
+                         [re startPostForURL:url title:itemTitle.value desc:nil];
+                     } else {
                          MRLogW (@"Error: %@", error, nil);
                      }
                  }
@@ -128,9 +135,9 @@ static inline const BOOL privacyFromString(NSString *s)
             t = (NSString *)kUTTypePlainText;
             if( [itemProvider hasItemConformingToTypeIdentifier:t] ) {
                 [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSString * txt, NSError * error) {
-                     if( !error )
-                         [re startPostForURL:nil title:itemTitle.value desc:txt];
-                     else {
+                     if( !error ) {
+                         [re startPostForURL:nil title:itemTitle.value desc:nil];
+                     } else {
                          MRLogW (@"Error: %@", error, nil);
                      }
                  }
@@ -170,6 +177,7 @@ static inline const BOOL privacyFromString(NSString *s)
 -(BOOL)isContentValid
 {
     MRLogD(@"-", nil);
+    self.wasTouched = YES;
     return YES;
 }
 
@@ -230,6 +238,28 @@ static inline const BOOL privacyFromString(NSString *s)
 #pragma mark ShaarliCmdPostDelegate
 
 
+// Update GUI
+-(void)form2Gui:(NSDictionary *)form
+{
+    itemAudience.value = stringFromPrivacy([@"on" isEqualToString:form[@"lf_private"]]);
+    NSString *txt = form[@"lf_description"];
+    if( self.shaarli.tagsActive ) {
+        NSString *tags = [form[@"lf_tags"] stringByReplacingOccurrencesOfString:@" " withString:@" #"];
+        if( 0 < tags.length )
+            tags = [@"#" stringByAppendingString:tags];
+        else if( 0 == txt.length )
+            tags = self.shaarli.tagsDefault;
+        else
+            tags = @"";
+        if( 0 < tags.length )
+            tags = [tags stringByAppendingString:@" "];
+
+        txt = [tags stringByAppendingString:txt];
+    }
+    self.textView.text = txt;
+}
+
+
 -(void)didPostLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)dst error:(NSError *)error
 {
     MRLogD(@"%@ %@", form, error, nil);
@@ -239,22 +269,11 @@ static inline const BOOL privacyFromString(NSString *s)
     }
     self.postForm = form;
     self.postURL = dst;
-
-    // Update GUI
-    itemAudience.value = stringFromPrivacy([@"on" isEqualToString:form[@"lf_private"]]);
-    NSString *txt = form[@"lf_description"];
-    if( self.shaarli.tagsActive ) {
-        NSString *tags = [form[@"lf_tags"] stringByReplacingOccurrencesOfString:@" " withString:@" #"];
-        if( 0 < tags.length )
-            tags = [@"#" stringByAppendingString:tags];
-        else
-            tags = self.shaarli.tagsDefault;
-        if( 0 < tags.length )
-            tags = [tags stringByAppendingString:@" "];
-
-        txt = [tags stringByAppendingString:txt];
+    if( !self.wasTouched )
+        [self form2Gui:form];
+    else {
+        MRLogD(@"Evtl. show a hint that there was discarded incoming server data.", nil);
     }
-    self.textView.text = txt;
 }
 
 
