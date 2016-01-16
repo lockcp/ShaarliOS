@@ -21,6 +21,15 @@
 
 #import "ShaarliCmdPost.h"
 
+@implementation NSData(NSString)
+-(NSString *)stringfromNSData
+{
+    return [[NSString alloc] initWithData:self encoding:NSUTF8StringEncoding];
+}
+
+
+@end
+
 
 #define POST_SOURCE @"http://app.mro.name/ShaarliOS"
 
@@ -44,7 +53,7 @@
 
 -(void)postLoginForm:(NSMutableDictionary *)form toURL:(NSURL *)url
 {
-    MRLogD(@"-", nil);
+    // MRLogD(@"-", nil);
     NSParameterAssert(self.session);
     NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.delegate);
@@ -59,6 +68,8 @@
                                                 );
                             }
                            ];
+    dt.taskDescription = @"post URL, step 1";
+    MRLogD (@"%@: %@ %@ HTTPBody: %@", dt.taskDescription, dt.originalRequest.HTTPMethod, dt.originalRequest.URL, [dt.originalRequest.HTTPBody stringfromNSData], nil);
     [dt resume];
 }
 
@@ -96,7 +107,7 @@
 
 -(void)startPostForURL:(NSURL *)url title:(NSString *)title desc:(NSString *)desc
 {
-    MRLogD(@"-", nil);
+    // MRLogD(@"-", nil);
     NSParameterAssert(self.session);
     NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.delegate);
@@ -132,13 +143,15 @@
                                                     );
                             }
                            ];
+    dt.taskDescription = @"post URL, step 0";
+    MRLogD (@"%@: %@ %@ HTTPBody: %@", dt.taskDescription, dt.originalRequest.HTTPMethod, dt.originalRequest.URL, [dt.originalRequest.HTTPBody stringfromNSData], nil);
     [dt resume];
 }
 
 
 -(void)finishPostForm:(NSMutableDictionary *)form toURL:(NSURL *)url
 {
-    MRLogD(@"-", nil);
+    // MRLogD(@"-", nil);
     NSParameterAssert(self.session);
     NSParameterAssert(self.endpointUrl);
     NSParameterAssert(self.delegate);
@@ -166,6 +179,8 @@
                                                 );
                             }
                            ];
+    dt.taskDescription = @"post URL, step 2";
+    MRLogD (@"%@: %@ %@ HTTPBody: %@", dt.taskDescription, dt.originalRequest.HTTPMethod, dt.originalRequest.URL, [dt.originalRequest.HTTPBody stringfromNSData], nil);
     [dt resume];
 }
 

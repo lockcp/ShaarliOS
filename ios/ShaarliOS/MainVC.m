@@ -247,6 +247,7 @@
         return;
     }
 
+    [form setValue:self.txtTitle.text forKey:@"lf_title"];
     if( self.shaarli.tagsActive ) {
         NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
         [form setValue:[self.txtDescr.text stringByStrippingTags:tags] forKey:@"lf_description"];

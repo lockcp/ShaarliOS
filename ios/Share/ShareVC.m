@@ -122,6 +122,7 @@ static inline const BOOL privacyFromString(NSString *s)
             NSString *t = (NSString *)kUTTypeURL;
             if( [itemProvider hasItemConformingToTypeIdentifier:t] ) {
                 [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSURL * url, NSError * error) {
+                     MRLogD (@"done. title:%@ url:%@ error:%@", itemTitle.value, url, error, nil);
                      if( !error ) {
                          [re startPostForURL:url title:itemTitle.value desc:nil];
                      } else {
@@ -135,8 +136,9 @@ static inline const BOOL privacyFromString(NSString *s)
             t = (NSString *)kUTTypePlainText;
             if( [itemProvider hasItemConformingToTypeIdentifier:t] ) {
                 [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSString * txt, NSError * error) {
+                     MRLogD (@"done. title:%@ txt:%@ error:%@", itemTitle.value, txt, error, nil);
                      if( !error ) {
-                         [re startPostForURL:nil title:itemTitle.value desc:nil];
+                         [re startPostForURL:nil title:itemTitle.value desc:txt];
                      } else {
                          MRLogW (@"Error: %@", error, nil);
                      }
@@ -197,6 +199,7 @@ static inline const BOOL privacyFromString(NSString *s)
     NSParameterAssert(form);
     NSParameterAssert(dst);
 
+    [form setValue:itemTitle.value forKey:@"lf_title"]; // in case of text notes: set it again!
     if( self.shaarli.tagsActive ) {
         NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
         [form setValue:[self.contentText stringByStrippingTags:tags] forKey:@"lf_description"];
