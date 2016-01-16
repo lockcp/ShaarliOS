@@ -3,7 +3,7 @@
 // Share
 //
 // Created by Marcus Rohrmoser on 18.03.15.
-// Copyright (c) 2015 Marcus Rohrmoser http://mro.name/me. All rights reserved.
+// Copyright (c) 2015-2016 Marcus Rohrmoser http://mro.name/me. All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

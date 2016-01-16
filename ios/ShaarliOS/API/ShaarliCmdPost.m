@@ -3,7 +3,7 @@
 // ShaarliOS
 //
 // Created by Marcus Rohrmoser on 12.10.15.
-// Copyright (c) 2015 Marcus Rohrmoser http://mro.name/me. All rights reserved.
+// Copyright (c) 2015-2016 Marcus Rohrmoser http://mro.name/me. All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -169,7 +169,7 @@
                                         // look for the lf_url in the results list (see https://github.com/shaarli/Shaarli/issues/356 ).
                                         const BOOL ok = [self parsePostResult:location url:form[@"lf_url"] error:&error];
                                         if( !ok ) {
-                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:url, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliPostCmd.m") }
+                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:url, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliCmdPost.m") }
                                                     ];
                                         }
                                     }
