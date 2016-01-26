@@ -85,7 +85,7 @@
 
     self.lblTitle.text = self.shaarli.title;
     self.lblTitle.textColor = self.lblTitle.text ? self.txtUserName.textColor : [UIColor redColor];
-    self.lblTitle.text = self.lblTitle.text ? self.lblTitle.text : NSLocalizedString(@"Not connected yət.", @"SettingsVC.m");
+    self.lblTitle.text = self.lblTitle.text ? self.lblTitle.text : NSLocalizedString(@"Not connected yət.", @"SettingsVC");
 
     self.txtEndpoint.text = self.shaarli.endpointStr;
     self.swiSecure.on = self.shaarli.endpointSecure;
@@ -176,7 +176,7 @@
 //
 -(IBAction)actionFindLoginFrom1Password:(id)sender
 {
-    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.shaarli.endpointUrl.absoluteString forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
+    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.shaarli.endpointURL.absoluteString forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
          if( loginDictionary.count == 0 ) {
              if( error.code != AppExtensionErrorCodeCancelledByUser ) {
                  NSLog (@"Error invoking 1Password App Extension for find login: %@", error);

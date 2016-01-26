@@ -55,7 +55,7 @@
 {
     // MRLogD(@"-", nil);
     NSParameterAssert(self.session);
-    NSParameterAssert(self.endpointUrl);
+    NSParameterAssert(self.endpointURL);
     NSParameterAssert(self.delegate);
 
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
@@ -109,25 +109,25 @@
 {
     // MRLogD(@"-", nil);
     NSParameterAssert(self.session);
-    NSParameterAssert(self.endpointUrl);
+    NSParameterAssert(self.endpointURL);
     NSParameterAssert(self.delegate);
 
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:3];
-    d[@"source"] = POST_SOURCE;
-    d[HTTP_POST] = url ? url.absoluteString : @"";
+    d[K_F_SOURCE] = POST_SOURCE;
+    d[K_F_POST] = url ? url.absoluteString : @"";
     if( title )
-        d[@"title"] = title;
+        d[K_F_TITLE] = title;
     if( desc )
-        d[@"description"] = desc;
+        d[K_F_DESCRIPTION] = desc;
 
     NSString *par = @"?";
     par = [par stringByAppendingString:[d stringByAddingPercentEscapesForHttpFormUrl]];
-    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointUrl];
+    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointURL];
     NSURLSessionTask *dt = [self.session downloadTaskWithURL:cmd completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
                                 if( !error ) {
                                     NSMutableDictionary *form = [self parseLoginForm:location error:&error];
 
-                                    NSURLProtectionSpace *ps = [self.endpointUrl protectionSpace];
+                                    NSURLProtectionSpace *ps = [self.endpointURL protectionSpace];
                                     NSURLCredential *cre0 = [self.session.configuration.URLCredentialStorage defaultCredentialForProtectionSpace:ps];
                                     NSParameterAssert (cre0);
                                     NSParameterAssert (cre0.user);
@@ -153,23 +153,23 @@
 {
     // MRLogD(@"-", nil);
     NSParameterAssert(self.session);
-    NSParameterAssert(self.endpointUrl);
+    NSParameterAssert(self.endpointURL);
     NSParameterAssert(self.delegate);
 
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
     req.HTTPMethod = HTTP_POST;
-    form[@"lf_source"] = POST_SOURCE;
+    form[K_F_LF_SOURCE] = POST_SOURCE;
     form[@"save_edit"] = @"Save";
     req.HTTPBody = [form postData];
 
     NSURLSessionTask *dt = [self.session downloadTaskWithRequest:req completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
                                 if( !error ) {
-                                    NSURL *newUrl = [NSURL URLWithString:[form[@"lf_url"] stringByReplacingOccurrencesOfString:@"?" withString:@"/?#"] relativeToURL:self.endpointUrl];
+                                    NSURL *newUrl = [NSURL URLWithString:[form[K_F_LF_URL] stringByReplacingOccurrencesOfString:@"?" withString:@"/?#"] relativeToURL:self.endpointURL];
                                     if( ![response.URL.absoluteString isEqualToString:[newUrl absoluteString]] ) {
                                         // look for the lf_url in the results list (see https://github.com/shaarli/Shaarli/issues/356 ).
-                                        const BOOL ok = [self parsePostResult:location url:form[@"lf_url"] error:&error];
+                                        const BOOL ok = [self parsePostResult:location url:form[K_F_LF_URL] error:&error];
                                         if( !ok ) {
-                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:req.URL, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliCmdPost.m") }
+                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:req.URL, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliCmdPost") }
                                                     ];
                                         }
                                     }

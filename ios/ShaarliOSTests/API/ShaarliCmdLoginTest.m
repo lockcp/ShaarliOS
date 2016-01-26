@@ -57,7 +57,7 @@
         // MRLogD(@"%@", ret, nil);
         XCTAssertEqual(4, ret.count, @"entries' count");
         XCTAssertEqualObjects(@ (1), ret[M_HAS_LOGOUT], @"");
-        XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+        XCTAssertEqualObjects(@"links.mro", ret[K_F_TITLE], @"");
         XCTAssertNotNil(ret[@"headerform"], @"");
         XCTAssertEqual(5, [ret[M_FORM] count], @"entries' count");
         XCTAssertEqualObjects(@"20150715_200440", ret[M_FORM][@"edit_link"], @"");

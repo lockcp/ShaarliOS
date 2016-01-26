@@ -112,7 +112,7 @@ static inline const BOOL privacyFromString(NSString *s)
     NSParameterAssert(self.shaarli.isSetUp);
     ShaarliCmdPost *re = [[ShaarliCmdPost alloc] init];
     re.session = self.shaarli.postSession;
-    re.endpointUrl = self.shaarli.endpointUrl;
+    re.endpointURL = self.shaarli.endpointURL;
     re.delegate = self;
     self.post = re;
 
@@ -199,17 +199,17 @@ static inline const BOOL privacyFromString(NSString *s)
     NSParameterAssert(form);
     NSParameterAssert(dst);
 
-    [form setValue:itemTitle.value forKey:@"lf_title"]; // in case of text notes: set it again!
+    [form setValue:itemTitle.value forKey:K_F_LF_TITLE]; // in case of text notes: set it again!
     if( self.shaarli.tagsActive ) {
         NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
-        [form setValue:[self.contentText stringByStrippingTags:tags] forKey:@"lf_description"];
-        [form setValue:[tags componentsJoinedByString:@" "] forKey:@"lf_tags"];
+        [form setValue:[self.contentText stringByStrippingTags:tags] forKey:K_F_LF_DESCRIPTION];
+        [form setValue:[tags componentsJoinedByString:@" "] forKey:K_F_LF_TAGS];
     } else
-        [form setValue:self.contentText forKey:@"lf_description"];
+        [form setValue:self.contentText forKey:K_F_LF_DESCRIPTION];
     if( privacyFromString(itemAudience.value) )
-        [form setValue:@"on" forKey:@"lf_private"];
+        [form setValue:HTML_ON forKey:K_F_LF_PRIVATE];
     else
-        [form removeObjectForKey:@"lf_private"];
+        [form removeObjectForKey:K_F_LF_PRIVATE];
 
     [self.post finishPostForm:form toURL:dst];
 }
@@ -244,10 +244,10 @@ static inline const BOOL privacyFromString(NSString *s)
 // Update GUI
 -(void)form2Gui:(NSDictionary *)form
 {
-    itemAudience.value = stringFromPrivacy([@"on" isEqualToString:form[@"lf_private"]]);
-    NSString *txt = form[@"lf_description"];
+    itemAudience.value = stringFromPrivacy([HTML_ON isEqualToString:form[K_F_LF_PRIVATE]]);
+    NSString *txt = form[K_F_LF_DESCRIPTION];
     if( self.shaarli.tagsActive ) {
-        NSString *tags = [form[@"lf_tags"] stringByReplacingOccurrencesOfString:@" " withString:@" #"];
+        NSString *tags = [form[K_F_LF_TAGS] stringByReplacingOccurrencesOfString:@" " withString:@" #"];
         if( 0 < tags.length )
             tags = [@"#" stringByAppendingString:tags];
         else if( 0 == txt.length )

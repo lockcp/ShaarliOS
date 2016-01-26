@@ -24,9 +24,7 @@
 		162DBEA21BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */; };
 		162DBEA31BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */; };
 		162DBEA41BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA11BCB94AA00AB8B9C /* ShaarliCmd.m */; };
-		162DBEA71BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */; };
 		162DBEA81BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */; };
-		162DBEA91BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */; };
 		162DBEAB1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAA1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m */; };
 		162DBEAE1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */; };
 		162DBEAF1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */; };
@@ -571,7 +569,6 @@
 				162DBEA41BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				16B03F621C4FCBD700ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */,
-				162DBEA91BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */,
 				162DBEB01BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
 				1601E4021ABA030F00D3E27D /* NSUserDefaults+Share.m in Sources */,
@@ -596,7 +593,6 @@
 				16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				169BCA151B72269400311870 /* OnePasswordExtension.m in Sources */,
 				165B45A41B5952B8008A2714 /* ShaarliM.m in Sources */,
-				162DBEA71BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

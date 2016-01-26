@@ -29,7 +29,7 @@
     // configured
 @property (readonly, strong, nonatomic) NSString *userName;
 @property (readonly, strong, nonatomic) NSString *passWord;
-@property (readonly, strong, nonatomic) NSURL *endpointUrl;
+@property (readonly, strong, nonatomic) NSURL *endpointURL;
 @property (readonly, strong, nonatomic) NSString *endpointStr;
 @property (readonly, assign, nonatomic) BOOL isSetUp;
 @property (readonly, assign, nonatomic) BOOL endpointSecure;

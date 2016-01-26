@@ -80,7 +80,7 @@
 
 -(void)viewDidLoad
 {
-    MRLogD(@"", nil);
+    MRLogD(@"-", nil);
     [super viewDidLoad];
     NSParameterAssert(self.vContainer);
     NSParameterAssert(self.centerY);
@@ -214,7 +214,7 @@
 
     ShaarliCmdPost *re = [[ShaarliCmdPost alloc] init];
     re.session = self.shaarli.postSession;
-    re.endpointUrl = self.shaarli.endpointUrl;
+    re.endpointURL = self.shaarli.endpointURL;
     re.delegate = self;
     self.post = re;
 
@@ -247,17 +247,17 @@
         return;
     }
 
-    [form setValue:self.txtTitle.text forKey:@"lf_title"];
+    [form setValue:self.txtTitle.text forKey:K_F_LF_TITLE];
     if( self.shaarli.tagsActive ) {
         NSMutableArray *tags = [NSMutableArray arrayWithCapacity:5];
-        [form setValue:[self.txtDescr.text stringByStrippingTags:tags] forKey:@"lf_description"];
-        [form setValue:[tags componentsJoinedByString:@" "] forKey:@"lf_tags"];
+        [form setValue:[self.txtDescr.text stringByStrippingTags:tags] forKey:K_F_LF_DESCRIPTION];
+        [form setValue:[tags componentsJoinedByString:@" "] forKey:K_F_LF_TAGS];
     } else
-        [form setValue:self.txtDescr.text forKey:@"lf_description"];
+        [form setValue:self.txtDescr.text forKey:K_F_LF_DESCRIPTION];
     if( self.btnAudience.selected )
-        [form setValue:@"on" forKey:@"lf_private"];
+        [form setValue:HTML_ON forKey:K_F_LF_PRIVATE];
     else
-        [form removeObjectForKey:@"lf_private"];
+        [form removeObjectForKey:K_F_LF_PRIVATE];
 
     [self.post finishPostForm:form toURL:dst];
 }

@@ -29,7 +29,7 @@
 @interface ShaarliCmdPost : ShaarliCmd
 
 @property (nonatomic, readwrite, strong) NSURLSession *session;
-@property (nonatomic, readwrite, strong) NSURL *endpointUrl;
+@property (nonatomic, readwrite, strong) NSURL *endpointURL;
 @property (nonatomic, readwrite, assign) id <ShaarliCmdPostDelegate> delegate;
 
 -(void)startPostForURL:(NSURL *)url title:(NSString *)title desc:(NSString *)desc;

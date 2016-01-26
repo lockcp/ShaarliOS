@@ -20,7 +20,6 @@
 //
 
 #import "ShaarliM.h"
-#import "ShaarliCmdLogin.h"
 #import "ShaarliCmdPost.h"
 #import "ShaarliCmdUpdateEndpoint.h"
 
@@ -72,7 +71,7 @@
 
 
 @interface ShaarliM()
-@property (strong, nonatomic) NSURL *endpointUrl;
+@property (strong, nonatomic) NSURL *endpointURL;
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
 @property (strong, nonatomic) NSString *title;
@@ -98,7 +97,7 @@
 
 -(BOOL)endpointSecure
 {
-    return ![HTTP_HTTP isEqualToString:self.endpointUrl.scheme];
+    return ![HTTP_HTTP isEqualToString:self.endpointURL.scheme];
 }
 
 
@@ -110,7 +109,7 @@
 
 -(NSString *)endpointStr
 {
-    return [self.endpointUrl.resourceSpecifier substringFromIndex:2];
+    return [self.endpointURL.resourceSpecifier substringFromIndex:2];
 }
 
 
@@ -122,7 +121,7 @@
 
 -(BOOL)isSetUp
 {
-    return nil != self.endpointUrl;
+    return nil != self.endpointURL;
 }
 
 
@@ -137,16 +136,16 @@
     self.tagsDefault = [d objectForKey:@"tagsDefault"] ? [d stringForKey:@"tagsDefault"] : @"#ShaarliOS";
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
-    self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:F_K_PASSWORD];
-    self.endpointUrl = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
+    self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"password"];
+    self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
 #else
     self.userName = [d valueForKey:@"userName"];
-    self.passWord = [d valueForKey:F_K_PASSWORD];
+    self.passWord = [d valueForKey:@"password"];
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
-    if( !( (nil == self.title) == (nil == self.endpointUrl) ) )
+    if( !( (nil == self.title) == (nil == self.endpointURL) ) )
         // don't assert because HTML markup might bring title in another tag:
-        MRLogW(@"strange configuration. title='%@' endpoint='%@'", self.title, self.endpointUrl, nil);
+        MRLogW(@"strange configuration. title='%@' endpoint='%@'", self.title, self.endpointURL, nil);
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
@@ -155,7 +154,7 @@
 -(void)save
 {
     MRLogD(@"", nil);
-    NSAssert( (nil == self.title) == (nil == self.endpointUrl), @"strange config.", nil );
+    NSAssert( (nil == self.title) == (nil == self.endpointURL), @"strange config.", nil );
     NSUserDefaults *d = [NSUserDefaults shaarliDefaults];
     NSParameterAssert(d);
     [d setValue:self.title forKey:@"title"];
@@ -164,11 +163,11 @@
     [d setObject:self.tagsDefault forKey:@"tagsDefault"];
 #if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
-    [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:F_K_PASSWORD];
-    [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointUrl.absoluteString forKey:@"endpointUrl"];
+    [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"password"];
+    [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointURL.absoluteString forKey:@"endpointUrl"];
 #else
     [d setValue:self.userName forKey:@"userName"];
-    [d setValue:self.passWord forKey:F_K_PASSWORD];
+    [d setValue:self.passWord forKey:@"password"];
     [d setURL:self.endpointUrl forKey:@"endpointUrl"];
 #endif
     [d synchronize];
@@ -184,7 +183,7 @@
     ShaarliCmdUpdateEndpoint *c = [[ShaarliCmdUpdateEndpoint alloc] initWithEndpoint:endpoint user:user pass:pass privateDefault:privateDefault tagsActive:tagsA tagsDefault:tagsD completion:^(ShaarliCmdUpdateEndpoint * me, NSError * error) {
                                        if( !error ) {
                                            // @TODO self.title = me.title;
-                                           weakSelf.endpointUrl = me.endpointURL;
+                                           weakSelf.endpointURL = me.endpointURL;
                                            weakSelf.userName = me.credential.user;
                                            weakSelf.passWord = me.credential.password;
                                            weakSelf.privateDefault = me.privateDefault;
@@ -201,7 +200,7 @@
 
 -(NSURLSession *)postSession
 {
-    NSParameterAssert(self.endpointUrl);
+    NSParameterAssert(self.endpointURL);
 #if 0
     NSString *confName = BUNDLE_ID @".backgroundpost";
     NSURLSessionConfiguration *conf = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:confName];
@@ -216,7 +215,7 @@
     NSURLSession *session = [NSURLSession sessionWithConfiguration:conf delegate:self delegateQueue:nil];
     session.sessionDescription = @"Shaarli Post";
 
-    NSURLProtectionSpace *ps = [self.endpointUrl protectionSpace];
+    NSURLProtectionSpace *ps = [self.endpointURL protectionSpace];
     for( NSURLCredential *c in[[session.configuration.URLCredentialStorage credentialsForProtectionSpace:ps] allValues] ) {
         [session.configuration.URLCredentialStorage removeCredential:c forProtectionSpace:ps options:@ { NSURLCredentialStorageRemoveSynchronizableCredentials:@YES }
         ];
