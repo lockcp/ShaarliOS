@@ -83,7 +83,17 @@
 #define SHAARLI_ERROR_NO_TOKEN 5
 #define SHAARLI_ERROR_NO_LINK_ADDED 6
 #define SHAARLI_ERROR_POST_FALLTHROUGH 7
+#define SHAARLI_ERROR_UNKNOWN 8
 
+#define HTTP_POST @"POST"
+#define HTTP_GET @"GET"
+#define HTTP_HTTP @"http"
+#define HTTP_HTTPS @"https"
+
+#define F_K_TOKEN @"token"
+#define F_K_LOGIN @"login"
+#define F_K_PASSWORD @"password"
+#define F_K_RETURNURL @"returnurl"
 
 #endif
 

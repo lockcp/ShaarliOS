@@ -25,7 +25,7 @@
  */
 static inline NSString *esc2dot(NSString *s)
 {
-    return s;
+    return [s stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 }
 
 
@@ -161,7 +161,7 @@ static inline NSString *esc2dot(NSString *s)
     NSMutableString *ret = [[NSMutableString alloc] initWithCapacity:100];
     [ret appendFormat:@"\"%@\" -> \"%@\" [label=\"%@", esc2dot(self.fromState.name), esc2dot(self.toState.name), esc2dot( NSStringFromSelector(self.action) ), nil];
     if( self.guard )
-        [ret appendFormat:@"\\n[ %@ ]", self.guard, nil];
+        [ret appendFormat:@"\\n[ %@ ]", esc2dot([self.guard description]), nil];
     [ret appendString:@"\"];"];
     return [NSString stringWithString:ret];
 }

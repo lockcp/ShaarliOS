@@ -184,8 +184,8 @@ static NSDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ct
         htmlFreeParserCtxt(ctxHtml);
     }
     XCTAssertEqual(2, form.count, @"foo", nil);
-    XCTAssertEqualObjects(@"http://links.mro.name/", form[@"returnurl"], @"foo", nil);
-    XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", form[@"token"], @"foo", nil);
+    XCTAssertEqualObjects(@"http://links.mro.name/", form[F_K_RETURNURL], @"foo", nil);
+    XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", form[F_K_TOKEN], @"foo", nil);
 }
 
 

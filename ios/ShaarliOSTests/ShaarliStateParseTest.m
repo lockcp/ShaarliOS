@@ -28,7 +28,7 @@
 
 
 #define M_FORM @"form"
-#define F_TOKEN @"token"
+#define F_TOKEN F_K_TOKEN
 #define M_HAS_LOGOUT @"has_logout"
 
 #define T_A @"a"
@@ -148,7 +148,7 @@ static htmlSAXHandler FormField_Handler = {
 
 -(void)transitionError:(MROTransition *)t
 {
-    NSAssert(NO, @"Not implemented yet.", nil);
+    ;
 }
 
 
@@ -234,7 +234,7 @@ static htmlSAXHandler FormField_Handler = {
         XCTAssertEqualObjects(@"20150715_200440", ret[M_FORM][@"lf_linkdate"], @"");
         XCTAssertEqualObjects(@"", ret[M_FORM][@"searchtags"], @"");
         XCTAssertEqualObjects(@"", ret[M_FORM][@"searchterm"], @"");
-        XCTAssertEqualObjects(@"6ff77552e09da9ef31e0e9d0b717da8933f68975", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"6ff77552e09da9ef31e0e9d0b717da8933f68975", ret[M_FORM][F_K_TOKEN], @"");
     }
     {
         NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"testLogin.0" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"testLogin.0" withExtension:@"html"], nil);
@@ -243,8 +243,8 @@ static htmlSAXHandler FormField_Handler = {
         XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
         XCTAssertNotNil(ret[@"headerform"], @"");
         XCTAssertEqual(2, [ret[M_FORM] count], @"entries' count");
-        XCTAssertEqualObjects(@"http://links.mro.name/", ret[M_FORM][@"returnurl"], @"");
-        XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"http://links.mro.name/", ret[M_FORM][F_K_RETURNURL], @"");
+        XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", ret[M_FORM][F_K_TOKEN], @"");
     }
     {
         NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"05.addlink-1" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"05.addlink-1" withExtension:@"html"], nil);
@@ -267,9 +267,9 @@ static htmlSAXHandler FormField_Handler = {
         XCTAssertEqualObjects(@"", ret[M_FORM][@"lf_tags"], @"");
         XCTAssertEqualObjects(@"Note: ", ret[M_FORM][@"lf_title"], @"");
         XCTAssertEqualObjects(@"?tgI8rw", ret[M_FORM][@"lf_url"], @"");
-        XCTAssertEqualObjects(@"http://links.mro.name/?do=login&post=", ret[M_FORM][@"returnurl"], @"");
+        XCTAssertEqualObjects(@"http://links.mro.name/?do=login&post=", ret[M_FORM][F_K_RETURNURL], @"");
         XCTAssertEqualObjects(@"Save", ret[M_FORM][@"save_edit"], @"");
-        XCTAssertEqualObjects(@"e90b4ab4846c221880872003ba47859183da4e6e", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"e90b4ab4846c221880872003ba47859183da4e6e", ret[M_FORM][F_K_TOKEN], @"");
     }
 }
 

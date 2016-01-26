@@ -43,10 +43,10 @@
     NSDictionary *form = [r fetchForm:&err];
     XCTAssertNil(err);
     XCTAssertEqual(5, form.count, @"");
-    XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", form[@"token"], @"");
-    XCTAssertEqualObjects(@"http://links.mro.name/", form[@"returnurl"], @"");
-    XCTAssertEqualObjects(@"", form[@"login"], @"");
-    XCTAssertEqualObjects(@"", form[@"password"], @"");
+    XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", form[F_K_TOKEN], @"");
+    XCTAssertEqualObjects(@"http://links.mro.name/", form[F_K_RETURNURL], @"");
+    XCTAssertEqualObjects(@"", form[F_K_LOGIN], @"");
+    XCTAssertEqualObjects(@"", form[F_K_PASSWORD], @"");
     XCTAssertEqualObjects(@"", form[@"longlastingsession"], @"");
 
     XCTAssert([r receivedPost1Response:nil data:[self dataWithContentsOfFixture:@"testLogin.ok" withExtension:@"html"] error:&err], @"");
@@ -64,7 +64,7 @@
         XCTAssertEqualObjects(@"20150715_200440", ret[M_FORM][@"lf_linkdate"], @"");
         XCTAssertEqualObjects(@"", ret[M_FORM][@"searchtags"], @"");
         XCTAssertEqualObjects(@"", ret[M_FORM][@"searchterm"], @"");
-        XCTAssertEqualObjects(@"6ff77552e09da9ef31e0e9d0b717da8933f68975", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"6ff77552e09da9ef31e0e9d0b717da8933f68975", ret[M_FORM][F_K_TOKEN], @"");
     }
 #endif
 }

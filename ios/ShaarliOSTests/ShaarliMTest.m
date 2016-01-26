@@ -24,7 +24,7 @@
 #import "ShaarliM.h"
 
 #define M_FORM @"form"
-#define F_TOKEN @"token"
+#define F_TOKEN F_K_TOKEN
 #define M_HAS_LOGOUT @"has_logout"
 
 NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
@@ -109,7 +109,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
     NSURL *url = [NSURL URLWithString:@"http://links.mro.name/?post=http%3A%2F%2Fww.heise.de%2Fa&title=Ti+tle&description=Des%20crip%20tio=n&source=http%3A%2F%2Fapp.mro.name%2FShaarliOS"];
     NSDictionary *p = [url dictionaryWithHttpFormUrl];
     XCTAssertEqual(4, p.count, @"");
-    XCTAssertEqualObjects(@"http://ww.heise.de/a", p[@"post"], @"");
+    XCTAssertEqualObjects(@"http://ww.heise.de/a", p[HTTP_POST], @"");
     XCTAssertEqualObjects(@"Ti tle", p[@"title"], @"");
     XCTAssertEqualObjects(@"Des crip tio=n", p[@"description"], @"");
     XCTAssertEqualObjects(@"http://app.mro.name/ShaarliOS", p[@"source"], @"");
@@ -137,7 +137,7 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
         XCTAssertEqualObjects(@"20150715_200440", ret[M_FORM][@"lf_linkdate"], @"");
         XCTAssertEqualObjects(@"", ret[M_FORM][@"searchtags"], @"");
         XCTAssertEqualObjects(@"", ret[M_FORM][@"searchterm"], @"");
-        XCTAssertEqualObjects(@"6ff77552e09da9ef31e0e9d0b717da8933f68975", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"6ff77552e09da9ef31e0e9d0b717da8933f68975", ret[M_FORM][F_K_TOKEN], @"");
     }
     {
         NSDictionary *ret = parseShaarliHtml([self dataWithContentsOfFixture:@"testLogin.0" withExtension:@"html"], nil);
@@ -146,8 +146,8 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
         XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
         XCTAssertNotNil(ret[@"headerform"], @"");
         XCTAssertEqual(2, [ret[M_FORM] count], @"entries' count");
-        XCTAssertEqualObjects(@"http://links.mro.name/", ret[M_FORM][@"returnurl"], @"");
-        XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"http://links.mro.name/", ret[M_FORM][F_K_RETURNURL], @"");
+        XCTAssertEqualObjects(@"20119241badf78a3dcfa55ae58eab429a5d24bad", ret[M_FORM][F_K_TOKEN], @"");
     }
     {
         NSDictionary *ret = parseShaarliHtml([self dataWithContentsOfFixture:@"05.addlink-1" withExtension:@"html"], nil);
@@ -170,9 +170,9 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
         XCTAssertEqualObjects(@"", ret[M_FORM][@"lf_tags"], @"");
         XCTAssertEqualObjects(@"Note: ", ret[M_FORM][@"lf_title"], @"");
         XCTAssertEqualObjects(@"?tgI8rw", ret[M_FORM][@"lf_url"], @"");
-        XCTAssertEqualObjects(@"http://links.mro.name/?do=login&post=", ret[M_FORM][@"returnurl"], @"");
+        XCTAssertEqualObjects(@"http://links.mro.name/?do=login&post=", ret[M_FORM][F_K_RETURNURL], @"");
         XCTAssertEqualObjects(@"Save", ret[M_FORM][@"save_edit"], @"");
-        XCTAssertEqualObjects(@"e90b4ab4846c221880872003ba47859183da4e6e", ret[M_FORM][@"token"], @"");
+        XCTAssertEqualObjects(@"e90b4ab4846c221880872003ba47859183da4e6e", ret[M_FORM][F_K_TOKEN], @"");
     }
     {
         NSDictionary *ret = parseShaarliHtml([self dataWithContentsOfFixture:@"banned" withExtension:@"html"], nil);

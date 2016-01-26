@@ -23,6 +23,7 @@
 #import <libxml2/libxml/HTMLparser.h>
 #import <libxml2/libxml/xpath.h>
 
+NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ctxXPath, const char *xpathStr);
 
 @interface ShaarliCmd() {
     htmlParserCtxtPtr ctxHtml;
@@ -118,7 +119,7 @@ static BOOL booleanFromXPath(const xmlXPathContextPtr ctxXPath, const char *xpat
  * @param ctxXPath see `xmlXPathNewContext`
  * @param xpathStr something like `/html/body//form[@name='loginform']//input[(@type='text' or @type='hidden') and @name and @value]`
  */
-static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ctxXPath, const char *xpathStr)
+NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ctxXPath, const char *xpathStr)
 {
     assert(ctxXPath && "must be set.");
     assert( (NULL == ctxXPath->node || ctxXPath->doc == (void *)ctxXPath->node) && "mustn't be set." );
@@ -280,7 +281,7 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
 -(NSURLProtectionSpace *)protectionSpace
 {
     NSURL *u = self;
-    NSNumber *pn = u.port ? u.port : (@ { @"http" : @ (80), @"https" : @ (443) }
+    NSNumber *pn = u.port ? u.port : (@ { HTTP_HTTP : @ (80), HTTP_HTTPS : @ (443) }
                                       [u.scheme]);
     NSParameterAssert(pn);
     return [[NSURLProtectionSpace alloc] initWithHost:u.host port:[pn integerValue] protocol:u.scheme realm:nil authenticationMethod:NSURLAuthenticationMethodHTMLForm];
@@ -359,6 +360,7 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
 
 -(NSMutableDictionary *)fetchForm:(NSString *)formName error:(NSError **)error
 {
+    NSParameterAssert(formName);
     if( error )
         *error = nil;
     NSString *xpath = [NSString stringWithFormat:@"/html/body//form[@name='%1$@']//input[(@type='text' or @type='password' or @type='hidden' or @type='checkbox') and @name] | /html/body//form[@name='%1$@']//textarea[@name]", formName, nil];
@@ -392,7 +394,8 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
 
 -(BOOL)hasLogOutLink
 {
-    return [@"?do=logout" isEqualToString:stringFromXPath(ctxXPath, "normalize-space(string(/html/body//a[@href='?do=logout']/@href))")];
+    NSString *tmp = stringFromXPath(ctxXPath, "normalize-space(string(/html/body//a[@href='?do=logout']/@href))");
+    return [@"?do=logout" isEqualToString:tmp];
 }
 
 
@@ -412,7 +415,7 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
 
 -(NSString *)fetchToken:(NSError **)error
 {
-    NSString *ret = [self fetchForm:error][@"token"];
+    NSString *ret = [self fetchForm:error][F_K_TOKEN];
     if( !ret )
         return nil;
     return ret;
@@ -426,7 +429,7 @@ static NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContex
         return NO;
     if( !self.hasLogOutLink ) {
         if( error )
-            *error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:response.URL, NSLocalizedDescriptionKey:NSLocalizedString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], @"ShaarliResponse.m") }
+            *error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:response.URL, NSLocalizedDescriptionKey:NSLocalizedString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], @"ShaarliCmd.m") }
                      ];
         return NO;
     }

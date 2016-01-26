@@ -89,6 +89,7 @@
 
     self.txtEndpoint.text = self.shaarli.endpointStr;
     self.swiSecure.on = self.shaarli.endpointSecure;
+    self.swiSecure.enabled = NO;
     self.txtUserName.text = self.shaarli.userName;
     self.txtPassWord.text = self.shaarli.passWord;
     self.swiPrivateDefault.on = self.shaarli.privateDefault;

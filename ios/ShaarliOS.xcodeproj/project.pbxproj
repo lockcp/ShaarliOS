@@ -49,6 +49,9 @@
 		16ABE6001B640CC10054F12F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FD1B640CC10054F12F /* Icon.png */; };
 		16ABE6011B640CC10054F12F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FE1B640CC10054F12F /* Icon@2x.png */; };
 		16ABE6021B640CC10054F12F /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 16ABE5FF1B640CC10054F12F /* Icon@3x.png */; };
+		16B03F601C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B03F5F1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m */; };
+		16B03F611C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B03F5F1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m */; };
+		16B03F621C4FCBD700ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B03F5F1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m */; };
 		16D18FAA1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
 		16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
 		16D18FAC1B5B023D005173C6 /* PDKeychainBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */; };
@@ -149,6 +152,8 @@
 		16ABE5FD1B640CC10054F12F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		16ABE5FE1B640CC10054F12F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		16ABE5FF1B640CC10054F12F /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
+		16B03F5E1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaarliCmdUpdateEndpoint.h; sourceTree = "<group>"; };
+		16B03F5F1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaarliCmdUpdateEndpoint.m; sourceTree = "<group>"; };
 		16D18F9F1B5B023D005173C6 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		16D18FA01B5B023D005173C6 /* PDKeychainBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDKeychainBindings.h; sourceTree = "<group>"; };
 		16D18FA11B5B023D005173C6 /* PDKeychainBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDKeychainBindings.m; sourceTree = "<group>"; };
@@ -245,6 +250,8 @@
 				162DBEA61BCB94C300AB8B9C /* ShaarliCmdLogin.m */,
 				162DBEAC1BCBBA0700AB8B9C /* ShaarliCmdPost.h */,
 				162DBEAD1BCBBA0700AB8B9C /* ShaarliCmdPost.m */,
+				16B03F5E1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.h */,
+				16B03F5F1C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -563,6 +570,7 @@
 				1601E3F31AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
 				162DBEA41BCB94AA00AB8B9C /* ShaarliCmd.m in Sources */,
 				16D18FAF1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
+				16B03F621C4FCBD700ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */,
 				162DBEA91BCB94C300AB8B9C /* ShaarliCmdLogin.m in Sources */,
 				162DBEB01BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */,
 				165B45A61B5952B8008A2714 /* ShaarliM.m in Sources */,
@@ -574,6 +582,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16B03F601C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */,
 				16E0A7971AB9E2280085B2C0 /* MainVC.m in Sources */,
 				162DBEAE1BCBBA0700AB8B9C /* ShaarliCmdPost.m in Sources */,
 				1621DDD11B6164EC00238503 /* SettingsVC.m in Sources */,
@@ -600,6 +609,7 @@
 				16D18FAB1B5B023D005173C6 /* PDKeychainBindings.m in Sources */,
 				1621DDD21B6164EC00238503 /* SettingsVC.m in Sources */,
 				1601E3F21AB9ED3B00D3E27D /* NSBundle+MroSemVer.m in Sources */,
+				16B03F611C4FC35300ACDC2C /* ShaarliCmdUpdateEndpoint.m in Sources */,
 				16D18FAE1B5B023D005173C6 /* PDKeychainBindingsController.m in Sources */,
 				165B45A51B5952B8008A2714 /* ShaarliM.m in Sources */,
 				162DBEAB1BCB94F000AB8B9C /* ShaarliCmdLoginTest.m in Sources */,

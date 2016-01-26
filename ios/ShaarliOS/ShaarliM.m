@@ -22,6 +22,7 @@
 #import "ShaarliM.h"
 #import "ShaarliCmdLogin.h"
 #import "ShaarliCmdPost.h"
+#import "ShaarliCmdUpdateEndpoint.h"
 
 #define USE_KEYCHAIN 1
 
@@ -97,7 +98,7 @@
 
 -(BOOL)endpointSecure
 {
-    return ![@"http" isEqualToString:self.endpointUrl.scheme];
+    return ![HTTP_HTTP isEqualToString:self.endpointUrl.scheme];
 }
 
 
@@ -136,11 +137,11 @@
     self.tagsDefault = [d objectForKey:@"tagsDefault"] ? [d stringForKey:@"tagsDefault"] : @"#ShaarliOS";
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
-    self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"passWord"];
+    self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:F_K_PASSWORD];
     self.endpointUrl = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
 #else
     self.userName = [d valueForKey:@"userName"];
-    self.passWord = [d valueForKey:@"passWord"];
+    self.passWord = [d valueForKey:F_K_PASSWORD];
     self.endpointUrl = [d URLForKey:@"endpointUrl"];
 #endif
     if( !( (nil == self.title) == (nil == self.endpointUrl) ) )
@@ -163,11 +164,11 @@
     [d setObject:self.tagsDefault forKey:@"tagsDefault"];
 #if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
-    [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"passWord"];
+    [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:F_K_PASSWORD];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointUrl.absoluteString forKey:@"endpointUrl"];
 #else
     [d setValue:self.userName forKey:@"userName"];
-    [d setValue:self.passWord forKey:@"passWord"];
+    [d setValue:self.passWord forKey:F_K_PASSWORD];
     [d setURL:self.endpointUrl forKey:@"endpointUrl"];
 #endif
     [d synchronize];
@@ -177,99 +178,24 @@
 -(void)updateEndpoint:(NSString *)endpoint secure:(BOOL)secure user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault
    tagsActive:(BOOL)tagsA tagsDefault:(NSString *)tagsD completion:( void (^)(ShaarliM * me, NSError * error) )completion
 {
-    const BOOL force = YES;
+    NSParameterAssert(completion);
+    __weak typeof(self) weakSelf = self;
 
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSParameterAssert(session.configuration);
-
-    NSURL *ur = [[NSURL URLWithString:[NSString stringWithFormat:@"http%s://%@", (secure ? "s":""), endpoint, nil]] standardizedURL];
-    MRLogD(@"%@ %@", ur, user, nil);
-
-    NSURLProtectionSpace *ps = [ur protectionSpace];
-    NSURLCredential *cre0 = [session.configuration.URLCredentialStorage defaultCredentialForProtectionSpace:ps];
-
-    // http://www.objc.io/issues/5-ios7/from-nsurlconnection-to-nsurlsession/
-    // http://www.raywenderlich.com/51127/nsurlsession-tutorial
-
-    // 1. GET the ?do=login action to get the token (and returnurl) as part of the form
-
-    // http://www.raywenderlich.com/51127/nsurlsession-tutorial
-    NSURL *u = [NSURL URLWithString:@"?do=login" relativeToURL:ur];
-    [[session dataTaskWithURL:u completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-          // MRLogD (@"complete %@", response.URL, nil);
-          if( error ) {
-              completion (self, error);
-              return;
-          }
-          ShaarliCmdLogin *resp = [[ShaarliCmdLogin alloc] initWithResponse:response data:data error:&error];
-          if( resp.hasLogOutLink && !force ) {
-              // check if there's a logout link - we're already logged in then.
-              NSParameterAssert (cre0);
-              NSParameterAssert (!error);
-              self.title = [resp fetchTitle:nil];
-              [self save];
-              completion (self, nil);
-              return;
-          }
-
-          if( error ) {
-              completion (self, error);
-              return;
-          }
-
-          NSMutableDictionary *form = [resp fetchForm:&error];
-          if( error ) {
-              completion (self, error);
-              return;
-          }
-          NSParameterAssert (!error);
-
-          for( NSString * field in @[@"login", @"password", @"token"] ) {
-              if( !form[field] )
-                  MRLogW (@"missing login form field: '%@'", field, nil);
-          }
-
-          // check for credential in store
-          // MRLogD (@"credentials in storage: %@", session.configuration.URLCredentialStorage.allCredentials, nil);
-          NSURLCredential *cre1 = [NSURLCredential credentialWithUser:user password:pass persistence:NSURLCredentialPersistenceSynchronizable];
-          NSParameterAssert (cre1.user && [cre1.user isEqualToString:user]);
-          NSParameterAssert (cre1.password && [cre1.password isEqualToString:pass]);
-
-          NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:u];
-          req.HTTPMethod = @"POST";
-          form[@"login"] = cre1.user;
-          form[@"password"] = cre1.password;
-          form[@"returnurl"] = @"/?do=changepasswd";
-          req.HTTPBody = [form postData];
-          // MRLogD (@"%@", post, nil);
-          [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-                if( !error ) {
-                    // MRLogD (@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
-                    [resp receivedPost1Response:response data:data error:&error];
-                    if( !error && resp.hasLogOutLink ) {
-                        self.endpointUrl = ur;
-                        self.title = [resp fetchTitle:nil];
-                        self.userName = cre1.user;
-                        self.passWord = cre1.password;
-                        self.privateDefault = privateDefault;
-                        self.tagsActive = tagsA;
-                        self.tagsDefault = tagsD;
-                        [session.configuration.URLCredentialStorage setCredential:cre1 forProtectionSpace:ps];
-#ifndef NS_BLOCK_ASSERTIONS
-                        NSParameterAssert ([user isEqual:self.userName]);
-                        NSParameterAssert ([pass isEqual:self.passWord]);
-                        NSURLCredential *cre2 = [session.configuration.URLCredentialStorage credentialsForProtectionSpace:ps][user];
-                        NSParameterAssert ([cre1.user isEqual:cre2.user]);
-                        NSParameterAssert ([cre1.password isEqual:cre2.password]);
-#endif
-                        [self save];
-                    }
-                }
-                completion (self, error);
-            }
-           ] resume];
-      }
-     ] resume];
+    ShaarliCmdUpdateEndpoint *c = [[ShaarliCmdUpdateEndpoint alloc] initWithEndpoint:endpoint user:user pass:pass privateDefault:privateDefault tagsActive:tagsA tagsDefault:tagsD completion:^(ShaarliCmdUpdateEndpoint * me, NSError * error) {
+                                       if( !error ) {
+                                           // @TODO self.title = me.title;
+                                           weakSelf.endpointUrl = me.endpointURL;
+                                           weakSelf.userName = me.credential.user;
+                                           weakSelf.passWord = me.credential.password;
+                                           weakSelf.privateDefault = me.privateDefault;
+                                           weakSelf.tagsActive = me.tagsActive;
+                                           weakSelf.tagsDefault = me.tagsDefault;
+                                           [weakSelf save];
+                                       }
+                                       completion (weakSelf, error);
+                                   }
+                                  ];
+    [c resume];
 }
 
 

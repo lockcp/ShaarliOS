@@ -59,7 +59,7 @@
     NSParameterAssert(self.delegate);
 
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
-    req.HTTPMethod = @"POST";
+    req.HTTPMethod = HTTP_POST;
     req.HTTPBody = [form postData];
     NSURLSessionTask *dt = [self.session downloadTaskWithRequest:req completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
                                 NSMutableDictionary *form = error ? nil:[self fetchPostFormForPostURLParse:location error:&error];
@@ -114,7 +114,7 @@
 
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:3];
     d[@"source"] = POST_SOURCE;
-    d[@"post"] = url ? url.absoluteString : @"";
+    d[HTTP_POST] = url ? url.absoluteString : @"";
     if( title )
         d[@"title"] = title;
     if( desc )
@@ -133,9 +133,9 @@
                                     NSParameterAssert (cre0.user);
                                     NSParameterAssert (cre0.password);
 
-                                    form[@"login"] = cre0.user;
-                                    form[@"password"] = cre0.password;
-                                    form[@"returnurl"] = [cmd absoluteString];
+                                    form[F_K_LOGIN] = cre0.user;
+                                    form[F_K_PASSWORD] = cre0.password;
+                                    form[F_K_RETURNURL] = [cmd absoluteString];
                                     [self postLoginForm:form toURL:response.URL];
                                 } else
                                     dispatch_async (dispatch_get_main_queue (), ^{ [self.delegate didPostLoginForm:nil toURL:response.URL error:error];
@@ -157,7 +157,7 @@
     NSParameterAssert(self.delegate);
 
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
-    req.HTTPMethod = @"POST";
+    req.HTTPMethod = HTTP_POST;
     form[@"lf_source"] = POST_SOURCE;
     form[@"save_edit"] = @"Save";
     req.HTTPBody = [form postData];
@@ -169,7 +169,7 @@
                                         // look for the lf_url in the results list (see https://github.com/shaarli/Shaarli/issues/356 ).
                                         const BOOL ok = [self parsePostResult:location url:form[@"lf_url"] error:&error];
                                         if( !ok ) {
-                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:url, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliCmdPost.m") }
+                                            error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:req.URL, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find added link on your Shaarli.", @"ShaarliCmdPost.m") }
                                                     ];
                                         }
                                     }
