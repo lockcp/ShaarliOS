@@ -152,7 +152,7 @@ NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ct
                     else if( 0 == strcmp( "value", x2c(attr->name) ) )
                         value = x2o(attr->children->content, enc);
                     else if( 0 == strcmp( "checked", x2c(attr->name) ) )
-                        value = @"on";
+                        value = HTML_ON;
                     if( name && value )
                         break;
                 }
@@ -343,7 +343,7 @@ NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ct
     if( errMsg ) {
         if( error ) {
             // how to map the error message to a code?
-            *error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_BANNED userInfo:@ { NSURLErrorKey:response.URL, NSLocalizedDescriptionKey:NSLocalizedString(errMsg, @"ShaarliResponse.m") }
+            *error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_BANNED userInfo:@ { NSURLErrorKey:response.URL, NSLocalizedDescriptionKey:NSLocalizedString(errMsg, @"ShaarliResponse") }
                      ];
         }
         return NO;
@@ -429,7 +429,7 @@ NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ct
         return NO;
     if( !self.hasLogOutLink ) {
         if( error )
-            *error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:response.URL, NSLocalizedDescriptionKey:NSLocalizedString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], @"ShaarliCmd.m") }
+            *error = [NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:response.URL, NSLocalizedDescriptionKey:NSLocalizedString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], @"ShaarliCmd") }
                      ];
         return NO;
     }

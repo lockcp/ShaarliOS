@@ -88,12 +88,26 @@
 #define HTTP_POST @"POST"
 #define HTTP_GET @"GET"
 #define HTTP_HTTP @"http"
-#define HTTP_HTTPS @"https"
+#define HTTP_HTTPS HTTP_HTTP @"s"
+
+#define HTML_ON @"on"
 
 #define F_K_TOKEN @"token"
 #define F_K_LOGIN @"login"
 #define F_K_PASSWORD @"password"
 #define F_K_RETURNURL @"returnurl"
+
+#define K_F_SOURCE @"source"
+#define K_F_POST @"post"
+#define K_F_TITLE @"title"
+#define K_F_DESCRIPTION @"description"
+
+#define K_F_LF_SOURCE @"lf_" K_F_SOURCE
+#define K_F_LF_TITLE @"lf_" K_F_TITLE
+#define K_F_LF_DESCRIPTION @"lf_" K_F_DESCRIPTION
+#define K_F_LF_URL @"lf_url"
+#define K_F_LF_TAGS @"lf_tags"
+#define K_F_LF_PRIVATE @"lf_private"
 
 #endif
 

@@ -14,10 +14,10 @@
 
 typedef enum : NSUInteger {
     Start,
-    GetLogin,
+    GetLoginFormAndToken,
     DoLogout,
     // HttpAuth,
-    PostLogin,
+    PostLoginForm,
     Error,
     Success,
     Done
@@ -31,6 +31,8 @@ State_t;
 @property (readwrite, nonatomic, strong) NSError *error;
 
 @property (readonly, nonatomic, assign) BOOL authMissing;
+
+@property (nonatomic, strong) NSString *title;
 
 @property (nonatomic, strong) NSString *scheme;
 @property (nonatomic, strong) NSURLCredential *credential;
@@ -57,10 +59,10 @@ State_t;
         self.tagsActive = tagsA;
         self.tagsDefault = tagsD;
 
-        if( [self.endpoint hasPrefix:HTTP_HTTP] )
-            self.endpoint = [self.endpoint substringFromIndex:[HTTP_HTTP length] + 3];
-        if( [self.endpoint hasPrefix:HTTP_HTTPS] )
-            self.endpoint = [self.endpoint substringFromIndex:[HTTP_HTTPS length] + 3];
+        if( [self.endpoint hasPrefix:HTTP_HTTPS @"://"] )
+            self.endpoint = [self.endpoint substringFromIndex:[HTTP_HTTPS  @"://" length]];
+        if( [self.endpoint hasPrefix:HTTP_HTTP @"://"] )
+            self.endpoint = [self.endpoint substringFromIndex:[HTTP_HTTP  @"://" length]];
 
         self.scheme = HTTP_HTTPS;
         // check for credential in store
@@ -83,7 +85,7 @@ State_t;
 
 -(NSURL *)endpointURL
 {
-    NSString *u = [NSString stringWithFormat:@"%@://%@", self.scheme, self.endpoint, nil];
+    NSString *u = [NSString stringWithFormat:@"%@" @"://" @"%@", self.scheme, self.endpoint, nil];
     return [[NSURL URLWithString:u] standardizedURL];
 }
 
@@ -91,133 +93,131 @@ State_t;
 #pragma mark - FSM
 
 
--(BOOL)exitIfError:(NSError *)error autoResume:(BOOL)autoResume
+-(BOOL)exitIfError:(NSError *)error autoResume:(NSInteger)autoNextSteps
 {
     if( nil == error )
         return NO;
     self.error = error;
     state = Error;
-    [self resume];
+    [self processState:autoNextSteps - 1];
     return YES;
 }
 
 
 -(void)resume
 {
-    [self processState:YES];
+    [self processState:1000];
 }
 
 
--(void)processState:(BOOL)autoResume
+-(void)processState:(NSInteger)autoNextSteps
 {
-    MRLogD(@"%d", state, nil);
+    MRLogD(@"%d %d", state, autoNextSteps, nil);
+    if( 0 > autoNextSteps )
+        return;
     NSParameterAssert( (Error != state && nil == self.error) || (Error == state && nil != self.error) );
     __weak typeof(self) weakSelf = self;
 
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSParameterAssert(session.configuration);
+    NSURL *ur = self.endpointURL;
+
     switch( state ) {
     case Start:
-        state = GetLogin;
-        [self resume];
+        state = GetLoginFormAndToken;
+        [self processState:autoNextSteps - 1];
         return;
-    case GetLogin:
+    case GetLoginFormAndToken:
     {
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSParameterAssert(session.configuration);
-
-        NSURL *ur = self.endpointURL;
-        MRLogD(@"%@ %@", ur, self.credential.user, nil);
-
         // http://www.objc.io/issues/5-ios7/from-nsurlconnection-to-nsurlsession/
         // http://www.raywenderlich.com/51127/nsurlsession-tutorial
-
-        // 1. GET the ?do=login action to get the token (and returnurl) as part of the form
-
-        // http://www.raywenderlich.com/51127/nsurlsession-tutorial
         NSURL *u = [[NSURL URLWithString:CMD_DO_LOGIN relativeToURL:ur] standardizedURL];
-
+        MRLogD(@"%@ %@ %@", HTTP_GET, u, self.credential.user, nil);
         [[session dataTaskWithURL:u completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
               // MRLogD (@"complete %@", response.URL, nil);
               if( error ) {
                   if( [HTTP_HTTPS isEqualToString:self.scheme] ) {
                       self.scheme = HTTP_HTTP;
-                      state = GetLogin;
-                      [weakSelf resume];
+                      state = GetLoginFormAndToken;
+                      [weakSelf processState:autoNextSteps - 1];
                       return;
                   }
-                  [weakSelf exitIfError:error autoResume:autoResume];
+                  [weakSelf exitIfError:error autoResume:autoNextSteps - 1];
                   return;
               }
               if( ![weakSelf parseAnyResponse:response data:data error:&error] ) {
                   NSParameterAssert (error);
-                  [weakSelf exitIfError:error autoResume:autoResume];
+                  [weakSelf exitIfError:error autoResume:autoNextSteps - 1];
                   return;
               }
               if( self.hasLogOutLink ) {
                   state = DoLogout;
-                  [weakSelf resume];
+                  [weakSelf processState:autoNextSteps - 1];
                   return;
               }
+              weakSelf.title = [weakSelf fetchTitle:&error];
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
               weakSelf.formDict = [weakSelf fetchForm:&error];
-              [weakSelf exitIfError:error autoResume:autoResume];
+              [weakSelf exitIfError:error autoResume:autoNextSteps - 1];
               for( NSString * field in @[F_K_LOGIN, F_K_PASSWORD, F_K_TOKEN] ) {
                   if( !weakSelf.formDict[field] ) {
                       MRLogW (@"missing login form field: '%@'", field, nil);
-                      MRLogW (@"response data: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
-                      [weakSelf exitIfError:[NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:u, NSLocalizedDescriptionKey:NSLocalizedString (@"No token found.", @"ShaarliCmdUpdateEndpoint.m") }
-                       ] autoResume:autoResume];
+                      // MRLogW (@"response data: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
+                      [weakSelf exitIfError:[NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:u, NSLocalizedDescriptionKey:NSLocalizedString (@"Required login form field slot missing.", @"ShaarliCmdUpdateEndpoint") }
+                       ] autoResume:autoNextSteps - 1];
                       return;
                   }
               }
-              state = PostLogin;
-              [weakSelf resume];
+              state = PostLoginForm;
+              [weakSelf processState:autoNextSteps - 1];
           }
          ] resume];
         return;
     }
     case DoLogout: {
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSParameterAssert (session.configuration);
-        NSURL *ur = self.endpointURL;
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGOUT relativeToURL:ur] standardizedURL]];
+        MRLogD (@"%@ %@", req.HTTPMethod, req.URL, nil);
         [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-              state = GetLogin;
-              [weakSelf resume];
+              state = GetLoginFormAndToken;
+              [weakSelf processState:autoNextSteps - 1];
               return;
           }
          ] resume];
     }
-    case PostLogin: {
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSParameterAssert (session.configuration);
-
-        NSURL *ur = self.endpointURL;
+    case PostLoginForm: {
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGIN relativeToURL:ur] standardizedURL]];
         req.HTTPMethod = HTTP_POST;
         self.formDict[F_K_LOGIN] = self.credential.user;
         self.formDict[F_K_PASSWORD] = self.credential.password;
         self.formDict[F_K_RETURNURL] = [[NSURL URLWithString:CMD_DO_CHANGEPASSWD relativeToURL:ur] absoluteString];
         req.HTTPBody = [self.formDict postData];
-
+        MRLogD (@"%@ %@", req.HTTPMethod, req.URL, nil);
         [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-              if( [weakSelf exitIfError:error autoResume:autoResume] )
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
                   return;
               // MRLogD (@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
               [weakSelf receivedPost1Response:response data:data error:&error];
-              if( [weakSelf exitIfError:error autoResume:autoResume] )
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
                   return;
+              if( !weakSelf.title ) {
+                  MRLogW (@"This is a bit od, there's no title yet.", nil);
+                  weakSelf.title = [weakSelf fetchTitle:&error];
+                  if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
+              }
               if( weakSelf.hasLogOutLink ) {
                   state = Success;
-                  [weakSelf resume];
+                  [weakSelf processState:autoNextSteps - 1];
                   return;
               }
-              [weakSelf exitIfError:[NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_LINK_ADDED userInfo:@ { NSURLErrorKey:req.URL, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find link in result.", @"ShaarliCmdUpdateEndpoint.m") }
-               ] autoResume:autoResume];
+              [weakSelf exitIfError:[NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_LOGOUT_BUTTON_EXPECTED userInfo:@ { NSURLErrorKey:req.URL, NSLocalizedDescriptionKey:NSLocalizedString (@"Couldn't find logout link, so maybe I'm not logged in properly.", @"ShaarliCmdUpdateEndpoint.m") }
+               ] autoResume:autoNextSteps - 1];
               return;
           }
          ] resume];
         return;
     }
     case Error:
+        NSParameterAssert (self.error);
     case Success:
         self.blockCompletion (self, self.error);
         state = Done;

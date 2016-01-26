@@ -214,7 +214,7 @@ static htmlSAXHandler FormField_Handler = {
     NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"banned" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"banned" withExtension:@"html"], nil);
     // MRLogD(@"%@", ret, nil);
     XCTAssertEqual(2, ret.count, @"entries' count");
-    XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+    XCTAssertEqualObjects(@"links.mro", ret[M_TITLE], @"");
     XCTAssertEqualObjects(@"You have been banned from login after too many failed attempts. Try later.", ret[@"headerform"], @"");
     XCTAssertEqual(0, [ret[M_FORM] count], @"entries' count");
 }
@@ -227,7 +227,7 @@ static htmlSAXHandler FormField_Handler = {
         // MRLogD(@"%@", ret, nil);
         XCTAssertEqual(4, ret.count, @"entries' count");
         XCTAssertEqualObjects(@ (1), ret[M_HAS_LOGOUT], @"");
-        XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+        XCTAssertEqualObjects(@"links.mro", ret[M_TITLE], @"");
         XCTAssertNotNil(ret[@"headerform"], @"");
         XCTAssertEqual(5, [ret[M_FORM] count], @"entries' count");
         XCTAssertEqualObjects(@"20150715_200440", ret[M_FORM][@"edit_link"], @"");
@@ -240,7 +240,7 @@ static htmlSAXHandler FormField_Handler = {
         NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"testLogin.0" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"testLogin.0" withExtension:@"html"], nil);
         // MRLogD(@"%@", ret, nil);
         XCTAssertEqual(3, ret.count, @"entries' count");
-        XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+        XCTAssertEqualObjects(@"links.mro", ret[M_TITLE], @"");
         XCTAssertNotNil(ret[@"headerform"], @"");
         XCTAssertEqual(2, [ret[M_FORM] count], @"entries' count");
         XCTAssertEqualObjects(@"http://links.mro.name/", ret[M_FORM][F_K_RETURNURL], @"");
@@ -250,7 +250,7 @@ static htmlSAXHandler FormField_Handler = {
         NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"05.addlink-1" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"05.addlink-1" withExtension:@"html"], nil);
         // MRLogD(@"%@", ret, nil);
         XCTAssertEqual(4, ret.count, @"entries' count");
-        XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+        XCTAssertEqualObjects(@"links.mro", ret[M_TITLE], @"");
         XCTAssertEqualObjects(@ (YES), ret[M_HAS_LOGOUT], @"");
         XCTAssertNotNil(ret[@"headerform"], @"");
         XCTAssertEqual(0, [ret[M_FORM] count], @"entries' count");
@@ -259,14 +259,14 @@ static htmlSAXHandler FormField_Handler = {
         NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"05.addlink-2" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"05.addlink-2" withExtension:@"html"], nil);
         // MRLogD(@"%@", ret, nil);
         XCTAssertEqual(3, ret.count, @"entries' count");
-        XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+        XCTAssertEqualObjects(@"links.mro", ret[M_TITLE], @"");
         XCTAssertEqualObjects(@ (YES), ret[M_HAS_LOGOUT], @"");
         XCTAssertEqual(8, [ret[M_FORM] count], @"entries' count");
         XCTAssertEqualObjects(@"Cancel", ret[M_FORM][@"cancel_edit"], @"");
         XCTAssertEqualObjects(@"20150719_173950", ret[M_FORM][@"lf_linkdate"], @"");
-        XCTAssertEqualObjects(@"", ret[M_FORM][@"lf_tags"], @"");
-        XCTAssertEqualObjects(@"Note: ", ret[M_FORM][@"lf_title"], @"");
-        XCTAssertEqualObjects(@"?tgI8rw", ret[M_FORM][@"lf_url"], @"");
+        XCTAssertEqualObjects(@"", ret[M_FORM][K_F_LF_TAGS], @"");
+        XCTAssertEqualObjects(@"Note: ", ret[M_FORM][K_F_LF_TITLE], @"");
+        XCTAssertEqualObjects(@"?tgI8rw", ret[M_FORM][K_F_LF_URL], @"");
         XCTAssertEqualObjects(@"http://links.mro.name/?do=login&post=", ret[M_FORM][F_K_RETURNURL], @"");
         XCTAssertEqualObjects(@"Save", ret[M_FORM][@"save_edit"], @"");
         XCTAssertEqualObjects(@"e90b4ab4846c221880872003ba47859183da4e6e", ret[M_FORM][F_K_TOKEN], @"");
@@ -279,7 +279,7 @@ static htmlSAXHandler FormField_Handler = {
     NSDictionary *ret = [self parseShaarliHtml:[self dataWithContentsOfFixture:@"03.tagcloud" withExtension:@"html"] error:nil]; // parseShaarliHtml([self dataWithContentsOfFixture:@"03.tagcloud" withExtension:@"html"], nil);
     // MRLogD(@"%@", ret, nil);
     XCTAssertEqual(2, ret.count, @"entries' count");
-    XCTAssertEqualObjects(@"links.mro", ret[@"title"], @"");
+    XCTAssertEqualObjects(@"links.mro", ret[M_TITLE], @"");
     NSArray *tags = ret[@"tags"];
     MRLogD(@"%@", tags, nil);
     XCTAssertEqual(1794, tags.count, @"");
