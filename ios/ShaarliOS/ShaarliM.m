@@ -140,7 +140,7 @@
     self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointURL"]];
     if( nil == self.endpointURL ) {
         // migrate legacy
-        [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
+        self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
     }
 #else
     self.userName = [d valueForKey:@"userName"];
