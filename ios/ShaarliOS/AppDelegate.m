@@ -41,6 +41,9 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     MRLogD(@"%@", [NSBundle semVer], nil);
+    for( NSString *key in launchOptions.allKeys ) {
+        MRLogD(@"%@ = %@", key, launchOptions[key], nil);
+    }
     {
         NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
         // MRLogD(@"%@", [d valueForKeyPath:@"CFBundleURLTypes.CFBundleURLSchemes.@firstObject"], nil);
@@ -50,6 +53,7 @@
     ShaarliM *s = [[ShaarliM alloc] init];
     [s load];
     self.vc.shaarli = s;
+    [UIView setAnimationsEnabled:NO]; // nil != launchOptions[UIApplicationLaunchOptionsURLKey]];
     // [s postTest];
     return YES;
 }

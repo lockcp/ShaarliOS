@@ -129,6 +129,7 @@
     }
     // start with note form ready..
     [self actionShowShaare:nil];
+    [UIView setAnimationsEnabled:YES];
 }
 
 
@@ -157,7 +158,7 @@
 
     self.viewShaare.alpha = 0;
     self.viewShaare.hidden = NO;
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.5f animations:^{
          self.viewShaare.alpha = 1;
      }
      completion:^(BOOL finished) {
