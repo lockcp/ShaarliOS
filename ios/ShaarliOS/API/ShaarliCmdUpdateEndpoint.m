@@ -156,9 +156,11 @@ State_t;
                   return;
               }
               weakSelf.title = [weakSelf fetchTitle:&error];
-              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
+                  return;
               weakSelf.formDict = [weakSelf fetchForm:&error];
-              [weakSelf exitIfError:error autoResume:autoNextSteps - 1];
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
+                  return;
               for( NSString * field in @[F_K_LOGIN, F_K_PASSWORD, F_K_TOKEN] ) {
                   if( !weakSelf.formDict[field] ) {
                       MRLogW (@"missing login form field: '%@'", field, nil);
@@ -172,20 +174,21 @@ State_t;
               [weakSelf processState:autoNextSteps - 1];
           }
          ] resume];
-        return;
     }
+        return;
     case DoLogout: {
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGOUT relativeToURL:ur] standardizedURL]];
         MRLogD (@"%@ %@", req.HTTPMethod, req.URL, nil);
         [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
+                  return;
               state = GetLoginFormAndToken;
               [weakSelf processState:autoNextSteps - 1];
               return;
           }
          ] resume];
-        return;
     }
+        return;
     case PostLoginForm: {
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGIN relativeToURL:ur] standardizedURL]];
         req.HTTPMethod = HTTP_POST;
@@ -204,7 +207,8 @@ State_t;
               if( !weakSelf.title ) {
                   MRLogW (@"This is a bit od, there's no title yet.", nil);
                   weakSelf.title = [weakSelf fetchTitle:&error];
-                  if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
+                  if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
+                      return;
               }
               if( weakSelf.hasLogOutLink ) {
                   state = Success;
@@ -216,8 +220,8 @@ State_t;
               return;
           }
          ] resume];
-        return;
     }
+        return;
     case Error:
         NSParameterAssert (self.error);
     case Success:

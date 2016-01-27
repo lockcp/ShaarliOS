@@ -136,7 +136,7 @@
     self.tagsDefault = [d objectForKey:@"tagsDefault"] ? [d stringForKey:@"tagsDefault"] : @"#ShaarliOS";
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
-    self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"password"];
+    self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"passWord"];
     self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointURL"]];
     if( nil == self.endpointURL ) {
         // migrate legacy
@@ -144,7 +144,7 @@
     }
 #else
     self.userName = [d valueForKey:@"userName"];
-    self.passWord = [d valueForKey:@"password"];
+    self.passWord = [d valueForKey:@"passWord"];
     self.endpointURL = [d URLForKey:@"endpointURL"];
 #endif
     if( !( (nil == self.title) == (nil == self.endpointURL) ) )
@@ -167,11 +167,11 @@
     [d setObject:self.tagsDefault forKey:@"tagsDefault"];
 #if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
-    [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"password"];
+    [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"passWord"];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointURL.absoluteString forKey:@"endpointURL"];
 #else
     [d setValue:self.userName forKey:@"userName"];
-    [d setValue:self.passWord forKey:@"password"];
+    [d setValue:self.passWord forKey:@"passWord"];
     [d setURL:self.endpointURL forKey:@"endpointURL"];
 #endif
     [d synchronize];
