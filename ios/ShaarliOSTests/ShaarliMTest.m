@@ -30,7 +30,7 @@
 NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
 
 @interface ShaarliM() <NSURLSessionDataDelegate>
-@property (strong, nonatomic) NSURL *endpointUrl;
+@property (strong, nonatomic) NSURL *endpointURL;
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *passWord;
 @property (assign, nonatomic) BOOL privateDefault;

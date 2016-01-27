@@ -91,7 +91,7 @@
 
 +(NSSet *)keyPathsForValuesAffectingEndpointSecure
 {
-    return [NSSet setWithObject:@"endpointUrl.scheme"];
+    return [NSSet setWithObject:@"endpointURL.scheme"];
 }
 
 
@@ -103,7 +103,7 @@
 
 +(NSSet *)keyPathsForValuesAffectingEndpointStr
 {
-    return [NSSet setWithObject:@"endpointUrl.resourceSpecifier"];
+    return [NSSet setWithObject:@"endpointURL.resourceSpecifier"];
 }
 
 
@@ -115,7 +115,7 @@
 
 +(NSSet *)keyPathsForValuesAffectingIsSetUp
 {
-    return [NSSet setWithObject:@"endpointUrl"];
+    return [NSSet setWithObject:@"endpointURL"];
 }
 
 
@@ -137,11 +137,15 @@
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
     self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"password"];
-    self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
+    self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointURL"]];
+    if( nil == self.endpointURL ) {
+        // migrate legacy
+        self.endpointURL = [NSURL URLWithString:[[PDKeychainBindings sharedKeychainBindings] stringForKey:@"endpointUrl"]];
+    }
 #else
     self.userName = [d valueForKey:@"userName"];
     self.passWord = [d valueForKey:@"password"];
-    self.endpointUrl = [d URLForKey:@"endpointUrl"];
+    self.endpointURL = [d URLForKey:@"endpointURL"];
 #endif
     if( !( (nil == self.title) == (nil == self.endpointURL) ) )
         // don't assert because HTML markup might bring title in another tag:
@@ -164,11 +168,11 @@
 #if USE_KEYCHAIN
     [[PDKeychainBindings sharedKeychainBindings] setString:self.userName forKey:@"userName"];
     [[PDKeychainBindings sharedKeychainBindings] setString:self.passWord forKey:@"password"];
-    [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointURL.absoluteString forKey:@"endpointUrl"];
+    [[PDKeychainBindings sharedKeychainBindings] setString:self.endpointURL.absoluteString forKey:@"endpointURL"];
 #else
     [d setValue:self.userName forKey:@"userName"];
     [d setValue:self.passWord forKey:@"password"];
-    [d setURL:self.endpointUrl forKey:@"endpointUrl"];
+    [d setURL:self.endpointURL forKey:@"endpointURL"];
 #endif
     [d synchronize];
 }
@@ -183,6 +187,7 @@
     ShaarliCmdUpdateEndpoint *c = [[ShaarliCmdUpdateEndpoint alloc] initWithEndpoint:endpoint user:user pass:pass privateDefault:privateDefault tagsActive:tagsA tagsDefault:tagsD completion:^(ShaarliCmdUpdateEndpoint * me, NSError * error) {
                                        if( !error ) {
                                            // @TODO self.title = me.title;
+                                           weakSelf.title = me.title;
                                            weakSelf.endpointURL = me.endpointURL;
                                            weakSelf.userName = me.credential.user;
                                            weakSelf.passWord = me.credential.password;

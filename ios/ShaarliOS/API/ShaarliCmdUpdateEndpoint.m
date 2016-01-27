@@ -32,6 +32,8 @@ State_t;
 
 @property (readonly, nonatomic, assign) BOOL authMissing;
 
+@property (nonatomic, strong) NSString *title;
+
 @property (nonatomic, strong) NSString *scheme;
 @property (nonatomic, strong) NSURLCredential *credential;
 @property (nonatomic, strong) NSMutableDictionary *formDict;
@@ -153,6 +155,8 @@ State_t;
                   [weakSelf processState:autoNextSteps - 1];
                   return;
               }
+              weakSelf.title = [weakSelf fetchTitle:&error];
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
               weakSelf.formDict = [weakSelf fetchForm:&error];
               [weakSelf exitIfError:error autoResume:autoNextSteps - 1];
               for( NSString * field in @[F_K_LOGIN, F_K_PASSWORD, F_K_TOKEN] ) {
@@ -195,6 +199,11 @@ State_t;
               [weakSelf receivedPost1Response:response data:data error:&error];
               if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
                   return;
+              if( !weakSelf.title ) {
+                  MRLogW (@"This is a bit od, there's no title yet.", nil);
+                  weakSelf.title = [weakSelf fetchTitle:&error];
+                  if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
+              }
               if( weakSelf.hasLogOutLink ) {
                   state = Success;
                   [weakSelf processState:autoNextSteps - 1];

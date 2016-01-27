@@ -10,12 +10,12 @@
 
 @interface ShaarliCmdUpdateEndpoint : ShaarliCmd
 
+@property (readonly, nonatomic, strong) NSString *title;
+@property (readonly, nonatomic, strong) NSURL *endpointURL;
 @property (readonly, nonatomic, strong) NSURLCredential *credential;
 @property (readonly, nonatomic, assign) BOOL privateDefault;
 @property (readonly, nonatomic, assign) BOOL tagsActive;
 @property (readonly, nonatomic, strong) NSString *tagsDefault;
-
--(NSURL *)endpointURL;
 
 -(instancetype)initWithEndpoint:(NSString *)endpoint user:(NSString *)user pass:(NSString *)pass privateDefault:(BOOL)privateDefault
    tagsActive:(BOOL)tagsA tagsDefault:(NSString *)tagsD completion:( void (^)(ShaarliCmdUpdateEndpoint * me, NSError * error) )completion;
