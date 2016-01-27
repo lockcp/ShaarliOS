@@ -178,11 +178,13 @@ State_t;
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGOUT relativeToURL:ur] standardizedURL]];
         MRLogD (@"%@ %@", req.HTTPMethod, req.URL, nil);
         [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
+              if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] ) return;
               state = GetLoginFormAndToken;
               [weakSelf processState:autoNextSteps - 1];
               return;
           }
          ] resume];
+        return;
     }
     case PostLoginForm: {
         NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGIN relativeToURL:ur] standardizedURL]];
