@@ -111,6 +111,7 @@
 {
     MRLogD(@"-", nil);
     [super viewDidAppear:animated];
+    [UIView setAnimationsEnabled:YES];
     // animate logo to bottom
     [UIView animateWithDuration:0.5f animations:^{
          self.vContainer.alpha = 0.5;
@@ -129,7 +130,6 @@
     }
     // start with note form ready..
     [self actionShowShaare:nil];
-    [UIView setAnimationsEnabled:YES];
 }
 
 
