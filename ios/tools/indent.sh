@@ -38,7 +38,7 @@ cd `dirname $0`/..
 if [[ "$@" == "" ]]
 then
 	echo "Got no files on commandline (which is fine), so I'll format those:"
-	PROJECT_SOURCE=$(find Sha* \( -name "*.m" -or -name "*.c" -or -name "*.h" \) )
+	PROJECT_SOURCE=$(find Sha* \( -name "*.m" -or -name "*.c" -or -name "*.h" \) ; find Today \( -name "*.m" -or -name "*.c" -or -name "*.h" \) )
 else
 	PROJECT_SOURCE="$@"
 fi

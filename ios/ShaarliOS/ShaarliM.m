@@ -145,7 +145,7 @@
 #endif
     if( !( (nil == self.title) == (nil == self.endpointURL) ) )
         // don't assert because HTML markup might bring title in another tag:
-        MRLogW(@"strange configuration. title='%@' endpoint='%@'", self.title, self.endpointURL, nil);
+        self.endpointUrl = MRLogW(@"strange configuration. title='%@' endpoint='%@'", self.title, self.endpointURL, nil);
     MRLogD(@"%@", self.title, nil);
     MRLogD(@"%@", self.userName, nil);
 }
