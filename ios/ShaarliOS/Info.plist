@@ -11,7 +11,7 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleDisplayName</key>
-	<string>ShaarliOS</string>
+	<string>Shaarli💫</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

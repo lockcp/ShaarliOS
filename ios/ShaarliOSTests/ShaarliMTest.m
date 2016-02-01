@@ -93,9 +93,9 @@ NSDictionary *parseShaarliHtml(NSData *data, NSError **error);
     }
     {
         [a removeAllObjects];
-        XCTAssertEqualObjects(@"foo", [@"#ShaarliOS #b  #c ##d \nfoo" stringByStrippingTags:a], @"");
+        XCTAssertEqualObjects(@"foo", [@"#Shaarli💫 #b  #c ##d \nfoo" stringByStrippingTags:a], @"");
         XCTAssertEqual(4, a.count, @"");
-        XCTAssertEqualObjects(@"ShaarliOS", a[0], @"");
+        XCTAssertEqualObjects(@"Shaarli💫", a[0], @"");
         XCTAssertEqualObjects(@"b", a[1], @"");
         XCTAssertEqualObjects(@"c", a[2], @"");
         XCTAssertEqualObjects(@"#d", a[3], @"");

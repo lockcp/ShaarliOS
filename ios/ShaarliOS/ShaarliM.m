@@ -133,7 +133,7 @@
     self.title = [d valueForKey:@"title"];
     self.privateDefault = [d boolForKey:@"privateDefault"];
     self.tagsActive = [d objectForKey:@"tagsActive"] ? [d boolForKey:@"tagsActive"] : YES;
-    self.tagsDefault = [d objectForKey:@"tagsDefault"] ? [d stringForKey:@"tagsDefault"] : @"#ShaarliOS";
+    self.tagsDefault = [d objectForKey:@"tagsDefault"] ? [d stringForKey:@"tagsDefault"] : @"#Shaarli💫";
 #if USE_KEYCHAIN
     self.userName = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"userName"];
     self.passWord = [[PDKeychainBindings sharedKeychainBindings] stringForKey:@"passWord"];
