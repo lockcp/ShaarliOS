@@ -132,20 +132,6 @@ static inline const BOOL privacyFromString(NSString *s)
                 ];
                 return;
             }
-
-            t = (NSString *)kUTTypePlainText;
-            if( [itemProvider hasItemConformingToTypeIdentifier:t] ) {
-                [itemProvider loadItemForTypeIdentifier:t options:nil completionHandler:^(NSString * txt, NSError * error) {
-                     MRLogD (@"done. title:%@ txt:%@ error:%@", itemTitle.value, txt, error, nil);
-                     if( !error ) {
-                         [re startPostForURL:nil title:itemTitle.value desc:txt];
-                     } else {
-                         MRLogW (@"Error: %@", error, nil);
-                     }
-                 }
-                ];
-                return;
-            }
         }
     }
 }
