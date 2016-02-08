@@ -1,1 +1,1 @@
-shaarli, share, link, URL, social, microblog, blog, notes, delicious
+shaarli, ShaarliOS, share, link, URL, social, microblog, blog, notes, delicious
