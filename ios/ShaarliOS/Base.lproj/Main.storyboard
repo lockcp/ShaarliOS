@@ -297,10 +297,16 @@
                                 <segue destination="kT6-WH-0iV" kind="show" identifier="SettingsVC" id="29n-WF-JhY"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Safari" id="IxT-6S-sLG">
+                            <connections>
+                                <action selector="actionSafari:" destination="BYZ-38-t0r" id="eT3-Uw-tMm"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="btnAudience" destination="xIv-xL-vyw" id="U6R-u4-mfR"/>
                         <outlet property="btnPetal" destination="g6k-WT-QUk" id="0LW-hc-Nyv"/>
+                        <outlet property="btnSafari" destination="IxT-6S-sLG" id="ijp-Cl-QRc"/>
                         <outlet property="btnShaare" destination="Bro-Q8-giC" id="CFv-1a-04h"/>
                         <outlet property="centerY" destination="12Y-li-NZ0" id="q8e-Zh-Xjk"/>
                         <outlet property="lblVersion" destination="Z84-bU-If9" id="ddy-My-wqy"/>

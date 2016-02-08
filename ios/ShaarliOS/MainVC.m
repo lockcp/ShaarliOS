@@ -24,6 +24,8 @@
 #import "NSBundle+MroSemVer.h"
 #import "ShaarliCmdPost.h"
 
+#define CMD_DAILY @"?do=daily"
+
 @implementation NSLayoutConstraint(ChangeMultiplier)
 
 // visual form center http://stackoverflow.com/a/13148012/349514
@@ -40,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblVersion;
 @property (weak, nonatomic) IBOutlet UIView *vContainer;
 @property (weak, nonatomic) IBOutlet UIButton *btnPetal;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *btnSafari;
 
 @property (weak, nonatomic) IBOutlet UIView *viewShaare;
 @property (weak, nonatomic) IBOutlet UIButton *btnShaare;
@@ -104,6 +107,7 @@
     self.lblVersion.text = [NSBundle semVer];
     self.lblVersion.alpha = 0;
     self.viewShaare.alpha = 0;
+    self.btnSafari.enabled = nil != self.shaarli.endpointURL;
 }
 
 
@@ -193,6 +197,20 @@
     self.btnAudience.selected = !self.btnAudience.selected;
     self.btnAudience.highlighted = NO;
     NSParameterAssert(!self.btnAudience.highlighted);
+}
+
+
+-(IBAction)actionSafari:(id)sender
+{
+    MRLogD(@"-", nil);
+    NSURL *u = self.shaarli.endpointURL;
+    if( nil == u ) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"MainVC") message:NSLocalizedString(@"No endpoint URL set in Settings.", @"MainVC") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"MainVC") style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    [[UIApplication sharedApplication] openURL:[[NSURL URLWithString:CMD_DAILY relativeToURL:u] absoluteURL]];
 }
 
 
