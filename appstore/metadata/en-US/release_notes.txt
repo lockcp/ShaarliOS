@@ -1,3 +1,7 @@
 - fix a crash (github#5)
 - fix a bug (github#7)
-- use field presets (github#4)
+- enable editing of links via re-sharing (github#4)
+- add a "Safari" Button to launch the Shaarli Webinterface
+- update 1Password code
+- add a today widget to quickly add notes
+- various small or internal improvements

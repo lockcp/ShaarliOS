@@ -1,5 +1,5 @@
-The missing iOS URL share extension for Shaarli - the personal, minimalist, super-fast, no-database delicious clone - https://github.com/shaarli/Shaarli).
+The convenient URL share extension for Shaarli – the personal, minimalist, super-fast, no-database delicious clone – https://github.com/shaarli/Shaarli.
 
-Share links with ease from every iOS app.
+Share links with ease from every App.
 
 See http://app.mro.name/ShaarliOS#credits for full credits.
