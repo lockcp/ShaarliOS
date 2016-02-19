@@ -3,8 +3,8 @@
 
 Share links with ease from every iOS app.
 
-![Icon](https://rawgithub.com/mro/ShaarliOS/master/shaarli-petal.svg)
-[![App Store Badge](https://rawgithub.com/mro/ShaarliOS/master/appstore/Download_on_the_App_Store_Badge_US-UK_135x40.svg)](https://itunes.apple.com/jp/app/ShaarliOS/id1027441388?mt=8)
+![Icon](https://cdn.rawgit.com/mro/ShaarliOS/master/shaarli-petal.svg)
+[![App Store Badge](https://cdn.rawgit.com/mro/ShaarliOS/master/appstore/Download_on_the_App_Store_Badge_US-UK_135x40.svg)](https://itunes.apple.com/jp/app/ShaarliOS/id1027441388?mt=8)
 [![Build Status](https://travis-ci.org/mro/ShaarliOS.svg?branch=master)](https://travis-ci.org/mro/ShaarliOS)
 
 ## Screenshots
