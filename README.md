@@ -17,7 +17,7 @@ Share links with ease from every iOS app.
 ## Compatibility
 
 All
-[functional Shaarli versions](https://travis-ci.org/mro/Shaarli-API-test), both
+[proper Shaarli versions](https://travis-ci.org/mro/Shaarli-API-test), both
 [community fork](https://github.com/shaarli/Shaarli/releases) and
 [vanilla](https://github.com/sebsauvage/Shaarli/releases), on more than
 [all current PHP versions](http://php.net/supported-versions.php), all
