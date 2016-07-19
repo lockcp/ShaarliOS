@@ -176,14 +176,14 @@
 //
 -(IBAction)actionFindLoginFrom1Password:(id)sender
 {
-    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.shaarli.endpointURL.absoluteString forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
+    // TODO: lookup may have to be tried 2x as the url scheme (http vs. https) isn't known yet.
+    [[OnePasswordExtension sharedExtension] findLoginForURLString:self.txtEndpoint.text forViewController:self sender:sender completion:^(NSDictionary * loginDictionary, NSError * error) {
          if( loginDictionary.count == 0 ) {
              if( error.code != AppExtensionErrorCodeCancelledByUser ) {
                  NSLog (@"Error invoking 1Password App Extension for find login: %@", error);
              }
              return;
          }
-
          self.txtUserName.text = loginDictionary[AppExtensionUsernameKey];
          self.txtPassWord.text = loginDictionary[AppExtensionPasswordKey];
      }
