@@ -168,7 +168,7 @@ State_t;
                   if( !weakSelf.formDict[field] ) {
                       MRLogW (@"missing login form field: '%@'", field, nil);
                       // MRLogW (@"response data: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], nil);
-                      [weakSelf exitIfError:[NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:u, NSLocalizedDescriptionKey:NSLocalizedString (@"Required login form field slot missing.", @"ShaarliCmdUpdateEndpoint") }
+                      [weakSelf exitIfError:[NSError errorWithDomain:SHAARLI_ERROR_DOMAIN code:SHAARLI_ERROR_NO_TOKEN userInfo:@ { NSURLErrorKey:u, NSLocalizedDescriptionKey:NSLocalizedString (@"Most likely this isn't a shaarli backend.\n\n(The required login form field slot is missing.)", @"ShaarliCmdUpdateEndpoint") }
                        ] autoResume:autoNextSteps - 1];
                       return;
                   }
