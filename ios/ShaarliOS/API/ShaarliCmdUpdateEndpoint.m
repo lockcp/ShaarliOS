@@ -152,6 +152,8 @@ State_t;
                   return;
               }
               if( self.hasLogOutLink ) {
+                  // use endpoint as it comes back from the server. Usually adds a trailing /
+                  self.endpoint = [response.URL stripSchemeAndCommand:CMD_DO_LOGIN];
                   state = DoLogout;
                   [weakSelf processState:autoNextSteps - 1];
                   return;
@@ -171,6 +173,8 @@ State_t;
                       return;
                   }
               }
+              // use endpoint as it comes back from the server. Usually adds a trailing /
+              self.endpoint = [response.URL stripSchemeAndCommand:CMD_DO_LOGIN];
               state = PostLoginForm;
               [weakSelf processState:autoNextSteps - 1];
           }
