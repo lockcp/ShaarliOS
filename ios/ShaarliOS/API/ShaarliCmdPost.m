@@ -122,7 +122,7 @@
 
     NSString *par = @"?";
     par = [par stringByAppendingString:[d stringByAddingPercentEscapesForHttpFormUrl]];
-    NSURL *cmd = [NSURL URLWithString:par relativeToURL:self.endpointURL];
+    NSURL *cmd = [self.endpointURL urlForCommand:par];
     NSURLSessionTask *dt = [self.session downloadTaskWithURL:cmd completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
                                 if( !error ) {
                                     NSMutableDictionary *form = [self parseLoginForm:location error:&error];
@@ -164,7 +164,7 @@
 
     NSURLSessionTask *dt = [self.session downloadTaskWithRequest:req completionHandler:^(NSURL * location, NSURLResponse * response, NSError * error) {
                                 if( !error ) {
-                                    NSURL *newUrl = [NSURL URLWithString:[form[K_F_LF_URL] stringByReplacingOccurrencesOfString:@"?" withString:@"/?#"] relativeToURL:self.endpointURL];
+                                    NSURL *newUrl = [self.endpointURL urlForCommand:[form[K_F_LF_URL] stringByReplacingOccurrencesOfString:@"?" withString:@"/?#"]];
                                     if( ![response.URL.absoluteString isEqualToString:[newUrl absoluteString]] ) {
                                         // look for the lf_url in the results list (see https://github.com/shaarli/Shaarli/issues/356 ).
                                         const BOOL ok = [self parsePostResult:location url:form[K_F_LF_URL] error:&error];

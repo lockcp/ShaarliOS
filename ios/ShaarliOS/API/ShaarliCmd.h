@@ -21,6 +21,10 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSURL(CmdBuilder)
+-(NSURL *)urlForCommand:(NSString *)cmd;
+-(NSString *)stripSchemeAndCommand:(NSString *)cmd;
+@end
 
 @interface NSString(HttpGetParams)
 -(NSString *)stringByAddingPercentEscapesForHttpFormUrl;

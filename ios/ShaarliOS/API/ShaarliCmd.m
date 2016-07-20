@@ -187,6 +187,26 @@ NSMutableDictionary *dictFromXPathFormInputNameValue(const xmlXPathContextPtr ct
 }
 
 
+@implementation NSURL(CmdBuilder)
+-(NSURL *)urlForCommand:(NSString *)cmd
+{
+    return [NSURL URLWithString:cmd relativeToURL:self];
+}
+
+
+-(NSString *)stripSchemeAndCommand:(NSString *)cmd
+{
+    NSString *t = [self absoluteString];
+    NSParameterAssert([t hasPrefix:[self.scheme stringByAppendingString:@"://"]]);
+    NSParameterAssert([t hasSuffix:cmd]);
+    t = [t substringWithRange:NSMakeRange( self.scheme.length + 3, t.length - cmd.length - (self.scheme.length + 3) )];
+    return t;
+}
+
+
+@end
+
+
 @implementation NSString(HttpGetParams)
 
 /**

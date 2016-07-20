@@ -131,11 +131,12 @@ State_t;
     {
         // http://www.objc.io/issues/5-ios7/from-nsurlconnection-to-nsurlsession/
         // http://www.raywenderlich.com/51127/nsurlsession-tutorial
-        NSURL *u = [[NSURL URLWithString:CMD_DO_LOGIN relativeToURL:ur] standardizedURL];
+        NSURL *u = [ur urlForCommand:CMD_DO_LOGIN];
         MRLogD(@"%@ %@ %@", HTTP_GET, u, self.credential.user, nil);
         [[session dataTaskWithURL:u completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
               // MRLogD (@"complete %@", response.URL, nil);
               if( error ) {
+                  // retry with (unsecure) http
                   if( [HTTP_HTTPS isEqualToString:self.scheme] ) {
                       self.scheme = HTTP_HTTP;
                       state = GetLoginFormAndToken;
@@ -177,7 +178,7 @@ State_t;
     }
         return;
     case DoLogout: {
-        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGOUT relativeToURL:ur] standardizedURL]];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[ur urlForCommand:CMD_DO_LOGOUT]];
         MRLogD (@"%@ %@", req.HTTPMethod, req.URL, nil);
         [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
               if( [weakSelf exitIfError:error autoResume:autoNextSteps - 1] )
@@ -190,11 +191,11 @@ State_t;
     }
         return;
     case PostLoginForm: {
-        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL URLWithString:CMD_DO_LOGIN relativeToURL:ur] standardizedURL]];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[ur urlForCommand:CMD_DO_LOGIN]];
         req.HTTPMethod = HTTP_POST;
         self.formDict[F_K_LOGIN] = self.credential.user;
         self.formDict[F_K_PASSWORD] = self.credential.password;
-        self.formDict[F_K_RETURNURL] = [[NSURL URLWithString:CMD_DO_CHANGEPASSWD relativeToURL:ur] absoluteString];
+        self.formDict[F_K_RETURNURL] = [[ur urlForCommand:CMD_DO_CHANGEPASSWD] absoluteString];
         req.HTTPBody = [self.formDict postData];
         MRLogD (@"%@ %@", req.HTTPMethod, req.URL, nil);
         [[session dataTaskWithRequest:req completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {

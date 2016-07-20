@@ -210,7 +210,7 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    [[UIApplication sharedApplication] openURL:[[NSURL URLWithString:CMD_DAILY relativeToURL:u] absoluteURL]];
+    [[UIApplication sharedApplication] openURL:[u urlForCommand:CMD_DAILY]];
 }
 
 
