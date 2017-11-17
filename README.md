@@ -67,5 +67,3 @@ except the material used and listed above, I'm happy to thank
 | Efficiency      |           |      |    ×   |            |
 | Changeability   |           |  ×   |        |            |
 | Portability     |           |      |        |      ×     |
-
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=mro&url=https://github.com/mro/ShaarliOS&title=ShaarliOS&language=&tags=github&category=software) 
