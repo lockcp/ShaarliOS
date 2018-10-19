@@ -9,6 +9,9 @@ Share links with ease from every iOS app.
 
 ## Screenshots
 
+![iPhone 4: Note](ShaarliOS/raw/master/appstore/screenshots/en-US/1_iphone35_note.png =80x)
+![iPhone 4: Share Settings](ShaarliOS/raw/master/appstore/screenshots/en-US/2_iphone35_share_sheet.png =x200)
+
 <img title="iPhone 4: Note" alt="iPhone 4: Note" src="ShaarliOS/raw/master/appstore/screenshots/en-US/1_iphone35_note.png" height="200px"/>
 <img title="iPhone 4: Share Settings" alt="iPhone 4: Share Settings" src="ShaarliOS/raw/master/appstore/screenshots/en-US/2_iphone35_share_sheet.png" height="200px"/>
 <img title="iPhone 4: Share" alt="iPhone 4: Share" src="ShaarliOS/raw/master/appstore/screenshots/en-US/3_iphone35_share.png" width="80px" height="200px"/>
