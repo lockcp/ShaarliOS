@@ -9,10 +9,10 @@ Share links with ease from every iOS app.
 
 ## Screenshots
 
-![iPhone 4: Note](appstore/screenshots/en-US/1_iphone35_note.png 80x)
-![iPhone 4: Share Settings](appstore/screenshots/en-US/2_iphone35_share_sheet.png x200)
-![iPhone 4: Share](appstore/screenshots/en-US/3_iphone35_share.png)
-![iPhad 2: Note](appstore/screenshots/en-US/1_ipad_note.png)
+![iPhone 4: Note](appstore/screenshots/en-US/1_iphone35_note.png#x200)
+![iPhone 4: Share Settings](appstore/screenshots/en-US/2_iphone35_share_sheet.png#x200)
+![iPhone 4: Share](appstore/screenshots/en-US/3_iphone35_share.png#x200)
+![iPhad 2: Note](appstore/screenshots/en-US/1_ipad_note.png#x200)
 
 ## Compatibility
 
