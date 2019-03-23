@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: Pinboard API
+  title: Subset of the Pinboard API
   description: "The Pinboard API is a way to interact programatically with your bookmarks,
     notes and other Pinboard data.\nWherever possible the Pinboard API uses the same
     syntax and method names as the Delicious V1 API. See differences from Delicious
@@ -18,6 +18,31 @@ servers:
 - url: https://demo.mro.name/shaarligo/shaarligo.cgi/v1
 - url: https://api.pinboard.in/v1
 paths:
+  "/user/api_token":
+    get:
+      tags:
+      - user
+      summary: Returns the user's API token (for making API calls without a password).
+      operationId: apiToken
+      responses:
+        '200':
+          description: A auth-token
+          content:
+            application/xml:
+              schema:
+                xml:
+                  name: result
+                type: string
+                example: XOG86E7JIYMI
+        '501':
+          description: |-
+            Cannot tell a token. Imagine a stateless façade hiding a shaarli backend that has no idea of such a thing as an API token.
+            Only if auth was successful, otherwise you get a 401/403.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 501 token auth not supported, use HTTP Basic.
   "/posts/add":
     get:
       tags:
@@ -30,50 +55,50 @@ paths:
         description: the URL of the item
         required: true
         schema:
-          type: string
+          "$ref": "#/components/schemas/URL"
       - name: description
         in: query
         description: Title of the item. This field is unfortunately named 'description'
           for backwards compatibility with the delicious API
         required: true
         schema:
-          type: string
+          "$ref": "#/components/schemas/title"
       - name: extended
         in: query
         description: Description of the item. Called 'extended' for backwards compatibility
           with delicious API
         schema:
-          type: string
+          "$ref": "#/components/schemas/text"
       - name: tags
         in: query
         description: List of up to 100 tags
         schema:
-          type: string
+          "$ref": "#/components/schemas/tag"
       - name: dt
         in: query
         description: creation time for this bookmark. Defaults to current time. Datestamps
           more than 10 minutes ahead of server time will be reset to current server
           time
         schema:
-          type: string
+          "$ref": "#/components/schemas/datetime"
       - name: replace
         in: query
         description: Replace any existing bookmark with this URL. Default is yes.
           If set to no, will throw an error if bookmark exists
         schema:
-          type: boolean
+          "$ref": "#/components/schemas/yes_no"
       - name: shared
         in: query
         description: Make bookmark public. Default is 'yes' unless user has enabled
           the 'save all bookmarks as private' user setting, in which case default
           is 'no'
         schema:
-          type: boolean
+          "$ref": "#/components/schemas/yes_no"
       - name: toread
         in: query
         description: Marks the bookmark as unread. Default is 'no'
         schema:
-          type: boolean
+          "$ref": "#/components/schemas/yes_no"
       responses:
         '200':
           "$ref": "#/components/responses/Done"
@@ -83,28 +108,30 @@ paths:
       - posts
       summary: Returns one or more posts on a single day matching the arguments. If
         no date or url is given, date of most recent bookmark will be used.
+      description: If called with a yet unknown URL, http GET the title and guess
+        tags from the URL
       operationId: getPost
       parameters:
       - name: tag
         in: query
         description: filter by up to three tags
         schema:
-          type: string
+          "$ref": "#/components/schemas/tag"
       - name: dt
         in: query
         description: return results bookmarked on this day
         schema:
-          type: string
+          "$ref": "#/components/schemas/date"
       - name: url
         in: query
         description: return bookmark for this URL
         schema:
-          type: string
+          "$ref": "#/components/schemas/URL"
       - name: meta
         in: query
         description: include a change detection signature in a meta attribute
         schema:
-          type: boolean
+          "$ref": "#/components/schemas/yes_no"
       responses:
         '200':
           description: foo
@@ -123,7 +150,74 @@ paths:
         in: query
         required: true
         schema:
-          type: string
+          "$ref": "#/components/schemas/URL"
+      responses:
+        '200':
+          "$ref": "#/components/responses/Done"
+  "/tags/get":
+    get:
+      tags:
+      - tags
+      summary: Returns a full list of the user's tags along with the number of times
+        they were used.
+      operationId: getTags
+      responses:
+        '200':
+          description: All tags
+          content:
+            application/xml:
+              schema:
+                xml:
+                  name: tags
+                properties:
+                  tag:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          xml:
+                            attribute: true
+                          type: integer
+                          example: 5
+                        tag:
+                          xml:
+                            attribute: true
+                          example: foo
+  "/tags/delete":
+    get:
+      tags:
+      - tags
+      summary: Delete an existing tag.
+      operationId: deleteTag
+      parameters:
+      - name: tag
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/tag"
+      responses:
+        '200':
+          "$ref": "#/components/responses/Done"
+  "/tags/rename":
+    get:
+      tags:
+      - tags
+      summary: Rename an tag, or fold it in to an existing tag.
+      operationId: renameTag
+      parameters:
+      - name: old
+        in: query
+        description: 'note: match is not case sensitive'
+        required: true
+        schema:
+          "$ref": "#/components/schemas/tag"
+      - name: new
+        in: query
+        description: if empty, nothing will happen
+        required: true
+        schema:
+          "$ref": "#/components/schemas/tag"
       responses:
         '200':
           "$ref": "#/components/responses/Done"
@@ -134,7 +228,15 @@ components:
       content:
         application/xml:
           schema:
-            "$ref": "#/components/schemas/result"
+            xml:
+              name: result
+            properties:
+              code:
+                example:
+                - done
+                - something went wrong
+                xml:
+                  attribute: true
   schemas:
     tag:
       type: string
@@ -162,7 +264,7 @@ components:
       type: string
       description: 'UTC date in this format: 2010-12-11. Same range as datetime above'
       example: '2010-12-11'
-    yes/no:
+    yes_no:
       type: string
       description: the literal string 'yes' or 'no'
       example: 'no'
@@ -170,7 +272,7 @@ components:
       type: string
       description: 32 character hexadecimal MD5 hash
     integer:
-      type: string
+      type: integer
       description: integer in the range 0..2^32
     format:
       type: string
@@ -239,16 +341,6 @@ components:
             xml:
               attribute: true
             example: '2005-11-28T05:26:09.000Z'
-    result:
-      type: object
-      properties:
-        code:
-          type: string
-          example:
-          - done
-          - something went wrong
-          xml:
-            attribute: true
   securitySchemes:
     BasicAuth:
       type: http
