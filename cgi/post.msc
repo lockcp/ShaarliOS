@@ -22,7 +22,7 @@ msc {
   php -> www [ label = "GET" ];
   php << www [ label = "<title>" ];
   cgi << php [ label = "linkform" ];
-  ios << cgi;
+  ios << cgi [ label = "cookie+token?" ];
   ...;
   ---  [ label = "manually edit description & tags" ];
   ios -> cgi [ label = "GET add?url=..." ];
@@ -31,6 +31,8 @@ msc {
   cgi -> php [ label = "POST login" ];
   cgi << php [ label = "301" ];
   cgi -> php [ label = "GET post=..." ];
+  php -> www [ label = "GET" ];
+  php << www [ label = "<title>" ];
   cgi << php [ label = "linkform"];
   cgi -> php [ label = "POST post=..." ];
   cgi << php;

@@ -26,6 +26,14 @@
 @interface ShaarliCmdPostTest : XCTestCase
 @end
 
+// There's three steps to a post:
+// - ?post
+// - do=login
+// - do=post
+//
+// Each has sunshine and error cases (with and without recovery).
+//
+// The three are linked together, dependant if it's just a connection/login probe or a real post.
 @implementation ShaarliCmdPostTest
 
 -(void)testExample
