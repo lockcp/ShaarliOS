@@ -2,10 +2,18 @@
 openapi: 3.0.1
 info:
   title: Subset of the Pinboard API
-  description: "The Pinboard API is a way to interact programatically with your bookmarks,
-    notes and other Pinboard data.\nWherever possible the Pinboard API uses the same
-    syntax and method names as the Delicious V1 API. See differences from Delicious
-    for a full list of areas where the APIs diverge. "
+  description: |-
+    The Pinboard API is a way to interact programatically with your bookmarks,
+    notes and other Pinboard data.
+
+    Wherever possible the Pinboard API uses the same syntax and method names as
+    the Delicious V1 API. See differences from Delicious for a full list of
+    areas where the APIs diverge.
+
+    Future issues may be
+    - auto-fill on /posts/get for unknown urls
+    - non UTC timezones
+    - images
   contact:
     email: pinboard-api@mro.name
   version: '1'
@@ -24,6 +32,12 @@ paths:
       - user
       summary: Returns the user's API token (for making API calls without a password).
       operationId: apiToken
+      parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       responses:
         '200':
           description: A auth-token
@@ -34,6 +48,11 @@ paths:
                   name: result
                 type: string
                 example: XOG86E7JIYMI
+            application/json:
+              schema:
+                properties:
+                  result:
+                    example: XOG86E7JIYMI
         '501':
           description: |-
             Cannot tell a token. Imagine a stateless façade hiding a shaarli backend that has no idea of such a thing as an API token.
@@ -50,6 +69,11 @@ paths:
       summary: Add a bookmark. Arguments with shaded background are required.
       operationId: addPost
       parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       - name: url
         in: query
         description: the URL of the item
@@ -112,6 +136,11 @@ paths:
         tags from the URL
       operationId: getPost
       parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       - name: tag
         in: query
         description: filter by up to three tags
@@ -146,6 +175,11 @@ paths:
       summary: Delete a bookmark.
       operationId: deletePost
       parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       - name: url
         in: query
         required: true
@@ -161,6 +195,12 @@ paths:
       summary: Returns a full list of the user's tags along with the number of times
         they were used.
       operationId: getTags
+      parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       responses:
         '200':
           description: All tags
@@ -191,6 +231,11 @@ paths:
       summary: Delete an existing tag.
       operationId: deleteTag
       parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       - name: tag
         in: query
         required: true
@@ -206,6 +251,11 @@ paths:
       summary: Rename an tag, or fold it in to an existing tag.
       operationId: renameTag
       parameters:
+      - name: format
+        in: query
+        description: xml or json
+        schema:
+          "$ref": "#/components/schemas/format"
       - name: old
         in: query
         description: 'note: match is not case sensitive'
@@ -222,6 +272,13 @@ paths:
         '200':
           "$ref": "#/components/responses/Done"
 components:
+  parameters:
+    formatParam:
+      name: format
+      in: query
+      description: xml (default) or json
+      schema:
+        "$ref": "#/components/schemas/format"
   responses:
     Done:
       description: A normal response
@@ -278,6 +335,7 @@ components:
       type: string
       description: the literal string 'json' or 'xml'
       example: xml
+      default: xml
     posts:
       type: array
       properties:
