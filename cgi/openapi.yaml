@@ -13,7 +13,7 @@ info:
     Future issues may be
     - auto-fill on /posts/get for unknown urls
     - non UTC timezones
-    - images
+    - enclosures (images, thumbnails)
   contact:
     email: pinboard-api@mro.name
   version: '1'
@@ -26,6 +26,20 @@ servers:
 - url: https://demo.mro.name/shaarligo/shaarligo.cgi/v1
 - url: https://api.pinboard.in/v1
 paths:
+  "/about":
+    get:
+      tags:
+      - about
+      summary: a DOAP RDF+XML
+      operationId: aboutDoap
+      responses:
+        '200':
+          description: a DOAP RDF+XML
+          content:
+            application/rdf+xml:
+              schema:
+                xml:
+                  name: rdf:RDF
   "/user/api_token":
     get:
       tags:
@@ -33,11 +47,7 @@ paths:
       summary: Returns the user's API token (for making API calls without a password).
       operationId: apiToken
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
+      - "$ref": "#/components/parameters/formatParam"
       responses:
         '200':
           description: A auth-token
@@ -69,17 +79,8 @@ paths:
       summary: Add a bookmark. Arguments with shaded background are required.
       operationId: addPost
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
-      - name: url
-        in: query
-        description: the URL of the item
-        required: true
-        schema:
-          "$ref": "#/components/schemas/URL"
+      - "$ref": "#/components/parameters/formatParam"
+      - "$ref": "#/components/parameters/urlParam"
       - name: description
         in: query
         description: Title of the item. This field is unfortunately named 'description'
@@ -136,11 +137,7 @@ paths:
         tags from the URL
       operationId: getPost
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
+      - "$ref": "#/components/parameters/formatParam"
       - name: tag
         in: query
         description: filter by up to three tags
@@ -151,11 +148,7 @@ paths:
         description: return results bookmarked on this day
         schema:
           "$ref": "#/components/schemas/date"
-      - name: url
-        in: query
-        description: return bookmark for this URL
-        schema:
-          "$ref": "#/components/schemas/URL"
+      - "$ref": "#/components/parameters/urlParamOpt"
       - name: meta
         in: query
         description: include a change detection signature in a meta attribute
@@ -175,16 +168,8 @@ paths:
       summary: Delete a bookmark.
       operationId: deletePost
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
-      - name: url
-        in: query
-        required: true
-        schema:
-          "$ref": "#/components/schemas/URL"
+      - "$ref": "#/components/parameters/formatParam"
+      - "$ref": "#/components/parameters/urlParam"
       responses:
         '200':
           "$ref": "#/components/responses/Done"
@@ -196,11 +181,7 @@ paths:
         they were used.
       operationId: getTags
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
+      - "$ref": "#/components/parameters/formatParam"
       responses:
         '200':
           description: All tags
@@ -231,11 +212,7 @@ paths:
       summary: Delete an existing tag.
       operationId: deleteTag
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
+      - "$ref": "#/components/parameters/formatParam"
       - name: tag
         in: query
         required: true
@@ -251,11 +228,7 @@ paths:
       summary: Rename an tag, or fold it in to an existing tag.
       operationId: renameTag
       parameters:
-      - name: format
-        in: query
-        description: xml or json
-        schema:
-          "$ref": "#/components/schemas/format"
+      - "$ref": "#/components/parameters/formatParam"
       - name: old
         in: query
         description: 'note: match is not case sensitive'
@@ -276,9 +249,19 @@ components:
     formatParam:
       name: format
       in: query
-      description: xml (default) or json
       schema:
         "$ref": "#/components/schemas/format"
+    urlParam:
+      name: url
+      in: query
+      required: true
+      schema:
+        "$ref": "#/components/schemas/URL"
+    urlParamOpt:
+      name: url
+      in: query
+      schema:
+        "$ref": "#/components/schemas/URL"
   responses:
     Done:
       description: A normal response
@@ -334,7 +317,7 @@ components:
     format:
       type: string
       description: the literal string 'json' or 'xml'
-      example: xml
+      example: json
       default: xml
     posts:
       type: array
@@ -408,9 +391,16 @@ components:
       in: query
       name: auth_token
       description: |-
-        An authentication token is a short opaque identifier in the form 'username:TOKEN'.
-        Users can find their API token on their settings page. They can request a new token at any time; this will invalidate their previous API token.
-        Any third-party sites making API requests on behalf of Pinboard users from an outside server MUST use this authentication method instead of storing the user's password. Violators will be blocked from using the API.
+        An authentication token is a short opaque identifier in the form
+        'username:TOKEN'.
+
+        Users can find their API token on their settings page. They can request
+        a new token at any time; this will invalidate their previous API token.
+
+        Any third-party sites making API requests on behalf of Pinboard users
+        from an outside server MUST use this authentication method instead of
+        storing the user's password. Violators will be blocked from using the
+        API.
 security:
 - AuthToken: []
 - BasicAuth: []
