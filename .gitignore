@@ -1,7 +1,7 @@
 .DS_Store
-ios/*.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad/
-ios/*.xcodeproj/project.xcworkspace/xcshareddata/*.xccheckout
-ios/*.xcodeproj/xcuserdata/*.xcuserdatad/
+*/*.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad/
+*/*.xcodeproj/project.xcworkspace/xcshareddata/*.xccheckout
+*/*.xcodeproj/xcuserdata/*.xcuserdatad/
 ios/assets/build/
 ios/build/
 shaarli-logo.png

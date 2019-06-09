@@ -1,5 +1,5 @@
 //
-//  ShaarliSrvTest.swift
+//  FormParserTest.swift
 //  ShaarliOSTests
 //
 //  Created by Marcus Rohrmoser on 09.06.19.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class ShaarliSrvTest: XCTestCase {
+class FormParserTest: XCTestCase {
     func dataWithContentsOfFixture(fileName: String, extensio:String) -> Data  {
         let b = Bundle(for: type(of: self))
         let sub = "testdata" + "/" + String(describing: self.classForCoder)
@@ -29,26 +29,22 @@ class ShaarliSrvTest: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testUrl () {
-        let url = URL(string: "https://uid:pwd@example.com/foo")!
-        XCTAssertEqual("https://uid:pwd@example.com/foo", url.description)
-        XCTAssertEqual("https", url.scheme)
-        XCTAssertEqual("example.com", url.host)
-        XCTAssertEqual("uid", url.user)
-        XCTAssertEqual("pwd", url.password)
-        XCTAssertEqual("/foo", url.path)
-        XCTAssertEqual(nil, url.query)
-        XCTAssertEqual(nil, url.fragment)
-        
-        var b = URLComponents(string:url.description)!
-        b.user = "foo"
-        let u2 = b.url!
-        XCTAssertEqual("foo", u2.user)
-        XCTAssertEqual("pwd", u2.password)
+    func testLoadfile() {
+        let d = dataWithContentsOfFixture(fileName: "login.0", extensio:"html")
+        XCTAssertEqual(2509, d.count)
     }
-        
-    func testProbe () {
-        let srv = ShaarliSrv()
-        XCTAssertNotNil(srv)
+
+    func testFindForms() {
+        let raw = dataWithContentsOfFixture(fileName: "login.0", extensio:"html")
+        let frms = findForms(raw, "utf-8")
+        XCTAssertEqual(1, frms.count)
+        let frm = frms["loginform"]!
+        XCTAssertEqual(6, frm.count)
+        XCTAssertEqual("", frm["login"])
+        XCTAssertEqual("", frm["password"])
+        XCTAssertEqual("Login", frm[""])
+        XCTAssertEqual("20119241badf78a3dcfa55ae58eab429a5d24bad", frm["token"])
+        XCTAssertEqual("", frm["longlastingsession"])
+        XCTAssertEqual("http://links.mro.name/", frm["returnurl"])
     }
 }
