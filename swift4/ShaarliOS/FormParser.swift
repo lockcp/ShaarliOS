@@ -9,7 +9,7 @@
 import Foundation
 
 // internal helper uses libxml2 graceful html parsing
-func findForms(_ body:Data?, _ encoding:String?) -> [String : [String : String]] {
+func findForms(_ body:Data?, _ encoding:String?) -> [String:[String:String]] {
     guard let da = body
         else { return [:] }
     return FormParser().parse(da)
@@ -87,24 +87,24 @@ private class FormParser {
     // iterate over the attributes and pull out name and value attribute values
     func nameAndValue(_ atts: UnsafePointer<UnsafePointer<xmlChar>?>?) -> (name: String, value: String) {
         guard let atts = atts
-            else { return ("","") }
+            else { return ("", "") }
         var name = ""
         var valu = ""
         
         var i = 0
         while (atts[i] != nil) {
             let n = decode(atts[i])!
-            let v = decode(atts[i+1])!
+            let v = decode(atts[i+1])
             i+=2
             switch n {
             case "id":
                 if name == "" {
-                    name = v
+                    name = v!
                 }
             case "name":
-                name = v
+                name = v!
             case "value":
-                valu = v
+                valu = v!
             default:
                 break
             }

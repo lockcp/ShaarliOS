@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1607F42622AD0D210036AC44 /* ShaarliSrv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliSrv.swift */; };
-		1607F42722AD0D210036AC44 /* ShaarliSrv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliSrv.swift */; };
-		1607F42822AD0D210036AC44 /* ShaarliSrv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliSrv.swift */; };
-		1607F42A22AD121E0036AC44 /* ShaarliSrvTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42922AD121E0036AC44 /* ShaarliSrvTest.swift */; };
+		1607F42622AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */; };
+		1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */; };
+		1607F42822AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */; };
+		1607F42A22AD121E0036AC44 /* ShaarliHtmlClientTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42922AD121E0036AC44 /* ShaarliHtmlClientTest.swift */; };
 		1607F42C22AD21C30036AC44 /* testdata in Resources */ = {isa = PBXBuildFile; fileRef = 1607F42B22AD21C30036AC44 /* testdata */; };
 		1607F42D22AD21C30036AC44 /* testdata in Resources */ = {isa = PBXBuildFile; fileRef = 1607F42B22AD21C30036AC44 /* testdata */; };
 		1607F43222AD2BCE0036AC44 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1607F43022AD2BCE0036AC44 /* libxml2.2.tbd */; };
@@ -46,8 +46,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1607F42522AD0D210036AC44 /* ShaarliSrv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliSrv.swift; sourceTree = "<group>"; };
-		1607F42922AD121E0036AC44 /* ShaarliSrvTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliSrvTest.swift; sourceTree = "<group>"; };
+		1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliHtmlClient.swift; sourceTree = "<group>"; };
+		1607F42922AD121E0036AC44 /* ShaarliHtmlClientTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliHtmlClientTest.swift; sourceTree = "<group>"; };
 		1607F42B22AD21C30036AC44 /* testdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testdata; sourceTree = "<group>"; };
 		1607F42E22AD27CD0036AC44 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		1607F43022AD2BCE0036AC44 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
@@ -136,7 +136,7 @@
 				168C71AA22AD03ED007DF595 /* Assets.xcassets */,
 				168C71AC22AD03ED007DF595 /* LaunchScreen.storyboard */,
 				168C71AF22AD03ED007DF595 /* Info.plist */,
-				1607F42522AD0D210036AC44 /* ShaarliSrv.swift */,
+				1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */,
 				1607F43422AD2C000036AC44 /* Bridging.h */,
 				1607F43522AD2D8B0036AC44 /* FormParser.swift */,
 			);
@@ -149,7 +149,7 @@
 				1607F42E22AD27CD0036AC44 /* TestCase.swift */,
 				1607F42B22AD21C30036AC44 /* testdata */,
 				168C71B822AD03EE007DF595 /* ShaarliOSTests.swift */,
-				1607F42922AD121E0036AC44 /* ShaarliSrvTest.swift */,
+				1607F42922AD121E0036AC44 /* ShaarliHtmlClientTest.swift */,
 				161FACA822AEBA9200C96B96 /* FormParserTest.swift */,
 				168C71BA22AD03EE007DF595 /* Info.plist */,
 			);
@@ -298,7 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1607F42622AD0D210036AC44 /* ShaarliSrv.swift in Sources */,
+				1607F42622AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43622AD2D8B0036AC44 /* FormParser.swift in Sources */,
 				168C71A622AD03EC007DF595 /* ViewController.swift in Sources */,
 				168C71A422AD03EC007DF595 /* AppDelegate.swift in Sources */,
@@ -309,11 +309,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1607F42722AD0D210036AC44 /* ShaarliSrv.swift in Sources */,
+				1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43722AD2D8B0036AC44 /* FormParser.swift in Sources */,
 				161FACA922AEBAED00C96B96 /* FormParserTest.swift in Sources */,
 				168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */,
-				1607F42A22AD121E0036AC44 /* ShaarliSrvTest.swift in Sources */,
+				1607F42A22AD121E0036AC44 /* ShaarliHtmlClientTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,7 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1607F42822AD0D210036AC44 /* ShaarliSrv.swift in Sources */,
+				1607F42822AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				168C71C422AD03EE007DF595 /* ShaarliOSUITests.swift in Sources */,
 				1607F43822AD2D8B0036AC44 /* FormParser.swift in Sources */,
 			);
