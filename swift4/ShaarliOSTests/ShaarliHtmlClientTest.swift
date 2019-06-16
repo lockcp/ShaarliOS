@@ -66,6 +66,23 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("3=d%0Ad", String(data: formData(["3":"d\nd"]), encoding: .ascii))
     }
 
+    func testEncoding() {
+        let str = "Hello, wörld!"
+        let byt = str.data(using: .utf8, allowLossyConversion: false)!
+        XCTAssertEqual(str, String(bytes: byt, encoding:.utf8))
+        XCTAssertEqual("Hello, wÃ¶rld!", String(bytes: byt, encoding:.isoLatin1))
+    }
+
+    // https://nshipster.com/swift-regular-expressions/
+    func testRegex() {
+        let ra0 = "Fancy a game of Cluedo™️?".range(of: "Clue(do)?™️?", options:.regularExpression)
+        XCTAssertEqual(16, ra0?.lowerBound.encodedOffset)
+
+        let msg = "<script>alert(\"foo\"); // bar \");"
+        let ra1 = msg.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression)!
+        XCTAssertEqual("<script>alert(\"foo\");", msg[ra1])
+    }
+
     func testProbeSunshine() {
         let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
@@ -79,6 +96,41 @@ class ShaarliHtmlClientTest: XCTestCase {
             XCTAssertEqual(URL(string:"https://demo.shaarli.org/"), url)
             XCTAssertEqual("päng+🚀", pong)
             XCTAssertEqual("", err)
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+    }
+
+    func testProbe403() {
+        // let demo = URL(string:"https://demo:foo@demo.shaarli.org/")! // credentials are public
+        let demo = URL(string:"https://tast:foo@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
+        // let demo = URL(string:"https://tast:foo@demo.mro.name/shaarli-v0.41b/")! // credentials are public
+
+        let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
+
+        let srv = ShaarliHtmlClient()
+        srv.probe(demo, "päng 🚀") { (url, pong, err) in
+            exp.fulfill()
+            XCTAssertEqual(URLEmpty, url)
+            XCTAssertEqual("", pong)
+            XCTAssertEqual("Wrong login/password.", err)
+            // XCTAssertEqual(ShaarliHtmlClient.STR_BANNED, err)
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+    }
+
+    func testProbe404() {
+        // let demo = URL(string:"https://demo:foo@demo.shaarli.org/hgr/")! // credentials are public
+        // let demo = URL(string:"https://tast:foo@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
+        let demo = URL(string:"https://demo.mro.name/bogus")! // credentials are public
+
+        let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
+
+        let srv = ShaarliHtmlClient()
+        srv.probe(demo, "päng 🚀") { (url, pong, err) in
+            exp.fulfill()
+            XCTAssertEqual(URLEmpty, url)
+            XCTAssertEqual("", pong)
+            XCTAssertEqual("Expected status 200, got 404", err)
         }
         waitForExpectations(timeout: 2, handler: nil)
     }

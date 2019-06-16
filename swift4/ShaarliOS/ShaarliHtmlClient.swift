@@ -17,12 +17,6 @@ let VAL_HEAD_USER_AGENT = "http://app.mro.name/ShaarliOS"
 let KEY_HEAD_CONTENT_TYPE = "Content-Type"
 let VAL_HEAD_CONTENT_TYPE = "application/x-www-form-urlencoded"
 
-let KEY_PAR_POST = "post"
-
-let NAME_LOGIN_FORM = "loginform"
-let KEY_FORM_LOGIN = "login"
-let KEY_FORM_PASSWORD = "password"
-
 // Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
 // https://stackoverflow.com/a/50116064
 func formString(_ form: [URLQueryItem]) -> String {
@@ -43,7 +37,33 @@ func formData(_ form:[String:String]) -> Data {
     return formString(formQueryItems(form)).data(using: .ascii)!
 }
 
+func encoding(name:String?) -> String.Encoding {
+    switch name {
+    case "latin1": return .isoLatin1
+    case "latin2": return .isoLatin2
+    case "cp1250": return .windowsCP1250
+    case "cp1251": return .windowsCP1251
+    case "cp1252": return .windowsCP1252
+    case "cp1253": return .windowsCP1253
+    case "cp1254": return .windowsCP1254
+    case "ascii": return .ascii
+    default: return .utf8
+    }
+}
+
 class ShaarliHtmlClient {
+
+    static let KEY_PAR_POST = "post"
+
+    static let LOGIN_FORM = "loginform"
+    static let KEY_FORM_LOGIN = "login"
+    static let KEY_FORM_PASSWORD = "password"
+
+    static let PAT_WRONG_LOGIN = "^<script>alert\\(\"(.*?)\"\\);"
+    static let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
+
+    static let LINK_FORM = "linkform"
+    static let LF_URL = "lf_url"
 
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
         let ses = URLSession.shared
@@ -52,11 +72,11 @@ class ShaarliHtmlClient {
         uc.user = nil
         uc.password = nil
         var qi = uc.queryItems ?? []
-        qi.append(URLQueryItem(name: KEY_PAR_POST, value: ping))
+        qi.append(URLQueryItem(name: ShaarliHtmlClient.KEY_PAR_POST, value: ping))
         uc.queryItems = qi
 
         var req0 = URLRequest(url:uc.url!)
-        req0.addValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
+        req0.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
 
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let t0 = ses.dataTask(with: req0) { data, response, erro in
@@ -64,20 +84,26 @@ class ShaarliHtmlClient {
                 completion(URLEmpty, "", erro.localizedDescription)
                 return
             }
-            guard let http = response as? HTTPURLResponse,
-                (200...299).contains(http.statusCode) else {
-                    completion(URLEmpty, "", String(format:"Expected status 200, got %@", response ?? "<nil>"))
-                    return
-            }
-            guard var lofo = findForms(data, "utf-8")[NAME_LOGIN_FORM] else {
-                completion(http.url!, "", NAME_LOGIN_FORM + " not found")
+            guard let http = response as? HTTPURLResponse else {
+                completion(URLEmpty, "", String(format:"Not a http reponse, but %@", response ?? "<nil>"))
                 return
             }
-            lofo[KEY_FORM_LOGIN] = endpoint.user
-            lofo[KEY_FORM_PASSWORD] = endpoint.password
+            if !(200...299).contains(http.statusCode) {
+                completion(URLEmpty, "", String(format:"Expected status 200, got %d", http.statusCode))
+                return
+            }
+
+            guard var lofo = findForms(data, String.Encoding.utf8.description)[ShaarliHtmlClient.LOGIN_FORM]
+            else {
+                completion(http.url!, "", ShaarliHtmlClient.LOGIN_FORM + " not found")
+                return
+            }
+            lofo[ShaarliHtmlClient.KEY_FORM_LOGIN] = endpoint.user
+            lofo[ShaarliHtmlClient.KEY_FORM_PASSWORD] = endpoint.password
 
             var req1 = URLRequest(url:http.url!)
             req1.httpMethod = HTTP_POST
+            req1.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
             req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
             let formDat = formData(lofo)
             let t1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
@@ -85,11 +111,38 @@ class ShaarliHtmlClient {
                     completion(URLEmpty, "", erro.localizedDescription)
                     return
                 }
-                guard let http = response as? HTTPURLResponse,
-                    (200...299).contains(http.statusCode) else {
-                        completion(URLEmpty, "", String(format:"Expected status 200, got %@", response ?? "<nil>"))
+                guard let http = response as? HTTPURLResponse else {
+                    completion(URLEmpty, "", String(format:"Not a http reponse, but %@", response ?? "<nil>"))
+                    return
+                }
+                if !(200...299).contains(http.statusCode) {
+                    completion(URLEmpty, "", String(format:"Expected status 200, got %d", http.statusCode))
+                    return
+                }
+                let _ = http.mimeType ?? ""
+                let enco = encoding(name:http.textEncodingName)
+                guard let lifo = findForms(data, enco.description)[ShaarliHtmlClient.LINK_FORM]
+                    else {
+                        let str = String(bytes: data!, encoding:enco) ?? ""
+                        if let ra = str.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression) {
+                            let err = String(str[ra]).dropFirst(15).dropLast(3)
+                            completion(URLEmpty, "", String(err))
+                            return
+                        }
+                        if ShaarliHtmlClient.STR_BANNED == str {
+                            completion(URLEmpty, "", ShaarliHtmlClient.STR_BANNED)
+                            return
+                        }
+
+                        completion(URLEmpty, "", ShaarliHtmlClient.LINK_FORM + " not found.")
                         return
                 }
+
+                if nil == lifo[ShaarliHtmlClient.LF_URL] {
+                    completion(URLEmpty, "", ShaarliHtmlClient.LF_URL + " not found.")
+                    return
+                }
+
                 // strip post=... query parameter
                 var uc = URLComponents(url: http.url!, resolvingAgainstBaseURL: true)!
                 var qi = uc.queryItems!
