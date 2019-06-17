@@ -25,16 +25,10 @@ func formString(_ form: [URLQueryItem]) -> String {
     return uc.percentEncodedQuery!
 }
 
-func formQueryItems(_ form: [String:String]) -> [URLQueryItem] {
-    var qi :[URLQueryItem] = []
-    for (k, v) in form {
-        qi.append(URLQueryItem(name: k, value: v))
-    }
-    return qi
-}
-
 func formData(_ form:[String:String]) -> Data {
-    return formString(formQueryItems(form)).data(using: .ascii)!
+    let qi = form.map { k,v in URLQueryItem(name:k, value:v) }
+    let str = formString(qi)
+    return str.data(using: .ascii)!
 }
 
 func encoding(name:String?) -> String.Encoding {
@@ -59,7 +53,7 @@ class ShaarliHtmlClient {
     static let KEY_FORM_LOGIN = "login"
     static let KEY_FORM_PASSWORD = "password"
 
-    static let PAT_WRONG_LOGIN = "^<script>alert\\(\"(.*?)\"\\);"
+    static let PAT_WRONG_LOGIN = "^<script>alert\\((?:\".*?\"|'.*?')\\);"
     static let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
 
     static let LINK_FORM = "linkform"
@@ -93,7 +87,7 @@ class ShaarliHtmlClient {
                 return
             }
 
-            guard var lofo = findForms(data, String.Encoding.utf8.description)[ShaarliHtmlClient.LOGIN_FORM]
+            guard var lofo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LOGIN_FORM]
             else {
                 completion(http.url!, "", ShaarliHtmlClient.LOGIN_FORM + " not found")
                 return
@@ -120,9 +114,9 @@ class ShaarliHtmlClient {
                     return
                 }
                 let _ = http.mimeType ?? ""
-                let enco = encoding(name:http.textEncodingName)
-                guard let lifo = findForms(data, enco.description)[ShaarliHtmlClient.LINK_FORM]
+                guard let lifo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM]
                     else {
+                        let enco = encoding(name:http.textEncodingName)
                         let str = String(bytes: data!, encoding:enco) ?? ""
                         if let ra = str.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression) {
                             let err = String(str[ra]).dropFirst(15).dropLast(3)
