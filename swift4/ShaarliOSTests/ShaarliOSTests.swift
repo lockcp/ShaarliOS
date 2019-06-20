@@ -11,12 +11,25 @@ import XCTest
 
 class ShaarliOSTests: XCTestCase {
 
+    private let df1123 = DateFormatter()
+
+    internal func RFC1123(_ date:Date) -> String {
+        return df1123.string(from: date)
+    }
+
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        // https://mro.name/blog/2009/08/nsdateformatter-http-header/
+        df1123.locale = Locale(identifier: "en_US")
+        df1123.timeZone = TimeZone(abbreviation: "GMT")
+        df1123.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"
     }
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    func testRfc1123() {
+        XCTAssertEqual("Sat, 01 Jan 0001 00:00:00 GMT", RFC1123(Date.distantPast))
     }
 
     func testUrl () {
