@@ -47,4 +47,25 @@ class FormParserTest: XCTestCase {
         XCTAssertEqual("", frm["longlastingsession"])
         XCTAssertEqual("http://links.mro.name/", frm["returnurl"])
     }
+
+    func testLinkForm() {
+        let raw = dataWithContentsOfFixture(fileName: "link_form.0", extensio:"html")
+        let frms = findForms(raw, "utf-8")
+        XCTAssertEqual(2, frms.count)
+        let frm = frms["linkform"]!
+        XCTAssertEqual(10, frm.count)
+        XCTAssertEqual([
+            "token": "06767bf39b3202f0c32d2dad3249742260c721b2",
+            "lf_id": "1",
+            "save_edit": "Apply Changes",
+            "lf_tags": "opensource software",
+            "lf_description": "Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.",
+            "returnurl": "https://demo.shaarli.org/?",
+            "lf_linkdate": "20190701_010131",
+            "lf_url": "https://shaarli.readthedocs.io",
+            "lf_title": "The personal, minimalist, super-fast, database free, bookmarking service",
+            "lf_private": ""
+            ], frm)
+        XCTAssertEqual("https://demo.shaarli.org/?", frm["returnurl"])
+    }
 }

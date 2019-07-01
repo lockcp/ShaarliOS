@@ -28,11 +28,11 @@ class ShaarliHtmlClientTest: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func testUrlEmpty () {
         XCTAssertEqual("", URLEmpty.absoluteString)
     }
-    
+
     func testUrl() {
         let url = URL(string: "https://uid:pwd@example.com/foo")!
         XCTAssertEqual("https://uid:pwd@example.com/foo", url.absoluteString)
@@ -43,13 +43,13 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("/foo", url.path)
         XCTAssertEqual(nil, url.query)
         XCTAssertEqual(nil, url.fragment)
-        
+
         var b = URLComponents(string:url.absoluteString)!
         b.user = "foo"
         let u2 = b.url!
         XCTAssertEqual("foo", u2.user)
         XCTAssertEqual("pwd", u2.password)
-        
+
         let emo = URL(string: percentEncode(in:"päng 🚀")!)!
         XCTAssertEqual("p%C3%A4ng%20%F0%9F%9A%80", emo.absoluteString)
     }
@@ -85,17 +85,19 @@ class ShaarliHtmlClientTest: XCTestCase {
         let ra1 = msg.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression)!
         XCTAssertEqual("<script>alert(\"foo\");", msg[ra1])
     }
-    
+
     func testProbeSunshine() {
         let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.41b/")! // credentials are public
-        
+
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
-        
+
         let srv = ShaarliHtmlClient()
         srv.probe(demo, "päng 🚀") { (url, pong, err) in
-            XCTAssertTrue(url.absoluteString.starts(with: "?"))
+            XCTAssertNil(url.host)
+            XCTAssertEqual("", url.path)
+            XCTAssertEqual(6, url.query?.count)
             XCTAssertEqual("Note: ", pong)
             XCTAssertEqual("", err)
             exp.fulfill()
@@ -133,6 +135,31 @@ class ShaarliHtmlClientTest: XCTestCase {
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
             XCTAssertEqual("Expected status 200, got 404", err)
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+    }
+
+    func testGetSunshine() {
+        let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        let url = URL(string:"https://shaarli.readthedocs.io/")!
+
+        // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
+        // let url = URL(string:"https://shaarli.readthedocs.io/")!
+
+        // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.41b/")! // credentials are public
+        // let url = URL(string:"http://sebsauvage.net/wiki/doku.php?id=php:shaarli")!
+
+        let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
+
+        let srv = ShaarliHtmlClient()
+        srv.get(demo, url) { (url, tit, dsc, tgs, frm, err) in
+            XCTAssertEqual("https://shaarli.readthedocs.io/", url.absoluteString)
+            XCTAssertEqual("Home - Shaarli Documentation", tit)
+            XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", dsc, "why is dsc empty?")
+            XCTAssertEqual(["opensource", "software", "nomarkdown"], tgs)
+            XCTAssertEqual("", err)
+            // XCTAssertEqual([:], frm)
             exp.fulfill()
         }
         waitForExpectations(timeout: 2, handler: nil)

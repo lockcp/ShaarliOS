@@ -20,6 +20,8 @@ private class FormParser {
     private var forms : [String:FormDict] = [:]
     private var form : FormDict = [:]
     private var formName = ""
+    private var textName = ""
+    private var text = ""
 
     func parse(_ data:Data) -> [String:FormDict] {
         var sax = htmlSAXHandler()
@@ -51,6 +53,9 @@ private class FormParser {
         case "form":
             formName = nameAndValue(atts).0
             form = [:]
+        case "textarea":
+            textName = nameAndValue(atts).0
+            text = ""
         case "input":
             let nv = nameAndValue(atts)
             form[nv.0] = nv.1
@@ -58,20 +63,28 @@ private class FormParser {
             break
         }
     }
-    
+
     func endElement(_ name:UnsafePointer<xmlChar>?) {
         let n = decode(name)
         switch n {
         case "form":
             forms[formName] = form
             formName = ""
+        case "textarea":
+            form[textName] = text
+            textName = ""
         default:
             break
         }
     }
     
     func charactersFound(_ ch: UnsafePointer<xmlChar>?, _ len: CInt) {
-        
+        if (textName.isEmpty) {
+            return
+        }
+        let d = Data(bytes: ch!, count:Int(len))
+        let s = String(data: d, encoding: .utf8) ?? "<utf8 decoding issue>"
+        text.append(s)
     }
 
     // https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L33
@@ -96,20 +109,28 @@ private class FormParser {
             let n = decode(atts[i])!
             let v = decode(atts[i+1])
             i+=2
+            // print("attribute", n, "=", v)
             switch n {
             case "id":
-                if name == "" {
+                if name.isEmpty {
                     name = v!
                 }
             case "name":
                 name = v!
             case "value":
                 valu = v!
+            case "data-list":
+                // workaround for 'modern' shaarli not bothering to fill the "value" attribute, but rather rely on javascript to do so.
+                // sigh.
+                if valu.isEmpty {
+                    valu = v!
+                }
             default:
                 break
             }
         }
 
+        // print("nameAndValue", name, "=", valu)
         return (name, valu)
     }
 }

@@ -22,6 +22,9 @@ let VAL_HEAD_CONTENT_TYPE = "application/x-www-form-urlencoded"
 let LF_URL = "lf_url"
 let LF_TIT = "lf_title"
 let LF_DSC = "lf_description"
+let LF_TGS = "lf_tags"
+let LF_TIM = "lf_linkdate"
+let LF_PRI = "lf_private"
 
 // Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
 // https://stackoverflow.com/a/50116064
@@ -125,6 +128,7 @@ class ShaarliHtmlClient {
                 }
                 let http = response as! HTTPURLResponse
                 let _ = http.mimeType ?? ""
+                // print(String(bytes:data!, encoding:encoding(name:http.textEncodingName)))
                 guard let lifo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM]
                     else {
                         let enco = encoding(name:http.textEncodingName)
@@ -165,8 +169,11 @@ class ShaarliHtmlClient {
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
         let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
         loginAndGet(endpoint, url) { lifo, err in
-            let u = URL(string:lifo[LF_URL] ?? "") ?? URLEmpty
-            completion(u, lifo[LF_TIT] ?? "", err)
+            completion(
+                URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
+                lifo[LF_TIT] ?? "",
+                err
+            )
             return [:]
         }
     }
@@ -181,10 +188,10 @@ class ShaarliHtmlClient {
         ) {
         loginAndGet(endpoint, url) { lifo, err in
             completion(
-                URL(string: lifo[LF_URL] ?? "") ?? URLEmpty,
+                URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
                 lifo[LF_DSC] ?? "",
-                ["tags", "todo"],
+                (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) },
                 lifo,
                 err
             )
