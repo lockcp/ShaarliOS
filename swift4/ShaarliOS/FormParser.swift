@@ -9,7 +9,7 @@
 import Foundation
 
 // internal helper uses libxml2 graceful html parsing
-func findForms(_ body:Data?, _ encoding:String?) -> [String:[String:String]] {
+func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
     guard let da = body
         else { return [:] }
     return FormParser().parse(da)
@@ -17,11 +17,11 @@ func findForms(_ body:Data?, _ encoding:String?) -> [String:[String:String]] {
 
 private class FormParser {
 
-    private var forms : [String:[String:String]] = [:]
-    private var form : [String:String] = [:]
+    private var forms : [String:FormDict] = [:]
+    private var form : FormDict = [:]
     private var formName = ""
 
-    func parse(_ data:Data) -> [String:[String:String]] {
+    func parse(_ data:Data) -> [String:FormDict] {
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
         sax.startElement = startElementSAX // could this be closures?

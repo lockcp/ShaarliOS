@@ -11,11 +11,17 @@ import Foundation
 let BUNDLE_ID = "name.mro.ShaarliOS"
 let URLEmpty = URLComponents().url!
 
+typealias FormDict = [String:String]
+
 let HTTP_POST = "POST"
 let KEY_HEAD_USER_AGENT = "User-Agent"
 let VAL_HEAD_USER_AGENT = "http://app.mro.name/ShaarliOS"
 let KEY_HEAD_CONTENT_TYPE = "Content-Type"
 let VAL_HEAD_CONTENT_TYPE = "application/x-www-form-urlencoded"
+
+let LF_URL = "lf_url"
+let LF_TIT = "lf_title"
+let LF_DSC = "lf_description"
 
 // Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
 // https://stackoverflow.com/a/50116064
@@ -25,8 +31,8 @@ func formString(_ form: [URLQueryItem]) -> String {
     return uc.percentEncodedQuery!
 }
 
-func formData(_ form:[String:String]) -> Data {
-    let qi = form.map { k,v in URLQueryItem(name:k, value:v) }
+func formData(_ form:FormDict) -> Data {
+    let qi = form.map { URLQueryItem(name:$0, value:$1) }
     let str = formString(qi)
     return str.data(using: .ascii)!
 }
@@ -48,6 +54,7 @@ func encoding(name:String?) -> String.Encoding {
 class ShaarliHtmlClient {
 
     static let KEY_PAR_POST = "post"
+    static let KEY_PAR_DESC = "description"
 
     static let LOGIN_FORM = "loginform"
     static let KEY_FORM_LOGIN = "login"
@@ -57,16 +64,17 @@ class ShaarliHtmlClient {
     static let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
 
     static let LINK_FORM = "linkform"
-    static let LF_URL = "lf_url"
 
-    func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
+    // prepare the login and be ready for payload - both retrieval and publication.
+    internal func loginAndGet(_ endpoint: URL, _ url: URL, _ callback: @escaping (_ lifo: FormDict, _ error: String) -> FormDict) {
         let ses = URLSession.shared
         // remove uid+pwd from endpoint url
         var uc = URLComponents(url: endpoint, resolvingAgainstBaseURL: true)!
         uc.user = nil
         uc.password = nil
+        // add payload query items, at least the url
         var qi = uc.queryItems ?? []
-        qi.append(URLQueryItem(name: ShaarliHtmlClient.KEY_PAR_POST, value: ping))
+        qi.append(URLQueryItem(name: ShaarliHtmlClient.KEY_PAR_POST, value: url.absoluteString))
         uc.queryItems = qi
 
         var req0 = URLRequest(url:uc.url!)
@@ -90,15 +98,16 @@ class ShaarliHtmlClient {
         let t0 = ses.dataTask(with: req0) { data, response, erro in
             let err = check(data, response, erro)
             if err != "" {
-                completion(URLEmpty, "", err)
+                let _ = callback([:], err)
                 return
             }
             let http = response as! HTTPURLResponse
 
             guard var lofo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LOGIN_FORM]
-            else {
-                completion(http.url!, "", ShaarliHtmlClient.LOGIN_FORM + " not found")
-                return
+                else {
+                    let _ = callback([:], ShaarliHtmlClient.LOGIN_FORM + " not found")
+                    // completion(http.url!, "", ShaarliHtmlClient.LOGIN_FORM + " not found")
+                    return
             }
             lofo[ShaarliHtmlClient.KEY_FORM_LOGIN] = endpoint.user
             lofo[ShaarliHtmlClient.KEY_FORM_PASSWORD] = endpoint.password
@@ -111,7 +120,7 @@ class ShaarliHtmlClient {
             let t1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
                 let err = check(data, response, erro)
                 if err != "" {
-                    completion(URLEmpty, "", err)
+                    let _ = callback([:], err)
                     return
                 }
                 let http = response as! HTTPURLResponse
@@ -122,51 +131,73 @@ class ShaarliHtmlClient {
                         let str = String(bytes: data!, encoding:enco) ?? ""
                         if let ra = str.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression) {
                             let err = String(str[ra]).dropFirst(15).dropLast(3)
-                            completion(URLEmpty, "", String(err))
+                            let _ = callback([:], String(err))
                             return
                         }
                         if ShaarliHtmlClient.STR_BANNED == str {
-                            completion(URLEmpty, "", ShaarliHtmlClient.STR_BANNED)
+                            let _ = callback([:], ShaarliHtmlClient.STR_BANNED)
                             return
                         }
 
-                        completion(URLEmpty, "", ShaarliHtmlClient.LINK_FORM + " not found.")
+                        let _ = callback([:], ShaarliHtmlClient.LINK_FORM + " not found.")
                         return
                 }
 
-                if nil == lifo[ShaarliHtmlClient.LF_URL] {
-                    completion(URLEmpty, "", ShaarliHtmlClient.LF_URL + " not found.")
+                if nil == lifo[LF_URL] {
+                    let _ = callback(lifo, LF_URL + " not found.")
                     return
                 }
+
+                // here we have them all for a get. And the post, too.
 
                 // strip post=... query parameter
                 var uc = URLComponents(url: http.url!, resolvingAgainstBaseURL: true)!
                 var qi = uc.queryItems!
                 let li = qi.popLast()!
                 uc.queryItems = qi.count == 0 ? nil : qi
-                completion(uc.url!, li.value!, "")
+                let _ = callback(lifo, "")
             }
             t1.resume()
         }
         t0.resume()
     }
 
-    func get(_ endpoint: URL, _ url: URL, _ completion: (
+    func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
+        let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
+        loginAndGet(endpoint, url) { lifo, err in
+            let u = URL(string:lifo[LF_URL] ?? "") ?? URLEmpty
+            completion(u, lifo[LF_TIT] ?? "", err)
+            return [:]
+        }
+    }
+
+    func get(_ endpoint: URL, _ url: URL, _ completion: @escaping (
         _ url:URL,
         _ description: String,
         _ extended: String,
-        _ ctx: [String:String],
+        _ tags: [String],
+        _ ctx: FormDict,
         _ error: String)->()
         ) {
-
+        loginAndGet(endpoint, url) { lifo, err in
+            completion(
+                URL(string: lifo[LF_URL] ?? "") ?? URLEmpty,
+                lifo[LF_TIT] ?? "",
+                lifo[LF_DSC] ?? "",
+                ["tags", "todo"],
+                lifo,
+                err
+            )
+            return [:]
+        }
     }
 
     func add(_ endpoint: URL,
              _ url: URL,
              _ description: String,
              _ extended: String,
-             _ ctx: [String:String],
-             _ completion: (_ url:URL, _ error: String)->()) {
+             _ ctx: FormDict,
+             _ completion: @escaping (_ url:URL, _ error: String)->()) {
 
     }
 }
