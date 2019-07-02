@@ -142,7 +142,7 @@ class ShaarliHtmlClientTest: XCTestCase {
 
     func testGetSunshine() {
         let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
-        let url = URL(string:"https://shaarli.readthedocs.io/")!
+        let url = URL(string:"https://shaarli.readthedocs.io")!
 
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
         // let url = URL(string:"https://shaarli.readthedocs.io/")!
@@ -154,10 +154,10 @@ class ShaarliHtmlClientTest: XCTestCase {
 
         let srv = ShaarliHtmlClient()
         srv.get(demo, url) { (url, tit, dsc, tgs, frm, err) in
-            XCTAssertEqual("https://shaarli.readthedocs.io/", url.absoluteString)
-            XCTAssertEqual("Home - Shaarli Documentation", tit)
+            XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
+            XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", tit)
             XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", dsc, "why is dsc empty?")
-            XCTAssertEqual(["opensource", "software", "nomarkdown"], tgs)
+            XCTAssertEqual(["opensource", "software"], tgs)
             XCTAssertEqual("", err)
             // XCTAssertEqual([:], frm)
             exp.fulfill()
