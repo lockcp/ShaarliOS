@@ -29,6 +29,15 @@ class FormParserTest: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testNameAndValue() {
+        XCTAssertEqual("", nameAndValue({nil}).name)
+
+        var it0 = ["name", "lf_tags","value", "opensource software", "foo", nil].makeIterator()
+        let nv0 = nameAndValue({ it0.next() } )
+        XCTAssertEqual("lf_tags", nv0.name)
+        XCTAssertEqual("opensource software", nv0.value)
+    }
+
     func testLoadfile() {
         let d = dataWithContentsOfFixture(fileName: "login.0", extensio:"html")
         XCTAssertEqual(2509, d.count)
@@ -39,12 +48,12 @@ class FormParserTest: XCTestCase {
         let frms = findForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["loginform"]!
-        XCTAssertEqual(6, frm.count)
-        XCTAssertEqual("", frm["login"])
-        XCTAssertEqual("", frm["password"])
+        XCTAssertEqual(3, frm.count)
+        XCTAssertNil(frm["login"])
+        XCTAssertNil(frm["password"])
         XCTAssertEqual("Login", frm[""])
         XCTAssertEqual("20119241badf78a3dcfa55ae58eab429a5d24bad", frm["token"])
-        XCTAssertEqual("", frm["longlastingsession"])
+        XCTAssertNil(frm["longlastingsession"])
         XCTAssertEqual("http://links.mro.name/", frm["returnurl"])
     }
 
@@ -53,19 +62,25 @@ class FormParserTest: XCTestCase {
         let frms = findForms(raw, "utf-8")
         XCTAssertEqual(2, frms.count)
         let frm = frms["linkform"]!
-        XCTAssertEqual(10, frm.count)
-        XCTAssertEqual([
-            "token": "06767bf39b3202f0c32d2dad3249742260c721b2",
-            "lf_id": "1",
-            "save_edit": "Apply Changes",
-            "lf_tags": "opensource software",
-            "lf_description": "Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.",
-            "returnurl": "https://demo.shaarli.org/?",
-            "lf_linkdate": "20190701_010131",
-            "lf_url": "https://shaarli.readthedocs.io",
-            "lf_title": "The personal, minimalist, super-fast, database free, bookmarking service",
-            "lf_private": ""
-            ], frm)
-        XCTAssertEqual("https://demo.shaarli.org/?", frm["returnurl"])
+        XCTAssertEqual(9, frm.count)
+        XCTAssertEqual("06767bf39b3202f0c32d2dad3249742260c721b2", frm["token"], "token")
+        XCTAssertEqual("1", frm["lf_id"], "lf_id")
+        XCTAssertEqual("Apply Changes", frm["save_edit"], "save_edit")
+        XCTAssertEqual("opensource software", frm["lf_tags"], "lf_tags")
+        XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", frm["lf_description"], "lf_description")
+        XCTAssertEqual("https://demo.shaarli.org/?", frm["returnurl"], "returnurl")
+        XCTAssertEqual("20190701_010131", frm["lf_linkdate"], "lf_linkdate")
+        XCTAssertEqual("https://shaarli.readthedocs.io", frm["lf_url"], "lf_url")
+        XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", frm["lf_title"], "lf_title")
+        XCTAssertNil(frm["lf_private"], "value nil is treated like non-existing")
+    }
+
+    func testLinkForm1() {
+        let raw = dataWithContentsOfFixture(fileName: "link_form.1", extensio:"html")
+        let frms = findForms(raw, "utf-8")
+        XCTAssertEqual(1, frms.count)
+        let frm = frms["linkform"]!
+        XCTAssertEqual(1, frm.count)
+        XCTAssertEqual("opensource software", frm["lf_tags"], "lf_tags")
     }
 }

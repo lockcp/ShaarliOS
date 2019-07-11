@@ -54,8 +54,21 @@ func encoding(name:String?) -> String.Encoding {
     }
 }
 
-class ShaarliHtmlClient {
+internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> String {
+    if let error = err {
+        return error.localizedDescription
+    }
+    guard let http = rep as? HTTPURLResponse else {
+        return String(format:"Not a http reponse, but %@", rep ?? "<nil>")
+    }
+    if !(200...299).contains(http.statusCode) {
+        return String(format:"Expected status 200, got %d", http.statusCode)
+    }
 
+    return ""
+}
+
+class ShaarliHtmlClient {
     static let KEY_PAR_POST = "post"
     static let KEY_PAR_DESC = "description"
 
@@ -69,8 +82,7 @@ class ShaarliHtmlClient {
     static let LINK_FORM = "linkform"
 
     // prepare the login and be ready for payload - both retrieval and publication.
-    internal func loginAndGet(_ endpoint: URL, _ url: URL, _ callback: @escaping (_ lifo: FormDict, _ error: String) -> FormDict) {
-        let ses = URLSession.shared
+    internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (_ lifo: FormDict, _ error: String) -> FormDict) {
         // remove uid+pwd from endpoint url
         var uc = URLComponents(url: endpoint, resolvingAgainstBaseURL: true)!
         uc.user = nil
@@ -82,20 +94,6 @@ class ShaarliHtmlClient {
 
         var req0 = URLRequest(url:uc.url!)
         req0.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
-
-        let check: (Data?, URLResponse?, Error?) -> String = {
-            if let error = $2 {
-                return error.localizedDescription
-            }
-            guard let http = $1 as? HTTPURLResponse else {
-                return String(format:"Not a http reponse, but %@", $1 ?? "<nil>")
-            }
-            if !(200...299).contains(http.statusCode) {
-                return String(format:"Expected status 200, got %d", http.statusCode)
-            }
-
-            return ""
-        }
         
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let t0 = ses.dataTask(with: req0) { data, response, erro in
@@ -152,13 +150,6 @@ class ShaarliHtmlClient {
                     return
                 }
 
-                // here we have them all for a get. And the post, too.
-
-                // strip post=... query parameter
-                var uc = URLComponents(url: http.url!, resolvingAgainstBaseURL: true)!
-                var qi = uc.queryItems!
-                let li = qi.popLast()!
-                uc.queryItems = qi.count == 0 ? nil : qi
                 let _ = callback(lifo, "")
             }
             t1.resume()
@@ -167,8 +158,9 @@ class ShaarliHtmlClient {
     }
 
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
+        let ses = URLSession.shared
         let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
-        loginAndGet(endpoint, url) { lifo, err in
+        loginAndGet(ses, endpoint, url) { lifo, err in
             completion(
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
@@ -186,7 +178,8 @@ class ShaarliHtmlClient {
         _ ctx: FormDict,
         _ error: String)->()
         ) {
-        loginAndGet(endpoint, url) { lifo, err in
+        let ses = URLSession.shared
+        loginAndGet(ses, endpoint, url) { lifo, err in
             completion(
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
@@ -200,11 +193,30 @@ class ShaarliHtmlClient {
     }
 
     func add(_ endpoint: URL,
-             _ url: URL,
+             _ ctx: FormDict,
+             _ url:URL,
              _ description: String,
              _ extended: String,
-             _ ctx: FormDict,
-             _ completion: @escaping (_ url:URL, _ error: String)->()) {
+             _ tags: [String],
+             _ completion: @escaping (_ error: String) -> ()) {
+        let ses = URLSession.shared
+        var lifo = ctx
+        lifo[LF_URL] = url.absoluteString
+        lifo[LF_TIT] = description
+        lifo[LF_DSC] = extended
+        lifo[LF_TGS] = tags.joined(separator: " ")
+        lifo[LF_PRI] = ("on" == lifo[LF_PRI]) ? "on" : "off"
 
+        var req = URLRequest(url:endpoint)
+        req.httpMethod = HTTP_POST
+        req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
+        req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
+        let foda = formData(lifo)
+        debugPrint(String(data: foda, encoding: .utf8))
+        let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
+            let erro = check(data, response, err)
+            completion(erro)
+        }
+        tsk.resume()
     }
 }

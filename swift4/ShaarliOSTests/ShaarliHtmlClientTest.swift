@@ -141,11 +141,11 @@ class ShaarliHtmlClientTest: XCTestCase {
     }
 
     func testGetSunshine() {
-        let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
-        let url = URL(string:"https://shaarli.readthedocs.io")!
+        // let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let url = URL(string:"https://shaarli.readthedocs.io")!
 
-        // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
-        // let url = URL(string:"https://shaarli.readthedocs.io/")!
+        let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
+        let url = URL(string:"https://shaarli.readthedocs.io")!
 
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.41b/")! // credentials are public
         // let url = URL(string:"http://sebsauvage.net/wiki/doku.php?id=php:shaarli")!
@@ -161,6 +161,36 @@ class ShaarliHtmlClientTest: XCTestCase {
             XCTAssertEqual("", err)
             // XCTAssertEqual([:], frm)
             exp.fulfill()
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+    }
+
+    func testPostSunshine() {
+        // let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let url = URL(string:"http://idlewords.com/talks/website_obesity.htm#minimalism")!
+
+        let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
+        let url = URL(string:"http://idlewords.com/talks/website_obesity.htm#minimalism")!
+
+        // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.41b/")! // credentials are public
+        // let url = URL(string:"http://sebsauvage.net/wiki/doku.php?id=php:shaarli")!
+
+        let exp0 = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
+        let exp1 = self.expectation(description: "Posting")
+
+        let srv = ShaarliHtmlClient()
+        srv.get(demo, url) { (url, tit, dsc, tgs, ctx, err0) in
+            XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm#minimalism", url.absoluteString)
+            XCTAssertEqual("The Website Obesity Crisis", tit)
+            XCTAssertEqual("", dsc, "why is dsc empty?")
+            XCTAssertEqual([], tgs)
+            XCTAssertEqual("", err0)
+            exp0.fulfill()
+
+            srv.add(demo, ctx, url, tit, dsc, tgs) { err1 in
+                XCTAssertEqual("", err1)
+                exp1.fulfill()
+            }
         }
         waitForExpectations(timeout: 2, handler: nil)
     }
