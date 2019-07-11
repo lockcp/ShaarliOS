@@ -67,6 +67,10 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("1=a%26b", String(data: formData(["1":"a&b"]), encoding: .ascii))
         XCTAssertEqual("2%3D2=c%3Dc", String(data: formData(["2=2":"c=c"]), encoding: .ascii))
         XCTAssertEqual("3=d%0Ad", String(data: formData(["3":"d\nd"]), encoding: .ascii))
+
+        var frm = ["3":"d\nd", LF_PRI:"on"]
+        frm[LF_PRI] = nil
+        XCTAssertEqual("3=d%0Ad", String(data: formData(frm), encoding: .ascii))
     }
     
     func testEncoding() {
@@ -153,11 +157,12 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient()
-        srv.get(demo, url) { (url, tit, dsc, tgs, frm, err) in
+        srv.get(demo, url) { (url, tit, dsc, tgs, pri, frm, err) in
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", tit)
             XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", dsc, "why is dsc empty?")
             XCTAssertEqual(["opensource", "software"], tgs)
+            XCTAssertFalse(pri)
             XCTAssertEqual("", err)
             // XCTAssertEqual([:], frm)
             exp.fulfill()
@@ -179,19 +184,22 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp1 = self.expectation(description: "Posting")
 
         let srv = ShaarliHtmlClient()
-        srv.get(demo, url) { (url, tit, dsc, tgs, ctx, err0) in
+        srv.get(demo, url) { (url, tit, dsc, tgs, pri, ctx, err0) in
+            XCTAssertEqual("", err0)
             XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm#minimalism", url.absoluteString)
             XCTAssertEqual("The Website Obesity Crisis", tit)
             XCTAssertEqual("", dsc, "why is dsc empty?")
             XCTAssertEqual([], tgs)
-            XCTAssertEqual("", err0)
+            XCTAssertFalse(pri)
+
+            XCTAssertNil(ctx[LF_PRI])
             exp0.fulfill()
 
-            srv.add(demo, ctx, url, tit, dsc, tgs) { err1 in
+            srv.add(demo, ctx, url, tit, dsc, tgs, pri) { err1 in
                 XCTAssertEqual("", err1)
                 exp1.fulfill()
             }
         }
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 }

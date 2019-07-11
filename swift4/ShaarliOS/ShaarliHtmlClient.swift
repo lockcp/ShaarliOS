@@ -96,7 +96,7 @@ class ShaarliHtmlClient {
         req0.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
         
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
-        let t0 = ses.dataTask(with: req0) { data, response, erro in
+        let tsk0 = ses.dataTask(with: req0) { data, response, erro in
             let err = check(data, response, erro)
             if err != "" {
                 let _ = callback([:], err)
@@ -118,7 +118,7 @@ class ShaarliHtmlClient {
             req1.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
             req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
             let formDat = formData(lofo)
-            let t1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
+            let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
                 let err = check(data, response, erro)
                 if err != "" {
                     let _ = callback([:], err)
@@ -152,9 +152,9 @@ class ShaarliHtmlClient {
 
                 let _ = callback(lifo, "")
             }
-            t1.resume()
+            tsk1.resume()
         }
-        t0.resume()
+        tsk0.resume()
     }
 
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
@@ -175,6 +175,7 @@ class ShaarliHtmlClient {
         _ description: String,
         _ extended: String,
         _ tags: [String],
+        _ privat: Bool,
         _ ctx: FormDict,
         _ error: String)->()
         ) {
@@ -185,6 +186,7 @@ class ShaarliHtmlClient {
                 lifo[LF_TIT] ?? "",
                 lifo[LF_DSC] ?? "",
                 (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) },
+                lifo[LF_PRI] == "on",
                 lifo,
                 err
             )
@@ -198,6 +200,7 @@ class ShaarliHtmlClient {
              _ description: String,
              _ extended: String,
              _ tags: [String],
+             _ privat: Bool,
              _ completion: @escaping (_ error: String) -> ()) {
         let ses = URLSession.shared
         var lifo = ctx
@@ -205,14 +208,14 @@ class ShaarliHtmlClient {
         lifo[LF_TIT] = description
         lifo[LF_DSC] = extended
         lifo[LF_TGS] = tags.joined(separator: " ")
-        lifo[LF_PRI] = ("on" == lifo[LF_PRI]) ? "on" : "off"
+        lifo[LF_PRI] = privat ? "on" : nil
 
         var req = URLRequest(url:endpoint)
         req.httpMethod = HTTP_POST
         req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
         let foda = formData(lifo)
-        debugPrint(String(data: foda, encoding: .utf8))
+        // debugPrint(String(data: foda, encoding: .utf8))
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
             let erro = check(data, response, err)
             completion(erro)
