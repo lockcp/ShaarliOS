@@ -29,13 +29,17 @@ class FormParserTest: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testNameAndValue() {
-        XCTAssertEqual("", nameAndValue({nil}).name)
-
-        var it0 = ["name", "lf_tags","value", "opensource software", "foo", nil].makeIterator()
-        let nv0 = nameAndValue({ it0.next() } )
-        XCTAssertEqual("lf_tags", nv0.name)
-        XCTAssertEqual("opensource software", nv0.value)
+    func testAtt2dict() {
+        var it0 = ["name", "lf_tags", "value", "opensource software", "foo", nil].makeIterator()
+        let di0 = att2dict({ it0.next() } )
+        XCTAssertEqual("lf_tags", di0["name"])
+        XCTAssertEqual("opensource software", di0["value"])
+        
+        var it1 = ["type", "checkbox", "name", "Kenntnisse_in", "checked", nil, "value", "HTML" ].makeIterator()
+        let di1 = att2dict({ it1.next() } )
+        XCTAssertEqual("Kenntnisse_in", di1["name"])
+        XCTAssertEqual("HTML", di1["value"])
+        XCTAssertNil(di1["checked"])
     }
 
     func testLoadfile() {

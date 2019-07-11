@@ -20,13 +20,13 @@ class ShaarliHtmlClientTest: XCTestCase {
             return Data()
         }
     }
-    
+
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        URLSession.shared.reset() { print("URLSession.reset() done.")}
     }
 
     func testUrlEmpty () {
@@ -53,7 +53,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let emo = URL(string: percentEncode(in:"päng 🚀")!)!
         XCTAssertEqual("p%C3%A4ng%20%F0%9F%9A%80", emo.absoluteString)
     }
-    
+
     func testFormString() {
         let a = [
             URLQueryItem(name: "1", value: "a&b"),
@@ -62,7 +62,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         ]
         XCTAssertEqual("1=a%26b&2%3D2=c%3Dc&3=d%0Ad", formString(a))
     }
-    
+
     func testFormData() {
         XCTAssertEqual("1=a%26b", String(data: formData(["1":"a&b"]), encoding: .ascii))
         XCTAssertEqual("2%3D2=c%3Dc", String(data: formData(["2=2":"c=c"]), encoding: .ascii))
@@ -72,14 +72,14 @@ class ShaarliHtmlClientTest: XCTestCase {
         frm[LF_PRI] = nil
         XCTAssertEqual("3=d%0Ad", String(data: formData(frm), encoding: .ascii))
     }
-    
+
     func testEncoding() {
         let str = "Hello, wörld!"
         let byt = str.data(using: .utf8, allowLossyConversion: false)!
         XCTAssertEqual(str, String(bytes: byt, encoding:.utf8))
         XCTAssertEqual("Hello, wÃ¶rld!", String(bytes: byt, encoding:.isoLatin1))
     }
-    
+
     // https://nshipster.com/swift-regular-expressions/
     func testRegex() {
         let ra0 = "Fancy a game of Cluedo™️?".range(of: "Clue(do)?™️?", options:.regularExpression)
@@ -108,7 +108,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         }
         waitForExpectations(timeout: 2, handler: nil)
     }
-    
+
     func testProbe403() {
         // let demo = URL(string:"https://demo:foo@demo.shaarli.org/")! // credentials are public
         let demo = URL(string:"https://tast:foo@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
@@ -157,7 +157,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient()
-        srv.get(demo, url) { (url, tit, dsc, tgs, pri, frm, err) in
+        srv.get(demo, url) { (frm, url, tit, dsc, tgs, pri, err) in
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", tit)
             XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", dsc, "why is dsc empty?")
@@ -184,7 +184,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp1 = self.expectation(description: "Posting")
 
         let srv = ShaarliHtmlClient()
-        srv.get(demo, url) { (url, tit, dsc, tgs, pri, ctx, err0) in
+        srv.get(demo, url) { (ctx, url, tit, dsc, tgs, pri, err0) in
             XCTAssertEqual("", err0)
             XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm#minimalism", url.absoluteString)
             XCTAssertEqual("The Website Obesity Crisis", tit)
@@ -200,6 +200,6 @@ class ShaarliHtmlClientTest: XCTestCase {
                 exp1.fulfill()
             }
         }
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 2, handler: nil)
     }
 }

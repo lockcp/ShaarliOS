@@ -23,8 +23,8 @@ let LF_URL = "lf_url"
 let LF_TIT = "lf_title"
 let LF_DSC = "lf_description"
 let LF_TGS = "lf_tags"
-let LF_TIM = "lf_linkdate"
 let LF_PRI = "lf_private"
+//let LF_TIM = "lf_linkdate"
 
 // Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
 // https://stackoverflow.com/a/50116064
@@ -64,6 +64,9 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> String
     if !(200...299).contains(http.statusCode) {
         return String(format:"Expected status 200, got %d", http.statusCode)
     }
+    if data?.count == 0 {
+        return "Got no data. That's not enough."
+    }
 
     return ""
 }
@@ -82,7 +85,10 @@ class ShaarliHtmlClient {
     static let LINK_FORM = "linkform"
 
     // prepare the login and be ready for payload - both retrieval and publication.
-    internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (_ lifo: FormDict, _ error: String) -> FormDict) {
+    internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
+        _ lifo: FormDict,
+        _ error: String) -> ()
+    ) {
         // remove uid+pwd from endpoint url
         var uc = URLComponents(url: endpoint, resolvingAgainstBaseURL: true)!
         uc.user = nil
@@ -99,65 +105,72 @@ class ShaarliHtmlClient {
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
             let err = check(data, response, erro)
             if err != "" {
-                let _ = callback([:], err)
+                callback([:], err)
                 return
             }
             let http = response as! HTTPURLResponse
 
-            guard var lofo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LOGIN_FORM]
-                else {
-                    let _ = callback([:], ShaarliHtmlClient.LOGIN_FORM + " not found")
-                    // completion(http.url!, "", ShaarliHtmlClient.LOGIN_FORM + " not found")
-                    return
-            }
-            lofo[ShaarliHtmlClient.KEY_FORM_LOGIN] = endpoint.user
-            lofo[ShaarliHtmlClient.KEY_FORM_PASSWORD] = endpoint.password
-
-            var req1 = URLRequest(url:http.url!)
-            req1.httpMethod = HTTP_POST
-            req1.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
-            req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
-            let formDat = formData(lofo)
-            let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
-                let err = check(data, response, erro)
-                if err != "" {
-                    let _ = callback([:], err)
+            let frms = findForms(data, http.textEncodingName)
+            guard let lifo = frms[ShaarliHtmlClient.LINK_FORM] else {
+                guard var lofo = frms[ShaarliHtmlClient.LOGIN_FORM] else {
+                    callback([:], ShaarliHtmlClient.LOGIN_FORM + " not found")
                     return
                 }
-                let http = response as! HTTPURLResponse
-                let _ = http.mimeType ?? ""
-                // print(String(bytes:data!, encoding:encoding(name:http.textEncodingName)))
-                guard let lifo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM]
-                    else {
+                lofo[ShaarliHtmlClient.KEY_FORM_LOGIN] = endpoint.user
+                lofo[ShaarliHtmlClient.KEY_FORM_PASSWORD] = endpoint.password
+
+                var req1 = URLRequest(url:http.url!)
+                req1.httpMethod = HTTP_POST
+                req1.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
+                req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
+                let formDat = formData(lofo)
+                let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
+                    let err = check(data, response, erro)
+                    if err != "" {
+                        callback([:], err)
+                        return
+                    }
+                    let http = response as! HTTPURLResponse
+                    let _ = http.mimeType ?? ""
+                    // print(String(bytes:data!, encoding:encoding(name:http.textEncodingName)))
+                    guard let lifo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM] else {
                         let enco = encoding(name:http.textEncodingName)
                         let str = String(bytes: data!, encoding:enco) ?? ""
                         if let ra = str.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression) {
                             let err = String(str[ra]).dropFirst(15).dropLast(3)
-                            let _ = callback([:], String(err))
+                            callback([:], String(err))
                             return
                         }
                         if ShaarliHtmlClient.STR_BANNED == str {
-                            let _ = callback([:], ShaarliHtmlClient.STR_BANNED)
+                            callback([:], ShaarliHtmlClient.STR_BANNED)
                             return
                         }
 
-                        let _ = callback([:], ShaarliHtmlClient.LINK_FORM + " not found.")
+                        callback([:], ShaarliHtmlClient.LINK_FORM + " not found.")
                         return
-                }
+                    }
 
-                if nil == lifo[LF_URL] {
-                    let _ = callback(lifo, LF_URL + " not found.")
-                    return
-                }
+                    if nil == lifo[LF_URL] {
+                        callback(lifo, LF_URL + " not found.")
+                        return
+                    }
 
-                let _ = callback(lifo, "")
+                    callback(lifo, "")
+                }
+                tsk1.resume()
+                return
             }
-            tsk1.resume()
+            callback(lifo, "")
+            return
         }
         tsk0.resume()
     }
 
-    func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (_ url:URL, _ pong:String, _ error:String)->()) {
+    func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (
+        _ url:URL,
+        _ pong:String,
+        _ error:String)->()
+    ) {
         let ses = URLSession.shared
         let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
         loginAndGet(ses, endpoint, url) { lifo, err in
@@ -166,42 +179,41 @@ class ShaarliHtmlClient {
                 lifo[LF_TIT] ?? "",
                 err
             )
-            return [:]
         }
     }
 
     func get(_ endpoint: URL, _ url: URL, _ completion: @escaping (
+        _ ctx: FormDict,
         _ url:URL,
         _ description: String,
         _ extended: String,
         _ tags: [String],
         _ privat: Bool,
-        _ ctx: FormDict,
         _ error: String)->()
-        ) {
+    ) {
         let ses = URLSession.shared
         loginAndGet(ses, endpoint, url) { lifo, err in
             completion(
+                lifo,
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
                 lifo[LF_DSC] ?? "",
                 (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) },
-                lifo[LF_PRI] == "on",
-                lifo,
+                (lifo[LF_PRI] ?? "off") != "off",
                 err
             )
-            return [:]
         }
     }
 
     func add(_ endpoint: URL,
-             _ ctx: FormDict,
-             _ url:URL,
-             _ description: String,
-             _ extended: String,
-             _ tags: [String],
-             _ privat: Bool,
-             _ completion: @escaping (_ error: String) -> ()) {
+         _ ctx: FormDict,
+         _ url:URL,
+         _ description: String,
+         _ extended: String,
+         _ tags: [String],
+         _ privat: Bool,
+         _ completion: @escaping (_ error: String) -> ()
+    ) {
         let ses = URLSession.shared
         var lifo = ctx
         lifo[LF_URL] = url.absoluteString

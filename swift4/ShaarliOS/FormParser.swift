@@ -9,16 +9,29 @@
 import Foundation
 
 // internal helper uses libxml2 graceful html parsing
-internal func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
-    guard let da = body
-        else { return [:] }
+func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
+    guard let da = body else {
+        return [:]
+    }
     return FormParser().parse(da)
+}
+
+func att2dict(_ next: (()->(String?)?)) -> FormDict {
+    var ret:FormDict = [:]
+    while let n = next() {
+        guard let v = next() else {
+            return [:] // or throw an error?
+        }
+        ret[n!] = v
+    }
+    return ret
 }
 
 // https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L33
 private func decode(_ bytes:UnsafePointer<xmlChar>?) -> String? {
-    guard let bytes = bytes
-        else { return nil }
+    guard let bytes = bytes else {
+        return nil
+    }
     if let (str, _) = String.decodeCString(bytes, as: UTF8.self, repairingInvalidCodeUnits: false) {
         return str
     }
@@ -36,7 +49,9 @@ private struct AttrIterator: IteratorProtocol {
     }
 
     mutating func next() -> (String?)? {
-        guard let atts = atts else { return nil }
+        guard let atts = atts else {
+            return nil
+        }
         let ret = decoder(atts[idx])
         if ret == nil && 0 == (idx % 2) {
             return nil
@@ -44,41 +59,6 @@ private struct AttrIterator: IteratorProtocol {
         idx += 1
         return (ret)
     }
-}
-
-// iterate over attributes and pull out name and value attribute values
-internal func nameAndValue(_ next: (()->(String?)?)) -> (name: String, value: String?) {
-    var name = ""
-    var valu:String? = nil
-    while let n = next() {
-        guard let v = next() else {
-            return ("","") // or throw an error?
-        }
-
-        // print("attribute", n, "=", v)
-        switch n {
-        case "id":
-            if name.isEmpty {
-                name = v!
-            }
-        case "name":
-            name = v!
-        case "value":
-            valu = v
-/*        case "data-list":
-            // workaround for 'modern' shaarli not bothering to fill the "value" attribute, but rather rely on javascript to do so.
-            // sigh.
-            if valu.isEmpty {
-                valu = v
-            }
- */
-        default:
-            break
-        }
-    }
-
-    // print("nameAndValue", name, "=", valu)
-    return (name, valu)
 }
 
 private class FormParser {
@@ -113,19 +93,23 @@ private class FormParser {
     }
 
     func startElement(_ name: UnsafePointer<xmlChar>? , _ atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
-        let n = decode(name)
+        guard let elm = decode(name), elm == "form" || elm == "textarea" || elm == "input" else {
+            return
+        }
         var it = AttrIterator(atts, decode)
-        let next = { it.next() }
-        switch n {
+        let att = att2dict({ it.next() })
+        let nam = att["name"] ?? (att["id"] ?? "")
+        switch elm {
         case "form":
-            formName = nameAndValue(next).0
+            formName = nam
             form = [:]
         case "textarea":
-            textName = nameAndValue(next).0
+            textName = nam
             text = ""
         case "input":
-            let nv = nameAndValue(next)
-            form[nv.0] = nv.1
+            form[nam] = "checkbox" == att["type"]
+                ? ((att["checked"] ?? "off") == "off" ? nil : "on")
+                : att["value"]
         default:
             break
         }
