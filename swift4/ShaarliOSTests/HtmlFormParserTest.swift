@@ -1,5 +1,5 @@
 //
-//  FormParserTest.swift
+//  HtmlFormParserTest.swift
 //  ShaarliOSTests
 //
 //  Created by Marcus Rohrmoser on 09.06.19.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class FormParserTest: XCTestCase {
+class HtmlFormParserTest: XCTestCase {
     func dataWithContentsOfFixture(fileName: String, extensio:String) -> Data  {
         let b = Bundle(for: type(of: self))
         let sub = "testdata" + "/" + String(describing: self.classForCoder)
@@ -53,7 +53,7 @@ class FormParserTest: XCTestCase {
 
     func testFindForms() {
         let raw = dataWithContentsOfFixture(fileName: "login.0", extensio:"html")
-        let frms = findForms(raw, "utf-8")
+        let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["loginform"]!
         XCTAssertEqual(3, frm.count)
@@ -67,7 +67,7 @@ class FormParserTest: XCTestCase {
 
     func testLinkForm() {
         let raw = dataWithContentsOfFixture(fileName: "link_form.0", extensio:"html")
-        let frms = findForms(raw, "utf-8")
+        let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(2, frms.count)
         let frm = frms["linkform"]!
         XCTAssertEqual(9, frm.count)
@@ -85,7 +85,7 @@ class FormParserTest: XCTestCase {
 
     func testLinkForm1() {
         let raw = dataWithContentsOfFixture(fileName: "link_form.1", extensio:"html")
-        let frms = findForms(raw, "utf-8")
+        let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["linkform"]!
         XCTAssertEqual(1, frm.count)

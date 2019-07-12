@@ -32,7 +32,7 @@ func formString(_ form: [URLQueryItem]) -> String {
     return uc.percentEncodedQuery!
 }
 
-func formData(_ form:FormDict) -> Data {
+func formData(_ form:HtmlFormDict) -> Data {
     let qi = form.map { URLQueryItem(name:$0, value:$1) }
     let str = formString(qi)
     return str.data(using: .ascii)!
@@ -84,7 +84,7 @@ class ShaarliHtmlClient {
 
     // prepare the login and be ready for payload - both retrieval and publication.
     internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
-        _ lifo: FormDict,
+        _ lifo: HtmlFormDict,
         _ error: String) -> ()
     ) {
         // remove uid+pwd from endpoint url
@@ -108,7 +108,7 @@ class ShaarliHtmlClient {
             }
             let http = response as! HTTPURLResponse
 
-            let frms = findForms(data, http.textEncodingName)
+            let frms = findHtmlForms(data, http.textEncodingName)
             guard let lifo = frms[ShaarliHtmlClient.LINK_FORM] else {
                 guard var lofo = frms[ShaarliHtmlClient.LOGIN_FORM] else {
                     callback([:], ShaarliHtmlClient.LOGIN_FORM + " not found")
@@ -131,7 +131,7 @@ class ShaarliHtmlClient {
                     let http = response as! HTTPURLResponse
                     let _ = http.mimeType ?? ""
                     // print(String(bytes:data!, encoding:encoding(name:http.textEncodingName)))
-                    guard let lifo = findForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM] else {
+                    guard let lifo = findHtmlForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM] else {
                         let enco = encoding(name:http.textEncodingName)
                         let str = String(bytes: data!, encoding:enco) ?? ""
                         if let ra = str.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression) {
@@ -181,7 +181,7 @@ class ShaarliHtmlClient {
     }
 
     func get(_ endpoint: URL, _ url: URL, _ completion: @escaping (
-        _ ctx: FormDict,
+        _ ctx: HtmlFormDict,
         _ url:URL,
         _ description: String,
         _ extended: String,
@@ -204,7 +204,7 @@ class ShaarliHtmlClient {
     }
 
     func add(_ endpoint: URL,
-         _ ctx: FormDict,
+         _ ctx: HtmlFormDict,
          _ url:URL,
          _ description: String,
          _ extended: String,

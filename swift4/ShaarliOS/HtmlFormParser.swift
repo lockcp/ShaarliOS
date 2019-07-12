@@ -1,5 +1,5 @@
 //
-//  FormParser.swift
+//  HtmlFormParser.swift
 //  ShaarliOS
 //
 //  Created by Marcus Rohrmoser on 09.06.19.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-typealias FormDict = [String:String]
+typealias HtmlFormDict = [String:String]
 
 // internal helper uses libxml2 graceful html parsing
-func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
+func findHtmlForms(_ body:Data?, _ encoding:String?) -> [String:HtmlFormDict] {
     guard let da = body else {
         return [:]
     }
-    return FormParser().parse(da)
+    return HtmlFormParser().parse(da)
 }
 
 // turn a nil-terminated list of unwrapped name,value pairs into a dictionary.
 // expand abbreviated (html5) attribute values.
-internal func atts2dict(_ atts: ((Int) -> String?)) -> FormDict {
-    var ret:FormDict = [:]
+internal func atts2dict(_ atts: (Int) -> String?) -> HtmlFormDict {
+    var ret:HtmlFormDict = [:]
     var idx = 0
     while let name = atts(idx) {
         ret[name] = atts(idx+1) ?? name
@@ -32,27 +32,23 @@ internal func atts2dict(_ atts: ((Int) -> String?)) -> FormDict {
 
 // https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L33
 private func decode(_ bytes:UnsafePointer<xmlChar>?) -> String? {
-    guard let bytes = bytes else {
-        return nil
-    }
-    if let (str, _) = String.decodeCString(bytes, as: UTF8.self, repairingInvalidCodeUnits: false) {
-        return str
-    }
-    return nil
+    guard let bytes = bytes else { return nil }
+    guard let (str, _) = String.decodeCString(bytes, as:UTF8.self, repairingInvalidCodeUnits:false) else { return nil }
+    return str
 }
 
-private func me(_ ptr : UnsafeRawPointer?) -> FormParser {
-    return Unmanaged<FormParser>.fromOpaque(ptr!).takeUnretainedValue()
+private func me(_ ptr : UnsafeRawPointer?) -> HtmlFormParser {
+    return Unmanaged<HtmlFormParser>.fromOpaque(ptr!).takeUnretainedValue()
 }
 
-private class FormParser {
-    private var forms : [String:FormDict] = [:]
-    private var form : FormDict = [:]
+private class HtmlFormParser {
+    private var forms : [String:HtmlFormDict] = [:]
+    private var form : HtmlFormDict = [:]
     private var formName = ""
     private var textName = ""
     private var text = ""
 
-    func parse(_ data:Data) -> [String:FormDict] {
+    func parse(_ data:Data) -> [String:HtmlFormDict] {
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
         sax.startElement = { me($0).startElement($1, $2) }
@@ -87,7 +83,7 @@ private class FormParser {
             text = ""
         case "input":
             form[nam] = "checkbox" == att["type"]
-                ? (att["checked"] == "off" ? nil : att["checked"])
+                ? ("off" == att["checked"] ? nil : att["checked"])
                 : att["value"]
         default:
             break
@@ -112,7 +108,7 @@ private class FormParser {
         if (textName.isEmpty) {
             return
         }
-        let d = Data(bytes: ch!, count:Int(len))
+        let d = Data(bytes: ch!, count:Int(len)) // clamp
         let s = String(data: d, encoding: .utf8) ?? "<utf8 decoding issue>"
         text.append(s)
     }

@@ -15,10 +15,10 @@
 		1607F42D22AD21C30036AC44 /* testdata in Resources */ = {isa = PBXBuildFile; fileRef = 1607F42B22AD21C30036AC44 /* testdata */; };
 		1607F43222AD2BCE0036AC44 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1607F43022AD2BCE0036AC44 /* libxml2.2.tbd */; };
 		1607F43322AD2BCE0036AC44 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1607F43122AD2BCE0036AC44 /* libxml2.tbd */; };
-		1607F43622AD2D8B0036AC44 /* FormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* FormParser.swift */; };
-		1607F43722AD2D8B0036AC44 /* FormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* FormParser.swift */; };
-		1607F43822AD2D8B0036AC44 /* FormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* FormParser.swift */; };
-		161FACA922AEBAED00C96B96 /* FormParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161FACA822AEBA9200C96B96 /* FormParserTest.swift */; };
+		1607F43622AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
+		1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
+		1607F43822AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
+		161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */; };
 		162BB46222C7FF28005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 		162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 		162BB46422C8013C005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
@@ -56,8 +56,8 @@
 		1607F43022AD2BCE0036AC44 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		1607F43122AD2BCE0036AC44 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		1607F43422AD2C000036AC44 /* Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
-		1607F43522AD2D8B0036AC44 /* FormParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormParser.swift; sourceTree = "<group>"; };
-		161FACA822AEBA9200C96B96 /* FormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormParserTest.swift; sourceTree = "<group>"; };
+		1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParser.swift; sourceTree = "<group>"; };
+		161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParserTest.swift; sourceTree = "<group>"; };
 		162BB46122C7FF28005D5578 /* urlencoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlencoding.swift; sourceTree = "<group>"; };
 		168C71A022AD03EC007DF595 /* ShaarliOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C71A322AD03EC007DF595 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 				168C71AF22AD03ED007DF595 /* Info.plist */,
 				1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */,
 				1607F43422AD2C000036AC44 /* Bridging.h */,
-				1607F43522AD2D8B0036AC44 /* FormParser.swift */,
+				1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */,
 				162BB46122C7FF28005D5578 /* urlencoding.swift */,
 			);
 			path = ShaarliOS;
@@ -155,7 +155,7 @@
 				1607F42B22AD21C30036AC44 /* testdata */,
 				168C71B822AD03EE007DF595 /* ShaarliOSTests.swift */,
 				1607F42922AD121E0036AC44 /* ShaarliHtmlClientTest.swift */,
-				161FACA822AEBA9200C96B96 /* FormParserTest.swift */,
+				161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */,
 				168C71BA22AD03EE007DF595 /* Info.plist */,
 			);
 			path = ShaarliOSTests;
@@ -305,7 +305,7 @@
 			files = (
 				162BB46222C7FF28005D5578 /* urlencoding.swift in Sources */,
 				1607F42622AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
-				1607F43622AD2D8B0036AC44 /* FormParser.swift in Sources */,
+				1607F43622AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 				168C71A622AD03EC007DF595 /* ViewController.swift in Sources */,
 				168C71A422AD03EC007DF595 /* AppDelegate.swift in Sources */,
 			);
@@ -316,9 +316,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
-				1607F43722AD2D8B0036AC44 /* FormParser.swift in Sources */,
+				1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 				162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */,
-				161FACA922AEBAED00C96B96 /* FormParserTest.swift in Sources */,
+				161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */,
 				168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */,
 				1607F42A22AD121E0036AC44 /* ShaarliHtmlClientTest.swift in Sources */,
 			);
@@ -331,7 +331,7 @@
 				1607F42822AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				168C71C422AD03EE007DF595 /* ShaarliOSUITests.swift in Sources */,
 				162BB46422C8013C005D5578 /* urlencoding.swift in Sources */,
-				1607F43822AD2D8B0036AC44 /* FormParser.swift in Sources */,
+				1607F43822AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
