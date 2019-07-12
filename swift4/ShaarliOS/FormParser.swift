@@ -16,13 +16,14 @@ func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
     return FormParser().parse(da)
 }
 
-func att2dict(_ next: (()->(String?)?)) -> FormDict {
+// turn a nil-terminated list of name=value pairs into a dictionary
+// expand abbreviated (html5) attribute values.
+func atts2dict(_ atts: ((Int) -> String?)) -> FormDict {
     var ret:FormDict = [:]
-    while let n = next() {
-        guard let v = next() else {
-            return [:] // or throw an error?
-        }
-        ret[n!] = v
+    var idx = 0
+    while let name = atts(idx) {
+        ret[name] = atts(idx+1) ?? name
+        idx += 2
     }
     return ret
 }
@@ -36,29 +37,6 @@ private func decode(_ bytes:UnsafePointer<xmlChar>?) -> String? {
         return str
     }
     return nil
-}
-
-private struct AttrIterator: IteratorProtocol {
-    let atts: UnsafePointer<UnsafePointer<xmlChar>?>?
-    let decoder: ((UnsafePointer<xmlChar>?) -> String?)
-    var idx = 0
-
-    init(_ atts: UnsafePointer<UnsafePointer<xmlChar>?>?, _ decoder: @escaping ((UnsafePointer<xmlChar>?) -> String?)) {
-        self.atts = atts
-        self.decoder = decoder
-    }
-
-    mutating func next() -> (String?)? {
-        guard let atts = atts else {
-            return nil
-        }
-        let ret = decoder(atts[idx])
-        if ret == nil && 0 == (idx % 2) {
-            return nil
-        }
-        idx += 1
-        return (ret)
-    }
 }
 
 private class FormParser {
@@ -93,12 +71,10 @@ private class FormParser {
     }
 
     func startElement(_ name: UnsafePointer<xmlChar>? , _ atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
-        guard let elm = decode(name), elm == "form" || elm == "textarea" || elm == "input" else {
-            return
-        }
-        var it = AttrIterator(atts, decode)
-        let att = att2dict({ it.next() })
-        let nam = att["name"] ?? (att["id"] ?? "")
+        guard let atts = atts else { return }
+        guard let elm = decode(name), elm == "form" || elm == "textarea" || elm == "input" else { return }
+        let att = atts2dict({ decode(atts[$0]) })
+        let nam = att["name"] ?? att["id"] ?? ""
         switch elm {
         case "form":
             formName = nam
@@ -108,7 +84,7 @@ private class FormParser {
             text = ""
         case "input":
             form[nam] = "checkbox" == att["type"]
-                ? ((att["checked"] ?? "off") == "off" ? nil : "on")
+                ? (att["checked"] == "off" ? nil : att["checked"])
                 : att["value"]
         default:
             break

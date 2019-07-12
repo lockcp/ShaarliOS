@@ -30,16 +30,20 @@ class FormParserTest: XCTestCase {
     }
 
     func testAtt2dict() {
-        var it0 = ["name", "lf_tags", "value", "opensource software", "foo", nil].makeIterator()
-        let di0 = att2dict({ it0.next() } )
-        XCTAssertEqual("lf_tags", di0["name"])
-        XCTAssertEqual("opensource software", di0["value"])
+        var ar0:[String?] = [nil]
+        let di0 = atts2dict({ ar0[$0] })
+        XCTAssertEqual([:], di0)
+
+        var ar1 = ["name", "lf_tags", "value", "opensource software", "foo", nil, nil]
+        let di1 = atts2dict({ ar1[$0] })
+        XCTAssertEqual("lf_tags", di1["name"])
+        XCTAssertEqual("opensource software", di1["value"])
         
-        var it1 = ["type", "checkbox", "name", "Kenntnisse_in", "checked", nil, "value", "HTML" ].makeIterator()
-        let di1 = att2dict({ it1.next() } )
-        XCTAssertEqual("Kenntnisse_in", di1["name"])
-        XCTAssertEqual("HTML", di1["value"])
-        XCTAssertNil(di1["checked"])
+        var ar2 = ["type", "checkbox", "name", "Kenntnisse_in", "checked", nil, "value", "HTML", nil]
+        let di2 = atts2dict({ ar2[$0] })
+        XCTAssertEqual("Kenntnisse_in", di2["name"])
+        XCTAssertEqual("HTML", di2["value"])
+        XCTAssertEqual("checked", di2["checked"])
     }
 
     func testLoadfile() {
