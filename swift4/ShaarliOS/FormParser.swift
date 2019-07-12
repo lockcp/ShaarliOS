@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias FormDict = [String:String]
+
 // internal helper uses libxml2 graceful html parsing
 func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
     guard let da = body else {
@@ -16,9 +18,9 @@ func findForms(_ body:Data?, _ encoding:String?) -> [String:FormDict] {
     return FormParser().parse(da)
 }
 
-// turn a nil-terminated list of name=value pairs into a dictionary
+// turn a nil-terminated list of unwrapped name,value pairs into a dictionary.
 // expand abbreviated (html5) attribute values.
-func atts2dict(_ atts: ((Int) -> String?)) -> FormDict {
+internal func atts2dict(_ atts: ((Int) -> String?)) -> FormDict {
     var ret:FormDict = [:]
     var idx = 0
     while let name = atts(idx) {
@@ -39,6 +41,10 @@ private func decode(_ bytes:UnsafePointer<xmlChar>?) -> String? {
     return nil
 }
 
+private func me(_ ptr : UnsafeRawPointer?) -> FormParser {
+    return Unmanaged<FormParser>.fromOpaque(ptr!).takeUnretainedValue()
+}
+
 private class FormParser {
     private var forms : [String:FormDict] = [:]
     private var form : FormDict = [:]
@@ -49,9 +55,9 @@ private class FormParser {
     func parse(_ data:Data) -> [String:FormDict] {
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
-        sax.startElement = startElementSAX // could this be closures?
-        sax.endElement = endElementSAX
-        sax.characters = charactersFoundSAX
+        sax.startElement = { me($0).startElement($1, $2) }
+        sax.endElement = { me($0).endElement($1) }
+        sax.characters = { me($0).charactersFound($1, $2) }
         // handler.error = errorEncounteredSAX
 
         // https://curl.haxx.se/libcurl/c/htmltitle.html
@@ -61,16 +67,13 @@ private class FormParser {
         // http://redqueencoder.com/wrapping-libxml2-for-swift/ bzw. https://github.com/SonoPlot/Swift-libxml
         let ctxt = htmlCreatePushParserCtxt(&sax, Unmanaged.passUnretained(self).toOpaque(), "", 0, "", XML_CHAR_ENCODING_NONE)
         defer { xmlFreeParserCtxt(ctxt) }
-
-        let _ = data.withUnsafeBytes { (bytes: UnsafePointer<Int8>) -> Int32 in
-            return htmlParseChunk(ctxt, bytes, Int32(data.count), 0)
-        }
+        let _ = data.withUnsafeBytes { htmlParseChunk(ctxt, $0, Int32(data.count), 0) }
         htmlParseChunk(ctxt, "", 0, 1)
 
         return forms
     }
 
-    func startElement(_ name: UnsafePointer<xmlChar>? , _ atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
+    private func startElement(_ name: UnsafePointer<xmlChar>? , _ atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
         guard let atts = atts else { return }
         guard let elm = decode(name), elm == "form" || elm == "textarea" || elm == "input" else { return }
         let att = atts2dict({ decode(atts[$0]) })
@@ -91,7 +94,7 @@ private class FormParser {
         }
     }
 
-    func endElement(_ name:UnsafePointer<xmlChar>?) {
+    private func endElement(_ name:UnsafePointer<xmlChar>?) {
         let n = decode(name)
         switch n {
         case "form":
@@ -105,7 +108,7 @@ private class FormParser {
         }
     }
 
-    func charactersFound(_ ch: UnsafePointer<xmlChar>?, _ len: CInt) {
+    private func charactersFound(_ ch: UnsafePointer<xmlChar>?, _ len: CInt) {
         if (textName.isEmpty) {
             return
         }
@@ -113,21 +116,4 @@ private class FormParser {
         let s = String(data: d, encoding: .utf8) ?? "<utf8 decoding issue>"
         text.append(s)
     }
-}
-
-private func startElementSAX(_ ctx: UnsafeMutableRawPointer?,
-                             _ name: UnsafePointer<xmlChar>?,
-                             _ attributes: UnsafeMutablePointer<UnsafePointer<xmlChar>?>?) {
-    let parser = Unmanaged<FormParser>.fromOpaque(ctx!).takeUnretainedValue()
-    parser.startElement(name, attributes)
-}
-
-private func endElementSAX(_ ctx: UnsafeMutableRawPointer?, name: UnsafePointer<xmlChar>?) {
-    let parser = Unmanaged<FormParser>.fromOpaque(ctx!).takeUnretainedValue()
-    parser.endElement(name)
-}
-
-private func charactersFoundSAX(_ ctx: UnsafeMutableRawPointer?, ch: UnsafePointer<xmlChar>?, len: CInt) {
-    let parser = Unmanaged<FormParser>.fromOpaque(ctx!).takeUnretainedValue()
-    parser.charactersFound(ch, len)
 }

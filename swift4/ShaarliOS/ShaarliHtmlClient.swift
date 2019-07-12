@@ -11,8 +11,6 @@ import Foundation
 let BUNDLE_ID = "name.mro.ShaarliOS"
 let URLEmpty = URLComponents().url!
 
-typealias FormDict = [String:String]
-
 let HTTP_POST = "POST"
 let KEY_HEAD_USER_AGENT = "User-Agent"
 let VAL_HEAD_USER_AGENT = "http://app.mro.name/ShaarliOS"
