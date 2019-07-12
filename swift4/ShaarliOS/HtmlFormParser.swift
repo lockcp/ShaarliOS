@@ -62,7 +62,7 @@ private class HtmlFormParser {
         // https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L524
         // http://redqueencoder.com/wrapping-libxml2-for-swift/ bzw. https://github.com/SonoPlot/Swift-libxml
         let ctxt = htmlCreatePushParserCtxt(&sax, Unmanaged.passUnretained(self).toOpaque(), "", 0, "", XML_CHAR_ENCODING_NONE)
-        defer { xmlFreeParserCtxt(ctxt) }
+        defer { htmlFreeParserCtxt(ctxt) }
         let _ = data.withUnsafeBytes { htmlParseChunk(ctxt, $0, Int32(data.count), 0) }
         htmlParseChunk(ctxt, "", 0, 1)
 
