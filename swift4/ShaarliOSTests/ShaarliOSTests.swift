@@ -90,6 +90,10 @@ class ShaarliOSTests: XCTestCase {
         XCTAssertEqual("🐳", isTag("🐳"))
         XCTAssertEqual("", isTag("foo#nein"))
 
+        XCTAssertEqual("><(((°>", isTag("#><(((°>"))
+        XCTAssertEqual("F#", isTag("#F#"))
+        XCTAssertEqual("#F#", isTag("##F#"))
+
         XCTAssertEqual(["ha"], tagsFromString("#ha, 1.2 foo#nein"), "aha")
         XCTAssertEqual(["🐳"], tagsFromString("🐳, foo#nein"), "aha")
         XCTAssertEqual(["$", "§", "†"], tagsFromString("#§, #$ #† foo#nein"), "aha")

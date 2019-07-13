@@ -34,17 +34,15 @@ internal func isEmojiRune(_ rune: UnicodeScalar) -> Bool {
 
 private let myPunct:CharacterSet = {
     var cs = CharacterSet.punctuationCharacters
-    cs.remove(charactersIn:"§†")
+    cs.remove(charactersIn:"§†#")
     return cs
 }()
 
 // https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/atom.go#L485
-func isTag(_ word: String?) -> String {
+internal func isTag(_ word: Substring?) -> String {
     let raw = word ?? "-"
-    if raw.hasPrefix("#") || isEmojiRune(raw.first!.unicodeScalars.first!) {
-        return raw.trimmingCharacters(in: myPunct)
-    }
-    return ""
+    let tag = raw.hasPrefix("#") ? raw.dropFirst() : isEmojiRune(raw.first!.unicodeScalars.first!) ? raw : ""
+    return tag.trimmingCharacters(in: myPunct)
 }
 
 func tagsFromString(_ string: String) -> [String] {
@@ -54,11 +52,10 @@ func tagsFromString(_ string: String) -> [String] {
     // not https://medium.com/@sorenlind/three-ways-to-enumerate-the-words-in-a-string-using-swift-7da5504f0062
     var word: NSString?
     while sca.scanUpToCharacters(from: CharacterSet.whitespacesAndNewlines, into: &word) {
-        let tag = isTag(word as String?)
-        if !tag.isEmpty {
-            ret.insert(tag)
-        }
+        let tag = isTag(word as Substring?)
+        ret.insert(tag)
     }
+    ret.remove("")
     return ret.sorted()
 }
 
