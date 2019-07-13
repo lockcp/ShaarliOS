@@ -8,6 +8,60 @@
 
 import Foundation
 
+// https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/atom.go#L467
+// https://stackoverflow.com/a/39425959
+internal func isEmojiRune(_ rune: UnicodeScalar) -> Bool {
+    switch rune.value {
+    case
+    0x2b50...0x2b50, // star
+    0x1F600...0x1F64F, // Emoticons
+    0x1F300...0x1F5FF, // Misc Symbols and Pictographs
+    0x1F680...0x1F6FF, // Transport and Map
+    0x1F1E6...0x1F1FF, // Regional country flags
+    0x2600...0x26FF, // Misc symbols
+    0x2700...0x27BF, // Dingbats
+    0xFE00...0xFE0F, // Variation Selectors
+    0x1F900...0x1F9FF, // Supplemental Symbols and Pictographs
+    0x1f018...0x1f270, // Various asian characters
+    0xfe00...0xfe0f, // Variation selector
+    0x238c...0x2454, // Misc items
+    0x20d0...0x20ff: // Combining Diacritical Marks for Symbols
+        return true
+    default:
+        return false
+    }
+}
+
+private let myPunct:CharacterSet = {
+    var cs = CharacterSet.punctuationCharacters
+    cs.remove(charactersIn:"§†")
+    return cs
+}()
+
+// https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/atom.go#L485
+func isTag(_ word: String?) -> String {
+    let raw = word ?? "-"
+    if raw.hasPrefix("#") || isEmojiRune(raw.first!.unicodeScalars.first!) {
+        return raw.trimmingCharacters(in: myPunct)
+    }
+    return ""
+}
+
+func tagsFromString(_ string: String) -> [String] {
+    let sca = Scanner(string:string)
+    var ret = Set<String>()
+    // https://news.ycombinator.com/item?id=8822835
+    // not https://medium.com/@sorenlind/three-ways-to-enumerate-the-words-in-a-string-using-swift-7da5504f0062
+    var word: NSString?
+    while sca.scanUpToCharacters(from: CharacterSet.whitespacesAndNewlines, into: &word) {
+        let tag = isTag(word as String?)
+        if !tag.isEmpty {
+            ret.insert(tag)
+        }
+    }
+    return ret.sorted()
+}
+
 let BUNDLE_ID = "name.mro.ShaarliOS"
 let URLEmpty = URLComponents().url!
 
