@@ -12,10 +12,7 @@ typealias HtmlFormDict = [String:String]
 
 // internal helper uses libxml2 graceful html parsing
 func findHtmlForms(_ body:Data?, _ encoding:String?) -> [String:HtmlFormDict] {
-    guard let da = body else {
-        return [:]
-    }
-    return HtmlFormParser().parse(da)
+    return HtmlFormParser().parse(body)
 }
 
 // turn a nil-terminated list of unwrapped name,value pairs into a dictionary.
@@ -48,7 +45,8 @@ private class HtmlFormParser {
     private var textName = ""
     private var text = ""
 
-    func parse(_ data:Data) -> [String:HtmlFormDict] {
+    func parse(_ data:Data?) -> [String:HtmlFormDict] {
+        guard let data = data else { return [:] }
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
         sax.startElement = { me($0).startElement($1, $2) }

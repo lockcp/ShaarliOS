@@ -165,7 +165,7 @@ class ShaarliHtmlClient {
             let frms = findHtmlForms(data, http.textEncodingName)
             guard let lifo = frms[ShaarliHtmlClient.LINK_FORM] else {
                 guard var lofo = frms[ShaarliHtmlClient.LOGIN_FORM] else {
-                    callback([:], ShaarliHtmlClient.LOGIN_FORM + " not found")
+                    callback([:], "\(ShaarliHtmlClient.LOGIN_FORM) not found")
                     return
                 }
                 lofo[ShaarliHtmlClient.KEY_FORM_LOGIN] = endpoint.user
@@ -198,26 +198,26 @@ class ShaarliHtmlClient {
                             return
                         }
 
-                        callback([:], ShaarliHtmlClient.LINK_FORM + " not found.")
+                        callback([:], "\(ShaarliHtmlClient.LINK_FORM) not found.")
                         return
                     }
 
                     if nil == lifo[LF_URL] {
-                        callback(lifo, LF_URL + " not found.")
+                        callback(lifo, "\(LF_URL) not found.")
                         return
                     }
 
                     callback(lifo, "")
                 }
                 tsk1.resume()
-                print("HTTP \(tsk1.originalRequest?.httpMethod) \(tsk1.originalRequest?.url)")
+                // print("HTTP \(tsk1.originalRequest?.httpMethod) \(tsk1.originalRequest?.url)")
                 return
             }
             callback(lifo, "")
             return
         }
         tsk0.resume()
-        print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
+        // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (
@@ -287,6 +287,6 @@ class ShaarliHtmlClient {
             completion(erro)
         }
         tsk.resume()
-        print("HTTP", tsk.originalRequest?.httpMethod, tsk.originalRequest?.url)
+        // print("HTTP", tsk.originalRequest?.httpMethod, tsk.originalRequest?.url)
     }
 }

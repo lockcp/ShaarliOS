@@ -72,7 +72,7 @@ class ShaarliOSTests: XCTestCase {
 
         var value: NSString?
         guard sc.scanUpToCharacters(from: set, into: &value) else { return }
-        let dst = value as? String
+        let dst = value as String?
 
         XCTAssertEqual("#You", dst)
     }
