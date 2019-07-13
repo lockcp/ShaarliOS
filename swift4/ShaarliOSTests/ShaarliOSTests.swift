@@ -9,6 +9,20 @@
 import XCTest
 @testable import ShaarliOS
 
+func dataWithContentsOfFixture(me mu:AnyObject, fileName: String, extensio:String) -> Data  {
+    precondition(true, "Never happens")
+    let ty:AnyObject.Type = type(of: mu)
+    let bu = Bundle(for: ty)
+    let sub = "testdata/\(String(describing: ty))"
+    guard let ur = bu.url(forResource: fileName, withExtension: extensio, subdirectory:sub)
+        else { return Data() }
+    do {
+        return try Data(contentsOf: ur)
+    } catch {
+        return Data()
+    }
+}
+
 class ShaarliOSTests: XCTestCase {
 
     private let df1123 = DateFormatter()

@@ -1,5 +1,5 @@
 //
-//  ShaarliSrvTest.swift
+//  ShaarliHtmlClientTest.swift
 //  ShaarliOSTests
 //
 //  Created by Marcus Rohrmoser on 09.06.19.
@@ -9,18 +9,6 @@
 import XCTest
 
 class ShaarliHtmlClientTest: XCTestCase {
-    func dataWithContentsOfFixture(fileName: String, extensio:String) -> Data  {
-        let b = Bundle(for: type(of: self))
-        let sub = "testdata" + "/" + String(describing: self.classForCoder)
-        guard let u = b.url(forResource: fileName, withExtension: extensio, subdirectory:sub)
-            else { return Data() }
-        do {
-            return try Data(contentsOf: u)
-        } catch {
-            return Data()
-        }
-    }
-
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

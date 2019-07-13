@@ -9,18 +9,6 @@
 import XCTest
 
 class HtmlFormParserTest: XCTestCase {
-    func dataWithContentsOfFixture(fileName: String, extensio:String) -> Data  {
-        let b = Bundle(for: type(of: self))
-        let sub = "testdata" + "/" + String(describing: self.classForCoder)
-        guard let u = b.url(forResource: fileName, withExtension: extensio, subdirectory:sub)
-            else { return Data() }
-        do {
-            return try Data(contentsOf: u)
-        } catch {
-            return Data()
-        }
-    }
-
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -47,12 +35,12 @@ class HtmlFormParserTest: XCTestCase {
     }
 
     func testLoadfile() {
-        let d = dataWithContentsOfFixture(fileName: "login.0", extensio:"html")
+        let d = dataWithContentsOfFixture(me:self, fileName: "login.0", extensio:"html")
         XCTAssertEqual(2509, d.count)
     }
 
     func testFindForms() {
-        let raw = dataWithContentsOfFixture(fileName: "login.0", extensio:"html")
+        let raw = dataWithContentsOfFixture(me:self, fileName: "login.0", extensio:"html")
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["loginform"]!
@@ -66,7 +54,7 @@ class HtmlFormParserTest: XCTestCase {
     }
 
     func testLinkForm() {
-        let raw = dataWithContentsOfFixture(fileName: "link_form.0", extensio:"html")
+        let raw = dataWithContentsOfFixture(me:self, fileName: "link_form.0", extensio:"html")
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(2, frms.count)
         let frm = frms["linkform"]!
@@ -84,7 +72,7 @@ class HtmlFormParserTest: XCTestCase {
     }
 
     func testLinkForm1() {
-        let raw = dataWithContentsOfFixture(fileName: "link_form.1", extensio:"html")
+        let raw = dataWithContentsOfFixture(me:self, fileName: "link_form.1", extensio:"html")
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["linkform"]!

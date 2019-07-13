@@ -156,12 +156,14 @@ class ShaarliHtmlClient {
                     callback(lifo, "")
                 }
                 tsk1.resume()
+                print("HTTP \(tsk1.originalRequest?.httpMethod) \(tsk1.originalRequest?.url)")
                 return
             }
             callback(lifo, "")
             return
         }
         tsk0.resume()
+        print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (
@@ -231,5 +233,6 @@ class ShaarliHtmlClient {
             completion(erro)
         }
         tsk.resume()
+        print("HTTP", tsk.originalRequest?.httpMethod, tsk.originalRequest?.url)
     }
 }
