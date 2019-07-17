@@ -49,9 +49,9 @@ private class HtmlFormParser {
         guard let data = data else { return [:] }
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
-        sax.startElement = { me($0).startElement($1, $2) }
-        sax.endElement = { me($0).endElement($1) }
-        sax.characters = { me($0).charactersFound($1, $2) }
+        sax.startElement = { me($0).startElement(name:$1, atts:$2) }
+        sax.endElement = { me($0).endElement(name:$1) }
+        sax.characters = { me($0).charactersFound(ch:$1, len:$2) }
         // handler.error = errorEncounteredSAX
 
         // https://curl.haxx.se/libcurl/c/htmltitle.html
@@ -67,9 +67,14 @@ private class HtmlFormParser {
         return forms
     }
 
-    private func startElement(_ name: UnsafePointer<xmlChar>? , _ atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
+    private func startElement(name: UnsafePointer<xmlChar>? , atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
         guard let atts = atts else { return }
-        guard let elm = decode(name), elm == "form" || elm == "textarea" || elm == "input" else { return }
+        // https://github.com/MaddTheSane/chmox/blob/3263ddf09276f6a47961cc4b87762f58b88772d0/CHMTableOfContents.swift#L75
+        guard let nam_ = UnsafeRawPointer(name)?.assumingMemoryBound(to: Int8.self) else { return }
+        if 0 != strcmp("form", nam_) && 0 != strcmp("input", nam_) && 0 != strcmp("textarea", nam_) {
+            return
+        }
+        guard let elm = decode(name) else { return }
         let att = atts2dict({ decode(atts[$0]) })
         let nam = att["name"] ?? att["id"] ?? ""
         switch elm {
@@ -88,9 +93,14 @@ private class HtmlFormParser {
         }
     }
 
-    private func endElement(_ name:UnsafePointer<xmlChar>?) {
-        let n = decode(name)
-        switch n {
+    private func endElement(name:UnsafePointer<xmlChar>?) {
+        // https://github.com/MaddTheSane/chmox/blob/3263ddf09276f6a47961cc4b87762f58b88772d0/CHMTableOfContents.swift#L75
+        guard let nam_ = UnsafeRawPointer(name)?.assumingMemoryBound(to: Int8.self) else { return }
+        if 0 != strcmp("form", nam_) && 0 != strcmp("input", nam_) && 0 != strcmp("textarea", nam_) {
+            return
+        }
+        let elm = decode(name)
+        switch elm {
         case "form":
             forms[formName] = form
             formName = ""
@@ -102,7 +112,7 @@ private class HtmlFormParser {
         }
     }
 
-    private func charactersFound(_ ch: UnsafePointer<xmlChar>?, _ len: CInt) {
+    private func charactersFound(ch: UnsafePointer<xmlChar>?, len: CInt) {
         if (textName.isEmpty) {
             return
         }
