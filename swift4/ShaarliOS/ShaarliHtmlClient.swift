@@ -32,20 +32,26 @@ internal func isEmojiRune(_ rune: UnicodeScalar) -> Bool {
     }
 }
 
+private let tpf = "#"
+
 private let myPunct:CharacterSet = {
     var cs = CharacterSet.punctuationCharacters
-    cs.remove(charactersIn:"§†#")
+    cs.remove(charactersIn:"§†\(tpf)")
     return cs
 }()
 
 // https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/atom.go#L485
 internal func isTag(_ word: Substring?) -> String {
     let raw = word ?? "-"
-    let tag = raw.hasPrefix("#") ? raw.dropFirst() : isEmojiRune(raw.first!.unicodeScalars.first!) ? raw : ""
+    let tag = raw.hasPrefix(tpf)
+        ? raw.dropFirst()
+        : isEmojiRune(raw.first!.unicodeScalars.first!)
+        ? raw
+        : ""
     return tag.trimmingCharacters(in: myPunct)
 }
 
-func tagsFromString(_ string: String) -> [String] {
+internal func tagsFromString(_ string: String) -> [String] {
     let sca = Scanner(string:string)
     var ret = Set<String>()
     // https://news.ycombinator.com/item?id=8822835
@@ -59,12 +65,37 @@ func tagsFromString(_ string: String) -> [String] {
     return ret.sorted()
 }
 
+internal func fold(lbl:String) -> String {
+    let trm = lbl.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+    return trm.folding(options: [.diacriticInsensitive, .caseInsensitive], locale:nil)
+}
+
+// TODO: make case insensitive
+func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<String>, known:Set<String>) -> (description: String, extended: String, tags: Set<String>) {
+    let foldr = { (m:[String:String], l:String) -> [String:String] in
+        var m_ = m
+        m_[fold(lbl:l)] = l
+        return m_
+    }
+    let known_ = known.reduce([:], foldr)
+
+    let txt = Set(tagsFromString(ds)).union(tagsFromString(ex))
+    let sep = " \(tpf)"
+    let miss = ta.subtracting(txt).sorted().joined(separator:sep)
+    let trim = { (s:String) -> String in s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
+    return (
+        description:trim(ds),
+        extended:trim("\(ex)\(sep)\(miss)"),
+        tags:ta.union(txt)
+    )
+}
+
 let BUNDLE_ID = "name.mro.ShaarliOS"
 let URLEmpty = URLComponents().url!
 
 let HTTP_POST = "POST"
 let KEY_HEAD_USER_AGENT = "User-Agent"
-let VAL_HEAD_USER_AGENT = "http://app.mro.name/ShaarliOS"
+let VAL_HEAD_USER_AGENT = "http://mro.name/ShaarliOS"
 let KEY_HEAD_CONTENT_TYPE = "Content-Type"
 let VAL_HEAD_CONTENT_TYPE = "application/x-www-form-urlencoded"
 

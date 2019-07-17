@@ -108,6 +108,19 @@ class ShaarliOSTests: XCTestCase {
         XCTAssertEqual(["⭐️"], tagsFromString("a single ⭐️ is also a tag"), "aha")
     }
 
+    func testFold() {
+        XCTAssertEqual("hallo wyrld!", fold(lbl:" Hälló wÿrld! "))
+        XCTAssertEqual("demaiziere", fold(lbl:" DeMaizière \n"))
+        XCTAssertEqual("cegłowski", fold(lbl:"\tCegłowski"))
+    }
+
+    func testTagsNormalise() {
+        let n0 = tagsNormalise(description:"#A", extended:"#B #C", tags:["B", "c", "D"], known:["c"])
+        XCTAssertEqual("#A", n0.description)
+        XCTAssertEqual("#B #C #D #c", n0.extended)
+        XCTAssertEqual(["A", "B", "C", "D", "c"], n0.tags.sorted())
+    }
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
