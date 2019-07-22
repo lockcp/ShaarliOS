@@ -115,10 +115,10 @@ class ShaarliOSTests: XCTestCase {
     }
 
     func testTagsNormalise() {
-        let n0 = tagsNormalise(description:"#A", extended:"#B #C", tags:["B", "c", "D"], known:["c"])
+        let n0 = tagsNormalise(description:"#A", extended:"#B #C", tags:["a", "c", "D"], known:["c"])
         XCTAssertEqual("#A", n0.description)
-        XCTAssertEqual("#B #C #D #c", n0.extended)
-        XCTAssertEqual(["A", "B", "C", "D", "c"], n0.tags.sorted())
+        XCTAssertEqual("#B #C #D", n0.extended)
+        XCTAssertEqual(["B", "D", "a", "c"], n0.tags.sorted())
     }
 
     func testPerformanceExample() {

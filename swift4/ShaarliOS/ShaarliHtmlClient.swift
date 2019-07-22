@@ -51,7 +51,7 @@ internal func isTag(_ word: Substring?) -> String {
     return tag.trimmingCharacters(in: myPunct)
 }
 
-internal func tagsFromString(_ string: String) -> [String] {
+internal func tagsFromString(_ string: String) -> Set<String> {
     let sca = Scanner(string:string)
     var ret = Set<String>()
     // https://news.ycombinator.com/item?id=8822835
@@ -62,7 +62,7 @@ internal func tagsFromString(_ string: String) -> [String] {
         ret.insert(tag)
     }
     ret.remove("")
-    return ret.sorted()
+    return ret
 }
 
 internal func fold(lbl:String) -> String {
@@ -70,23 +70,31 @@ internal func fold(lbl:String) -> String {
     return trm.folding(options: [.diacriticInsensitive, .caseInsensitive], locale:nil)
 }
 
-// TODO: make case insensitive
 func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<String>, known:Set<String>) -> (description: String, extended: String, tags: Set<String>) {
     let foldr = { (m:[String:String], l:String) -> [String:String] in
+        // build a dictionary key:folded value:original
         var m_ = m
         m_[fold(lbl:l)] = l
         return m_
     }
-    let known_ = known.reduce([:], foldr)
+    let kndi = known.reduce([:], foldr) // may be large
+    
+    let tadi = ta.reduce([:], foldr) // previously declared tags
+    let take = tadi.keys
+    
+    let txdi = tagsFromString(ds).union(tagsFromString(ex)).reduce([:], foldr) // factual used tags
+    let txke = txdi.keys
+    
+    let nedi = txdi.filter { !take.contains($0.0) } // used, but undeclared: new
+    // should we replace values from tav with corresponding from kndi now?
+    let tags = ta.union(nedi.values)
 
-    let txt = Set(tagsFromString(ds)).union(tagsFromString(ex))
-    let sep = " \(tpf)"
-    let miss = ta.subtracting(txt).sorted().joined(separator:sep)
+    let miss = tadi.filter{ !txke.contains($0.0) }.values.sorted().reduce("") { "\($0) \(tpf)\($1)" }
     let trim = { (s:String) -> String in s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
     return (
         description:trim(ds),
-        extended:trim("\(ex)\(sep)\(miss)"),
-        tags:ta.union(txt)
+        extended:"\(trim(ex))\(miss)",
+        tags:tags
     )
 }
 
@@ -269,18 +277,19 @@ class ShaarliHtmlClient {
         _ url:URL,
         _ description: String,
         _ extended: String,
-        _ tags: [String],
+        _ tags: Set<String>,
         _ privat: Bool,
         _ error: String)->()
     ) {
         let ses = URLSession.shared
         loginAndGet(ses, endpoint, url) { lifo, err in
+            let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
             completion(
                 lifo,
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
                 lifo[LF_DSC] ?? "",
-                (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) },
+                Set(tags),
                 (lifo[LF_PRI] ?? "off") != "off",
                 err
             )
@@ -292,7 +301,7 @@ class ShaarliHtmlClient {
          _ url:URL,
          _ description: String,
          _ extended: String,
-         _ tags: [String],
+         _ tags: Set<String>,
          _ privat: Bool,
          _ completion: @escaping (_ error: String) -> ()
     ) {
