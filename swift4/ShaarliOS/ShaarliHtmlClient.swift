@@ -71,23 +71,18 @@ internal func fold(lbl:String) -> String {
 }
 
 func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<String>, known:Set<String>) -> (description: String, extended: String, tags: Set<String>) {
-    let foldr = { (m:[String:String], l:String) -> [String:String] in
-        // build a dictionary key:folded value:original
-        var m_ = m
-        m_[fold(lbl:l)] = l
-        return m_
-    }
-    let kndi = known.reduce([:], foldr) // may be large
+    func foldr(_ di: inout [String:String], _ tag:String) { di[fold(lbl:tag)] = tag }
     
-    let tadi = ta.reduce([:], foldr) // previously declared tags
+    let tadi = ta.reduce(into:[:], foldr) // previously declared tags
     let take = tadi.keys
-    
-    let txdi = tagsFromString(ds).union(tagsFromString(ex)).reduce([:], foldr) // factual used tags
+
+    let txdi = tagsFromString(ds).union(tagsFromString(ex)).reduce(into:[:], foldr) // factual used tags
     let txke = txdi.keys
     
     let nedi = txdi.filter { !take.contains($0.0) } // used, but undeclared: new
-    // should we replace values from tav with corresponding from kndi now?
     let tags = ta.union(nedi.values)
+    // let kndi = known.reduce(into:[:], foldr) // may be large
+    // should we replace values from tags with corresponding from kndi now?
 
     let miss = tadi.filter{ !txke.contains($0.0) }.values.sorted().reduce("") { "\($0) \(tpf)\($1)" }
     let trim = { (s:String) -> String in s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
