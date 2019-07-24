@@ -51,7 +51,7 @@ internal func isTag(_ word: Substring?) -> String {
     return tag.trimmingCharacters(in: myPunct)
 }
 
-internal func tagsFromString(_ string: String) -> Set<String> {
+internal func tagsFrom(string: String) -> Set<String> {
     let sca = Scanner(string:string)
     var ret = Set<String>()
     // https://news.ycombinator.com/item?id=8822835
@@ -76,7 +76,7 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
     let tadi = ta.reduce(into:[:], foldr) // previously declared tags
     let take = tadi.keys
 
-    let txdi = tagsFromString(ds).union(tagsFromString(ex)).reduce(into:[:], foldr) // factual used tags
+    let txdi = tagsFrom(string:ds).union(tagsFrom(string:ex)).reduce(into:[:], foldr) // factual used tags
     let txke = txdi.keys
     
     let nedi = txdi.filter { !take.contains($0.0) } // used, but undeclared: new
@@ -85,7 +85,7 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
     // should we replace values from tags with corresponding from kndi now?
 
     let miss = tadi.filter{ !txke.contains($0.0) }.values.sorted().reduce("") { "\($0) \(tpf)\($1)" }
-    let trim = { (s:String) -> String in s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
+    func trim(_ s:String) -> String { return s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
     return (
         description:trim(ds),
         extended:"\(trim(ex))\(miss)",
