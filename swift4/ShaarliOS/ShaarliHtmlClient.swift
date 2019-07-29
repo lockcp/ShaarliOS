@@ -58,8 +58,7 @@ internal func tagsFrom(string: String) -> Set<String> {
     // not https://medium.com/@sorenlind/three-ways-to-enumerate-the-words-in-a-string-using-swift-7da5504f0062
     var word: NSString?
     while sca.scanUpToCharacters(from: CharacterSet.whitespacesAndNewlines, into: &word) {
-        let tag = isTag(word as Substring?)
-        ret.insert(tag)
+        ret.insert(isTag(word as Substring?))
     }
     ret.remove("")
     return ret
@@ -162,6 +161,8 @@ class ShaarliHtmlClient {
     static let KEY_FORM_LOGIN = "login"
     static let KEY_FORM_PASSWORD = "password"
 
+    static let CMD_DO_CFG = "do=configure"
+
     static let PAT_WRONG_LOGIN = "^<script>alert\\((?:\".*?\"|'.*?')\\);"
     static let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
 
@@ -195,6 +196,7 @@ class ShaarliHtmlClient {
 
             let frms = findHtmlForms(data, http.textEncodingName)
             guard let lifo = frms[ShaarliHtmlClient.LINK_FORM] else {
+                // actually that's what we normally expect: not logged in yet.
                 guard var lofo = frms[ShaarliHtmlClient.LOGIN_FORM] else {
                     callback([:], "\(ShaarliHtmlClient.LOGIN_FORM) not found")
                     return
@@ -251,6 +253,10 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
+    // TODO:
+    // We need the name of the server. Reliably. So we have to look at ?do=configure.
+    // That's where it's in a HTML form.
+    // so we pretend to ?post= in order to get past the login and then ?do=configure.
     func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (
         _ url:URL,
         _ pong:String,
@@ -259,11 +265,17 @@ class ShaarliHtmlClient {
         let ses = URLSession.shared
         let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
         loginAndGet(ses, endpoint, url) { lifo, err in
+            // do not call back yet, but rather call ?do=configure and report the title.
+            // do we need the evtl. rewritten endpoint url?
+            
+            
+            
             completion(
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
                 err
             )
+            
         }
     }
 
