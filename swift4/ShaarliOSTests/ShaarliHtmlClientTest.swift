@@ -74,7 +74,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual(16, ra0?.lowerBound.encodedOffset)
         
         let msg = "<script>alert(\"foo\"); // bar \");"
-        let ra1 = msg.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression)!
+        let ra1 = msg.range(of: PAT_WRONG_LOGIN, options:.regularExpression)!
         XCTAssertEqual("<script>alert(\"foo\");", msg[ra1])
     }
 
@@ -86,12 +86,16 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient()
-        srv.probe(demo, "päng 🚀") { (url, pong, err) in
-            XCTAssertNil(url.host)
-            XCTAssertEqual("", url.path)
-            XCTAssertEqual(6, url.query?.count)
-            XCTAssertEqual("Note: ", pong)
+        srv.probe(demo) { (url, tit, err) in
             XCTAssertEqual("", err)
+            XCTAssertEqual("https://demo.shaarli.org/", url.absoluteString)
+            XCTAssertEqual("Shaarli demo (master)", tit)
+
+            // XCTAssertEqual("https://demo.mro.name/shaarli-v0.10.2/", url.absoluteString)
+            // XCTAssertEqual("Uhu 🚀", tit)
+
+            // XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b/", url.absoluteString)
+            // XCTAssertEqual("Uhu 🚀", tit)
             exp.fulfill()
         }
         waitForExpectations(timeout: 2, handler: nil)
@@ -105,7 +109,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         
         let srv = ShaarliHtmlClient()
-        srv.probe(demo, "paeng") { (url, pong, err) in
+        srv.probe(demo) { (url, pong, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
             XCTAssertEqual("Wrong login/password.", err)
@@ -123,7 +127,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         
         let srv = ShaarliHtmlClient()
-        srv.probe(demo, "paeng") { (url, pong, err) in
+        srv.probe(demo) { (url, pong, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
             XCTAssertEqual("Expected status 200, got 404", err)

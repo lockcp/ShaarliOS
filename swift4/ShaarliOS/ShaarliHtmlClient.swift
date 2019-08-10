@@ -96,6 +96,7 @@ let BUNDLE_ID = "name.mro.ShaarliOS"
 let URLEmpty = URLComponents().url!
 
 let HTTP_POST = "POST"
+let HTTP_GET = "GET"
 let KEY_HEAD_USER_AGENT = "User-Agent"
 let VAL_HEAD_USER_AGENT = "http://mro.name/ShaarliOS"
 let KEY_HEAD_CONTENT_TYPE = "Content-Type"
@@ -107,6 +108,23 @@ let LF_DSC = "lf_description"
 let LF_TGS = "lf_tags"
 let LF_PRI = "lf_private"
 //let LF_TIM = "lf_linkdate"
+
+private let KEY_PAR_DO = "do"
+private let KEY_PAR_POST = "post"
+private let KEY_PAR_DESC = "description"
+private let CMD_DO_CFG = "configure"
+
+private let LOGIN_FORM = "loginform"
+private let KEY_FORM_LOGIN = "login"
+private let KEY_FORM_PASSWORD = "password"
+
+internal let PAT_WRONG_LOGIN = "^<script>alert\\((?:\".*?\"|'.*?')\\);"
+private let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
+
+private let LINK_FORM = "linkform"
+private let KEY_FORM_TITLE = "title"
+
+private let CFG_FORM = "configform"
 
 // Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
 // https://stackoverflow.com/a/50116064
@@ -154,32 +172,20 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> String
 }
 
 class ShaarliHtmlClient {
-    static let KEY_PAR_POST = "post"
-    static let KEY_PAR_DESC = "description"
-
-    static let LOGIN_FORM = "loginform"
-    static let KEY_FORM_LOGIN = "login"
-    static let KEY_FORM_PASSWORD = "password"
-
-    static let CMD_DO_CFG = "do=configure"
-
-    static let PAT_WRONG_LOGIN = "^<script>alert\\((?:\".*?\"|'.*?')\\);"
-    static let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
-
-    static let LINK_FORM = "linkform"
 
     // prepare the login and be ready for payload - both retrieval and publication.
+    // todo https://youtu.be/vDe-4o8Uwl8?t=3090
     internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
         _ lifo: HtmlFormDict,
         _ error: String) -> ()
     ) {
         // remove uid+pwd from endpoint url
-        var uc = URLComponents(url: endpoint, resolvingAgainstBaseURL: true)!
+        var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
         uc.user = nil
         uc.password = nil
         // add payload query items, at least the url
         var qi = uc.queryItems ?? []
-        qi.append(URLQueryItem(name: ShaarliHtmlClient.KEY_PAR_POST, value: url.absoluteString))
+        qi.append(URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString))
         uc.queryItems = qi
 
         var req0 = URLRequest(url:uc.url!)
@@ -193,16 +199,15 @@ class ShaarliHtmlClient {
                 return
             }
             let http = response as! HTTPURLResponse
-
             let frms = findHtmlForms(data, http.textEncodingName)
-            guard let lifo = frms[ShaarliHtmlClient.LINK_FORM] else {
+            guard let lifo = frms[LINK_FORM] else {
                 // actually that's what we normally expect: not logged in yet.
-                guard var lofo = frms[ShaarliHtmlClient.LOGIN_FORM] else {
-                    callback([:], "\(ShaarliHtmlClient.LOGIN_FORM) not found")
+                guard var lofo = frms[LOGIN_FORM] else {
+                    callback([:], "\(LOGIN_FORM) not found")
                     return
                 }
-                lofo[ShaarliHtmlClient.KEY_FORM_LOGIN] = endpoint.user
-                lofo[ShaarliHtmlClient.KEY_FORM_PASSWORD] = endpoint.password
+                lofo[KEY_FORM_LOGIN] = endpoint.user
+                lofo[KEY_FORM_PASSWORD] = endpoint.password
 
                 var req1 = URLRequest(url:http.url!)
                 req1.httpMethod = HTTP_POST
@@ -218,20 +223,20 @@ class ShaarliHtmlClient {
                     let http = response as! HTTPURLResponse
                     let _ = http.mimeType ?? ""
                     // print(String(bytes:data!, encoding:encoding(name:http.textEncodingName)))
-                    guard let lifo = findHtmlForms(data, http.textEncodingName)[ShaarliHtmlClient.LINK_FORM] else {
+                    guard let lifo = findHtmlForms(data, http.textEncodingName)[LINK_FORM] else {
                         let enco = encoding(name:http.textEncodingName)
                         let str = String(bytes: data!, encoding:enco) ?? ""
-                        if let ra = str.range(of: ShaarliHtmlClient.PAT_WRONG_LOGIN, options:.regularExpression) {
+                        if let ra = str.range(of: PAT_WRONG_LOGIN, options:.regularExpression) {
                             let err = String(str[ra]).dropFirst(15).dropLast(3)
                             callback([:], String(err))
                             return
                         }
-                        if ShaarliHtmlClient.STR_BANNED == str {
-                            callback([:], ShaarliHtmlClient.STR_BANNED)
+                        if STR_BANNED == str {
+                            callback([:], STR_BANNED)
                             return
                         }
 
-                        callback([:], "\(ShaarliHtmlClient.LINK_FORM) not found.")
+                        callback([:], "\(LINK_FORM) not found.")
                         return
                     }
 
@@ -253,29 +258,58 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
-    // TODO:
     // We need the name of the server. Reliably. So we have to look at ?do=configure.
     // That's where it's in a HTML form.
     // so we pretend to ?post= in order to get past the login and then ?do=configure.
-    func probe(_ endpoint: URL, _ ping: String, _ completion: @escaping (
+    func probe(_ endpoint: URL, _ completion: @escaping (
         _ url:URL,
-        _ pong:String,
+        _ title:String,
         _ error:String)->()
     ) {
         let ses = URLSession.shared
         let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
         loginAndGet(ses, endpoint, url) { lifo, err in
+            if err != "" {
+                completion(URLEmpty, "", err)
+                return
+            }
             // do not call back yet, but rather call ?do=configure and report the title.
             // do we need the evtl. rewritten endpoint url?
-            
-            
-            
-            completion(
-                URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
-                lifo[LF_TIT] ?? "",
-                err
-            )
-            
+
+            // remove uid+pwd from endpoint url
+            var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
+            uc.user = nil
+            uc.password = nil
+            var qi = uc.queryItems ?? []
+            qi.append(URLQueryItem(name: KEY_PAR_DO, value: CMD_DO_CFG))
+            uc.queryItems = qi
+
+            var req = URLRequest(url:uc.url!)
+            req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
+            req.httpMethod = HTTP_GET
+            let tsk = ses.dataTask(with: req) { data, response, err in
+                let erro = check(data, response, err)
+                if erro != "" {
+                    completion(URLEmpty, "", erro)
+                    return
+                }
+                let http = response as! HTTPURLResponse
+                guard let cffo = findHtmlForms(data, http.textEncodingName)[CFG_FORM] else {
+                    completion(URLEmpty, "", "\(CFG_FORM) not found.")
+                    return
+                }
+                guard var u = URLComponents(url:http.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                    completion(http.url ?? URLEmpty, "", "Strange URL")
+                    return
+                }
+                u.queryItems = nil
+                completion(
+                    u.url ?? URLEmpty,
+                    cffo[KEY_FORM_TITLE] ?? "",
+                    ""
+                )
+            }
+            tsk.resume()
         }
     }
 
