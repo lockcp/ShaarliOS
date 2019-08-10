@@ -86,13 +86,13 @@ class ShaarliOSTests: XCTestCase {
         // api0LinkForMap
         // https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/api0.go#L432
 
-        XCTAssertEqual("ha", isTag("#ha"))
-        XCTAssertEqual("🐳", isTag("🐳"))
-        XCTAssertEqual("", isTag("foo#nein"))
+        XCTAssertEqual("ha", isTag(word:"#ha"))
+        XCTAssertEqual("🐳", isTag(word:"🐳"))
+        XCTAssertEqual("", isTag(word:"foo#nein"))
 
-        XCTAssertEqual("><(((°>", isTag("#><(((°>"))
-        XCTAssertEqual("F#", isTag("#F#"))
-        XCTAssertEqual("#F#", isTag("##F#"))
+        XCTAssertEqual("><(((°>", isTag(word:"#><(((°>"))
+        XCTAssertEqual("F#", isTag(word:"#F#"))
+        XCTAssertEqual("#F#", isTag(word:"##F#"))
 
         XCTAssertEqual(["ha"], tagsFrom(string:"#ha, 1.2 foo#nein"), "aha")
         XCTAssertEqual(["🐳"], tagsFrom(string:"🐳, foo#nein"), "aha")

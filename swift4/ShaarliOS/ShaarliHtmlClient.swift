@@ -8,9 +8,14 @@
 
 import Foundation
 
+internal func isEmoji(character: Character?) -> Bool {
+    guard let character = character else { return false }
+    return isEmoji(rune:character.unicodeScalars.first!)
+}
+
 // https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/atom.go#L467
 // https://stackoverflow.com/a/39425959
-internal func isEmojiRune(_ rune: UnicodeScalar) -> Bool {
+internal func isEmoji(rune: UnicodeScalar) -> Bool {
     switch rune.value {
     case
     0x2b50...0x2b50, // star
@@ -41,12 +46,12 @@ private let myPunct:CharacterSet = {
 }()
 
 // https://code.mro.name/mro/ShaarliGo/src/c65e142dda32bac7cec02deedc345b8f32a2cf8e/atom.go#L485
-internal func isTag(_ word: Substring?) -> String {
-    let raw = word ?? "-"
-    let tag = raw.hasPrefix(tpf)
-        ? raw.dropFirst()
-        : isEmojiRune(raw.first!.unicodeScalars.first!)
-        ? raw
+internal func isTag(word: Substring?) -> String {
+    guard let word = word else { return "" }
+    let tag = word.hasPrefix(tpf)
+        ? word.dropFirst()
+        : isEmoji(character:word.first)
+        ? word
         : ""
     return tag.trimmingCharacters(in: myPunct)
 }
@@ -57,8 +62,8 @@ internal func tagsFrom(string: String) -> Set<String> {
     // https://news.ycombinator.com/item?id=8822835
     // not https://medium.com/@sorenlind/three-ways-to-enumerate-the-words-in-a-string-using-swift-7da5504f0062
     var word: NSString?
-    while sca.scanUpToCharacters(from: CharacterSet.whitespacesAndNewlines, into: &word) {
-        ret.insert(isTag(word as Substring?))
+    while sca.scanUpToCharacters(from:CharacterSet.whitespacesAndNewlines, into:&word) {
+        ret.insert(isTag(word:word as Substring?))
     }
     ret.remove("")
     return ret
