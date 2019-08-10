@@ -171,6 +171,16 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> String
     return ""
 }
 
+internal func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
+    var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
+    uc.user = nil
+    uc.password = nil
+    uc.queryItems = params.count == 0 ? nil : params
+    var req = URLRequest(url:uc.url!)
+    req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
+    return req
+}
+
 class ShaarliHtmlClient {
 
     // prepare the login and be ready for payload - both retrieval and publication.
@@ -179,18 +189,7 @@ class ShaarliHtmlClient {
         _ lifo: HtmlFormDict,
         _ error: String) -> ()
     ) {
-        // remove uid+pwd from endpoint url
-        var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
-        uc.user = nil
-        uc.password = nil
-        // add payload query items, at least the url
-        var qi = uc.queryItems ?? []
-        qi.append(URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString))
-        uc.queryItems = qi
-
-        var req0 = URLRequest(url:uc.url!)
-        req0.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
-        
+        let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString)])
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
             let err = check(data, response, erro)
@@ -210,9 +209,9 @@ class ShaarliHtmlClient {
                 lofo[KEY_FORM_PASSWORD] = endpoint.password
 
                 var req1 = URLRequest(url:http.url!)
-                req1.httpMethod = HTTP_POST
                 req1.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
                 req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
+                req1.httpMethod = HTTP_POST
                 let formDat = formData(lofo)
                 let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
                     let err = check(data, response, erro)
@@ -267,26 +266,14 @@ class ShaarliHtmlClient {
         _ error:String)->()
     ) {
         let ses = URLSession.shared
-        let url = URLEmpty // URL(string: percentEncode(in: ping)!)!
-        loginAndGet(ses, endpoint, url) { lifo, err in
+        loginAndGet(ses, endpoint, URLEmpty) { lifo, err in
             if err != "" {
                 completion(URLEmpty, "", err)
                 return
             }
             // do not call back yet, but rather call ?do=configure and report the title.
             // do we need the evtl. rewritten endpoint url?
-
-            // remove uid+pwd from endpoint url
-            var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
-            uc.user = nil
-            uc.password = nil
-            var qi = uc.queryItems ?? []
-            qi.append(URLQueryItem(name: KEY_PAR_DO, value: CMD_DO_CFG))
-            uc.queryItems = qi
-
-            var req = URLRequest(url:uc.url!)
-            req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
-            req.httpMethod = HTTP_GET
+            let req = createReq(endpoint:endpoint, params:[URLQueryItem(name: KEY_PAR_DO, value: CMD_DO_CFG)])
             let tsk = ses.dataTask(with: req) { data, response, err in
                 let erro = check(data, response, err)
                 if erro != "" {
@@ -298,13 +285,13 @@ class ShaarliHtmlClient {
                     completion(URLEmpty, "", "\(CFG_FORM) not found.")
                     return
                 }
-                guard var u = URLComponents(url:http.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                guard var uc = URLComponents(url:http.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
                     completion(http.url ?? URLEmpty, "", "Strange URL")
                     return
                 }
-                u.queryItems = nil
+                uc.queryItems = nil
                 completion(
-                    u.url ?? URLEmpty,
+                    uc.url ?? URLEmpty,
                     cffo[KEY_FORM_TITLE] ?? "",
                     ""
                 )
@@ -337,7 +324,8 @@ class ShaarliHtmlClient {
         }
     }
 
-    func add(_ endpoint: URL,
+    // Requires a logged.in session as left over by get().
+    func add(_ action: URL,
          _ ctx: HtmlFormDict,
          _ url:URL,
          _ description: String,
@@ -354,10 +342,9 @@ class ShaarliHtmlClient {
         lifo[LF_TGS] = tags.joined(separator: " ")
         lifo[LF_PRI] = privat ? "on" : nil
 
-        var req = URLRequest(url:endpoint)
-        req.httpMethod = HTTP_POST
-        req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
+        var req = createReq(endpoint:action, params:[])
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
+        req.httpMethod = HTTP_POST
         let foda = formData(lifo)
         // debugPrint(String(data: foda, encoding: .utf8))
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
