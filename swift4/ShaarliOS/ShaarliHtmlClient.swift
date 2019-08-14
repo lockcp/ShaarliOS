@@ -290,7 +290,7 @@ class ShaarliHtmlClient {
                     completion(URLEmpty, "", "\(CFG_FORM) not found.")
                     return
                 }
-                guard var uc = URLComponents(url:http.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                guard var uc = URLComponents(url:req.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
                     completion(http.url ?? URLEmpty, "", "Strange URL")
                     return
                 }

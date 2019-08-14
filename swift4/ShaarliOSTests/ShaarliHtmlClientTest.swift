@@ -93,12 +93,8 @@ class ShaarliHtmlClientTest: XCTestCase {
             // XCTAssertEqual("Shaarli demo", tit)
 
             // XCTAssertEqual("https://demo.mro.name/shaarli-v0.10.2/", url.absoluteString)
-            // XCTAssertEqual("Uhu 🚀", tit)
-
             // XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b/", url.absoluteString)
-            // XCTAssertEqual("Uhu 🚀", tit)
-
-            XCTAssertEqual("https://demo.mro.name/shaarligo/shaarligo.cgi/config/", url.absoluteString)
+            XCTAssertEqual("https://demo.mro.name/shaarligo/shaarligo.cgi", url.absoluteString)
             XCTAssertEqual("Uhu 🚀", tit)
             exp.fulfill()
         }
