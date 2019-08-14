@@ -79,23 +79,27 @@ class ShaarliHtmlClientTest: XCTestCase {
     }
 
     func testProbeSunshine() {
-        let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.41b/")! // credentials are public
+        let demo = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo/shaarligo.cgi")! // credentials are public
 
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient()
         srv.probe(demo) { (url, tit, err) in
             XCTAssertEqual("", err)
-            XCTAssertEqual("https://demo.shaarli.org/", url.absoluteString)
-            XCTAssertEqual("Shaarli demo (master)", tit)
+            // XCTAssertEqual("https://demo.shaarli.org/", url.absoluteString)
+            // XCTAssertEqual("Shaarli demo", tit)
 
             // XCTAssertEqual("https://demo.mro.name/shaarli-v0.10.2/", url.absoluteString)
             // XCTAssertEqual("Uhu 🚀", tit)
 
             // XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b/", url.absoluteString)
             // XCTAssertEqual("Uhu 🚀", tit)
+
+            XCTAssertEqual("https://demo.mro.name/shaarligo/shaarligo.cgi/config/", url.absoluteString)
+            XCTAssertEqual("Uhu 🚀", tit)
             exp.fulfill()
         }
         waitForExpectations(timeout: 2, handler: nil)
@@ -192,6 +196,6 @@ class ShaarliHtmlClientTest: XCTestCase {
                 exp1.fulfill()
             }
         }
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 }

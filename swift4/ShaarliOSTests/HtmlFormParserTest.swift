@@ -54,7 +54,7 @@ class HtmlFormParserTest: XCTestCase {
     }
 
     func testLinkForm() {
-        let raw = dataWithContentsOfFixture(me:self, fileName: "link_form.0", extensio:"html")
+        let raw = dataWithContentsOfFixture(me:self, fileName: "linkform.0", extensio:"html")
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(2, frms.count)
         let frm = frms["linkform"]!
@@ -72,11 +72,20 @@ class HtmlFormParserTest: XCTestCase {
     }
 
     func testLinkForm1() {
-        let raw = dataWithContentsOfFixture(me:self, fileName: "link_form.1", extensio:"html")
+        let raw = dataWithContentsOfFixture(me:self, fileName: "linkform.1", extensio:"html")
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["linkform"]!
         XCTAssertEqual(1, frm.count)
         XCTAssertEqual("opensource software", frm["lf_tags"], "lf_tags")
+    }
+
+    func testCinfigForm0() {
+        let raw = dataWithContentsOfFixture(me:self, fileName: "configform.0", extensio:"html")
+        let frms = findHtmlForms(raw, "utf-8")
+        XCTAssertEqual(1, frms.count)
+        let frm = frms["configform"]!
+        XCTAssertEqual(3, frm.count)
+        XCTAssertEqual("🚀 Uhu", frm["title"], "title")
     }
 }

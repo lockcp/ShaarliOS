@@ -12,7 +12,7 @@ typealias HtmlFormDict = [String:String]
 
 // internal helper uses libxml2 graceful html parsing
 func findHtmlForms(_ body:Data?, _ encoding:String?) -> [String:HtmlFormDict] {
-    return HtmlFormParser().parse(body)
+    return HtmlFormParser().parse(data:body, encoding:encoding)
 }
 
 // turn a nil-terminated list of unwrapped name,value pairs into a dictionary.
@@ -38,6 +38,14 @@ private func me(_ ptr : UnsafeRawPointer?) -> HtmlFormParser {
     return Unmanaged<HtmlFormParser>.fromOpaque(ptr!).takeUnretainedValue()
 }
 
+private func xml(encoding:String?) -> xmlCharEncoding {
+    switch encoding {
+    case "utf-8":   return XML_CHAR_ENCODING_UTF8
+    default:        print(encoding)
+                    return XML_CHAR_ENCODING_ERROR
+    }
+}
+
 private class HtmlFormParser {
     private var forms : [String:HtmlFormDict] = [:]
     private var form : HtmlFormDict = [:]
@@ -45,7 +53,7 @@ private class HtmlFormParser {
     private var textName = ""
     private var text = ""
 
-    func parse(_ data:Data?) -> [String:HtmlFormDict] {
+    func parse(data:Data?, encoding:String?) -> [String:HtmlFormDict] {
         guard let data = data else { return [:] }
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
@@ -59,7 +67,7 @@ private class HtmlFormParser {
         // https://stackoverflow.com/questions/41140050/parsing-large-xml-from-server-while-downloading-with-libxml2-in-swift-3
         // https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L524
         // http://redqueencoder.com/wrapping-libxml2-for-swift/ bzw. https://github.com/SonoPlot/Swift-libxml
-        let ctxt = htmlCreatePushParserCtxt(&sax, Unmanaged.passUnretained(self).toOpaque(), "", 0, "", XML_CHAR_ENCODING_NONE)
+        let ctxt = htmlCreatePushParserCtxt(&sax, Unmanaged.passUnretained(self).toOpaque(), "", 0, "", xml(encoding:encoding))
         defer { htmlFreeParserCtxt(ctxt) }
         let _ = data.withUnsafeBytes { htmlParseChunk(ctxt, $0, Int32(data.count), 0) }
         htmlParseChunk(ctxt, "", 0, 1)
