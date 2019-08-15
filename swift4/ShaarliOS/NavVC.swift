@@ -11,6 +11,6 @@ import UIKit
 class NavVC: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.purple
+        view.backgroundColor = .purple
     }
 }

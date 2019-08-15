@@ -14,22 +14,27 @@ class MainVC: UITableViewController {
     @IBOutlet var btnSave: UIBarButtonItem!
     @IBOutlet var btnCancel: UIBarButtonItem!
     @IBOutlet var btnLegal: UIBarButtonItem!
-
+    
+    override func viewDidLoad() {
+        print("viewDidLoad \(type(of: self))")
+        super.viewDidLoad()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
 
-        navigationController!.view.backgroundColor = .orange
+        // navigationController!.view.backgroundColor = .orange
         // navigationController!.viewControllers.forEach { $0.view.backgroundColor = .orange }
-        UIApplication.shared.windows.first!.backgroundColor = .orange
-        UIApplication.shared.windows.first!.rootViewController!.view.backgroundColor = .orange
-        parent!.view.backgroundColor = .orange
+        // UIApplication.shared.windows.first!.backgroundColor = .orange
+        // UIApplication.shared.windows.first!.rootViewController!.view.backgroundColor = .orange
+        // parent!.view.backgroundColor = .orange
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("prepare \(type(of: self))-> \(String(describing: type(of:segue.destination)))")
         super.prepare(for:segue, sender:sender)
-        segue.destination.view.backgroundColor = .orange
+        // segue.destination.view.backgroundColor = .orange
     }
 
     override func performSegue(withIdentifier identifier: String, sender: Any?) {
@@ -47,7 +52,6 @@ class MainVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier:id, for:indexPath)
         cell.textLabel!.text = "Uhu 🐳"
         cell.detailTextLabel!.text = "https://demo.mro.name/shaarligo/shaarligo.cgi"
-        cell.contentView.layoutSubviews()
         return cell
     }
 

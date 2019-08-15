@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         guard let window = window else {return false}
-        window.backgroundColor = UIColor.purple
+        window.backgroundColor = .yellow
         return true
     }
 
