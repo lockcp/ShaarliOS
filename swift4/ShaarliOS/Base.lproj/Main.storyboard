@@ -60,7 +60,7 @@
                                 <color key="backgroundColor" red="0.88373842592592589" green="0.70359586254782303" blue="0.52119087376221696" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <segue destination="1r5-AJ-qbE" kind="show" identifier="EditSegue" trigger="accessoryAction" id="XdX-uE-nba"/>
-                                    <segue destination="up8-qQ-2V3" kind="modal" identifier="PostSegue" modalPresentationStyle="currentContext" id="3hH-3X-zwN"/>
+                                    <segue destination="up8-qQ-2V3" kind="presentation" identifier="PostSegue" id="3hH-3X-zwN"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
