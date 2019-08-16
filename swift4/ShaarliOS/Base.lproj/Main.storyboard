@@ -23,7 +23,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hMI-eY-WXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2235" y="50"/>
+            <point key="canvasLocation" x="2235" y="1645"/>
         </scene>
         <!--ShaarliOS  💫-->
         <scene sceneID="E9S-9K-WaW">
@@ -41,15 +41,15 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="88"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="abG-gO-Kkq">
-                                            <rect key="frame" x="16" y="24" width="33.5" height="20.5"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title of the Shaarli" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="abG-gO-Kkq">
+                                            <rect key="frame" x="16" y="24" width="138.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gf7-fM-O3G">
-                                            <rect key="frame" x="16" y="47.5" width="44" height="14.5"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Endpoint RL (sans pwd) of the Shaarli" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gf7-fM-O3G">
+                                            <rect key="frame" x="16" y="47.5" width="212.5" height="14.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -78,7 +78,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="§" id="7QU-Am-GBY">
                             <connections>
-                                <segue destination="jYO-WJ-1xW" kind="show" id="1rn-ny-UHj"/>
+                                <segue destination="jYO-WJ-1xW" kind="show" identifier="LegalSegue" id="1rn-ny-UHj"/>
                             </connections>
                         </barButtonItem>
                         <connections>
@@ -356,10 +356,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ROf-YG-H7o"/>
                     </view>
+                    <connections>
+                        <outlet property="lblTitle" destination="Umi-Qp-8FQ" id="o9W-PJ-cmb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cj0-tD-CW3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1168" y="1623"/>
+            <point key="canvasLocation" x="2235" y="6"/>
         </scene>
     </scenes>
 </document>

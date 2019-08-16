@@ -14,12 +14,12 @@ class MainVC: UITableViewController {
     @IBOutlet var btnSave: UIBarButtonItem!
     @IBOutlet var btnCancel: UIBarButtonItem!
     @IBOutlet var btnLegal: UIBarButtonItem!
-    
+
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
@@ -32,9 +32,12 @@ class MainVC: UITableViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("prepare \(type(of: self))-> \(String(describing: type(of:segue.destination)))")
+        print("prepare \(segue.identifier ?? "?") \(type(of: self)) -> \(String(describing: type(of:segue.destination)))")
         super.prepare(for:segue, sender:sender)
-        // segue.destination.view.backgroundColor = .orange
+        if "PostSegue" == segue.identifier {
+            guard let tc = sender as? UITableViewCell else {return}
+            segue.destination.title = tc.textLabel?.text ?? "?" // just hand on the title
+        }
     }
 
     override func performSegue(withIdentifier identifier: String, sender: Any?) {

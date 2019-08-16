@@ -9,6 +9,9 @@
 import UIKit
 
 class PostVC: UIViewController {
+
+    @IBOutlet var lblTitle: UILabel!
+
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
@@ -20,6 +23,11 @@ class PostVC: UIViewController {
         blurView.frame = self.view.bounds
 
         view.insertSubview(blurView, at:0)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        lblTitle.text = title
     }
     
     @IBAction func actionCancel(_ sender: Any) {

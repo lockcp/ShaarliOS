@@ -41,7 +41,7 @@ private func me(_ ptr : UnsafeRawPointer?) -> HtmlFormParser {
 private func xml(encoding:String?) -> xmlCharEncoding {
     switch encoding {
     case "utf-8":   return XML_CHAR_ENCODING_UTF8
-    default:        print(encoding)
+    default:        print(encoding as Any)
                     return XML_CHAR_ENCODING_ERROR
     }
 }

@@ -59,6 +59,6 @@ class CreditsVC: UIViewController, WKNavigationDelegate {
         // even this late gives a flash sometimes: view.isOpaque = true
         let semv = semver(info:Bundle.main.infoDictionary)
         let js = "injectVersion('\(semv)');"
-        wv.evaluateJavaScript(js) { res,err in print(err) }
+        wv.evaluateJavaScript(js) { res,err in print(err as Any) }
     }
 }
