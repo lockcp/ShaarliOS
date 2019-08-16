@@ -28,6 +28,8 @@ class CreditsVC: UIViewController, WKNavigationDelegate {
         let back = view.backgroundColor
         view = wv
         view.backgroundColor = back
+        view.isOpaque = false // avoid white flash https://stackoverflow.com/a/15670274
+        view.backgroundColor = .black
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +56,7 @@ class CreditsVC: UIViewController, WKNavigationDelegate {
     }
 
     func webView(_ sender:WKWebView, didFinish:WKNavigation!) {
+        // even this late gives a flash sometimes: view.isOpaque = true
         let semv = semver(info:Bundle.main.infoDictionary)
         let js = "injectVersion('\(semv)');"
         wv.evaluateJavaScript(js) { res,err in print(err) }
