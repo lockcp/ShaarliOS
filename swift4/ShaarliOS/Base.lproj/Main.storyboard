@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="2235" y="1645"/>
         </scene>
-        <!--ShaarliOS  💫-->
+        <!--Shaarli💫-->
         <scene sceneID="E9S-9K-WaW">
             <objects>
                 <tableViewController storyboardIdentifier="MainVC" id="Q8B-gJ-HOu" customClass="MainVC" customModule="ShaarliOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -70,7 +70,7 @@
                             <outlet property="delegate" destination="Q8B-gJ-HOu" id="dB6-R6-FVG"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ShaarliOS  💫" id="Olh-Zh-tl8">
+                    <navigationItem key="navigationItem" title="Shaarli💫" id="Olh-Zh-tl8">
                         <barButtonItem key="leftBarButtonItem" systemItem="edit" id="PQN-Ew-vv2">
                             <connections>
                                 <action selector="actionEdit:" destination="Q8B-gJ-HOu" id="pUS-c1-gQu"/>
@@ -162,10 +162,10 @@
             </objects>
             <point key="canvasLocation" x="2235" y="793"/>
         </scene>
-        <!--NavVC-->
+        <!--Navigation Controller-->
         <scene sceneID="v1J-OC-ggy">
             <objects>
-                <navigationController storyboardIdentifier="NavVC" id="a8p-p5-kp8" customClass="NavVC" customModule="ShaarliOS" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavVC" id="a8p-p5-kp8" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Fwc-Ac-Kur">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

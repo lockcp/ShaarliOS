@@ -8,6 +8,11 @@
 
 import UIKit
 
+internal let EditSegue = "EditSegue"
+internal let PostSegue = "PostSegue"
+
+internal let SubtitleCell = "SubtitleCell"
+
 class MainVC: UITableViewController {
 
     @IBOutlet var btnEdit: UIBarButtonItem!
@@ -23,26 +28,29 @@ class MainVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
+    }
 
-        // navigationController!.view.backgroundColor = .orange
-        // navigationController!.viewControllers.forEach { $0.view.backgroundColor = .orange }
-        // UIApplication.shared.windows.first!.backgroundColor = .orange
-        // UIApplication.shared.windows.first!.rootViewController!.view.backgroundColor = .orange
-        // parent!.view.backgroundColor = .orange
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        switch identifier {
+        case EditSegue: return tableView.isEditing
+        case PostSegue: return !tableView.isEditing
+        default: return true
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("prepare \(segue.identifier ?? "?") \(type(of: self)) -> \(String(describing: type(of:segue.destination)))")
         super.prepare(for:segue, sender:sender)
-        if "PostSegue" == segue.identifier {
+        switch segue.identifier {
+        case EditSegue:
             guard let tc = sender as? UITableViewCell else {return}
             segue.destination.title = tc.textLabel?.text ?? "?" // just hand on the title
+            segue.destination.view.backgroundColor = segue.source.view.backgroundColor
+        case PostSegue:
+            guard let tc = sender as? UITableViewCell else {return}
+            segue.destination.title = tc.textLabel?.text ?? "?" // just hand on the title
+        default: break
         }
-    }
-
-    override func performSegue(withIdentifier identifier: String, sender: Any?) {
-        print("performSegue \(type(of: self))")
-        super.performSegue(withIdentifier: identifier, sender:sender)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,19 +59,21 @@ class MainVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cellForRowAt \(type(of: self))")
-        let id = "SubtitleCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier:id, for:indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier:SubtitleCell, for:indexPath)
+
         cell.textLabel!.text = "Uhu 🐳"
         cell.detailTextLabel!.text = "https://demo.mro.name/shaarligo/shaarligo.cgi"
+
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("didSelectRowAt \(type(of: self))")
         tableView.deselectRow(at:indexPath, animated:true)
+        // PostSegue is anchored on the cell, so no need to trigger it manually.
+        // EditSegue is anchored on the table itself, so we need to trigger it manually
         if tableView.isEditing {
-            self.performSegue(withIdentifier: "EditSegue", sender: self)
-            return
+            performSegue(withIdentifier: EditSegue, sender:tableView.cellForRow(at: indexPath))
         }
     }
 
