@@ -113,6 +113,9 @@ let LF_DSC = "lf_description"
 let LF_TGS = "lf_tags"
 let LF_PRI = "lf_private"
 //let LF_TIM = "lf_linkdate"
+internal let VAL_ON = "on"
+internal let VAL_OFF = "off"
+
 
 private let KEY_PAR_DO = "do"
 private let KEY_PAR_POST = "post"
@@ -191,6 +194,7 @@ class ShaarliHtmlClient {
     // prepare the login and be ready for payload - both retrieval and publication.
     // todo https://youtu.be/vDe-4o8Uwl8?t=3090
     internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
+        _ lurl: URL,
         _ lifo: HtmlFormDict,
         _ error: String) -> ()
     ) {
@@ -199,7 +203,7 @@ class ShaarliHtmlClient {
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
             let err = check(data, response, erro)
             if err != "" {
-                callback([:], err)
+                callback(URLEmpty, [:], err)
                 return
             }
             let http = response as! HTTPURLResponse
@@ -207,7 +211,7 @@ class ShaarliHtmlClient {
             guard let lifo = frms[LINK_FORM] else {
                 // actually that's what we normally expect: not logged in yet.
                 guard var lofo = frms[LOGIN_FORM] else {
-                    callback([:], "\(LOGIN_FORM) not found")
+                    callback(URLEmpty, [:], "\(LOGIN_FORM) not found")
                     return
                 }
                 lofo[KEY_FORM_LOGIN] = endpoint.user
@@ -221,7 +225,7 @@ class ShaarliHtmlClient {
                 let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
                     let err = check(data, response, erro)
                     if err != "" {
-                        callback([:], err)
+                        callback(URLEmpty, [:], err)
                         return
                     }
                     let http = response as! HTTPURLResponse
@@ -232,30 +236,41 @@ class ShaarliHtmlClient {
                         let str = String(bytes: data!, encoding:enco) ?? ""
                         if let ra = str.range(of: PAT_WRONG_LOGIN, options:.regularExpression) {
                             let err = String(str[ra]).dropFirst(15).dropLast(3)
-                            callback([:], String(err))
+                            callback(URLEmpty, [:], String(err))
                             return
                         }
                         if STR_BANNED == str {
-                            callback([:], STR_BANNED)
+                            callback(URLEmpty, [:], STR_BANNED)
                             return
                         }
 
-                        callback([:], "\(LINK_FORM) not found.")
+                        callback(URLEmpty, [:], "\(LINK_FORM) not found.")
                         return
                     }
 
                     if nil == lifo[LF_URL] {
-                        callback(lifo, "\(LF_URL) not found.")
+                        callback(URLEmpty, lifo, "\(LF_URL) not found.")
                         return
                     }
 
-                    callback(lifo, "")
+                    guard var uc = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                        callback(URLEmpty, lifo, "strange url")
+                        return
+                    }
+                    uc.queryItems = nil
+                    callback(uc.url ?? URLEmpty, lifo, "")
                 }
                 tsk1.resume()
                 // print("HTTP \(tsk1.originalRequest?.httpMethod) \(tsk1.originalRequest?.url)")
                 return
             }
-            callback(lifo, "")
+
+            guard var uc = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                callback(URLEmpty, lifo, "strange url")
+                return
+            }
+            uc.queryItems = nil
+            callback(uc.url ?? URLEmpty, lifo, "")
             return
         }
         tsk0.resume()
@@ -271,9 +286,9 @@ class ShaarliHtmlClient {
         _ error:String)->()
     ) {
         let ses = URLSession.shared
-        loginAndGet(ses, endpoint, URLEmpty) { lifo, err in
+        loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             if err != "" {
-                completion(URLEmpty, "", err)
+                completion(lurl, "", err)
                 return
             }
             // do not call back yet, but rather call ?do=configure and report the title.
@@ -282,21 +297,16 @@ class ShaarliHtmlClient {
             let tsk = ses.dataTask(with: req) { data, response, err in
                 let erro = check(data, response, err)
                 if erro != "" {
-                    completion(URLEmpty, "", erro)
+                    completion(lurl, "", erro)
                     return
                 }
                 let http = response as! HTTPURLResponse
                 guard let cffo = findHtmlForms(data, http.textEncodingName)[CFG_FORM] else {
-                    completion(URLEmpty, "", "\(CFG_FORM) not found.")
+                    completion(lurl, "", "\(CFG_FORM) not found.")
                     return
                 }
-                guard var uc = URLComponents(url:req.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
-                    completion(http.url ?? URLEmpty, "", "Strange URL")
-                    return
-                }
-                uc.queryItems = nil
                 completion(
-                    uc.url ?? URLEmpty,
+                    lurl,
                     cffo[KEY_FORM_TITLE] ?? "",
                     ""
                 )
@@ -315,7 +325,7 @@ class ShaarliHtmlClient {
         _ error: String)->()
     ) {
         let ses = URLSession.shared
-        loginAndGet(ses, endpoint, url) { lifo, err in
+        loginAndGet(ses, endpoint, url) { _, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
             completion(
                 lifo,
@@ -323,13 +333,13 @@ class ShaarliHtmlClient {
                 lifo[LF_TIT] ?? "",
                 lifo[LF_DSC] ?? "",
                 Set(tags),
-                (lifo[LF_PRI] ?? "off") != "off",
+                (lifo[LF_PRI] ?? VAL_OFF) != VAL_OFF,
                 err
             )
         }
     }
 
-    // Requires a logged.in session as left over by get().
+    // Requires a logged-in session as left over by get().
     func add(_ action: URL,
          _ ctx: HtmlFormDict,
          _ url:URL,
@@ -345,14 +355,15 @@ class ShaarliHtmlClient {
         lifo[LF_TIT] = description
         lifo[LF_DSC] = extended
         lifo[LF_TGS] = tags.joined(separator: " ")
-        lifo[LF_PRI] = privat ? "on" : nil
+        lifo[LF_PRI] = privat ? VAL_ON : nil
 
         var req = createReq(endpoint:action, params:[])
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
         req.httpMethod = HTTP_POST
         let foda = formData(lifo)
-        // debugPrint(String(data: foda, encoding: .utf8))
+        debugPrint("\(req.httpMethod ?? "?") \(req.url ?? URLEmpty) data:\(String(data:foda, encoding:.utf8) ?? "-")")
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
+            debugPrint("response: \(response?.url ?? URLEmpty) data:\(String(data:data!, encoding:.utf8) ?? "-")")
             let erro = check(data, response, err)
             completion(erro)
         }
