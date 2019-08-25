@@ -8,13 +8,19 @@
 
 import UIKit
 
-class PostVC: UIViewController {
+class PostVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var lblTitle: UILabel!
-
+    @IBOutlet weak var tfURL: UITextField!
+    @IBOutlet weak var tfTit: UITextField!
+    @IBOutlet weak var tvDsc: UITextView!
+    @IBOutlet weak var aiTit: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
+        tfTit.leftViewMode = .always
+        tfTit.leftView = aiTit
 
         // https://belkadigital.com/articles/modal-uiviewcontroller-blur-background-swift
         // https://stackoverflow.com/a/44400909
@@ -33,5 +39,19 @@ class PostVC: UIViewController {
     @IBAction func actionCancel(_ sender: Any) {
         print("actionCancel \(type(of: self))")
         dismiss(animated:true) { }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case tfURL:
+            tfTit.becomeFirstResponder()
+        case tfTit:
+            tvDsc.becomeFirstResponder()
+        case tvDsc:
+            print("Let's go!")
+        default:
+            print("Uhu")
+        }
+        return true
     }
 }
