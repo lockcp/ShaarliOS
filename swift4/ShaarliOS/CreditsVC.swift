@@ -29,7 +29,7 @@ class CreditsVC: UIViewController, WKNavigationDelegate {
         view = wv
         view.backgroundColor = back
         view.isOpaque = false // avoid white flash https://stackoverflow.com/a/15670274
-        view.backgroundColor = .black
+        //view.backgroundColor = .black
     }
 
     override func viewWillAppear(_ animated: Bool) {
