@@ -8,10 +8,8 @@
 
 import UIKit
 
-internal let EditSegue = "EditSegue"
+internal let ServerSegue = "ServerSegue"
 internal let PostSegue = "PostSegue"
-
-internal let SubtitleCell = "SubtitleCell"
 
 class MainVC: UITableViewController {
 
@@ -19,6 +17,12 @@ class MainVC: UITableViewController {
     @IBOutlet var btnSave: UIBarButtonItem!
     @IBOutlet var btnCancel: UIBarButtonItem!
     @IBOutlet var btnLegal: UIBarButtonItem!
+
+    let urls: [ServerM] = [
+        ServerM("a", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo/shaarligo.cgi")!),
+        ServerM("b", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b")!),
+        ServerM("c", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.2")!)
+    ]
 
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
@@ -32,9 +36,12 @@ class MainVC: UITableViewController {
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         switch identifier {
-        case EditSegue: return tableView.isEditing
-        case PostSegue: return !tableView.isEditing
-        default: return true
+        case ServerSegue:
+            return tableView.isEditing
+        case PostSegue:
+            return !tableView.isEditing
+        default:
+            return true
         }
     }
 
@@ -42,28 +49,28 @@ class MainVC: UITableViewController {
         print("prepare \(segue.identifier ?? "?") \(type(of: self)) -> \(String(describing: type(of:segue.destination)))")
         super.prepare(for:segue, sender:sender)
         switch segue.identifier {
-        case EditSegue:
-            guard let tc = sender as? UITableViewCell else {return}
-            segue.destination.title = tc.textLabel?.text ?? "?" // just hand on the title
-            segue.destination.view.backgroundColor = segue.source.view.backgroundColor
+        case ServerSegue:
+            guard let vc = segue.destination as? ServerVC else {return}
+            vc.setup(sender as? ServerTVC)
+            vc.view.backgroundColor = segue.source.view.backgroundColor
+            break
         case PostSegue:
-            guard let tc = sender as? UITableViewCell else {return}
-            segue.destination.title = tc.textLabel?.text ?? "?" // just hand on the title
-        default: break
+            guard let vc = segue.destination as? PostVC else {return}
+            vc.setup(sender as? ServerTVC)
+            break
+        default:
+            break
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return urls.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cellForRowAt \(type(of: self))")
-        let cell = tableView.dequeueReusableCell(withIdentifier:SubtitleCell, for:indexPath)
-
-        cell.textLabel!.text = "Uhu 🐳"
-        cell.detailTextLabel!.text = "https://demo.mro.name/shaarligo/shaarligo.cgi"
-
+        guard let cell = dequeue(tableView, indexPath) else { return UITableViewCell() }
+        cell.setup(urls[indexPath.row])
         return cell
     }
 
@@ -71,9 +78,9 @@ class MainVC: UITableViewController {
         print("didSelectRowAt \(type(of: self))")
         tableView.deselectRow(at:indexPath, animated:true)
         // PostSegue is anchored on the cell, so no need to trigger it manually.
-        // EditSegue is anchored on the table itself, so we need to trigger it manually
+        // ServerSegue is anchored on the table itself, so we need to trigger it manually
         if tableView.isEditing {
-            performSegue(withIdentifier: EditSegue, sender:tableView.cellForRow(at: indexPath))
+            performSegue(withIdentifier: ServerSegue, sender:tableView.cellForRow(at: indexPath))
         }
     }
 

@@ -16,6 +16,14 @@ class PostVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var tvDsc: UITextView!
     @IBOutlet weak var aiTit: UIActivityIndicatorView!
     
+    func setup(_ tc:ServerTVC?) {
+        guard let tc = tc else {
+            title = "?"
+            return
+        }
+        title = tc.server?.key ?? "-"
+    }
+
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
         super.viewDidLoad()

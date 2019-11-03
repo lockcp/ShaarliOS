@@ -34,7 +34,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.6588235294" green="0.6588235294" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" showsReorderControl="YES" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SubtitleCell" editingAccessoryType="disclosureIndicator" textLabel="abG-gO-Kkq" detailTextLabel="gf7-fM-O3G" style="IBUITableViewCellStyleSubtitle" id="ubM-FF-x6g">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" showsReorderControl="YES" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ServerTVC" editingAccessoryType="disclosureIndicator" textLabel="abG-gO-Kkq" detailTextLabel="gf7-fM-O3G" style="IBUITableViewCellStyleSubtitle" id="ubM-FF-x6g" customClass="ServerTVC" customModule="ShaarliOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ubM-FF-x6g" id="4DL-bd-lS7">
@@ -48,8 +48,8 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Endpoint RL (sans pwd) of the Shaarli" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gf7-fM-O3G">
-                                            <rect key="frame" x="16" y="47.5" width="212.5" height="14.5"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Endpoint URL (sans pwd) of the Shaarli" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gf7-fM-O3G">
+                                            <rect key="frame" x="16" y="47.5" width="221.5" height="14.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -59,7 +59,7 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.88373842592592589" green="0.70359586254782303" blue="0.52119087376221696" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <segue destination="1r5-AJ-qbE" kind="show" identifier="EditSegue" trigger="accessoryAction" id="XdX-uE-nba"/>
+                                    <segue destination="1r5-AJ-qbE" kind="show" identifier="ServerSegue" trigger="accessoryAction" id="XdX-uE-nba"/>
                                     <segue destination="up8-qQ-2V3" kind="presentation" identifier="PostSegue" id="3hH-3X-zwN"/>
                                 </connections>
                             </tableViewCell>
@@ -109,7 +109,7 @@
         <!--Server-->
         <scene sceneID="HFT-cb-qNS">
             <objects>
-                <viewController title="Server" id="1r5-AJ-qbE" sceneMemberID="viewController">
+                <viewController title="Server" id="1r5-AJ-qbE" customClass="ServerVC" customModule="ShaarliOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F44-Wj-Bgm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -122,20 +122,29 @@
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="url"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="1r5-AJ-qbE" id="tgj-Nj-pGB"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Snc-M7-aY5">
                                         <rect key="frame" x="8" y="46" width="304" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="username"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="1r5-AJ-qbE" id="EGl-gt-5xN"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gav-Iw-OhO">
                                         <rect key="frame" x="8" y="84" width="304" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="send" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="send" secureTextEntry="YES" textContentType="password"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="1r5-AJ-qbE" id="BqF-ku-28d"/>
+                                        </connections>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOh-g9-ydf">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOh-g9-ydf">
                                         <rect key="frame" x="8" y="122" width="304" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="y2T-79-NNG"/>
@@ -144,20 +153,28 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGP-az-kdd">
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="j0a-zr-JvG">
+                                        <rect key="frame" x="141.5" y="153.5" width="37" height="37"/>
+                                    </activityIndicatorView>
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGP-az-kdd">
                                         <rect key="frame" x="8" y="230" width="304" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="OLX-25-7J0"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
+                                        <state key="normal" title="Test &amp; Save"/>
+                                        <connections>
+                                            <action selector="clkTest:" destination="1r5-AJ-qbE" eventType="touchUpInside" id="16j-bu-8oi"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="DGP-az-kdd" secondAttribute="bottom" constant="86" id="9Gz-uO-jbM"/>
                                     <constraint firstItem="05d-3M-TGX" firstAttribute="top" secondItem="lTH-NX-Apg" secondAttribute="topMargin" id="9W6-sh-MY2"/>
+                                    <constraint firstItem="j0a-zr-JvG" firstAttribute="centerX" secondItem="AOh-g9-ydf" secondAttribute="centerX" id="9hN-V4-crx"/>
                                     <constraint firstItem="Snc-M7-aY5" firstAttribute="top" secondItem="05d-3M-TGX" secondAttribute="bottom" constant="8" id="GCS-b4-upu"/>
                                     <constraint firstItem="AOh-g9-ydf" firstAttribute="centerX" secondItem="Gav-Iw-OhO" secondAttribute="centerX" id="Ivo-Gx-4Wu"/>
+                                    <constraint firstItem="j0a-zr-JvG" firstAttribute="centerY" secondItem="AOh-g9-ydf" secondAttribute="centerY" id="MjO-Wl-Rcn"/>
                                     <constraint firstItem="Gav-Iw-OhO" firstAttribute="top" secondItem="Snc-M7-aY5" secondAttribute="bottom" constant="8" id="YQ1-g5-8xj"/>
                                     <constraint firstItem="DGP-az-kdd" firstAttribute="width" secondItem="Gav-Iw-OhO" secondAttribute="width" id="aXB-Nm-8hF"/>
                                     <constraint firstItem="Snc-M7-aY5" firstAttribute="width" secondItem="05d-3M-TGX" secondAttribute="width" id="bVl-aw-BQK"/>
@@ -182,6 +199,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="pYc-nB-eNa"/>
                     </view>
+                    <connections>
+                        <outlet property="aiURL" destination="j0a-zr-JvG" id="KET-ar-HBe"/>
+                        <outlet property="btTest" destination="DGP-az-kdd" id="psl-Jd-plz"/>
+                        <outlet property="lbInfo" destination="AOh-g9-ydf" id="iTa-23-gUa"/>
+                        <outlet property="tfPwd" destination="Gav-Iw-OhO" id="mpW-2E-Wy6"/>
+                        <outlet property="tfURL" destination="05d-3M-TGX" id="4fL-Lx-Zs7"/>
+                        <outlet property="tfUid" destination="Snc-M7-aY5" id="fb4-fo-pE7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cgx-Ah-zgz" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <barButtonItem style="done" systemItem="save" id="2z6-p7-AzD"/>
