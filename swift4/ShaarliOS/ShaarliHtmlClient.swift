@@ -285,10 +285,14 @@ class ShaarliHtmlClient {
         _ title:String,
         _ error:String)->()
     ) {
+        func callback(_ url :URL, _ title: String, _ error: String) -> () {
+            DispatchQueue.main.async(execute: { completion(url, title, error) })
+        }
+
         let ses = URLSession.shared
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             if err != "" {
-                completion(lurl, "", err)
+                callback(lurl, "", err)
                 return
             }
             // do not call back yet, but rather call ?do=configure and report the title.
@@ -297,15 +301,15 @@ class ShaarliHtmlClient {
             let tsk = ses.dataTask(with: req) { data, response, err in
                 let erro = check(data, response, err)
                 if erro != "" {
-                    completion(lurl, "", erro)
+                    callback(lurl, "", erro)
                     return
                 }
                 let http = response as! HTTPURLResponse
                 guard let cffo = findHtmlForms(data, http.textEncodingName)[CFG_FORM] else {
-                    completion(lurl, "", "\(CFG_FORM) not found.")
+                    callback(lurl, "", "\(CFG_FORM) not found.")
                     return
                 }
-                completion(
+                callback(
                     lurl,
                     cffo[KEY_FORM_TITLE] ?? "",
                     ""
