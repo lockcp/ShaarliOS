@@ -97,7 +97,6 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
     )
 }
 
-let BUNDLE_ID = "name.mro.ShaarliOS"
 let URLEmpty = URLComponents().url!
 
 let HTTP_POST = "POST"

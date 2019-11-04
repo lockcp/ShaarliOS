@@ -8,12 +8,31 @@
 
 import UIKit
 
+let BUNDLE_ID = "name.mro.ShaarliOS"
+let SELF_URL_PREFIX = "name-mro-shaarlios"
+let SHAARLI_COMPANION_APP_URL = "http://mro.name/ShaarliOS"
+
+let green = UIColor.init(hue: 87/360.0, saturation: 0.58, brightness: 0.68, alpha:1)
+let green60_64_66 = UIColor.init(hue: 60/360.0, saturation: 0.64, brightness: 0.66, alpha:1)
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        UINavigationBar.appearance().barTintColor = .darkGray
+        UINavigationBar.appearance().tintColor = green
+        // UIBarButtonItem.appearance().tintColor = green
+        UIButton.appearance().tintColor = green
+
+        let info = Bundle.main.infoDictionary ?? [:]
+        assert(BUNDLE_ID == info["CFBundleIdentifier"] as? String, "CFBundleIdentifier")
+        let urlt = info["CFBundleURLTypes"] as? [[String:Any]]
+        let urls = urlt?[0]["CFBundleURLSchemes"] as? [String]
+        assert(SELF_URL_PREFIX == urls?[0], "CFBundleURLTypes"+"/"+"CFBundleURLSchemes")
+
         return true
     }
 
@@ -38,7 +57,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
-
