@@ -24,10 +24,11 @@
 		162BB46422C8013C005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 		1631278B2305F7AF0098B11C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168C71A722AD03EC007DF595 /* Main.storyboard */; };
 		1631278C2305F8200098B11C /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5E2992305DDAF00D62C2E /* PostVC.swift */; };
+		1688469E237065CF00130588 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1688469C237065CF00130588 /* LaunchScreen.xib */; };
+		168846A22370669300130588 /* Icon-1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 168846A12370669300130588 /* Icon-1024x1024.png */; };
 		168C71A422AD03EC007DF595 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71A322AD03EC007DF595 /* AppDelegate.swift */; };
 		168C71A622AD03EC007DF595 /* CreditsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71A522AD03EC007DF595 /* CreditsVC.swift */; };
 		168C71AB22AD03ED007DF595 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 168C71AA22AD03ED007DF595 /* Assets.xcassets */; };
-		168C71AE22AD03ED007DF595 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168C71AC22AD03ED007DF595 /* LaunchScreen.storyboard */; };
 		168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71B822AD03EE007DF595 /* ShaarliOSTests.swift */; };
 		168C71C422AD03EE007DF595 /* ShaarliOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71C322AD03EE007DF595 /* ShaarliOSUITests.swift */; };
 		16D5E293230581E700D62C2E /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5E29123057DEF00D62C2E /* MainVC.swift */; };
@@ -63,12 +64,13 @@
 		1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParser.swift; sourceTree = "<group>"; };
 		161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParserTest.swift; sourceTree = "<group>"; };
 		162BB46122C7FF28005D5578 /* urlencoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlencoding.swift; sourceTree = "<group>"; };
+		1688469D237065CF00130588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		168846A12370669300130588 /* Icon-1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-1024x1024.png"; path = "build/Icon-1024x1024.png"; sourceTree = SOURCE_ROOT; };
 		168C71A022AD03EC007DF595 /* ShaarliOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C71A322AD03EC007DF595 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		168C71A522AD03EC007DF595 /* CreditsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsVC.swift; sourceTree = "<group>"; };
 		168C71A822AD03EC007DF595 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		168C71AA22AD03ED007DF595 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		168C71AD22AD03ED007DF595 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		168C71AF22AD03ED007DF595 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		168C71B422AD03EE007DF595 /* ShaarliOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShaarliOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C71B822AD03EE007DF595 /* ShaarliOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliOSTests.swift; sourceTree = "<group>"; };
@@ -142,11 +144,12 @@
 		168C71A222AD03EC007DF595 /* ShaarliOS */ = {
 			isa = PBXGroup;
 			children = (
-				168C71AC22AD03ED007DF595 /* LaunchScreen.storyboard */,
-				168C71A722AD03EC007DF595 /* Main.storyboard */,
-				168C71A322AD03EC007DF595 /* AppDelegate.swift */,
+				168846A12370669300130588 /* Icon-1024x1024.png */,
+				1688469C237065CF00130588 /* LaunchScreen.xib */,
 				168C71AF22AD03ED007DF595 /* Info.plist */,
 				168C71AA22AD03ED007DF595 /* Assets.xcassets */,
+				168C71A722AD03EC007DF595 /* Main.storyboard */,
+				168C71A322AD03EC007DF595 /* AppDelegate.swift */,
 				16D5E29123057DEF00D62C2E /* MainVC.swift */,
 				16E50FAD236D8AB0008CAB4A /* ServerVC.swift */,
 				16D5E2992305DDAF00D62C2E /* PostVC.swift */,
@@ -287,10 +290,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1688469E237065CF00130588 /* LaunchScreen.xib in Resources */,
 				16D5E29723058BF200D62C2E /* about.html in Resources */,
-				168C71AE22AD03ED007DF595 /* LaunchScreen.storyboard in Resources */,
 				168C71AB22AD03ED007DF595 /* Assets.xcassets in Resources */,
 				1631278B2305F7AF0098B11C /* Main.storyboard in Resources */,
+				168846A22370669300130588 /* Icon-1024x1024.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,20 +393,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		1688469C237065CF00130588 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1688469D237065CF00130588 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
 		168C71A722AD03EC007DF595 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				168C71A822AD03EC007DF595 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		168C71AC22AD03ED007DF595 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				168C71AD22AD03ED007DF595 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 		16D5E29523058BF200D62C2E /* about.html */ = {
