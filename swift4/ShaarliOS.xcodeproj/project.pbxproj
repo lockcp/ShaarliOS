@@ -65,7 +65,7 @@
 		161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParserTest.swift; sourceTree = "<group>"; };
 		162BB46122C7FF28005D5578 /* urlencoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlencoding.swift; sourceTree = "<group>"; };
 		1688469D237065CF00130588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		168846A12370669300130588 /* Icon-1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-1024x1024.png"; path = "build/Icon-1024x1024.png"; sourceTree = SOURCE_ROOT; };
+		168846A12370669300130588 /* Icon-1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024x1024.png"; sourceTree = SOURCE_ROOT; };
 		168C71A022AD03EC007DF595 /* ShaarliOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C71A322AD03EC007DF595 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		168C71A522AD03EC007DF595 /* CreditsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsVC.swift; sourceTree = "<group>"; };

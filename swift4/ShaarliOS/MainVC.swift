@@ -3,13 +3,39 @@
 //  ShaarliOS
 //
 //  Created by Marcus Rohrmoser on 15.08.19.
-//  Copyright © 2019 Marcus Rohrmoser mobile Software. All rights reserved.
+//  Copyright © 2019-2020 Marcus Rohrmoser http://0x4c.de/~rohrmoser. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 import UIKit
 
 // Reading from private effective user settings. https://stackoverflow.com/a/45280879/349514
 class MainVC: UIViewController {
+
+    // visual form center http://stackoverflow.com/a/13148012/349514
+    private func constraintWithMultiplier(_ elf: NSLayoutConstraint!, multiplier: CGFloat) -> NSLayoutConstraint!
+    {
+        return NSLayoutConstraint(
+            item:elf.firstItem!,
+            attribute:elf.firstAttribute,
+            relatedBy:elf.relation,
+            toItem:elf.secondItem,
+            attribute:elf.secondAttribute,
+            multiplier:multiplier,
+            constant:elf.constant)
+    }
 
     @IBOutlet var centerY: NSLayoutConstraint!
     @IBOutlet var lblVersion: UILabel!
@@ -47,6 +73,36 @@ class MainVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
+        title = "Todo: My Shaarli"
+        lblVersion.text = "1.2.3+4cde"
+        lblVersion.alpha = 0
+        viewShaare.alpha = 0
+        btnSafari.isEnabled = false
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        print("viewDidAppear \(type(of: self))")
+        super.viewDidAppear(animated)
+        UIView.setAnimationsEnabled(true)
+
+        UIView.animate(withDuration:0.5) {
+            self.vContainer.alpha = 0.5;
+            self.lblVersion.alpha = 1.0;
+
+            // logo to bottom
+            self.view.removeConstraint(self.centerY)
+            self.centerY = self.constraintWithMultiplier(self.centerY, multiplier:0.75)!
+            self.view.addConstraint(self.centerY)
+            // self.view.layoutIfNeeded()
+        }
+/*
+        if( !self.shaarli.isSetUp ) {
+            [self performSegueWithIdentifier:NSStringFromClass([SettingsVC class]) sender:self];
+            return;
+        }
+        // start with note form ready..
+        [self actionShowShaare:nil];
+*/
     }
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
