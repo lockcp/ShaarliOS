@@ -12,6 +12,9 @@ func dequeue(_ tableView:UITableView, _ indexPath: IndexPath) -> ServerTVC? {
     return tableView.dequeueReusableCell(withIdentifier:SubtitleCell, for:indexPath) as? ServerTVC
 }
 
+let S_HTTP = "http"
+let S_HTTPS = S_HTTP + "s"
+
 internal let SubtitleCell = "ServerTVC"
 internal let colErr = #colorLiteral(red: 1, green: 0.6743582589, blue: 0.6743582589, alpha: 1)
 internal let colOk = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -34,8 +37,6 @@ class ServerTVC: UITableViewCell {
 
 internal func url(_ base : String?, _ uid : String?, _ pwd: String?) -> URL? {
     guard let base = base else {return nil}
-    guard let uid = uid else {return nil}
-    guard let pwd = pwd else {return nil}
     guard var uc = URLComponents(string: base) else {return nil}
     uc.user = uid
     uc.password = pwd
@@ -75,16 +76,19 @@ class ServerVC: UIViewController, UITextFieldDelegate {
         lbInfo.text = ""
     }
 
+    // convenience
     func setup(_ tc:ServerTVC?) {
         guard let tc = tc else {
-            result = { (a) in }
-            endpoint = nil
-            title = "?"
+            setup(nil) { (a) in }
             return
         }
-        result = tc.setup
-        endpoint = tc.server
-        title = endpoint?.key ?? "-"
+        setup(tc.server, tc.setup)
+    }
+    
+    func setup(_ endp:ServerM?, _ res: @escaping (ServerM) -> ()) {
+        result = res
+        endpoint = endp
+        title = endp?.key ?? "-"
     }
     
     /*
@@ -96,21 +100,20 @@ class ServerVC: UIViewController, UITextFieldDelegate {
         // Pass the selected object to the new view controller.
     }
     */
-
-    @IBAction func clkTest(_ sender: Any) {
-        print("clkTest \(type(of: sender))")
-        test()
-    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("textFieldShouldReturn \(textField.text ?? "-")")
         switch textField {
         case tfURL:
+            
             guard tfURL.text != ""
-                , let _ = url(tfURL.text, tfUid.text, tfPwd.text)
+                , let uc = URL(string: tfURL.text ?? "")
             else {
                 tfURL.backgroundColor = colErr
                 return false
+            }
+            if(uc.scheme == nil) {
+                tfURL.text = S_HTTPS + "://" + (tfURL.text ?? "")
             }
             tfUid.becomeFirstResponder()
             return true
@@ -118,6 +121,7 @@ class ServerVC: UIViewController, UITextFieldDelegate {
             tfPwd.becomeFirstResponder()
             return true
         case tfPwd:
+            // TODO: erst erlauben, wenn die URL Sinn ergibt, uid und pwd nicht leer sind
             tfPwd.resignFirstResponder()
             test()
             return true
@@ -147,10 +151,10 @@ class ServerVC: UIViewController, UITextFieldDelegate {
         lbl.text = ""
 
         shaarli.probe(u) { (ur, ti, er) in            
-            ai.stopAnimating()
             print("url \(ur)")
             print("tit \(ti)")
             print("err \(er)")
+            ai.stopAnimating()
             lbl.text = er
             switch er {
             case "":

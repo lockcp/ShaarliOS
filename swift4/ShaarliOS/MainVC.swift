@@ -18,15 +18,18 @@ class MainVC: UITableViewController {
     @IBOutlet var btnCancel: UIBarButtonItem!
     @IBOutlet var btnLegal: UIBarButtonItem!
 
-    let urls: [ServerM] = [
-        ServerM("a", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo/shaarligo.cgi")!),
-        ServerM("b", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b")!),
-        ServerM("c", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.2")!)
+    var servers: [ServerM] = [
+        ServerM("Shaarli demö", URL(string:"https://demo:demo@demo.shaarli.org")!),
+        ServerM("ShaarliGo", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo/shaarligo.cgi")!),
+        ServerM("Shaarli v0.41", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b")!),
+        ServerM("Shaarli v0.10.2", URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.2")!)
     ]
 
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
+        view.backgroundColor = green60_64_66
+        view.isOpaque = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,18 +67,18 @@ class MainVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return urls.count
+        return servers.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("cellForRowAt \(type(of: self))")
+        print("\(type(of: self)) cellForRowAt \(indexPath.row))")
         guard let cell = dequeue(tableView, indexPath) else { return UITableViewCell() }
-        cell.setup(urls[indexPath.row])
+        cell.setup(servers[indexPath.row])
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("didSelectRowAt \(type(of: self))")
+        print("\(type(of: self)) didSelectRowAt \(indexPath.row))")
         tableView.deselectRow(at:indexPath, animated:true)
         // PostSegue is anchored on the cell, so no need to trigger it manually.
         // ServerSegue is anchored on the table itself, so we need to trigger it manually
@@ -86,6 +89,7 @@ class MainVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         print("moveRowAt \(type(of: self)) \(sourceIndexPath) -> \(destinationIndexPath)")
+        // swap(&servers[sourceIndexPath.row], &servers[destinationIndexPath.row])
     }
 
     @IBAction func actionEdit(_ sender: Any) {

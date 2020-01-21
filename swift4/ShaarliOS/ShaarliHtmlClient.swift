@@ -284,11 +284,14 @@ class ShaarliHtmlClient {
         _ title:String,
         _ error:String)->()
     ) {
+        let ses = URLSession(configuration: URLSession.shared.configuration)
+        ses.reset { }
+
         func callback(_ url :URL, _ title: String, _ error: String) -> () {
             DispatchQueue.main.async(execute: { completion(url, title, error) })
+            ses.invalidateAndCancel()
         }
 
-        let ses = URLSession.shared
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             if err != "" {
                 callback(lurl, "", err)
@@ -327,7 +330,9 @@ class ShaarliHtmlClient {
         _ privat: Bool,
         _ error: String)->()
     ) {
-        let ses = URLSession.shared
+        let ses = URLSession(configuration: URLSession.shared.configuration)
+        ses.reset { }
+
         loginAndGet(ses, endpoint, url) { _, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
             completion(
@@ -352,7 +357,9 @@ class ShaarliHtmlClient {
          _ privat: Bool,
          _ completion: @escaping (_ error: String) -> ()
     ) {
-        let ses = URLSession.shared
+        let ses = URLSession(configuration: URLSession.shared.configuration)
+        ses.reset { }
+        
         var lifo = ctx
         lifo[LF_URL] = url.absoluteString
         lifo[LF_TIT] = description
