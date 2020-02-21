@@ -3,7 +3,7 @@
 //  ShaarliOS
 //
 //  Created by Marcus Rohrmoser on 09.06.19.
-//  Copyright © 2019-2020 Marcus Rohrmoser http://0x4c.de/~rohrmoser. All rights reserved.
+//  Copyright © 2019-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,13 +23,47 @@ import UIKit
 
 let BUNDLE_ID = "name.mro.ShaarliOS"
 let SELF_URL_PREFIX = "name-mro-shaarlios"
-let SHAARLI_COMPANION_APP_URL = "http://mro.name/ShaarliOS"
+let SHAARLI_COMPANION_APP_URL = "https://mro.name/ShaarliOS"
 
 let green = UIColor.init(hue: 87/360.0, saturation: 0.58, brightness: 0.68, alpha:1)
 let green60_64_66 = UIColor.init(hue: 60/360.0, saturation: 0.64, brightness: 0.66, alpha:1)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    class var shared : AppDelegate { get { return UIApplication.shared.delegate as! AppDelegate } }
+
+    var semver : String { get {
+        guard let info = Bundle.main.infoDictionary else {return "v?.?"}
+        // guard let version = info["CFBundleShortVersionString"] as! String? else {return "v?"} // Marketing
+        guard let version = info["CFBundleVersion"] as! String? else {return "v?.?"}
+        guard let build = info["CFBundleVersionGitSHA"] as! String? else {return "v\(version)+?"}
+        return "v\(version)+\(build)"
+    } }
+
+    func loadBlog(_ prefs : UserDefaults, _ completion: @escaping (
+        _ blog : BlogM?,
+        _ error: String?)->()
+        ) {
+        guard let endpoint = prefs.url(forKey: "endpoint") else {
+            completion(nil, "no such key")
+            return
+        }
+        guard let title = prefs.string(forKey: "title") else {
+            completion(nil, "no such key")
+            return
+        }
+
+        completion(BlogM(endpoint, title), nil)
+    }
+
+    func saveBlog(_ prefs : UserDefaults, _ blog: BlogM, _ completion: @escaping (
+        _ error: String?)->()
+        ) {
+        prefs.set(blog.endpoint, forKey: "endpoint")
+        prefs.set(blog.title, forKey: "title")
+        completion(nil)
+    }
 
     var window: UIWindow?
 

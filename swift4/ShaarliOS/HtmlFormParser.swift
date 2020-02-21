@@ -3,7 +3,7 @@
 //  ShaarliOS
 //
 //  Created by Marcus Rohrmoser on 09.06.19.
-//  Copyright © 2019-2020 Marcus Rohrmoser http://0x4c.de/~rohrmoser. All rights reserved.
+//  Copyright © 2019-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by

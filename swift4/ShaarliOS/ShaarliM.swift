@@ -1,8 +1,8 @@
 //
-//  TestCase.swift
-//  ShaarliOSTests
+//  ShaarliM.swift
+//  ShaarliOS
 //
-//  Created by Marcus Rohrmoser on 09.06.19.
+//  Created by Marcus Rohrmoser on 21.02.20.
 //  Copyright © 2019-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-import XCTest
+import Foundation
 
-class TestCase: XCTestCase {
+struct ShaarliM {
 }

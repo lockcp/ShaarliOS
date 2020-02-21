@@ -1,9 +1,9 @@
 //
-//  TestCase.swift
-//  ShaarliOSTests
+//  BlogM.swift
+//  ShaarliOS
 //
-//  Created by Marcus Rohrmoser on 09.06.19.
-//  Copyright © 2019-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
+//  Created by Marcus Rohrmoser on 21.02.20.
+//  Copyright © 2020-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,22 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-import XCTest
+import Foundation
 
-class TestCase: XCTestCase {
+func probe(_ endpoint: URL, _ completion: @escaping (
+    _ blog : BlogM?,
+    _ error: String?)->()
+    ) {
+}
+
+/** Contact to a Microblog Server
+ */
+struct BlogM {
+    let endpoint: URL
+    let title   : String
+
+    init(_ endpoint: URL, _ title: String) {
+        self.endpoint = endpoint
+        self.title    = title
+    }
 }

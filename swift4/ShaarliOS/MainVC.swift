@@ -3,7 +3,7 @@
 //  ShaarliOS
 //
 //  Created by Marcus Rohrmoser on 15.08.19.
-//  Copyright © 2019-2020 Marcus Rohrmoser http://0x4c.de/~rohrmoser. All rights reserved.
+//  Copyright © 2019-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -73,11 +73,26 @@ class MainVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
-        title = "Todo: My Shaarli"
-        lblVersion.text = "1.2.3+4cde"
-        lblVersion.alpha = 0
-        viewShaare.alpha = 0
+        
+        self.viewShaare.alpha = 0
         btnSafari.isEnabled = false
+        // contact the app delegate and get dependency
+        let ad = AppDelegate.shared
+        lblVersion.text = ad.semver
+        ad.loadBlog(UserDefaults.standard) {
+            guard let b = $0 else {
+                guard $1 != nil else {
+                    self.title = "How odd"
+                    return
+                }
+                self.title = "Todo: settings!"
+                self.performSegue(withIdentifier: "SettingsVC", sender: nil)
+                return
+            }
+            self.title = b.title
+            self.viewShaare.alpha = 1
+            self.btnSafari.isEnabled = true
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
