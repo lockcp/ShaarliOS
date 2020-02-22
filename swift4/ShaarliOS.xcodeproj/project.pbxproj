@@ -31,6 +31,8 @@
 		168C71AB22AD03ED007DF595 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 168C71AA22AD03ED007DF595 /* Assets.xcassets */; };
 		168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71B822AD03EE007DF595 /* ShaarliOSTests.swift */; };
 		168C71C422AD03EE007DF595 /* ShaarliOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71C322AD03EE007DF595 /* ShaarliOSUITests.swift */; };
+		16964E2B2401354C004D85FA /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16964E2A2401354C004D85FA /* KeychainPasswordItem.swift */; };
+		16964E2C2401354C004D85FA /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16964E2A2401354C004D85FA /* KeychainPasswordItem.swift */; };
 		16B094C524000F3F001B5224 /* ShaarliM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B094C424000F3F001B5224 /* ShaarliM.swift */; };
 		16B094C624000F3F001B5224 /* ShaarliM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B094C424000F3F001B5224 /* ShaarliM.swift */; };
 		16B094C724000F3F001B5224 /* ShaarliM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B094C424000F3F001B5224 /* ShaarliM.swift */; };
@@ -41,6 +43,8 @@
 		16D5E29723058BF200D62C2E /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 16D5E29523058BF200D62C2E /* about.html */; };
 		16DAA966240036C9009641CC /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAA965240036C9009641CC /* SettingsVC.swift */; };
 		16E50FAE236D8AB0008CAB4A /* ServerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E50FAD236D8AB0008CAB4A /* ServerVC.swift */; };
+		16F5CF37240188DC001B4D7F /* Latch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F5CF36240188DC001B4D7F /* Latch.swift */; };
+		16F5CF38240188DC001B4D7F /* Latch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F5CF36240188DC001B4D7F /* Latch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +89,7 @@
 		168C71BF22AD03EE007DF595 /* ShaarliOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShaarliOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		168C71C322AD03EE007DF595 /* ShaarliOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliOSUITests.swift; sourceTree = "<group>"; };
 		168C71C522AD03EE007DF595 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16964E2A2401354C004D85FA /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		16B094C424000F3F001B5224 /* ShaarliM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaarliM.swift; sourceTree = "<group>"; };
 		16B094C824001075001B5224 /* BlogM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogM.swift; sourceTree = "<group>"; };
 		16D5E29123057DEF00D62C2E /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -92,6 +97,7 @@
 		16D5E2992305DDAF00D62C2E /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		16DAA965240036C9009641CC /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		16E50FAD236D8AB0008CAB4A /* ServerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerVC.swift; sourceTree = "<group>"; };
+		16F5CF36240188DC001B4D7F /* Latch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Latch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +178,7 @@
 				16D5E29523058BF200D62C2E /* about.html */,
 				16B094C424000F3F001B5224 /* ShaarliM.swift */,
 				16B094C824001075001B5224 /* BlogM.swift */,
+				16F5CF3924018B38001B4D7F /* 3rd */,
 			);
 			path = ShaarliOS;
 			sourceTree = "<group>";
@@ -197,6 +204,16 @@
 			);
 			path = ShaarliOSUITests;
 			sourceTree = "<group>";
+		};
+		16F5CF3924018B38001B4D7F /* 3rd */ = {
+			isa = PBXGroup;
+			children = (
+				16964E2A2401354C004D85FA /* KeychainPasswordItem.swift */,
+				16F5CF36240188DC001B4D7F /* Latch.swift */,
+			);
+			name = 3rd;
+			path = ShaarliOS/3rd;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -359,6 +376,7 @@
 				162BB46222C7FF28005D5578 /* urlencoding.swift in Sources */,
 				16B094C524000F3F001B5224 /* ShaarliM.swift in Sources */,
 				16E50FAE236D8AB0008CAB4A /* ServerVC.swift in Sources */,
+				16F5CF37240188DC001B4D7F /* Latch.swift in Sources */,
 				16D5E293230581E700D62C2E /* MainVC.swift in Sources */,
 				1607F42622AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43622AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
@@ -366,6 +384,7 @@
 				16B094C924001075001B5224 /* BlogM.swift in Sources */,
 				1631278C2305F8200098B11C /* PostVC.swift in Sources */,
 				168C71A422AD03EC007DF595 /* AppDelegate.swift in Sources */,
+				16964E2B2401354C004D85FA /* KeychainPasswordItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,11 +392,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16F5CF38240188DC001B4D7F /* Latch.swift in Sources */,
 				1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 				162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */,
 				161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */,
 				168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */,
+				16964E2C2401354C004D85FA /* KeychainPasswordItem.swift in Sources */,
 				16B094C624000F3F001B5224 /* ShaarliM.swift in Sources */,
 				1607F42A22AD121E0036AC44 /* ShaarliHtmlClientTest.swift in Sources */,
 				16B094CA24001075001B5224 /* BlogM.swift in Sources */,
