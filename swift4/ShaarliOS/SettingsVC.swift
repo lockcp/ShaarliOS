@@ -116,9 +116,10 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
     }
 
     func webViewDidFinishLoad(_ webView: UIWebView) {
+        webView.alpha = 1 // avoid white flash
         let ver = AppDelegate.shared.semver
-        let ret = webView.stringByEvaluatingJavaScript(from: "injectVersion('\(ver)');")
-        print(ret as Any)
+        let _ = webView.stringByEvaluatingJavaScript(from: "injectVersion('\(ver)');")
+        // print(ret as Any)
     }
 
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {

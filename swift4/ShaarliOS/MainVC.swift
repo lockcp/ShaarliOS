@@ -79,7 +79,7 @@ class MainVC: UIViewController {
         // contact the app delegate and get dependency
         let ad = AppDelegate.shared
         lblVersion.text = ad.semver
-        ad.loadBlog(UserDefaults.standard) {
+        ad.loadBlog(AppDelegate.shared.defaults) {
             guard let b = $0 else {
                 guard $1 != nil else {
                     self.title = "How odd"
