@@ -79,7 +79,7 @@ public enum LatchAccessibility: RawRepresentable {
      :param: rawValue A CFString representing a kSecAttrAccessible value.
      */
     public init?(rawValue: CFString) {
-        switch rawValue as NSString {
+        switch rawValue {
         case kSecAttrAccessibleWhenUnlocked:
             self = .whenUnlocked
         case kSecAttrAccessibleAfterFirstUnlock:
@@ -95,7 +95,6 @@ public enum LatchAccessibility: RawRepresentable {
         default:
             return nil
         }
-        
     }
     
     /**
@@ -172,7 +171,7 @@ public struct Latch {
      */
     public func string(forKey key: String) -> String? {
         guard let data = data(forKey: key) else { return nil }
-        return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
+        return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
     }
     
     // MARK - Setters
@@ -218,7 +217,11 @@ public struct Latch {
         }
         
         if status != errSecSuccess {
-            print("Latch failed to set data for key '\(key)', error: \(status)")
+            if #available(iOS 11.3, *) {
+                print("Latch failed to set data for key '\(key)', error: \(status), '\(SecCopyErrorMessageString(status,nil))'")
+            } else {
+                print("Latch failed to set data for key '\(key)', error: \(status)")
+            }
             return false
         }
         
