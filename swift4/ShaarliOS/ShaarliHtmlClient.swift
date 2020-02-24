@@ -270,6 +270,8 @@ class ShaarliHtmlClient {
                         return
                     }
                     uc.queryItems = nil
+                    uc.user = endpoint.user
+                    uc.password = endpoint.password
                     callback(uc.url ?? URLEmpty, lifo, "")
                 }
                 tsk1.resume()
@@ -282,6 +284,8 @@ class ShaarliHtmlClient {
                 return
             }
             uc.queryItems = nil
+            uc.user = endpoint.user
+            uc.password = endpoint.password
             callback(uc.url ?? URLEmpty, lifo, "")
             return
         }
