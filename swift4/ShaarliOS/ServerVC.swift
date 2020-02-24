@@ -177,6 +177,7 @@ class ServerVC: UIViewController, UITextFieldDelegate {
                 tfu.backgroundColor = colErr
                 tfu.becomeFirstResponder()
             }
+            return false
         }
     }
 }

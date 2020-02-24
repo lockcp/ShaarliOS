@@ -296,16 +296,17 @@ class ShaarliHtmlClient {
     // We need the name of the server. Reliably. So we have to look at ?do=configure.
     // That's where it's in a HTML form.
     // so we pretend to ?post= in order to get past the login and then ?do=configure.
-    func probe(_ endpoint: URL, _ completion: @escaping (
+    func probe(_ endpoint: URL?, _ completion: @escaping (
         _ url:URL,
         _ title:String,
-        _ error:String)->()
+        _ error:String) -> Bool
     ) {
+        guard let endpoint = endpoint else { return }
         let ses = URLSession(configuration: URLSession.shared.configuration)
         ses.reset { }
 
         func callback(_ url :URL, _ title: String, _ error: String) -> () {
-            DispatchQueue.main.async(execute: { completion(url, title, error) })
+            DispatchQueue.main.async(execute: { let _ = completion(url, title, error) })
             ses.invalidateAndCancel()
         }
 
@@ -396,5 +397,24 @@ class ShaarliHtmlClient {
         }
         tsk.resume()
         // print("HTTP", tsk.originalRequest?.httpMethod, tsk.originalRequest?.url)
+    }
+}
+
+// https://oleb.net/2018/sequence-head-tail/#preserving-the-subsequence-type
+extension Sequence {
+    var headAndTail: (head: Element, tail: SubSequence)? {
+        var first: Element? = nil
+        let tail = drop(while: { element in
+            if first == nil {
+                first = element
+                return true
+            } else {
+                return false
+            }
+        })
+        guard let head = first else {
+            return nil
+        }
+        return (head, tail)
     }
 }

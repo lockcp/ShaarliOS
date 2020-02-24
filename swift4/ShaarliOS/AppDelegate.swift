@@ -44,22 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let semver = _version(Bundle.main.infoDictionary)
     let defaults = UserDefaults(suiteName:"group.\(BUNDLE_ID)")!
 
-    private func string(forKey:String) -> String? {
-        do {
-            return try KeychainPasswordItem(service:BUNDLE_ID, account:forKey, accessGroup: nil).readPassword()
-        } catch {
-            return nil
-        }
-    }
-
-    private func set(_ val:String, forKey:String) {
-        do {
-            try KeychainPasswordItem(service:BUNDLE_ID, account:forKey, accessGroup: nil).savePassword(val)
-        } catch {
-            print("ouch")
-        }
-    }
-
     /** https://code.mro.name/mro/ShaarliOS/src/e9009ef466582e806b97d723e5acea885eaa4c7d/ios/ShaarliOS/ShaarliM.m#L133
      *
      * # Keychain
@@ -68,46 +52,69 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
      * https://developer.apple.com/library/archive/samplecode/GenericKeychain/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007797
      * https://developer.apple.com/library/archive/samplecode/GenericKeychain/Listings/GenericKeychain_KeychainPasswordItem_swift.html#//apple_ref/doc/uid/DTS40007797-GenericKeychain_KeychainPasswordItem_swift-DontLinkElementID_7
      */
+    private func string(forKey:String) -> String? {
+        do {
+            return try KeychainPasswordItem(service:BUNDLE_ID, account:forKey, accessGroup:nil).readPassword()
+        } catch {
+            return nil
+        }
+    }
+
+    private func set(_ val:String, forKey:String) {
+        do {
+            try KeychainPasswordItem(service:BUNDLE_ID, account:forKey, accessGroup:nil).savePassword(val)
+        } catch {
+            print("ouch")
+        }
+    }
+
+    private let KEY_title           = "title"
+    private let KEY_endpointURL     = "endpointURL"
+    private let KEY_userName        = "userName"
+    private let KEY_passWord        = "passWord"
+    private let KEY_privateDefault  = "privateDefault"
+    private let KEY_tagsActive      = "tagsActive"
+    private let KEY_tagsDefault     = "tagsDefault"
+
     func loadEndpointURL() -> URL? {
-        guard let url = string(forKey:"endpointURL")
+        guard let url = string(forKey:KEY_endpointURL)
             ?? string(forKey:"endpointUrl")
             else { return nil }
 
         guard var uc = URLComponents(string: url) else { return nil }
         if uc.user == nil || uc.user == "" {
-            guard let s = string(forKey:"userName"), s != "" else { return nil }
-            uc.user = s
+            uc.user = string(forKey:KEY_userName)
         }
         if uc.password == nil || uc.password == ""  {
-            guard let s = string(forKey:"passWord"), s != "" else { return nil }
-            uc.password = s
+            uc.password = string(forKey:KEY_passWord)
         }
         return uc.url
     }
 
     func loadBlog(_ prefs :UserDefaults) -> BlogM? {
         guard let url = loadEndpointURL() else { return nil }
-        let title = prefs.string(forKey: "title")
+        let title = prefs.string(forKey:KEY_title)
             ?? NSLocalizedString("My Shaarli", comment:String(describing:type(of:self)))
-        let pd = prefs.bool(forKey: "privateDefault")
-        let ta = prefs.object(forKey: "tagsActive") != nil
-            ? prefs.bool(forKey: "tagsActive")
+        let pd = prefs.bool(forKey:KEY_privateDefault)
+        let ta = prefs.object(forKey:KEY_tagsActive) != nil
+            ? prefs.bool(forKey:KEY_tagsActive)
             : true
-        let td = prefs.string(forKey: "tagsDefault")
+        let td = prefs.string(forKey:KEY_tagsDefault)
             ?? "#Shaarli💫"
         return BlogM(endpoint:url, title:title, privateDefault:pd, tagsActive:ta, tagsDefault:td)
     }
 
     func saveBlog(_ prefs : UserDefaults, _ blog: BlogM) {
         let url = blog.endpoint
-        set(url.absoluteString, forKey: "endpointURL")
-        set(url.user!, forKey: "userName")
-        set(url.password!, forKey: "passWord")
+        set(url.absoluteString, forKey:KEY_endpointURL) // incl. uid+pwd
+        // redundant, legacy:
+        set(url.user!, forKey:KEY_userName)
+        set(url.password!, forKey:KEY_passWord)
 
-        prefs.set(blog.title, forKey: "title")
-        prefs.set(blog.privateDefault, forKey: "privateDefault")
-        prefs.set(blog.tagsActive, forKey: "tagsActive")
-        prefs.set(blog.tagsDefault, forKey: "tagsDefault")
+        prefs.set(blog.title, forKey:KEY_title)
+        prefs.set(blog.privateDefault, forKey:KEY_privateDefault)
+        prefs.set(blog.tagsActive, forKey:KEY_tagsActive)
+        prefs.set(blog.tagsDefault, forKey:KEY_tagsDefault)
     }
 
     var window: UIWindow?

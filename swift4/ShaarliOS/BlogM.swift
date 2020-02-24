@@ -21,12 +21,6 @@
 
 import Foundation
 
-func probe(_ endpoint: URL, _ completion: @escaping (
-    _ blog : BlogM?,
-    _ error: String?)->()
-    ) {
-}
-
 /** Contact to a Microblog Server
  */
 struct BlogM {
@@ -36,14 +30,13 @@ struct BlogM {
     let tagsActive      : Bool
     let tagsDefault     : String
     
-    var endpointStr : String? { get {
-        guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) else {return nil}
-        uc.user = nil
-        uc.password = nil
-        return uc.url?.absoluteString
-        } }
+    var endpointStrNoScheme : String? {
+        guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)
+            else {return nil}
+        return (uc.host ?? "") + uc.path
+    }
     
-    var isEndpointSecure : Bool { get {
+    var isEndpointSecure : Bool {
         return "https" == endpoint.scheme
-        } }
+    }
 }
