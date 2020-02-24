@@ -43,29 +43,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let semver = _version(Bundle.main.infoDictionary)
     let defaults = UserDefaults(suiteName:"group.\(BUNDLE_ID)")!
+    let keychain = Latch(service: BUNDLE_ID)
 
-    func loadBlog(_ prefs : UserDefaults, _ completion: @escaping (
-        _ blog : BlogM?,
-        _ error: String?)->()
-        ) {
-        guard let endpoint = prefs.url(forKey: "endpoint") else {
-            completion(nil, "no such key")
-            return
+    /** https://code.mro.name/mro/ShaarliOS/src/e9009ef466582e806b97d723e5acea885eaa4c7d/ios/ShaarliOS/ShaarliM.m#L133
+     *
+     * # Keychain
+     *
+     * https://l.mro.name/o/p/a8b2sa5/
+     * https://developer.apple.com/library/archive/samplecode/GenericKeychain/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007797
+     * https://developer.apple.com/library/archive/samplecode/GenericKeychain/Listings/GenericKeychain_KeychainPasswordItem_swift.html#//apple_ref/doc/uid/DTS40007797-GenericKeychain_KeychainPasswordItem_swift-DontLinkElementID_7
+     */
+    func loadEndpointURL(_ latch :Latch) -> URL? {
+        guard let url = latch.string(forKey: "endpointURL")
+            ?? latch.string(forKey: "endpointUrl") else { return nil }
+        guard var uc = URLComponents(string: url) else { return nil }
+        if uc.user == nil || uc.user == "" {
+            guard let s = latch.string(forKey: "userName"), s != "" else { return nil }
+            uc.user = s
         }
-        guard let title = prefs.string(forKey: "title") else {
-            completion(nil, "no such key")
-            return
+        if uc.password == nil || uc.password == ""  {
+            guard let s = latch.string(forKey: "passWord"), s != "" else { return nil }
+            uc.password = s
         }
-
-        completion(BlogM(endpoint, title), nil)
+        return uc.url
     }
 
-    func saveBlog(_ prefs : UserDefaults, _ blog: BlogM, _ completion: @escaping (
-        _ error: String?)->()
-        ) {
-        prefs.set(blog.endpoint, forKey: "endpoint")
+    func loadBlog(_ prefs :UserDefaults, _ latch :Latch) -> BlogM? {
+        guard let url = loadEndpointURL(latch) else { return nil }
+        let title = prefs.string(forKey: "title")
+            ?? NSLocalizedString("My Shaarli", comment:String(describing:type(of:self)))
+        let pd = prefs.bool(forKey: "privateDefault")
+        let ta = prefs.object(forKey: "tagsActive") != nil
+            ? prefs.bool(forKey: "tagsActive")
+            : true
+        let td = prefs.string(forKey: "tagsDefault")
+            ?? "#Shaarli💫"
+        return BlogM(endpoint:url, title:title, privateDefault:pd, tagsActive:ta, tagsDefault:td)
+    }
+
+    func saveBlog(_ prefs : UserDefaults, _ latch :Latch, _ blog: BlogM) {
+        let url = blog.endpoint
+        latch.set(url.absoluteString, forKey: "endpointURL")
+        latch.set(url.user!, forKey: "userName")
+        latch.set(url.password!, forKey: "passWord")
+
         prefs.set(blog.title, forKey: "title")
-        completion(nil)
+        prefs.set(blog.privateDefault, forKey: "privateDefault")
+        prefs.set(blog.tagsActive, forKey: "tagsActive")
+        prefs.set(blog.tagsDefault, forKey: "tagsDefault")
     }
 
     var window: UIWindow?

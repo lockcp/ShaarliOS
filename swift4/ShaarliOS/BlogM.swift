@@ -30,11 +30,20 @@ func probe(_ endpoint: URL, _ completion: @escaping (
 /** Contact to a Microblog Server
  */
 struct BlogM {
-    let endpoint: URL
-    let title   : String
-
-    init(_ endpoint: URL, _ title: String) {
-        self.endpoint = endpoint
-        self.title    = title
-    }
+    let endpoint        : URL
+    let title           : String
+    let privateDefault  : Bool
+    let tagsActive      : Bool
+    let tagsDefault     : String
+    
+    var endpointStr : String? { get {
+        guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) else {return nil}
+        uc.user = nil
+        uc.password = nil
+        return uc.url?.absoluteString
+        } }
+    
+    var isEndpointSecure : Bool { get {
+        return "https" == endpoint.scheme
+        } }
 }

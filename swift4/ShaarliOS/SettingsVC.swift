@@ -3,7 +3,7 @@
 //  ShaarliOS
 //
 //  Created by Marcus Rohrmoser on 21.02.20.
-//  Copyright © 2019-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
+//  Copyright © 2020-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -22,86 +22,101 @@
 import UIKit
 
 class SettingsVC: UITableViewController, UIWebViewDelegate {
-    @IBOutlet var txtEndpoint : UITextField?
-    @IBOutlet var swiSecure : UISwitch?
-    @IBOutlet var txtUserName : UITextField?
-    @IBOutlet var txtPassWord : UITextField?
+    @IBOutlet var txtEndpoint       : UITextField?
+    @IBOutlet var swiSecure         : UISwitch?
+    @IBOutlet var txtUserName       : UITextField?
+    @IBOutlet var txtPassWord       : UITextField?
     @IBOutlet var lblDefaultPrivate : UILabel?
     @IBOutlet var swiPrivateDefault : UISwitch?
-    @IBOutlet var lblTitle : UILabel?
-    @IBOutlet var swiTags : UISwitch?
-    @IBOutlet var txtTags : UITextField?
-    @IBOutlet var spiLogin : UIActivityIndicatorView?
+    @IBOutlet var lblTitle          : UILabel?
+    @IBOutlet var swiTags           : UISwitch?
+    @IBOutlet var txtTags           : UITextField?
+    @IBOutlet var spiLogin          : UIActivityIndicatorView?
     
     // https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
-    @IBOutlet var btn1Password : UIButton?
+    @IBOutlet var btn1Password      : UIButton?
     
-    @IBOutlet var cellAbout : UITableViewCell?
-    @IBOutlet var wwwAbout : UIWebView?
+    @IBOutlet var cellAbout         : UITableViewCell?
+    @IBOutlet var wwwAbout          : UIWebView?
     
+    var current : BlogM?
+
+    // https://www.objc.io/blog/2018/04/24/bindings-with-kvo-and-keypaths/
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let spiLogin = spiLogin else { return }
-        guard let wwwAbout = wwwAbout else { return }
-        guard let btn1Password = btn1Password else { return }
-        guard let url = Bundle(for: type(of:self)).url(forResource:"about", withExtension:"html") else { return }
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        addObserver(self, forKeyPath: "current", options:.new , context:nil)
         
+        title = NSLocalizedString("Settings", comment:String(describing:type(of:self)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target:self, action:#selector(SettingsVC.actionCancel(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target:self, action:#selector(SettingsVC.actionSignIn(_:)))
+
+        guard let spiLogin = spiLogin else { return }
         tableView.addSubview(spiLogin)
 
+        guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
+        guard let wwwAbout = wwwAbout else { return }
         wwwAbout.scrollView.isScrollEnabled = false
         wwwAbout.scrollView.bounces = false
         wwwAbout.loadRequest(URLRequest.init(url: url))
         
+        guard let btn1Password = btn1Password else { return }
         btn1Password.isEnabled = false // [[OnePasswordExtension sharedExtension] isAppExtensionAvailable];
         btn1Password.alpha = btn1Password.isEnabled ? 1.0 : 0.5;
+
+        // wire KVO?
+    }
+
+    deinit {
+        removeObserver(self, forKeyPath: "current")
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        print("observeValue \(keyPath)")
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let spiLogin = spiLogin else { return }
+        spiLogin?.stopAnimating()
 
-        spiLogin.stopAnimating()
+        togui(current)
+    }
+
+    private func togui(_ b : BlogM?) {
+        guard let lblTitle = lblTitle else { return }
+        guard let txtEndpoint = txtEndpoint else { return }
+        guard let swiSecure = swiSecure else { return }
+        guard let txtUserName = txtUserName else { return }
+        guard let txtPassWord = txtPassWord else { return }
+        guard let swiPrivateDefault = swiPrivateDefault else { return }
+        guard let swiTags = swiTags else { return }
+        guard let txtTags = txtTags else { return }
+
+        guard let b = b else {
+            lblTitle.textColor = UIColor.red
+            lblTitle.text = NSLocalizedString("Not connected yet.", comment:String(describing:type(of:self)))
+            return
+        }
         
-        title = NSLocalizedString("Settings", comment:"SettingsVC")
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target:self, action:#selector(SettingsVC.actionCancel(_:)))
-        navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target:self, action:#selector(SettingsVC.actionSignIn(_:)))
-        /*
-        self.lblTitle.text = self.shaarli.title;
-        self.lblTitle.textColor = self.lblTitle.text ? self.txtUserName.textColor : [UIColor redColor];
-        self.lblTitle.text = self.lblTitle.text ? self.lblTitle.text : NSLocalizedString(@"Not connected yət.", @"SettingsVC");
+        lblTitle.text = b.title;
+        lblTitle.textColor = txtUserName.textColor
         
-        self.txtEndpoint.text = self.shaarli.endpointStr;
-        self.swiSecure.on = self.shaarli.endpointSecure;
-        self.swiSecure.enabled = NO;
-        self.txtUserName.text = self.shaarli.userName;
-        self.txtPassWord.text = self.shaarli.passWord;
-        self.swiPrivateDefault.on = self.shaarli.privateDefault;
-        self.swiTags.on = self.shaarli.tagsActive;
-        self.txtTags.text = self.shaarli.tagsDefault;
-        
-        [self.spiLogin stopAnimating];
-        
-        self.title = NSLocalizedString(@"Settings", @"SettingsVC");
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(actionCancel:)];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionSignIn:)];
-*/
+        txtEndpoint.text = b.endpointStr
+        swiSecure.isOn = b.isEndpointSecure
+        swiSecure.isEnabled = false
+        txtUserName.text = b.endpoint.user
+        txtPassWord.text = b.endpoint.password
+        swiPrivateDefault.isOn = b.privateDefault
+        swiTags.isOn = b.tagsActive
+        txtTags.text = b.tagsDefault
     }
     
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        guard let vc = segue.destination as? MainVC else {return}
+        vc.current = current
     }
-    */
 
     @IBAction func actionCancel(_ sender: Any) {
         print("actionCancel \(type(of: self))")
@@ -111,8 +126,51 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
 
     @IBAction func actionSignIn(_ sender: Any) {
         print("actionSignIn \(type(of: self))")
-        guard let navigationController = navigationController else { return }
-        navigationController.popViewController(animated:true)
+        guard let lblTitle = lblTitle else { return }
+        guard let txtEndpoint = txtEndpoint else { return }
+        guard let swiSecure = swiSecure else { return }
+        guard let txtUserName = txtUserName else { return }
+        guard let txtPassWord = txtPassWord else { return }
+        guard let swiPrivateDefault = swiPrivateDefault else { return }
+        guard let swiTags = swiTags else { return }
+        guard let txtTags = txtTags else { return }
+
+        // gui -> BlogM -> probe -> display err -> save -> pop
+
+        guard var ep = URLComponents(string:"//" + (txtEndpoint.text ?? "")) else {return}
+        ep.scheme = swiSecure.isOn
+            ? "https"
+            : "http"
+        ep.user = txtUserName.text
+        ep.password = txtPassWord.text
+        if !ep.path.hasSuffix("/") {
+            ep.path = ep.path + "/"
+        }
+        guard let url = ep.url else {return}
+
+        let ad = AppDelegate.shared
+        let c = ShaarliHtmlClient()
+        guard let nav = navigationController else { return }
+        c.probe(url) { (ur, ti, er) in
+            print("probed '\(url)' -> (\(ur), \(ti), \(er))")
+
+            if er != "" {
+                lblTitle.text = er
+                lblTitle.textColor = UIColor.red
+                return
+            }
+
+            let b = BlogM(
+                endpoint:ur,
+                title:ti,
+                privateDefault:swiPrivateDefault.isOn,
+                tagsActive:swiTags.isOn,
+                tagsDefault:txtTags.text ?? ""
+            )
+            ad.saveBlog(ad.defaults, ad.keychain, b)
+            self.current = b
+            nav.popViewController(animated:true)
+        }
     }
 
     func webViewDidFinishLoad(_ webView: UIWebView) {

@@ -65,6 +65,8 @@ class MainVC: UIViewController {
         print("btnAudience \(type(of: self))")
     }
 
+    var current : BlogM?
+
     override func viewDidLoad() {
         print("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
@@ -73,25 +75,14 @@ class MainVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
-        
-        self.viewShaare.alpha = 0
-        btnSafari.isEnabled = false
-        // contact the app delegate and get dependency
+
         let ad = AppDelegate.shared
         lblVersion.text = ad.semver
-        ad.loadBlog(AppDelegate.shared.defaults) {
-            guard let b = $0 else {
-                guard $1 != nil else {
-                    self.title = "How odd"
-                    return
-                }
-                self.title = "Todo: settings!"
-                self.performSegue(withIdentifier: "SettingsVC", sender: nil)
-                return
-            }
-            self.title = b.title
-            self.viewShaare.alpha = 1
-            self.btnSafari.isEnabled = true
+        current = ad.loadBlog(ad.defaults, ad.keychain)
+        if nil == current {
+            title = NSLocalizedString("-", comment:String(describing:type(of:self)))
+            viewShaare.alpha = 0
+            btnSafari.isEnabled = false
         }
     }
 
@@ -110,22 +101,21 @@ class MainVC: UIViewController {
             self.view.addConstraint(self.centerY)
             // self.view.layoutIfNeeded()
         }
-/*
-        if( !self.shaarli.isSetUp ) {
-            [self performSegueWithIdentifier:NSStringFromClass([SettingsVC class]) sender:self];
-            return;
-        }
-        // start with note form ready..
-        [self actionShowShaare:nil];
-*/
-    }
 
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
+        guard let b = current else {
+            performSegue(withIdentifier:String(describing:SettingsVC.self), sender:self)
+            return
+        }
+
+        title = b.title
+        viewShaare.alpha = 1
+        btnSafari.isEnabled = true
+        // start with note form ready..
+        // [self actionShowShaare:nil];
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("prepare \(segue.identifier ?? "?") \(type(of: self)) -> \(String(describing: type(of:segue.destination)))")
-        super.prepare(for:segue, sender:sender)
+        guard let vc = segue.destination as? SettingsVC else {return}
+        vc.current = current
     }
 }
