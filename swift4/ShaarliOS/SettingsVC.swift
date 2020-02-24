@@ -167,7 +167,7 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
                 tagsActive:swiTags.isOn,
                 tagsDefault:txtTags.text ?? ""
             )
-            ad.saveBlog(ad.defaults, ad.keychain, b)
+            ad.saveBlog(ad.defaults, b)
             self.current = b
             nav.popViewController(animated:true)
         }

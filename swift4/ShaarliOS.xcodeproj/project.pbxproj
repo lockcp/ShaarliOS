@@ -49,8 +49,6 @@
 		16D5E29723058BF200D62C2E /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 16D5E29523058BF200D62C2E /* about.html */; };
 		16DAA966240036C9009641CC /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAA965240036C9009641CC /* SettingsVC.swift */; };
 		16E50FAE236D8AB0008CAB4A /* ServerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E50FAD236D8AB0008CAB4A /* ServerVC.swift */; };
-		16F5CF37240188DC001B4D7F /* Latch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F5CF36240188DC001B4D7F /* Latch.swift */; };
-		16F5CF38240188DC001B4D7F /* Latch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F5CF36240188DC001B4D7F /* Latch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,7 +104,6 @@
 		16D5E2992305DDAF00D62C2E /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		16DAA965240036C9009641CC /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		16E50FAD236D8AB0008CAB4A /* ServerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerVC.swift; sourceTree = "<group>"; };
-		16F5CF36240188DC001B4D7F /* Latch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Latch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,7 +215,6 @@
 			isa = PBXGroup;
 			children = (
 				16964E2A2401354C004D85FA /* KeychainPasswordItem.swift */,
-				16F5CF36240188DC001B4D7F /* Latch.swift */,
 				160593362402E0F9001DB69F /* KeyValueObserver.h */,
 				160593372402E0F9001DB69F /* KeyValueObserver.m */,
 				1605933B2402E3D7001DB69F /* Disposable.swift */,
@@ -391,7 +387,6 @@
 				162BB46222C7FF28005D5578 /* urlencoding.swift in Sources */,
 				16B094C524000F3F001B5224 /* ShaarliM.swift in Sources */,
 				16E50FAE236D8AB0008CAB4A /* ServerVC.swift in Sources */,
-				16F5CF37240188DC001B4D7F /* Latch.swift in Sources */,
 				16D5E293230581E700D62C2E /* MainVC.swift in Sources */,
 				1607F42622AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1605933C2402E3D7001DB69F /* Disposable.swift in Sources */,
@@ -409,7 +404,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16F5CF38240188DC001B4D7F /* Latch.swift in Sources */,
 				1605933D2402E3D7001DB69F /* Disposable.swift in Sources */,
 				1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,

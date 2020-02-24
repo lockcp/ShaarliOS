@@ -78,7 +78,7 @@ class MainVC: UIViewController {
 
         let ad = AppDelegate.shared
         lblVersion.text = ad.semver
-        current = ad.loadBlog(ad.defaults, ad.keychain)
+        current = ad.loadBlog(ad.defaults)
         if nil == current {
             title = NSLocalizedString("-", comment:String(describing:type(of:self)))
             viewShaare.alpha = 0
