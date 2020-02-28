@@ -33,9 +33,17 @@ struct BlogM {
     var endpointStrNoScheme : String? {
         guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)
             else {return nil}
-        return (uc.host ?? "") + uc.path
+        return "\(uc.host ?? "")\(uc.path)"
     }
-    
+
+    var endpointAnon : URL {
+        guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)
+            else {return URLEmpty}
+        uc.password = nil
+        uc.user = nil
+        return uc.url ?? URLEmpty
+    }
+
     var isEndpointSecure : Bool {
         return "https" == endpoint.scheme
     }

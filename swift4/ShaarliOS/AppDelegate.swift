@@ -28,12 +28,12 @@ let SHAARLI_COMPANION_APP_URL = "https://mro.name/ShaarliOS"
 let green = UIColor.init(hue: 87/360.0, saturation: 0.58, brightness: 0.68, alpha:1)
 let green60_64_66 = UIColor.init(hue: 60/360.0, saturation: 0.64, brightness: 0.66, alpha:1)
 
-private func _version(_ info : [String:Any?]?) -> String {
-    guard let info = info else {return "v?.?"}
-    guard let version = info["CFBundleShortVersionString"] as! String? else {return "v?.?"} // Marketing
-    // guard let version = info["CFBundleVersion"] as! String? else {return "v?.?"}
-    guard let build = info["CFBundleVersionGitSHA"] as! String? else {return "v\(version)+?"}
-    return "v\(version)+\(build)"
+fileprivate func _version(_ info : [String:Any?]?) -> String {
+    guard let info = info else { return "v?.?" }
+    guard let version = info["CFBundleShortVersionString"] as! String? else { return "v?.?" } // Marketing
+    // guard let version = info["CFBundleVersion"] as! String? else { return "v?.?" }
+    guard let gitsha = info["CFBundleVersionGitSHA"] as! String? else { return "v\(version)+?" }
+    return "v\(version)+\(gitsha)"
 }
 
 @UIApplicationMain
@@ -81,7 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ?? string(forKey:"endpointUrl")
             else { return nil }
 
-        guard var uc = URLComponents(string: url) else { return nil }
+        guard var uc = URLComponents(string: url)
+            else { return nil }
         if uc.user == nil || uc.user == "" {
             uc.user = string(forKey:KEY_userName)
         }

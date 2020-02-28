@@ -54,40 +54,98 @@ class MainVC: UIViewController {
     @IBOutlet var scrollView: UIScrollView!
     
     @IBAction func actionCancel(_ sender: Any) {
-        print("actionCancel \(type(of: self))")
+        debugPrint("actionCancel \(type(of: self))")
+
+        viewShaare.alpha = 1
+        btnShaare.isEnabled = current != nil
+        btnSafari.isEnabled = btnShaare.isEnabled
+        guard let b = current else { return }
+        title = b.title
+        btnAudience.isSelected = current?.privateDefault ?? false
+        txtTitle.text = ""
+        txtDescr.text = b.tagsActive
+            ? "\(b.tagsDefault) "
+            : ""
+        txtDescr.becomeFirstResponder()
     }
 
     @IBAction func actionPost(_ sender: Any) {
-        print("actionPost \(type(of: self))")
+        debugPrint("actionPost \(type(of: self))")
+        guard let btnShaare = btnShaare else { return }
+        guard let btnAudience = btnAudience else { return }
+        guard let txtDescr = txtDescr else { return }
+        guard let txtTitle = txtTitle else { return }
+        btnShaare.isEnabled = false
+        txtDescr.resignFirstResponder()
+        txtTitle.resignFirstResponder()
+
+        guard let current = current else { return }
+        let srv = current.endpoint
+        let tit = txtTitle.text ?? "-"
+        let dsc = txtDescr.text ?? "-"
+        let pri = btnAudience.isSelected
+        let c = ShaarliHtmlClient()
+        c.get(srv, URL(string:"https://0x4c.de/12")!) { ctx, ur_, ti_, de_, ta_, pr_, err in
+            guard "" == err else {
+                DispatchQueue.main.async(execute: {
+                    debugPrint("get error: '\(err)'")
+                    btnShaare.isEnabled = true
+                })
+                return
+            }
+            var ctx = ctx
+            ctx.removeValue(forKey: "cancel_edit")
+            c.add(srv, ctx, ur_, tit, dsc, ta_, pri) { err in
+                DispatchQueue.main.async(execute: {
+                    btnShaare.isEnabled = true
+                    guard "" == err else {
+                        debugPrint("set error: '\(err)'")
+                        return
+                    }
+                    print("set result: '\(ur_)'")
+                })
+            }
+        }
+    }
+
+    @IBAction func actionSafari(_ sender: Any) {
+        debugPrint("actionSafari \(type(of: self))")
+        guard let current = current else { return }
+        UIApplication.shared.openURL(current.endpointAnon)
     }
 
     @IBAction func btnAudience(_ sender: Any) {
-        print("btnAudience \(type(of: self))")
+        debugPrint("btnAudience \(type(of: self))")
+        guard let btnAudience = btnAudience else { return }
+        btnAudience.isSelected = !btnAudience.isSelected
+        btnAudience.isHighlighted = false
     }
 
     var current : BlogM?
 
     override func viewDidLoad() {
-        print("viewDidLoad \(type(of: self))")
+        debugPrint("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        print("viewWillAppear \(type(of: self))")
+        debugPrint("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
 
         let ad = AppDelegate.shared
         lblVersion.text = ad.semver
         current = ad.loadBlog(ad.defaults)
+        btnSafari.isEnabled = current?.endpoint != nil
+        btnAudience.isSelected = current?.privateDefault ?? false
         if nil == current {
             title = NSLocalizedString("-", comment:String(describing:type(of:self)))
             viewShaare.alpha = 0
-            btnSafari.isEnabled = false
         }
+        actionCancel(self)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear \(type(of: self))")
+        debugPrint("viewDidAppear \(type(of: self))")
         super.viewDidAppear(animated)
         UIView.setAnimationsEnabled(true)
 
@@ -107,15 +165,13 @@ class MainVC: UIViewController {
             return
         }
 
-        title = b.title
-        viewShaare.alpha = 1
-        btnSafari.isEnabled = true
         // start with note form ready..
         // [self actionShowShaare:nil];
+        actionCancel(self)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let vc = segue.destination as? SettingsVC else {return}
+        guard let vc = segue.destination as? SettingsVC else { return }
         vc.current = current
     }
 }

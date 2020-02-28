@@ -391,7 +391,9 @@ class ShaarliHtmlClient {
         let foda = formData(lifo)
         debugPrint("\(req.httpMethod ?? "?") \(req.url ?? URLEmpty) data:\(String(data:foda, encoding:.utf8) ?? "-")")
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
-            debugPrint("response: \(response?.url ?? URLEmpty) data:\(String(data:data!, encoding:.utf8) ?? "-")")
+            guard let data = data
+                else { return completion("Got no response body") }
+            debugPrint("response: \(response?.url ?? URLEmpty) data:\(String(data:data, encoding:.utf8) ?? "-")")
             let erro = check(data, response, err)
             completion(erro)
         }
