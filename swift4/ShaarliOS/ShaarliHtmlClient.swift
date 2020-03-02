@@ -195,7 +195,9 @@ internal func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
     var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
     uc.user = nil
     uc.password = nil
-    uc.queryItems = params.count == 0 ? nil : params
+    uc.queryItems = params.count == 0
+        ? nil
+        : params
     var req = URLRequest(url:uc.url!)
     req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
     return req
@@ -270,8 +272,8 @@ class ShaarliHtmlClient {
                         return
                     }
                     uc.queryItems = nil
-                    uc.user = endpoint.user
-                    uc.password = endpoint.password
+                    uc.user = nil
+                    uc.password = nil
                     callback(uc.url ?? URLEmpty, lifo, "")
                 }
                 tsk1.resume()
@@ -375,16 +377,16 @@ class ShaarliHtmlClient {
          _ privat: Bool,
          _ completion: @escaping (_ error: String) -> ()
     ) {
-        let ses = URLSession(configuration: URLSession.shared.configuration)
-        ses.reset { }
-        
+        let ses = URLSession.shared
+
         var lifo = ctx
         lifo[LF_URL] = url.absoluteString
         lifo[LF_TIT] = description
         lifo[LF_DSC] = extended
         lifo[LF_TGS] = tags.joined(separator: " ")
-        lifo[LF_PRI] = privat ? VAL_ON : nil
-
+        lifo[LF_PRI] = privat
+            ? VAL_ON
+            : nil
         var req = createReq(endpoint:action, params:[])
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
         req.httpMethod = HTTP_POST
