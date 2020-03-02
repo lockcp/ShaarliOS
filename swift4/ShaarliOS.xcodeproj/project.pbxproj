@@ -47,6 +47,10 @@
 		16D5E29723058BF200D62C2E /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 16D5E29523058BF200D62C2E /* about.html */; };
 		16DAA966240036C9009641CC /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAA965240036C9009641CC /* SettingsVC.swift */; };
 		16E50FAE236D8AB0008CAB4A /* ServerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E50FAD236D8AB0008CAB4A /* ServerVC.swift */; };
+		16F5C926240D5395001B75D4 /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F5C925240D5395001B75D4 /* ShareVC.swift */; };
+		16F5C92D240D5395001B75D4 /* Share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 16F5C923240D5395001B75D4 /* Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		16F5C934240D6595001B75D4 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1607F43122AD2BCE0036AC44 /* libxml2.tbd */; };
+		16F5C935240D65A3001B75D4 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1607F43122AD2BCE0036AC44 /* libxml2.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +68,28 @@
 			remoteGlobalIDString = 168C719F22AD03EC007DF595;
 			remoteInfo = ShaarliOS;
 		};
+		16F5C92B240D5395001B75D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 168C719822AD03EC007DF595 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16F5C922240D5395001B75D4;
+			remoteInfo = Share;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		16F5C931240D5395001B75D4 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				16F5C92D240D5395001B75D4 /* Share.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		160593362402E0F9001DB69F /* KeyValueObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyValueObserver.h; sourceTree = "<group>"; };
@@ -102,6 +127,11 @@
 		16D5E2992305DDAF00D62C2E /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		16DAA965240036C9009641CC /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		16E50FAD236D8AB0008CAB4A /* ServerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerVC.swift; sourceTree = "<group>"; };
+		16F5C923240D5395001B75D4 /* Share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		16F5C925240D5395001B75D4 /* ShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVC.swift; sourceTree = "<group>"; };
+		16F5C92A240D5395001B75D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16F5C932240D53F7001B75D4 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Share.entitlements; sourceTree = "<group>"; };
+		16F5C936240D68B8001B75D4 /* ShaarliOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShaarliOS.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16F5C934240D6595001B75D4 /* libxml2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +156,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16F5C920240D5395001B75D4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16F5C935240D65A3001B75D4 /* libxml2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +185,7 @@
 				168C71A222AD03EC007DF595 /* ShaarliOS */,
 				168C71B722AD03EE007DF595 /* ShaarliOSTests */,
 				168C71C222AD03EE007DF595 /* ShaarliOSUITests */,
+				16F5C924240D5395001B75D4 /* Share */,
 				168C71A122AD03EC007DF595 /* Products */,
 				1607F42F22AD2BCE0036AC44 /* Frameworks */,
 			);
@@ -157,6 +197,7 @@
 				168C71A022AD03EC007DF595 /* ShaarliOS.app */,
 				168C71B422AD03EE007DF595 /* ShaarliOSTests.xctest */,
 				168C71BF22AD03EE007DF595 /* ShaarliOSUITests.xctest */,
+				16F5C923240D5395001B75D4 /* Share.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -164,6 +205,7 @@
 		168C71A222AD03EC007DF595 /* ShaarliOS */ = {
 			isa = PBXGroup;
 			children = (
+				16F5C936240D68B8001B75D4 /* ShaarliOS.entitlements */,
 				168846A12370669300130588 /* Icon-1024x1024.png */,
 				1688469C237065CF00130588 /* LaunchScreen.xib */,
 				168C71AF22AD03ED007DF595 /* Info.plist */,
@@ -209,6 +251,16 @@
 			path = ShaarliOSUITests;
 			sourceTree = "<group>";
 		};
+		16F5C924240D5395001B75D4 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				16F5C925240D5395001B75D4 /* ShareVC.swift */,
+				16F5C932240D53F7001B75D4 /* Share.entitlements */,
+				16F5C92A240D5395001B75D4 /* Info.plist */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
 		16F5CF3924018B38001B4D7F /* 3rd */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,10 +284,12 @@
 				168C719D22AD03EC007DF595 /* Frameworks */,
 				168C719E22AD03EC007DF595 /* Resources */,
 				16D5E298230594F800D62C2E /* Git Sha -> Info.plist */,
+				16F5C931240D5395001B75D4 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				16F5C92C240D5395001B75D4 /* PBXTargetDependency */,
 			);
 			name = ShaarliOS;
 			productName = ShaarliOS;
@@ -278,6 +332,23 @@
 			productReference = 168C71BF22AD03EE007DF595 /* ShaarliOSUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		16F5C922240D5395001B75D4 /* Share */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16F5C930240D5395001B75D4 /* Build configuration list for PBXNativeTarget "Share" */;
+			buildPhases = (
+				16F5C91F240D5395001B75D4 /* Sources */,
+				16F5C920240D5395001B75D4 /* Frameworks */,
+				16F5C921240D5395001B75D4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Share;
+			productName = Share;
+			productReference = 16F5C923240D5395001B75D4 /* Share.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -291,6 +362,14 @@
 					168C719F22AD03EC007DF595 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					168C71B322AD03EE007DF595 = {
 						CreatedOnToolsVersion = 10.1;
@@ -301,6 +380,17 @@
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1010;
 						TestTargetID = 168C719F22AD03EC007DF595;
+					};
+					16F5C922240D5395001B75D4 = {
+						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -320,6 +410,7 @@
 				168C719F22AD03EC007DF595 /* ShaarliOS */,
 				168C71B322AD03EE007DF595 /* ShaarliOSTests */,
 				168C71BE22AD03EE007DF595 /* ShaarliOSUITests */,
+				16F5C922240D5395001B75D4 /* Share */,
 			);
 		};
 /* End PBXProject section */
@@ -350,6 +441,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1607F42D22AD21C30036AC44 /* testdata in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16F5C921240D5395001B75D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +527,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16F5C91F240D5395001B75D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16F5C926240D5395001B75D4 /* ShareVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -441,6 +547,11 @@
 			isa = PBXTargetDependency;
 			target = 168C719F22AD03EC007DF595 /* ShaarliOS */;
 			targetProxy = 168C71C022AD03EE007DF595 /* PBXContainerItemProxy */;
+		};
+		16F5C92C240D5395001B75D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16F5C922240D5395001B75D4 /* Share */;
+			targetProxy = 16F5C92B240D5395001B75D4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -599,8 +710,10 @@
 		168C71C922AD03EE007DF595 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ShaarliOS/ShaarliOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PE85K2L7LE;
 				INFOPLIST_FILE = ShaarliOS/Info.plist;
@@ -618,8 +731,10 @@
 		168C71CA22AD03EE007DF595 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ShaarliOS/ShaarliOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PE85K2L7LE;
 				INFOPLIST_FILE = ShaarliOS/Info.plist;
@@ -720,6 +835,49 @@
 			};
 			name = Release;
 		};
+		16F5C92E240D5395001B75D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Share/Share.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PE85K2L7LE;
+				INFOPLIST_FILE = Share/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = name.mro.ShaarliOS.Share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		16F5C92F240D5395001B75D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Share/Share.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PE85K2L7LE;
+				INFOPLIST_FILE = Share/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = name.mro.ShaarliOS.Share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -755,6 +913,15 @@
 			buildConfigurations = (
 				168C71CF22AD03EE007DF595 /* Debug */,
 				168C71D022AD03EE007DF595 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16F5C930240D5395001B75D4 /* Build configuration list for PBXNativeTarget "Share" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16F5C92E240D5395001B75D4 /* Debug */,
+				16F5C92F240D5395001B75D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
