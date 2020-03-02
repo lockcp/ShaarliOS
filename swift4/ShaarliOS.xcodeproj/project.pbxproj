@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		160593382402E0F9001DB69F /* KeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 160593372402E0F9001DB69F /* KeyValueObserver.m */; };
-		160593392402E0F9001DB69F /* KeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 160593372402E0F9001DB69F /* KeyValueObserver.m */; };
-		1605933A2402E0F9001DB69F /* KeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 160593372402E0F9001DB69F /* KeyValueObserver.m */; };
 		1605933C2402E3D7001DB69F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1605933B2402E3D7001DB69F /* Disposable.swift */; };
 		1605933D2402E3D7001DB69F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1605933B2402E3D7001DB69F /* Disposable.swift */; };
 		1605933E2402E3D7001DB69F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1605933B2402E3D7001DB69F /* Disposable.swift */; };
@@ -408,7 +406,6 @@
 				1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 				162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */,
-				160593392402E0F9001DB69F /* KeyValueObserver.m in Sources */,
 				161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */,
 				168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */,
 				16964E2C2401354C004D85FA /* KeychainPasswordItem.swift in Sources */,
@@ -422,7 +419,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1605933A2402E0F9001DB69F /* KeyValueObserver.m in Sources */,
 				1605933E2402E3D7001DB69F /* Disposable.swift in Sources */,
 				1607F42822AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				168C71C422AD03EE007DF595 /* ShaarliOSUITests.swift in Sources */,
