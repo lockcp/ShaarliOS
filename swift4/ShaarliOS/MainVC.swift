@@ -95,9 +95,7 @@ class MainVC: UIViewController {
         c.get(srv, URLEmpty) { ctx, ur_, ti_, de_, ta_, pr_, err in
             guard "" == err else {
                 DispatchQueue.main.async(execute: {
-                    debugPrint("get error: '\(err)'")
-                    spiPost.stopAnimating()
-                    btnShaare.isEnabled = !spiPost.isAnimating
+                    self.reportPostingError(err)
                 })
                 return
             }
@@ -105,9 +103,8 @@ class MainVC: UIViewController {
             ctx.removeValue(forKey: "cancel_edit")
             c.add(srv, ctx, ur_, tit, dsc, ta_, pri) { err in
                 DispatchQueue.main.async(execute: {
-                    btnShaare.isEnabled = true
                     guard "" == err else {
-                        debugPrint("set error: '\(err)'")
+                        self.reportPostingError(err)
                         return
                     }
                     print("set result: '\(ur_)'")
@@ -115,6 +112,13 @@ class MainVC: UIViewController {
                 })
             }
         }
+    }
+
+    fileprivate func reportPostingError(_ err:String) {
+        guard let spiPost = spiPost else { return }
+        spiPost.stopAnimating()
+        btnShaare.isEnabled = !spiPost.isAnimating
+        UIAlertView(title:"Sorry, couldn't post", message:err, delegate:nil, cancelButtonTitle:"OK").show()
     }
 
     @IBAction func actionSafari(_ sender: Any) {
