@@ -151,7 +151,9 @@ class MainVC: UIViewController {
 
         let ad = AppDelegate.shared
         lblVersion.text = ad.semver
-        current = ad.loadBlog(ad.defaults)
+
+        let sm = ShaarliM.shared
+        current = sm.loadBlog(sm.defaults)
         btnSafari.isEnabled = current?.endpoint != nil
         btnAudience.isSelected = current?.privateDefault ?? false
         if nil == current {

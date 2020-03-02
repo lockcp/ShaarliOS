@@ -26,7 +26,7 @@ import MobileCoreServices
 fileprivate func stringFromPrivacy(_ priv : Bool) -> String
 {
     return priv
-        ? NSLocalizedString("Private 🔐", comment:"ShaareVC")
+        ? NSLocalizedString("Private 🔐", comment:"ShareVC")
         : NSLocalizedString("Public 🔓", comment:"ShareVC")
 }
 
@@ -38,6 +38,7 @@ fileprivate func privacyFromString(_ s : String) -> Bool
 @objc (ShareVC) // https://blog.hellocode.co/post/share-extension/
 class ShareVC: SLComposeServiceViewController {
 
+    var current         : BlogM?
     var wasTouched      = false
     var itemTitle       : SLComposeSheetConfigurationItem?
     var itemAudience    : SLComposeSheetConfigurationItem?
@@ -56,11 +57,12 @@ class ShareVC: SLComposeServiceViewController {
         guard let iAu = SLComposeSheetConfigurationItem() else {return []}
         iAu.title = NSLocalizedString("Audience", comment:"ShareVC")
         iAu.value = stringFromPrivacy(false)
+        weak var wself = self
         iAu.tapHandler = {
-            // weak self ref?
-            guard let iAu = self.itemAudience else {return}
+            guard let sf = wself else {return}
+            guard let iAu = sf.itemAudience else {return}
             iAu.value = stringFromPrivacy( !privacyFromString(iAu.value) )
-            self.wasTouched = true
+            sf.wasTouched = true
         }
 
         itemTitle = iTi
@@ -75,16 +77,20 @@ class ShareVC: SLComposeServiceViewController {
         assert(itemTitle != nil)
         assert(itemAudience != nil)
 
+        let sha = ShaarliM.shared
+        current = sha.loadBlog(sha.defaults)
+        guard let current = current else {return}
+
         wasTouched = false
         textView.keyboardType = .twitter
 
         guard let itemTitle = itemTitle else {return}
         guard let itemAudience = itemAudience else {return}
 
-        title = "Uhu"
+        title = current.title
         itemTitle.value = contentText
-        let tagsDefault = true
-            ? "#a #b"
+        let tagsDefault = current.tagsActive
+            ? current.tagsDefault
             : ""
 
         var txt = "🔄"
@@ -92,16 +98,16 @@ class ShareVC: SLComposeServiceViewController {
             txt = "\(tagsDefault) \(txt)"
         }
         textView.text = txt
-        itemAudience.value = stringFromPrivacy(false)
+        itemAudience.value = stringFromPrivacy(current.privateDefault)
 
         for _item in (extensionContext?.inputItems)! {
             let item = _item as! NSExtensionItem
             for _itemProvider in (item.attachments!) {
                 let itemProvider = _itemProvider
                 // see predicate from http://stackoverflow.com/a/27932776
-                let t = kUTTypeURL as String
-                if( itemProvider.hasItemConformingToTypeIdentifier(t) ) {
-                    itemProvider.loadItem(forTypeIdentifier:t, options:nil) { (_url, err) in
+                let tu = kUTTypeURL as String
+                if( itemProvider.hasItemConformingToTypeIdentifier(tu) ) {
+                    itemProvider.loadItem(forTypeIdentifier:tu, options:nil) { (_url, err) in
                         debugPrint("done. title:\(itemTitle.value) url:\(_url) \(err)")
                         guard let err = err else {
                             // post!
@@ -113,6 +119,32 @@ class ShareVC: SLComposeServiceViewController {
                 
             }
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if nil != current {
+            return
+        }
+
+        let alert = UIAlertController(
+            title:NSLocalizedString("No Shaarli", comment:"ShareVC"),
+            message: NSLocalizedString("There is no Shaarli account configured.\nPlease add one in the Shaarli💫 in-app settings.", comment:"ShareVC"),
+            preferredStyle:.alert
+        )
+
+        // DispatchGroup + local notification to open Shaarli?
+        // https://stackoverflow.com/a/44499222/349514
+
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Cancel", comment:"ShareVC"),
+            style:.cancel,
+            handler:{ (_) in self.cancel() }
+        ))
+        DispatchQueue.main.async(execute: {
+            self.present(alert, animated:true, completion:nil)
+        })
     }
 
     override func presentationAnimationDidFinish() {

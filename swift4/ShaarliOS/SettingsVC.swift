@@ -193,7 +193,7 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
             tagsActive:swiTags.isOn,
             tagsDefault:txtTags.text ?? ""
         )
-        let ad = AppDelegate.shared
+        let ad = ShaarliM.shared
         ad.saveBlog(ad.defaults, b)
         current = b
         guard let nav = navigationController else { return }
