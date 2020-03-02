@@ -52,11 +52,14 @@ class MainVC: UIViewController {
     // http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
     @IBOutlet var activeField: UIView!
     @IBOutlet var scrollView: UIScrollView!
-    
+
+    @IBOutlet var spiPost          : UIActivityIndicatorView?
+
     @IBAction func actionCancel(_ sender: Any) {
         debugPrint("actionCancel \(type(of: self))")
 
         viewShaare.alpha = 1
+        spiPost?.stopAnimating()
         btnShaare.isEnabled = current != nil
         btnSafari.isEnabled = btnShaare.isEnabled
         guard let b = current else { return }
@@ -75,7 +78,11 @@ class MainVC: UIViewController {
         guard let btnAudience = btnAudience else { return }
         guard let txtDescr = txtDescr else { return }
         guard let txtTitle = txtTitle else { return }
-        btnShaare.isEnabled = false
+        guard let spiPost = spiPost else { return }
+
+        view.bringSubviewToFront(spiPost)
+        spiPost.startAnimating()
+        btnShaare.isEnabled = !spiPost.isAnimating
         txtDescr.resignFirstResponder()
         txtTitle.resignFirstResponder()
 
@@ -85,11 +92,12 @@ class MainVC: UIViewController {
         let dsc = txtDescr.text ?? "-"
         let pri = btnAudience.isSelected
         let c = ShaarliHtmlClient()
-        c.get(srv, URL(string:"https://0x4c.de/12")!) { ctx, ur_, ti_, de_, ta_, pr_, err in
+        c.get(srv, URLEmpty) { ctx, ur_, ti_, de_, ta_, pr_, err in
             guard "" == err else {
                 DispatchQueue.main.async(execute: {
                     debugPrint("get error: '\(err)'")
-                    btnShaare.isEnabled = true
+                    spiPost.stopAnimating()
+                    btnShaare.isEnabled = !spiPost.isAnimating
                 })
                 return
             }
@@ -103,6 +111,7 @@ class MainVC: UIViewController {
                         return
                     }
                     print("set result: '\(ur_)'")
+                    self.actionCancel(self)
                 })
             }
         }
@@ -126,6 +135,10 @@ class MainVC: UIViewController {
     override func viewDidLoad() {
         debugPrint("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
+        assert(nil != spiPost)
+
+        guard let spiPost = spiPost else { return }
+        view.addSubview(spiPost)
     }
 
     override func viewWillAppear(_ animated: Bool) {
