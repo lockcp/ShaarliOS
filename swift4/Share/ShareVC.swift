@@ -130,17 +130,27 @@ class ShareVC: SLComposeServiceViewController {
 
         let alert = UIAlertController(
             title:NSLocalizedString("No Shaarli", comment:"ShareVC"),
-            message: NSLocalizedString("There is no Shaarli account configured.\nPlease add one in the Shaarli💫 in-app settings.", comment:"ShareVC"),
+            message: NSLocalizedString("There is no Shaarli account configured.\nPlease add one in the Shaarli💫 settings.", comment:"ShareVC"),
             preferredStyle:.alert
         )
-
-        // DispatchGroup + local notification to open Shaarli?
-        // https://stackoverflow.com/a/44499222/349514
 
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("Cancel", comment:"ShareVC"),
             style:.cancel,
-            handler:{ (_) in self.cancel() }
+            handler:{ (_) in
+                self.cancel()
+            }
+        ))
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Settings", comment:"ShareVC"),
+            style:.default,
+            handler:{ (_) in
+                // https://stackoverflow.com/a/44499222/349514
+                DispatchGroup().notify(queue: DispatchQueue.main) {
+                    let _ = self.openURL(URL(string:"\(SELF_URL_PREFIX):///settings")!)
+                }
+                self.cancel()
+            }
         ))
         DispatchQueue.main.async(execute: {
             self.present(alert, animated:true, completion:nil)
@@ -168,5 +178,19 @@ class ShareVC: SLComposeServiceViewController {
 
     override func didSelectCancel() {
         debugPrint("didSelectCancel")
+    }
+
+    // https://stackoverflow.com/a/44499222/349514
+    // Function must be named exactly like this so a selector can be found by the compiler!
+    // Anyway - it's another selector in another instance that would be "performed" instead.
+    @objc fileprivate func openURL(_ url: URL) -> Bool {
+        var rep: UIResponder? = self
+        while rep != nil {
+            if let app = rep as? UIApplication {
+                return app.perform(#selector(openURL(_:)), with: url) != nil
+            }
+            rep = rep?.next
+        }
+        return false
     }
 }
