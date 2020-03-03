@@ -64,7 +64,10 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         swiSecure!.isEnabled     = false
 
         guard let spiLogin = spiLogin else { return }
-        tableView.addSubview(spiLogin)
+        view.addSubview(spiLogin)
+        spiLogin.frame = view.bounds
+        // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiLogin, attribute:.centerX, multiplier:1.0, constant:0))
+        // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerY, relatedBy:.equal, toItem:spiLogin, attribute:.centerY, multiplier:1.0, constant:0))
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
         guard let wwwAbout = wwwAbout else { return }

@@ -42,6 +42,8 @@ class ShareVC: SLComposeServiceViewController {
     var wasTouched      = false
     var itemTitle       : SLComposeSheetConfigurationItem?
     var itemAudience    : SLComposeSheetConfigurationItem?
+    var ctx             : HtmlFormDict = [:]
+    var url             : URL = URLEmpty
 
     override func viewDidLoad() {
         debugPrint("viewDidLoad")
@@ -80,12 +82,13 @@ class ShareVC: SLComposeServiceViewController {
         let sha = ShaarliM.shared
         current = sha.loadBlog(sha.defaults)
         guard let current = current else {return}
+        let c = ShaarliHtmlClient()
 
-        wasTouched = false
         textView.keyboardType = .twitter
 
         guard let itemTitle = itemTitle else {return}
         guard let itemAudience = itemAudience else {return}
+        guard let textView = textView else {return}
 
         title = current.title
         itemTitle.value = contentText
@@ -93,44 +96,97 @@ class ShareVC: SLComposeServiceViewController {
             ? current.tagsDefault
             : ""
 
-        var txt = "🔄"
+        var txt = NSLocalizedString("🔄", comment:"ShareVC")
         if( "" != tagsDefault ) {
             txt = "\(tagsDefault) \(txt)"
         }
         textView.text = txt
         itemAudience.value = stringFromPrivacy(current.privateDefault)
 
+        let tUrl = kUTTypeURL as String
+        let tTxt = kUTTypeText as String
+        weak var ws = self
         for _item in (extensionContext?.inputItems)! {
             let item = _item as! NSExtensionItem
-            for _itemProvider in (item.attachments!) {
-                let itemProvider = _itemProvider
+            for ip in (item.attachments!) {
                 // see predicate from http://stackoverflow.com/a/27932776
-                let tu = kUTTypeURL as String
-                if( itemProvider.hasItemConformingToTypeIdentifier(tu) ) {
-                    itemProvider.loadItem(forTypeIdentifier:tu, options:nil) { (_url, err) in
-                        debugPrint("done. title:\(itemTitle.value) url:\(_url) \(err)")
-                        guard let err = err else {
-                            // post!
+                if( ip.hasItemConformingToTypeIdentifier(tUrl) ) {
+                    ip.loadItem(forTypeIdentifier:tUrl, options:nil) { (_url, err) in
+                        guard let ws = ws else {return}
+                        guard let _url = _url as? URL else {
                             return
                         }
-                        debugPrint("Error: \(err)")
+                        guard let err = err else {
+                            c.get(current.endpoint, _url, { (ctx, _url, tit, dsc, tgs, pri, err) in
+                                DispatchQueue.main.async {
+                                    ws.ctx = ctx
+                                    ws.url = _url
+                                    if "" != tit {
+                                        itemTitle.value = tit
+                                    }
+                                    if "" != dsc {
+                                        textView.text = dsc
+                                    }
+                                    itemAudience.value = stringFromPrivacy(pri)
+                                }
+                            })
+                            return
+                        }
+                        ws.showError(
+                            title:NSLocalizedString("Error", comment: ""),
+                            message:err.localizedDescription
+                        )
                     }
                 }
-                
+                if( ip.hasItemConformingToTypeIdentifier(tTxt) ) {
+                    ip.loadItem(forTypeIdentifier:tTxt, options:nil) { (_txt, err) in
+                        guard let ws = ws else {return}
+                        guard let err = err else {
+                            debugPrint("done. title:\(itemTitle.value ?? "-") txt:\(String(describing: _txt))")
+                            return
+                        }
+                        ws.showError(
+                            title:NSLocalizedString("Error", comment: ""),
+                            message:err.localizedDescription
+                        )
+                    }
+                }
             }
         }
+    }
+
+    override func didSelectPost() {
+        debugPrint("didSelectPost")
+        guard let current = current else {return}
+        let c = ShaarliHtmlClient()
+        guard let tit = itemTitle?.value else {return}
+        guard let dsc = textView.text else {return}
+        let tgs : Set<String> = []
+        let pri = privacyFromString((itemAudience?.value)!)
+        c.add(current.endpoint, ctx, url, tit, dsc, tgs, pri) {
+            if $0 != "" {
+                self.showError(
+                    title:NSLocalizedString("Error", comment: "ShareVC"),
+                    message:$0
+                )
+            }
+            super.didSelectPost()
+        }
+        // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+        // self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         if nil != current {
+            wasTouched = false
             return
         }
 
         let alert = UIAlertController(
-            title:NSLocalizedString("No Shaarli", comment:"ShareVC"),
-            message: NSLocalizedString("There is no Shaarli account configured.\nPlease add one in the Shaarli💫 settings.", comment:"ShareVC"),
+            title:NSLocalizedString("No Shaarli found", comment:"ShareVC"),
+            message: NSLocalizedString("Please add one in the Shaarli💫 settings.", comment:"ShareVC"),
             preferredStyle:.alert
         )
 
@@ -152,11 +208,30 @@ class ShareVC: SLComposeServiceViewController {
                 self.cancel()
             }
         ))
-        DispatchQueue.main.async(execute: {
+        DispatchQueue.main.async {
             self.present(alert, animated:true, completion:nil)
-        })
+        }
     }
 
+    fileprivate func showError(title:String, message:String) {
+        let alert = UIAlertController(
+            title:title,
+            message:message,
+            preferredStyle:.alert
+        )
+        alert.addAction(UIAlertAction(
+            title:title,
+            style:.cancel,
+            handler:{ (_) in
+                self.cancel()
+            }
+        ))
+
+        DispatchQueue.main.async {
+            self.present(alert, animated:true, completion:nil)
+        }
+    }
+    
     override func presentationAnimationDidFinish() {
         debugPrint("presentationAnimationDidFinish")
     }
@@ -168,16 +243,14 @@ class ShareVC: SLComposeServiceViewController {
         return true
     }
 
-    override func didSelectPost() {
-        debugPrint("didSelectPost")
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-
-        // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-        // self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+    // No preview image right upper inside the share dialog.
+    override func loadPreviewView() -> UIView! {
+        return nil
     }
 
     override func didSelectCancel() {
         debugPrint("didSelectCancel")
+        super.didSelectCancel()
     }
 
     // https://stackoverflow.com/a/44499222/349514

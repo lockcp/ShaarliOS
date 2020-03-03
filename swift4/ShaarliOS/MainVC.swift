@@ -94,22 +94,22 @@ class MainVC: UIViewController {
         let c = ShaarliHtmlClient()
         c.get(srv, URLEmpty) { ctx, ur_, ti_, de_, ta_, pr_, err in
             guard "" == err else {
-                DispatchQueue.main.async(execute: {
+                DispatchQueue.main.async {
                     self.reportPostingError(err)
-                })
+                }
                 return
             }
             var ctx = ctx
             ctx.removeValue(forKey: "cancel_edit")
             c.add(srv, ctx, ur_, tit, dsc, ta_, pri) { err in
-                DispatchQueue.main.async(execute: {
+                DispatchQueue.main.async {
                     guard "" == err else {
                         self.reportPostingError(err)
                         return
                     }
                     print("set result: '\(ur_)'")
                     self.actionCancel(self)
-                })
+                }
             }
         }
     }
@@ -143,6 +143,9 @@ class MainVC: UIViewController {
 
         guard let spiPost = spiPost else { return }
         view.addSubview(spiPost)
+        spiPost.frame = view.bounds
+        // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiPost, attribute:.centerX, multiplier:1.0, constant:0))
+        // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerY, relatedBy:.equal, toItem:spiPost, attribute:.centerY, multiplier:1.0, constant:0))
     }
 
     override func viewWillAppear(_ animated: Bool) {
