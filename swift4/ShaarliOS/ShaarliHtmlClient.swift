@@ -272,8 +272,8 @@ class ShaarliHtmlClient {
                         return
                     }
                     uc.queryItems = nil
-                    uc.user = nil
-                    uc.password = nil
+                    uc.user = endpoint.user
+                    uc.password = endpoint.password
                     callback(uc.url ?? URLEmpty, lifo, "")
                 }
                 tsk1.resume()
@@ -308,7 +308,9 @@ class ShaarliHtmlClient {
         ses.reset { }
 
         func callback(_ url :URL, _ title: String, _ error: String) -> () {
-            DispatchQueue.main.async(execute: { let _ = completion(url, title, error) })
+            DispatchQueue.main.async {
+                let _ = completion(url, title, error)
+            }
             ses.invalidateAndCancel()
         }
 
