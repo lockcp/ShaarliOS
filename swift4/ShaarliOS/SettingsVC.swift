@@ -73,6 +73,9 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         guard let wwwAbout = wwwAbout else { return }
         wwwAbout.scrollView.isScrollEnabled = false
         wwwAbout.scrollView.bounces = false
+        wwwAbout.backgroundColor = view.backgroundColor
+        wwwAbout.isOpaque = false // avoid white flash https://stackoverflow.com/a/15670274
+        //view.backgroundColor = .black
         wwwAbout.loadRequest(URLRequest.init(url: url))
 
         guard let btn1Password = btn1Password else { return }
