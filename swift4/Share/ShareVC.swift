@@ -96,11 +96,10 @@ class ShareVC: SLComposeServiceViewController {
             ? current.tagsDefault
             : ""
 
-        var txt = NSLocalizedString("🔄", comment:"ShareVC")
-        if( "" != tagsDefault ) {
-            txt = "\(tagsDefault) \(txt)"
-        }
-        textView.text = txt
+        let txt = "" != tagsDefault
+            ? "\(tagsDefault) "
+            : ""
+        textView.text = "\(txt)\(NSLocalizedString("🔄", comment:"ShareVC"))"
         itemAudience.value = stringFromPrivacy(current.privateDefault)
 
         let tUrl = kUTTypeURL as String
@@ -118,15 +117,16 @@ class ShareVC: SLComposeServiceViewController {
                         }
                         guard let err = err else {
                             c.get(current.endpoint, _url, { (ctx, _url, tit, dsc, tgs, pri, err) in
+                                let r = tagsNormalise(description:tit, extended:dsc, tags:tgs, known:[])
                                 DispatchQueue.main.async {
                                     ws.ctx = ctx
                                     ws.url = _url
-                                    if "" != tit {
-                                        itemTitle.value = tit
-                                    }
-                                    if "" != dsc {
-                                        textView.text = dsc
-                                    }
+                                    itemTitle.value = "" != r.description
+                                        ? r.description
+                                        : itemTitle.value
+                                    textView.text = "" != r.extended
+                                        ? r.extended
+                                        : txt
                                     itemAudience.value = stringFromPrivacy(pri)
                                 }
                             })
@@ -161,9 +161,9 @@ class ShareVC: SLComposeServiceViewController {
         let c = ShaarliHtmlClient()
         guard let tit = itemTitle?.value else {return}
         guard let dsc = textView.text else {return}
-        let tgs : Set<String> = []
         let pri = privacyFromString((itemAudience?.value)!)
-        c.add(current.endpoint, ctx, url, tit, dsc, tgs, pri) {
+        let r = tagsNormalise(description:tit, extended:dsc, tags:[], known:[])
+        c.add(current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) {
             if $0 != "" {
                 self.showError(
                     title:NSLocalizedString("Error", comment: "ShareVC"),

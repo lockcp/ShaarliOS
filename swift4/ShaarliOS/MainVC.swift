@@ -101,7 +101,8 @@ class MainVC: UIViewController {
             }
             var ctx = ctx
             ctx.removeValue(forKey: "cancel_edit")
-            c.add(srv, ctx, ur_, tit, dsc, ta_, pri) { err in
+            let r = tagsNormalise(description:tit, extended:dsc, tags:ta_, known:[])
+            c.add(srv, ctx, ur_, r.description, r.extended, r.tags, pri) { err in
                 DispatchQueue.main.async {
                     guard "" == err else {
                         self.reportPostingError(err)
