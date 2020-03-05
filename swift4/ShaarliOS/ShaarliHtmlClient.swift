@@ -406,6 +406,7 @@ class ShaarliHtmlClient {
     }
 }
 
+/*
 // https://oleb.net/2018/sequence-head-tail/#preserving-the-subsequence-type
 extension Sequence {
     var headAndTail: (head: Element, tail: SubSequence)? {
@@ -424,3 +425,4 @@ extension Sequence {
         return (head, tail)
     }
 }
+*/

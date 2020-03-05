@@ -107,7 +107,8 @@ class ShareVC: SLComposeServiceViewController {
         weak var ws = self
         for _item in (extensionContext?.inputItems)! {
             let item = _item as! NSExtensionItem
-            for ip in (item.attachments!) {
+            for _ip in (item.attachments!) {
+                let ip = _ip as! NSItemProvider // required for Xcode <10
                 // see predicate from http://stackoverflow.com/a/27932776
                 if( ip.hasItemConformingToTypeIdentifier(tUrl) ) {
                     ip.loadItem(forTypeIdentifier:tUrl, options:nil) { (_url, err) in
