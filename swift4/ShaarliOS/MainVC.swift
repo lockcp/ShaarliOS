@@ -42,13 +42,13 @@ class MainVC: UIViewController {
     @IBOutlet var vContainer: UIView!
     @IBOutlet var btnPetal: UIButton!
     @IBOutlet var btnSafari: UIBarButtonItem!
-    
+
     @IBOutlet var viewShaare: UIView!
     @IBOutlet var btnShaare: UIButton!
     @IBOutlet var txtDescr: UITextView!
     @IBOutlet var txtTitle: UITextField!
     @IBOutlet var btnAudience: UIButton!
-    
+
     // http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
     @IBOutlet var activeField: UIView!
     @IBOutlet var scrollView: UIScrollView!
@@ -57,18 +57,29 @@ class MainVC: UIViewController {
 
     @IBAction func actionCancel(_ sender: Any) {
         debugPrint("actionCancel \(type(of: self))")
+        guard let btnShaare = btnShaare else {return}
+        guard let btnSafari = btnSafari else {return}
+        guard let b = current else {
+            btnShaare.isEnabled = false
+            btnSafari.isEnabled = btnShaare.isEnabled
+            return
+        }
+        guard let viewShaare = viewShaare else {return}
+        guard let btnAudience = btnAudience else {return}
+        guard let txtTitle = txtTitle else {return}
+        guard let txtDescr = txtDescr else {return}
+        guard let spiPost = spiPost else {return}
 
-        viewShaare.alpha = 1
-        spiPost?.stopAnimating()
-        btnShaare.isEnabled = current != nil
-        btnSafari.isEnabled = btnShaare.isEnabled
-        guard let b = current else { return }
         title = b.title
-        btnAudience.isSelected = current?.privateDefault ?? false
+        spiPost.stopAnimating()
+        btnShaare.isEnabled = true // b != nil
+        btnSafari.isEnabled = btnShaare.isEnabled
+        btnAudience.isSelected = b.privateDefault
         txtTitle.text = ""
         txtDescr.text = b.tagsActive
             ? "\(b.tagsDefault) "
             : ""
+        viewShaare.alpha = 1
         txtDescr.becomeFirstResponder()
     }
 
