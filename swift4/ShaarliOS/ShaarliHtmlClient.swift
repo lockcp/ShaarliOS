@@ -295,6 +295,19 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
+    fileprivate func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
+        cfg.allowsCellularAccess = true
+        cfg.httpAdditionalHeaders = [KEY_HEAD_USER_AGENT:VAL_HEAD_USER_AGENT]
+        cfg.httpMaximumConnectionsPerHost = 1
+        cfg.httpShouldSetCookies = true
+        cfg.httpShouldUsePipelining = true
+        cfg.timeoutIntervalForRequest = 5.0
+        cfg.timeoutIntervalForResource = 5.0
+        // cfg.waitsForConnectivity = true
+        cfg.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        return cfg
+    }
+
     // We need the name of the server. Reliably. So we have to look at ?do=configure.
     // That's where it's in a HTML form.
     // so we pretend to ?post= in order to get past the login and then ?do=configure.
@@ -304,8 +317,7 @@ class ShaarliHtmlClient {
         _ error:String) -> Bool
     ) {
         guard let endpoint = endpoint else { return }
-        let ses = URLSession(configuration: URLSession.shared.configuration)
-        ses.reset { }
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
 
         func callback(_ url :URL, _ title: String, _ error: String) -> () {
             DispatchQueue.main.async {
@@ -344,6 +356,7 @@ class ShaarliHtmlClient {
     }
 
     func get(_ endpoint: URL, _ url: URL, _ completion: @escaping (
+        _ ses: URLSession,
         _ ctx: HtmlFormDict,
         _ url:URL,
         _ description: String,
@@ -352,12 +365,12 @@ class ShaarliHtmlClient {
         _ privat: Bool,
         _ error: String)->()
     ) {
-        let ses = URLSession(configuration: URLSession.shared.configuration)
-        ses.reset { }
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
 
         loginAndGet(ses, endpoint, url) { _, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
             completion(
+                ses,
                 lifo,
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
@@ -370,7 +383,8 @@ class ShaarliHtmlClient {
     }
 
     // Requires a logged-in session as left over by get().
-    func add(_ action: URL,
+    func add(_ ses: URLSession,
+         _ endpoint: URL,
          _ ctx: HtmlFormDict,
          _ url:URL,
          _ description: String,
@@ -379,8 +393,6 @@ class ShaarliHtmlClient {
          _ privat: Bool,
          _ completion: @escaping (_ error: String) -> ()
     ) {
-        let ses = URLSession.shared
-
         var lifo = ctx
         lifo[LF_URL] = url.absoluteString
         lifo[LF_TIT] = description
@@ -389,7 +401,7 @@ class ShaarliHtmlClient {
         lifo[LF_PRI] = privat
             ? VAL_ON
             : nil
-        var req = createReq(endpoint:action, params:[])
+        var req = createReq(endpoint:endpoint, params:[])
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
         req.httpMethod = HTTP_POST
         let foda = formData(lifo)

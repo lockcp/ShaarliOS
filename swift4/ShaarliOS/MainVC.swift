@@ -103,7 +103,7 @@ class MainVC: UIViewController {
         let dsc = txtDescr.text ?? "-"
         let pri = btnAudience.isSelected
         let c = ShaarliHtmlClient()
-        c.get(srv, URLEmpty) { ctx, ur_, ti_, de_, ta_, pr_, err in
+        c.get(srv, URLEmpty) { ses, ctx, ur_, ti_, de_, ta_, pr_, err in
             guard "" == err else {
                 DispatchQueue.main.async {
                     self.reportPostingError(err)
@@ -113,7 +113,7 @@ class MainVC: UIViewController {
             var ctx = ctx
             ctx.removeValue(forKey: "cancel_edit")
             let r = tagsNormalise(description:tit, extended:dsc, tags:ta_, known:[])
-            c.add(srv, ctx, ur_, r.description, r.extended, r.tags, pri) { err in
+            c.add(ses, srv, ctx, ur_, r.description, r.extended, r.tags, pri) { err in
                 DispatchQueue.main.async {
                     guard "" == err else {
                         self.reportPostingError(err)

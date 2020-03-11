@@ -42,6 +42,7 @@ class ShareVC: SLComposeServiceViewController {
     var wasTouched      = false
     var itemTitle       : SLComposeSheetConfigurationItem?
     var itemAudience    : SLComposeSheetConfigurationItem?
+    var session         : URLSession?
     var ctx             : HtmlFormDict = [:]
     var url             : URL = URLEmpty
 
@@ -117,7 +118,8 @@ class ShareVC: SLComposeServiceViewController {
                             return
                         }
                         guard let err = err else {
-                            c.get(current.endpoint, _url, { (ctx, _url, tit, dsc, tgs, pri, err) in
+                            c.get(current.endpoint, _url, { (ses, ctx, _url, tit, dsc, tgs, pri, err) in
+                                self.session = ses
                                 let r = tagsNormalise(description:tit, extended:dsc, tags:tgs, known:[])
                                 DispatchQueue.main.async {
                                     ws.ctx = ctx
@@ -164,7 +166,7 @@ class ShareVC: SLComposeServiceViewController {
         guard let dsc = textView.text else {return}
         let pri = privacyFromString((itemAudience?.value)!)
         let r = tagsNormalise(description:tit, extended:dsc, tags:[], known:[])
-        c.add(current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) {
+        c.add(session!, current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) {
             if $0 != "" {
                 self.showError(
                     title:NSLocalizedString("Error", comment: "ShareVC"),
