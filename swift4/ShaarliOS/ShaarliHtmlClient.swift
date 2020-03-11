@@ -311,12 +311,11 @@ class ShaarliHtmlClient {
     // We need the name of the server. Reliably. So we have to look at ?do=configure.
     // That's where it's in a HTML form.
     // so we pretend to ?post= in order to get past the login and then ?do=configure.
-    func probe(_ endpoint: URL?, _ completion: @escaping (
+    func probe(_ endpoint: URL, _ completion: @escaping (
         _ url:URL,
         _ title:String,
         _ error:String) -> Bool
     ) {
-        guard let endpoint = endpoint else { return }
         let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
 
         func callback(_ url :URL, _ title: String, _ error: String) -> () {

@@ -103,8 +103,8 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         guard let txtTags = txtTags else { return }
 
         guard let b = b else {
-            lblTitle.textColor = UIColor.red
             lblTitle.text = NSLocalizedString("Not connected yet.", comment:String(describing:type(of:self)))
+            lblTitle.textColor = .red
             return
         }
 
@@ -143,10 +143,11 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
 
         spiLogin.startAnimating()
         lblTitle.text = NSLocalizedString("…", comment:String(describing:type(of:self)))
+        lblTitle.textColor = txtUserName.textColor
 
         let urls = endpoints(txtEndpoint.text, txtUserName.text, txtPassWord.text)
         let c = ShaarliHtmlClient()
-        c.probe(urls.first) {
+        c.probe(urls.first!) {
             return self.handleCallback(c, urls, $0, $1, $2)
         }
     }
@@ -168,14 +169,20 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
     }
 
     private func handleCallback(_ c:ShaarliHtmlClient, _ urls:ArraySlice<URL>, _ ur: URL, _ ti: String, _ er: String) -> Bool {
+        guard let spiLogin = spiLogin else {return false}
+        guard let lblTitle = lblTitle else {return false}
         guard let head = urls.first else {return false}
         print("probed '\(head)' -> (\(ur), \(ti), \(er))")
 
         if er != "" {
-            lblTitle?.text = er
-            lblTitle?.backgroundColor = .red
+            lblTitle.text = er
+            lblTitle.textColor = .red
             let tail = urls.dropFirst()
-            c.probe(tail.first) {
+            guard let first = tail.first else {
+                spiLogin.stopAnimating()
+                return false
+            }
+            c.probe(first) {
                 return self.handleCallback(c, tail, $0, $1, $2)
             }
             return true
