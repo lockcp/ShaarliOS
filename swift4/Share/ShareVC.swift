@@ -189,7 +189,7 @@ class ShareVC: SLComposeServiceViewController {
 
         let alert = UIAlertController(
             title:NSLocalizedString("No Shaarli found", comment:"ShareVC"),
-            message: NSLocalizedString("Please add one in the Shaarli💫 settings.", comment:"ShareVC"),
+            message: NSLocalizedString("Please add one in the \(BUNDLE_NAME) settings.", comment:"ShareVC"),
             preferredStyle:.alert
         )
 

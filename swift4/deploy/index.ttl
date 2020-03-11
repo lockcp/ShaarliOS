@@ -6,7 +6,7 @@
 
 <>
     a doap:Project ;
-    doap:name "Shaarli💫" ;
+    doap:name "#Shaarli💫" ;
     doap:bug-database
       <https://code.mro.name/mro/ShaarliOS/issues>,
       <mailto:issues@mro.name?subject=%3CProblembeschreibung%3E&body=Project:%20shaarlios%0D%0A%0D%0AWas%20genau%20schmerzt?%20Bitte%20mit%20Screenshot,%20Merci!> ;

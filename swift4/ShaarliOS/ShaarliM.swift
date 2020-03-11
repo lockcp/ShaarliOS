@@ -23,6 +23,7 @@ import Foundation
 import UIKit
 
 let BUNDLE_ID = "name.mro.ShaarliOS"
+let BUNDLE_NAME = "#Shaarli💫"
 let SELF_URL_PREFIX = "name-mro-shaarlios"
 let SHAARLI_COMPANION_APP_URL = "https://mro.name/ShaarliOS"
 
@@ -92,7 +93,7 @@ struct ShaarliM {
             ? prefs.bool(forKey:KEY_tagsActive)
             : true
         let td = prefs.string(forKey:KEY_tagsDefault)
-            ?? "#Shaarli💫"
+            ?? BUNDLE_NAME
         return BlogM(endpoint:url, title:title, privateDefault:pd, tagsActive:ta, tagsDefault:td)
     }
 

@@ -117,7 +117,9 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         txtPassWord.text        = b.endpoint.password
         swiPrivateDefault.isOn  = b.privateDefault
         swiTags.isOn            = b.tagsActive
-        txtTags.text            = b.tagsDefault
+        txtTags.text            = "" == b.tagsDefault
+            ? b.tagsDefault
+            : "\(b.tagsDefault) "
     }
 
     // MARK: - Navigation
