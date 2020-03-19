@@ -439,9 +439,8 @@
                                                     <rect key="frame" x="76" y="8" width="51" height="31"/>
                                                     <color key="onTintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="auto-detected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2Y-SC-pqs">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="auto-detected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2Y-SC-pqs" userLabel="Lbl auto-detected">
                                                     <rect key="frame" x="133" y="15" width="273" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -452,8 +451,11 @@
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="8IB-jx-NmZ" secondAttribute="centerY" constant="-2" id="9kj-Y2-c8v"/>
                                                 <constraint firstItem="7Tf-dV-ff2" firstAttribute="centerY" secondItem="8IB-jx-NmZ" secondAttribute="centerY" id="BZI-br-Cim"/>
+                                                <constraint firstItem="e2Y-SC-pqs" firstAttribute="leading" secondItem="7Tf-dV-ff2" secondAttribute="trailing" constant="8" id="RhE-6x-GL5"/>
                                                 <constraint firstItem="7Tf-dV-ff2" firstAttribute="top" secondItem="IbE-E0-eMJ" secondAttribute="topMargin" id="U3C-7d-QUp"/>
                                                 <constraint firstItem="7Tf-dV-ff2" firstAttribute="leading" secondItem="8IB-jx-NmZ" secondAttribute="trailing" constant="8" symbolic="YES" id="WPg-qV-pcS"/>
+                                                <constraint firstItem="e2Y-SC-pqs" firstAttribute="centerY" secondItem="8IB-jx-NmZ" secondAttribute="centerY" id="e1g-2w-m3o"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="e2Y-SC-pqs" secondAttribute="trailing" id="vmb-zh-css"/>
                                                 <constraint firstItem="8IB-jx-NmZ" firstAttribute="leading" secondItem="IbE-E0-eMJ" secondAttribute="leadingMargin" id="ycA-Uw-5L9"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -587,7 +589,7 @@
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
-                                                <constraint firstItem="kkE-fF-4kw" firstAttribute="baseline" secondItem="67x-by-XUB" secondAttribute="baseline" id="59P-Sr-7RY"/>
+                                                <constraint firstItem="kkE-fF-4kw" firstAttribute="centerY" secondItem="67x-by-XUB" secondAttribute="centerY" id="59P-Sr-7RY"/>
                                                 <constraint firstItem="gXU-ES-Y7N" firstAttribute="top" secondItem="FRl-ym-ySC" secondAttribute="topMargin" id="6IQ-qS-fJh"/>
                                                 <constraint firstItem="kkE-fF-4kw" firstAttribute="leading" secondItem="gXU-ES-Y7N" secondAttribute="trailing" constant="8" id="Fjh-PX-Qim"/>
                                                 <constraint firstItem="67x-by-XUB" firstAttribute="leading" secondItem="FRl-ym-ySC" secondAttribute="leadingMargin" id="KCV-5a-Kss"/>
