@@ -19,24 +19,24 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.2</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>5</string>
 	<key>NSExtension</key>
 	<dict>
-		<key>NSExtensionPrincipalClass</key>
-		<string>ShareVC</string>
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>NSExtensionActivationRule</key>
 			<string>SUBQUERY(extensionItems, $extensionItem, 
 	SUBQUERY($extensionItem.attachments, $attachment, 
-		SUBQUERY($attachment.registeredTypeIdentifiers, $uti, $uti UTI-CONFORMS-TO &quot;public.url&quot; 
-		  AND NOT $uti UTI-CONFORMS-TO &quot;public.file-url&quot;
+		SUBQUERY($attachment.registeredTypeIdentifiers, $uti, $uti UTI-CONFORMS-TO "public.url" 
+		  AND NOT $uti UTI-CONFORMS-TO "public.file-url"
 		).@count &gt;= 1
 	).@count &gt;= 1
 ).@count &gt;= 1</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>ShareVC</string>
 	</dict>
 </dict>
 </plist>
