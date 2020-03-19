@@ -86,6 +86,10 @@ class ShareVC: SLComposeServiceViewController {
         let c = ShaarliHtmlClient()
 
         textView.keyboardType = .twitter
+        view.subviews.forEach({ (v) in
+            // dark mode?
+            v.backgroundColor = UIColor.white.withAlphaComponent(0.89)
+        })
 
         guard let itemTitle = itemTitle else {return}
         guard let itemAudience = itemAudience else {return}
