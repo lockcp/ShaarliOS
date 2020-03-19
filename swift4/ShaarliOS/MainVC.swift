@@ -37,8 +37,9 @@ class MainVC: UIViewController {
             constant:elf.constant)
     }
 
-    @IBOutlet var centerY: NSLayoutConstraint!
     @IBOutlet var lblVersion: UILabel!
+    @IBOutlet var lblName: UILabel!
+    @IBOutlet var centerY: NSLayoutConstraint!
     @IBOutlet var vContainer: UIView!
     @IBOutlet var btnPetal: UIButton!
     @IBOutlet var btnSafari: UIBarButtonItem!
@@ -64,7 +65,6 @@ class MainVC: UIViewController {
             btnSafari.isEnabled = btnShaare.isEnabled
             return
         }
-        guard let viewShaare = viewShaare else {return}
         guard let btnAudience = btnAudience else {return}
         guard let txtTitle = txtTitle else {return}
         guard let txtDescr = txtDescr else {return}
@@ -79,7 +79,7 @@ class MainVC: UIViewController {
         txtDescr.text = b.tagsActive
             ? "\(b.tagsDefault) "
             : ""
-        viewShaare.alpha = 1
+        // viewShaare.alpha = 1
         txtDescr.becomeFirstResponder()
     }
 
@@ -152,6 +152,12 @@ class MainVC: UIViewController {
         debugPrint("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
         assert(nil != spiPost)
+        assert(nil != lblVersion)
+        assert(nil != lblName)
+
+        let ad = AppDelegate.shared
+        lblVersion.text = ad.semver
+        lblName.text = BUNDLE_NAME
 
         guard let spiPost = spiPost else { return }
         view.addSubview(spiPost)
@@ -164,18 +170,16 @@ class MainVC: UIViewController {
         debugPrint("viewWillAppear \(type(of: self))")
         super.viewWillAppear(animated)
 
-        let ad = AppDelegate.shared
-        lblVersion.text = ad.semver
-
         let sm = ShaarliM.shared
         current = sm.loadBlog(sm.defaults)
         btnSafari.isEnabled = current?.endpoint != nil
         btnAudience.isSelected = current?.privateDefault ?? false
         if nil == current {
             title = NSLocalizedString("-", comment:String(describing:type(of:self)))
-            viewShaare.alpha = 0
         }
+
         actionCancel(self)
+        viewShaare!.alpha = 0
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -183,25 +187,27 @@ class MainVC: UIViewController {
         super.viewDidAppear(animated)
         UIView.setAnimationsEnabled(true)
 
-        UIView.animate(withDuration:0.5) {
+        let dt = 0.75
+        guard let viewShaare = viewShaare else {return}
+        UIView.animate(withDuration:dt) {
             self.vContainer.alpha = 0.5;
-            self.lblVersion.alpha = 1.0;
 
             // logo to bottom
             self.view.removeConstraint(self.centerY)
             self.centerY = self.constraintWithMultiplier(self.centerY, multiplier:0.75)!
             self.view.addConstraint(self.centerY)
             // self.view.layoutIfNeeded()
+            viewShaare.alpha = 1
         }
 
-        guard let b = current else {
+        if current == nil {
             performSegue(withIdentifier:String(describing:SettingsVC.self), sender:self)
             return
         }
 
         // start with note form ready..
         // [self actionShowShaare:nil];
-        actionCancel(self)
+       // actionCancel(self)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

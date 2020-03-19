@@ -20,8 +20,9 @@
 //
 
 import UIKit
+import WebKit
 
-class SettingsVC: UITableViewController, UIWebViewDelegate {
+class SettingsVC: UITableViewController, WKNavigationDelegate {
     @IBOutlet var txtEndpoint       : UITextField?
     @IBOutlet var swiSecure         : UISwitch?
     @IBOutlet var txtUserName       : UITextField?
@@ -37,8 +38,8 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
     @IBOutlet var btn1Password      : UIButton?
 
     @IBOutlet var cellAbout         : UITableViewCell?
-    @IBOutlet var wwwAbout          : UIWebView?
-
+    
+    let wwwAbout                    = WKWebView()
     var current : BlogM?
 
     // https://www.objc.io/blog/2018/04/24/bindings-with-kvo-and-keypaths/
@@ -53,7 +54,6 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         assert(nil != lblDefaultPrivate)
         assert(nil != swiTags)
         assert(nil != txtTags)
-        assert(nil != wwwAbout?.scrollView)
         assert(nil != cellAbout)
         assert(nil != spiLogin)
 
@@ -66,17 +66,22 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         guard let spiLogin = spiLogin else { return }
         view.addSubview(spiLogin)
         spiLogin.frame = view.bounds
+        
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiLogin, attribute:.centerX, multiplier:1.0, constant:0))
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerY, relatedBy:.equal, toItem:spiLogin, attribute:.centerY, multiplier:1.0, constant:0))
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
-        guard let wwwAbout = wwwAbout else { return }
+        cellAbout?.contentView.addSubview(wwwAbout)
+        wwwAbout.navigationDelegate = self
+        wwwAbout.frame = cellAbout!.contentView.bounds.insetBy(dx: 8, dy: 8)
+        wwwAbout.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        wwwAbout.contentScaleFactor = 1.0
         wwwAbout.scrollView.isScrollEnabled = false
         wwwAbout.scrollView.bounces = false
-        wwwAbout.backgroundColor = view.backgroundColor
         wwwAbout.isOpaque = false // avoid white flash https://stackoverflow.com/a/15670274
-        //view.backgroundColor = .black
-        wwwAbout.loadRequest(URLRequest.init(url: url))
+        wwwAbout.backgroundColor = .black
+        wwwAbout.customUserAgent = SHAARLI_COMPANION_APP_URL
+        wwwAbout.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
 
         guard let btn1Password = btn1Password else { return }
         btn1Password.isEnabled = false // [[OnePasswordExtension sharedExtension] isAppExtensionAvailable];
@@ -88,6 +93,7 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         spiLogin?.stopAnimating()
+        txtEndpoint?.becomeFirstResponder()
 
         togui(current)
     }
@@ -103,7 +109,7 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         guard let txtTags = txtTags else { return }
 
         guard let b = b else {
-            lblTitle.text = NSLocalizedString("Not connected yet.", comment:String(describing:type(of:self)))
+            lblTitle.text = NSLocalizedString("No Shaarli yet.", comment:String(describing:type(of:self)))
             lblTitle.textColor = .red
             return
         }
@@ -215,21 +221,28 @@ class SettingsVC: UITableViewController, UIWebViewDelegate {
         nav.popViewController(animated:true)
     }
 
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        webView.alpha = 1 // avoid white flash
-        let ver = AppDelegate.shared.semver
-        let _ = webView.stringByEvaluatingJavaScript(from: "injectVersion('\(ver)');")
-        // print(ret as Any)
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard let url = navigationAction.request.url else {return}
+        if "file" == url.scheme {
+            decisionHandler(.allow)
+            return
+        }
+
+        let app = UIApplication.shared
+        if #available(iOS 10.0, *) {
+            app.open(url)
+        } else {
+            app.openURL(url)
+        }
+        decisionHandler(.cancel)
     }
 
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
-        guard let url = request.url else { return false }
-        guard let scheme = url.scheme else { return false }
-        if scheme == "file" { return true }
-        let sha = UIApplication.shared
-        if sha.canOpenURL(url) {
-           return sha.openURL(url)
-        }
-        return true
+    func webView(_ sender:WKWebView, didFinish:WKNavigation!) {
+        // even this late gives a flash sometimes: view.isOpaque = true
+        let semv = AppDelegate.shared.semver
+        let js = "injectVersion('\(semv)');"
+        wwwAbout.evaluateJavaScript(js) { res,err in print(err as Any) }
+        let s = wwwAbout.scrollView.contentSize
+        cellAbout?.contentView.bounds = CGRect(origin: .zero, size: s)
     }
 }

@@ -305,6 +305,7 @@
                         <outlet property="btnSafari" destination="IxT-6S-sLG" id="ijp-Cl-QRc"/>
                         <outlet property="btnShaare" destination="Bro-Q8-giC" id="CFv-1a-04h"/>
                         <outlet property="centerY" destination="12Y-li-NZ0" id="q8e-Zh-Xjk"/>
+                        <outlet property="lblName" destination="941-OM-dXS" id="aMP-fF-xcT"/>
                         <outlet property="lblVersion" destination="Z84-bU-If9" id="ddy-My-wqy"/>
                         <outlet property="scrollView" destination="Fw7-Wm-Pwc" id="405-Ef-TuA"/>
                         <outlet property="spiPost" destination="ReI-cY-Jp7" id="Xnr-Hq-0cL"/>
@@ -662,23 +663,8 @@
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="center" tableViewCell="b1j-7X-9IY" id="HGz-Md-au5">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="945"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <webView alpha="0.0" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kGI-Id-kZ0">
-                                                    <rect key="frame" x="8" y="8" width="398" height="284"/>
-                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="kT6-WH-0iV" id="2Xq-Uv-XcF"/>
-                                                    </connections>
-                                                </webView>
-                                            </subviews>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="kGI-Id-kZ0" secondAttribute="trailing" id="QLE-My-gap"/>
-                                                <constraint firstItem="kGI-Id-kZ0" firstAttribute="top" secondItem="HGz-Md-au5" secondAttribute="topMargin" id="aLT-Ql-0B2"/>
-                                                <constraint firstItem="kGI-Id-kZ0" firstAttribute="leading" secondItem="HGz-Md-au5" secondAttribute="leadingMargin" id="mKm-DG-wGk"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="kGI-Id-kZ0" secondAttribute="bottom" id="t2V-HI-vZl"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -706,7 +692,6 @@
                         <outlet property="txtPassWord" destination="L7z-8R-XqD" id="eeK-2f-qU4"/>
                         <outlet property="txtTags" destination="h3u-lJ-Kgr" id="MB8-b6-Egh"/>
                         <outlet property="txtUserName" destination="MEv-Ol-cU8" id="eNn-wv-bWK"/>
-                        <outlet property="wwwAbout" destination="kGI-Id-kZ0" id="TSv-s7-gzc"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q1E-H7-ZpF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -725,7 +710,7 @@
             <objects>
                 <navigationController id="8e5-sY-NGX" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6c0-1J-3vh">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
