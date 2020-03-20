@@ -34,6 +34,7 @@ struct ShaarliM {
 
     static let shared = ShaarliM()
 
+    // how can we ever purge these settings? removePersistentDomain
     let defaults = UserDefaults(suiteName:"group.\(BUNDLE_ID)")!
 
     /** https://code.mro.name/mro/ShaarliOS/src/e9009ef466582e806b97d723e5acea885eaa4c7d/ios/ShaarliOS/ShaarliM.m#L133

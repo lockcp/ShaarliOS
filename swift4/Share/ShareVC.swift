@@ -81,6 +81,7 @@ class ShareVC: SLComposeServiceViewController {
         assert(itemAudience != nil)
 
         let sha = ShaarliM.shared
+        // sha.defaults.removePersistentDomain(forName:"group.\(BUNDLE_ID)") // doesn't do it.
         current = sha.loadBlog(sha.defaults)
         guard let current = current else {return}
         let c = ShaarliHtmlClient()
