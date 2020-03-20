@@ -37,38 +37,34 @@ class MainVC: UIViewController {
             constant:elf.constant)
     }
 
-    @IBOutlet var lblVersion: UILabel!
-    @IBOutlet var lblName: UILabel!
-    @IBOutlet var centerY: NSLayoutConstraint!
-    @IBOutlet var vContainer: UIView!
-    @IBOutlet var btnPetal: UIButton!
-    @IBOutlet var btnSafari: UIBarButtonItem!
+    @IBOutlet var lblVersion    : UILabel!
+    @IBOutlet var lblName       : UILabel!
+    @IBOutlet var centerY       : NSLayoutConstraint!
+    @IBOutlet var vContainer    : UIView!
+    @IBOutlet var btnPetal      : UIButton!
+    @IBOutlet var btnSafari     : UIBarButtonItem!
 
-    @IBOutlet var viewShaare: UIView!
-    @IBOutlet var btnShaare: UIButton!
-    @IBOutlet var txtDescr: UITextView!
-    @IBOutlet var txtTitle: UITextField!
-    @IBOutlet var btnAudience: UIButton!
+    @IBOutlet var viewShaare    : UIView!
+    @IBOutlet var btnShaare     : UIButton!
+    @IBOutlet var txtDescr      : UITextView!
+    @IBOutlet var txtTitle      : UITextField!
+    @IBOutlet var btnAudience   : UIButton!
 
     // http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
-    @IBOutlet var activeField: UIView!
-    @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var activeField   : UIView!
+    @IBOutlet var scrollView    : UIScrollView!
 
-    @IBOutlet var spiPost          : UIActivityIndicatorView?
+    @IBOutlet var spiPost       : UIActivityIndicatorView!
+
+    var current                 : BlogM?
 
     @IBAction func actionCancel(_ sender: Any) {
         debugPrint("actionCancel \(type(of: self))")
-        guard let btnShaare = btnShaare else {return}
-        guard let btnSafari = btnSafari else {return}
         guard let b = current else {
             btnShaare.isEnabled = false
             btnSafari.isEnabled = btnShaare.isEnabled
             return
         }
-        guard let btnAudience = btnAudience else {return}
-        guard let txtTitle = txtTitle else {return}
-        guard let txtDescr = txtDescr else {return}
-        guard let spiPost = spiPost else {return}
 
         title = b.title
         spiPost.stopAnimating()
@@ -85,11 +81,6 @@ class MainVC: UIViewController {
 
     @IBAction func actionPost(_ sender: Any) {
         debugPrint("actionPost \(type(of: self))")
-        guard let btnShaare = btnShaare else { return }
-        guard let btnAudience = btnAudience else { return }
-        guard let txtDescr = txtDescr else { return }
-        guard let txtTitle = txtTitle else { return }
-        guard let spiPost = spiPost else { return }
 
         view.bringSubviewToFront(spiPost)
         spiPost.startAnimating()
@@ -126,8 +117,7 @@ class MainVC: UIViewController {
         }
     }
 
-    fileprivate func reportPostingError(_ err:String) {
-        guard let spiPost = spiPost else { return }
+    private func reportPostingError(_ err:String) {
         spiPost.stopAnimating()
         btnShaare.isEnabled = !spiPost.isAnimating
         UIAlertView(title:"Sorry, couldn't post", message:err, delegate:nil, cancelButtonTitle:"OK").show()
@@ -141,12 +131,9 @@ class MainVC: UIViewController {
 
     @IBAction func btnAudience(_ sender: Any) {
         debugPrint("btnAudience \(type(of: self))")
-        guard let btnAudience = btnAudience else { return }
         btnAudience.isSelected = !btnAudience.isSelected
         btnAudience.isHighlighted = false
     }
-
-    var current : BlogM?
 
     override func viewDidLoad() {
         debugPrint("viewDidLoad \(type(of: self))")
@@ -159,7 +146,6 @@ class MainVC: UIViewController {
         lblVersion.text = ad.semver
         lblName.text = BUNDLE_NAME
 
-        guard let spiPost = spiPost else { return }
         view.addSubview(spiPost)
         spiPost.frame = view.bounds
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiPost, attribute:.centerX, multiplier:1.0, constant:0))
@@ -188,7 +174,6 @@ class MainVC: UIViewController {
         UIView.setAnimationsEnabled(true)
 
         let dt = 0.75
-        guard let viewShaare = viewShaare else {return}
         UIView.animate(withDuration:dt) {
             self.vContainer.alpha = 0.5;
 
@@ -197,7 +182,7 @@ class MainVC: UIViewController {
             self.centerY = self.constraintWithMultiplier(self.centerY, multiplier:0.75)!
             self.view.addConstraint(self.centerY)
             // self.view.layoutIfNeeded()
-            viewShaare.alpha = 1
+            self.viewShaare.alpha = 1
         }
 
         if current == nil {

@@ -220,7 +220,7 @@ class ShareVC: SLComposeServiceViewController {
         }
     }
 
-    fileprivate func showError(title:String, message:String) {
+    private func showError(title:String, message:String) {
         let alert = UIAlertController(
             title:title,
             message:message,
@@ -263,7 +263,7 @@ class ShareVC: SLComposeServiceViewController {
     // https://stackoverflow.com/a/44499222/349514
     // Function must be named exactly like this so a selector can be found by the compiler!
     // Anyway - it's another selector in another instance that would be "performed" instead.
-    @objc fileprivate func openURL(_ url: URL) -> Bool {
+    @objc private func openURL(_ url: URL) -> Bool {
         var rep: UIResponder? = self
         while rep != nil {
             if let app = rep as? UIApplication {

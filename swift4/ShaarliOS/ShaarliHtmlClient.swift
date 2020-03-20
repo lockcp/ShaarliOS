@@ -295,7 +295,7 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
-    fileprivate func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
+    private func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
         cfg.allowsCellularAccess = true
         cfg.httpAdditionalHeaders = [KEY_HEAD_USER_AGENT:VAL_HEAD_USER_AGENT]
         cfg.httpMaximumConnectionsPerHost = 1

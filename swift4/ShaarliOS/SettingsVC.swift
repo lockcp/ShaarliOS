@@ -22,56 +22,44 @@
 import UIKit
 import WebKit
 
-    @IBOutlet var txtEndpoint       : UITextField?
-    @IBOutlet var swiSecure         : UISwitch?
-    @IBOutlet var txtUserName       : UITextField?
-    @IBOutlet var txtPassWord       : UITextField?
-    @IBOutlet var lblDefaultPrivate : UILabel?
-    @IBOutlet var swiPrivateDefault : UISwitch?
-    @IBOutlet var lblTitle          : UILabel?
-    @IBOutlet var swiTags           : UISwitch?
-    @IBOutlet var txtTags           : UITextField?
-    @IBOutlet var spiLogin          : UIActivityIndicatorView?
-
 class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelegate {
+    @IBOutlet var txtEndpoint       : UITextField!
+    @IBOutlet var swiSecure         : UISwitch!
+    @IBOutlet var txtUserName       : UITextField!
+    @IBOutlet var txtPassWord       : UITextField!
+    @IBOutlet var lblDefaultPrivate : UILabel!
+    @IBOutlet var swiPrivateDefault : UISwitch!
+    @IBOutlet var lblTitle          : UILabel!
+    @IBOutlet var swiTags           : UISwitch!
+    @IBOutlet var txtTags           : UITextField!
+    @IBOutlet var spiLogin          : UIActivityIndicatorView!
+    @IBOutlet var cellAbout         : UITableViewCell!
     // https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
-    @IBOutlet var btn1Password      : UIButton?
+    @IBOutlet var btn1Password      : UIButton!
 
-    @IBOutlet var cellAbout         : UITableViewCell?
-    
     let wwwAbout                    = WKWebView()
-    var current : BlogM?
+    var current                     : BlogM?
+
+    // MARK: - Lifecycle
 
     // https://www.objc.io/blog/2018/04/24/bindings-with-kvo-and-keypaths/
     override func viewDidLoad() {
         super.viewDidLoad()
-        assert(nil != lblTitle)
-        assert(nil != txtEndpoint)
-        assert(nil != swiSecure)
-        assert(nil != txtUserName)
-        assert(nil != txtPassWord)
-        assert(nil != swiPrivateDefault)
-        assert(nil != lblDefaultPrivate)
-        assert(nil != swiTags)
-        assert(nil != txtTags)
-        assert(nil != cellAbout)
-        assert(nil != spiLogin)
 
         title = NSLocalizedString("Settings", comment:String(describing:type(of:self)))
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target:self, action:#selector(SettingsVC.actionCancel(_:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target:self, action:#selector(SettingsVC.actionSignIn(_:)))
 
-        swiSecure!.isEnabled     = false
+        swiSecure.isEnabled     = false
 
-        guard let spiLogin = spiLogin else { return }
         view.addSubview(spiLogin)
         spiLogin.frame = view.bounds
-        
+
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiLogin, attribute:.centerX, multiplier:1.0, constant:0))
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerY, relatedBy:.equal, toItem:spiLogin, attribute:.centerY, multiplier:1.0, constant:0))
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
-        cellAbout?.contentView.addSubview(wwwAbout)
+        cellAbout.contentView.addSubview(wwwAbout)
         wwwAbout.navigationDelegate = self
         wwwAbout.frame = cellAbout!.contentView.bounds.insetBy(dx: 8, dy: 8)
         wwwAbout.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -83,7 +71,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         wwwAbout.customUserAgent = SHAARLI_COMPANION_APP_URL
         wwwAbout.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
 
-        guard let btn1Password = btn1Password else { return }
         btn1Password.isEnabled = false // [[OnePasswordExtension sharedExtension] isAppExtensionAvailable];
         btn1Password.alpha = btn1Password.isEnabled
             ? 1.0
@@ -92,22 +79,12 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        spiLogin?.stopAnimating()
-        txtEndpoint?.becomeFirstResponder()
-
+        spiLogin.stopAnimating()
+        txtEndpoint.becomeFirstResponder()
         togui(current)
     }
 
-    fileprivate func togui(_ b : BlogM?) {
-        guard let lblTitle = lblTitle else { return }
-        guard let txtEndpoint = txtEndpoint else { return }
-        guard let swiSecure = swiSecure else { return }
-        guard let txtUserName = txtUserName else { return }
-        guard let txtPassWord = txtPassWord else { return }
-        guard let swiPrivateDefault = swiPrivateDefault else { return }
-        guard let swiTags = swiTags else { return }
-        guard let txtTags = txtTags else { return }
-
+    private func togui(_ b : BlogM?) {
         guard let b = b else {
             lblTitle.text = NSLocalizedString("No Shaarli yet.", comment:String(describing:type(of:self)))
             lblTitle.textColor = .red
@@ -135,6 +112,8 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         vc.current = current
     }
 
+    // MARK: - Actions
+
     @IBAction func actionCancel(_ sender: Any) {
         print("actionCancel \(type(of: self))")
         guard let navigationController = navigationController else { return }
@@ -143,11 +122,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     @IBAction func actionSignIn(_ sender: Any) {
         print("actionSignIn \(type(of: self))")
-        guard let lblTitle = lblTitle else { return }
-        guard let txtEndpoint = txtEndpoint else { return }
-        guard let txtUserName = txtUserName else { return }
-        guard let txtPassWord = txtPassWord else { return }
-        guard let spiLogin = spiLogin else { return }
 
         spiLogin.startAnimating()
         lblTitle.text = NSLocalizedString("…", comment:String(describing:type(of:self)))
@@ -176,9 +150,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         return urls
     }
 
+    // MARK: - Controller Logic
+
     private func handleCallback(_ c:ShaarliHtmlClient, _ urls:ArraySlice<URL>, _ ur: URL, _ ti: String, _ er: String) -> Bool {
-        guard let spiLogin = spiLogin else {return false}
-        guard let lblTitle = lblTitle else {return false}
         guard let head = urls.first else {return false}
         print("probed '\(head)' -> (\(ur), \(ti), \(er))")
 
@@ -201,11 +175,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     }
 
     private func success(_ ur:URL, _ ti:String, _ er:String) {
-        guard let swiPrivateDefault = swiPrivateDefault else { return }
-        guard let swiTags = swiTags else { return }
-        guard let txtTags = txtTags else { return }
-        guard let spiLogin = spiLogin else { return }
-
         spiLogin.stopAnimating()
         let b = BlogM(
             endpoint:ur,
@@ -235,6 +204,8 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         return true
     }
 
+    // MARK: - WKWebViewDelegate
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.url else {return}
         if "file" == url.scheme {
@@ -257,6 +228,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         let js = "injectVersion('\(semv)');"
         wwwAbout.evaluateJavaScript(js) { res,err in print(err as Any) }
         let s = wwwAbout.scrollView.contentSize
-        cellAbout?.contentView.bounds = CGRect(origin: .zero, size: s)
+        cellAbout.contentView.bounds = CGRect(origin: .zero, size: s)
     }
 }
