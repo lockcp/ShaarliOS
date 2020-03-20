@@ -22,7 +22,6 @@
 import UIKit
 import WebKit
 
-class SettingsVC: UITableViewController, WKNavigationDelegate {
     @IBOutlet var txtEndpoint       : UITextField?
     @IBOutlet var swiSecure         : UISwitch?
     @IBOutlet var txtUserName       : UITextField?
@@ -34,6 +33,7 @@ class SettingsVC: UITableViewController, WKNavigationDelegate {
     @IBOutlet var txtTags           : UITextField?
     @IBOutlet var spiLogin          : UIActivityIndicatorView?
 
+class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelegate {
     // https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
     @IBOutlet var btn1Password      : UIButton?
 
@@ -219,6 +219,20 @@ class SettingsVC: UITableViewController, WKNavigationDelegate {
         current = b
         guard let nav = navigationController else { return }
         nav.popViewController(animated:true)
+    }
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("textFieldShouldReturn \(type(of: self))")
+        switch textField {
+        case txtEndpoint: txtUserName.becomeFirstResponder()
+        case txtUserName: txtPassWord.becomeFirstResponder()
+        case txtPassWord: txtTags.becomeFirstResponder()
+        case txtTags: actionSignIn(textField) // keyboard doesn't show 'Done', but just in case... dispatch async?
+        default: return false
+        }
+        return true
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
