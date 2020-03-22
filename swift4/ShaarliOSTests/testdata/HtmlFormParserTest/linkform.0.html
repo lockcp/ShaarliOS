@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Shaare - Shaarli demo (master)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
+<link rel="alternate" type="application/atom+xml" href="https://demo.shaarli.org/?do=atom" title="ATOM Feed" />
+<link rel="alternate" type="application/rss+xml" href="https://demo.shaarli.org/?do=rss" title="RSS Feed" />
+<link href="tpl/default/./img/favicon.png" rel="shortcut icon" type="image/png" />
+<link href="tpl/default/./img/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+<link type="text/css" rel="stylesheet" href="tpl/default/./css/shaarli.min.css?v=5ada135e9157e4477fd78314662cf56b575d2a938c79c8794e725bf6d712b9d5" />
+
+  <link type="text/css" rel="stylesheet" href="plugins/markdown/markdown.css?v=5ada135e9157e4477fd78314662cf56b575d2a938c79c8794e725bf6d712b9d5"/>
+
+
+<link rel="search" type="application/opensearchdescription+xml" href="?do=opensearch" title="Shaarli search - Shaarli demo (master)"/>
+
+
+</head>
+<body>
+  <div class="shaarli-menu pure-g" id="shaarli-menu">
+  <div class="pure-u-lg-0 pure-u-1">
+    <div class="pure-menu">
+      <a href="?" class="pure-menu-link shaarli-title" id="shaarli-title-mobile">
+        <i class="fa fa-shaarli" aria-hidden="true"></i>
+        Shaarli demo (master)
+      </a>
+      <a href="#" class="menu-toggle" id="menu-toggle"><s class="bar"></s><s class="bar"></s></a>
+    </div>
+  </div>
+  <div class="pure-u-1">
+    <div class="pure-menu menu-transform pure-menu-horizontal pure-g">
+      <ul class="pure-menu-list pure-u-lg-5-6 pure-u-1">
+        <li class="pure-menu-item pure-u-0 pure-u-lg-visible">
+          <a href="?" class="pure-menu-link shaarli-title" id="shaarli-title-desktop">
+            <i class="fa fa-shaarli" aria-hidden="true"></i>
+            Shaarli demo (master)
+          </a>
+        </li>
+        
+          <li class="pure-menu-item">
+            <a href="?do=addlink" class="pure-menu-link" id="shaarli-menu-shaare">
+              <i class="fa fa-plus" aria-hidden="true"></i> Shaare
+            </a>
+          </li>
+          <li class="pure-menu-item" id="shaarli-menu-tools">
+            <a href="?do=tools" class="pure-menu-link">Tools</a>
+          </li>
+        
+        <li class="pure-menu-item" id="shaarli-menu-tags">
+          <a href="?do=tagcloud" class="pure-menu-link">Tag cloud</a>
+        </li>
+        
+          <li class="pure-menu-item" id="shaarli-menu-picwall">
+            <a href="?do=picwall" class="pure-menu-link">Picture wall</a>
+          </li>
+        
+        <li class="pure-menu-item" id="shaarli-menu-daily">
+          <a href="?do=daily" class="pure-menu-link">Daily</a>
+        </li>
+        
+        <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-rss">
+            <a href="?do=atom" class="pure-menu-link">RSS Feed</a>
+        </li>
+        
+          <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-logout">
+            <a href="?do=logout" class="pure-menu-link">Logout</a>
+          </li>
+        
+      </ul>
+      <div class="header-buttons pure-u-lg-1-6 pure-u-0 pure-u-lg-visible">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item" id="shaarli-menu-desktop-search">
+            <a href="#" class="pure-menu-link subheader-opener"
+               data-open-id="search"
+               id="search-button" aria-label="Search" title="Search">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+          </li>
+          <li class="pure-menu-item" id="shaarli-menu-desktop-rss">
+            <a href="?do=atom" class="pure-menu-link" title="RSS Feed" aria-label="RSS Feed">
+              <i class="fa fa-rss" aria-hidden="true"></i>
+            </a>
+          </li>
+          
+            <li class="pure-menu-item" id="shaarli-menu-desktop-logout">
+              <a href="?do=logout" class="pure-menu-link" aria-label="Logout" title="Logout">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="content" class="container">
+  <div id="search" class="subheader-form searchform-block header-search">
+    <form method="GET" class="pure-form searchform" name="searchform">
+      <input type="text" tabindex="1" id="searchform_value" name="searchterm" placeholder="Search text"
+             
+      >
+      <input type="text" tabindex="2" name="searchtags" id="tagfilter_value" placeholder="Filter by tag"
+             
+      autocomplete="off" data-multiple data-autofirst data-minChars="1"
+      data-list="Comics, opensource, software, nomarkdown, "
+      >
+      <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+  <div id="actions" class="subheader-form">
+    <div class="pure-g">
+      <div class="pure-u-1">
+        <a href="" id="actions-delete" class="button">
+          <i class="fa fa-trash"></i>
+          Delete
+        </a>&nbsp;
+        <a href="" class="actions-change-visibility button" data-visibility="public">
+          <i class="fa fa-globe"></i>
+          Set public
+        </a>&nbsp;
+        <a href="" class="actions-change-visibility button" data-visibility="private">
+          <i class="fa fa-user-secret"></i>
+          Set private
+        </a>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+  <div class="clear"></div>
+
+  <div id="editlinkform" class="edit-link-container" class="pure-g">
+    <div class="pure-u-lg-1-5 pure-u-1-24"></div>
+    <form method="post" name="linkform" class="page-form pure-u-lg-3-5 pure-u-22-24 page-form page-form-light">
+      <h2 class="window-title">
+        Edit Shaare
+      </h2>
+      <input type="hidden" name="lf_linkdate" value="20190701_010131">
+      
+        <input type="hidden" name="lf_id" value="1">
+      
+      <div class="created-date">Created: July 1, 2019 at 1:01:31 AM GMT</div>
+      <div>
+        <label for="lf_url">URL</label>
+      </div>
+      <div>
+        <input type="text" name="lf_url" id="lf_url" value="https://shaarli.readthedocs.io" class="lf_input autofocus">
+      </div>
+      <div>
+      <label for="lf_title">Title</label>
+      </div>
+      <div>
+        <input type="text" name="lf_title" id="lf_title" value="The personal, minimalist, super-fast, database free, bookmarking service" class="lf_input autofocus">
+      </div>
+      <div>
+        <label for="lf_description">Description</label>
+      </div>
+      <div>
+        <textarea name="lf_description" id="lf_description" class="autofocus">Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
+
+To learn how to use Shaarli, consult the link &quot;Documentation&quot; at the bottom of this page.
+
+You use the community supported version of the original Shaarli project, by Sebastien Sauvage.</textarea>
+      </div>
+      <div>
+        <label for="lf_tags">Tags</label>
+      </div>
+      <div>
+        <input type="text" name="lf_tags" id="lf_tags" value="opensource software" class="lf_input autofocus"
+          data-list="Comics, opensource, software, nomarkdown, " data-multiple data-autofirst autocomplete="off" >
+      </div>
+
+      <div>
+        <input type="checkbox"  name="lf_private" id="lf_private"
+        >
+        &nbsp;<label for="lf_private">Private</label>
+      </div>
+
+      <div id="editlink-plugins">
+        
+          <div class="md_help">
+    Description will be rendered with
+    <a href="http://daringfireball.net/projects/markdown/syntax" title="Markdown syntax documentation">
+        Markdown syntax</a>.
+</div>
+
+        
+      </div>
+
+
+      <div class="submit-buttons center">
+        <input type="submit" name="save_edit" class="" id="button-save-edit"
+               value="Apply Changes">
+        
+        <a href="?delete_link&amp;lf_linkdate=1&amp;token=06767bf39b3202f0c32d2dad3249742260c721b2"
+           title="" name="delete_link" class="button button-red confirm-delete">
+          Delete
+        </a>
+        
+      </div>
+
+      <input type="hidden" name="token" value="06767bf39b3202f0c32d2dad3249742260c721b2">
+      
+        <input type="hidden" name="returnurl" value="https://demo.shaarli.org/?">
+      
+    </form>
+  </div>
+  </div>
+
+<div class="pure-g">
+  <div class="pure-u-2-24"></div>
+  <footer id="footer" class="pure-u-20-24 footer-container" role="contentinfo">
+    <i class="fa fa-shaarli" aria-hidden="true"></i>
+    <strong><a href="https://github.com/shaarli/Shaarli">Shaarli</a></strong>
+    
+      dev
+    
+    &middot;
+    The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community &middot;
+    <a href="doc/html/index.html" rel="nofollow">Documentation</a>
+      
+  </footer>
+  <div class="pure-u-2-24"></div>
+</div>
+
+<input type="hidden" name="token" value="06767bf39b3202f0c32d2dad3249742260c721b2" id="token" />
+
+
+
+
+
+<div id="js-translations" class="hidden">
+  <span id="translation-fold">Fold</span>
+  <span id="translation-fold-all">Fold all</span>
+  <span id="translation-expand">Expand</span>
+  <span id="translation-expand-all">Expand all</span>
+  <span id="translation-delete-link">Are you sure you want to delete this link?</span>
+  <span id="translation-shaarli-desc">
+    The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community
+  </span>
+</div>
+
+<script src="tpl/default/./js/shaarli.min.js?v=5ada135e9157e4477fd78314662cf56b575d2a938c79c8794e725bf6d712b9d5"></script>
+
+</body>
+</html>

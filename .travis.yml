@@ -1,15 +1,17 @@
 branches:
   only: [master, develop]
 # sign in at https://travis-ci.org/#
-before_script:
-  - sh ios/ThirdParty/PDKeychainBindingsController/update.sh
-  - sh ios/ThirdParty/1Password/update.sh
 # http://docs.travis-ci.com/user/languages/objective-c/
-language: objective-c
-osx_image: xcode7.3
+language: swift
+osx_image:
+# - xcode11.3 # https://docs.travis-ci.com/user/reference/osx/#xcode-1131
+# - xcode10.3
+- xcode10.2 # https://docs.travis-ci.com/user/reference/osx/#xcode-102
+# - xcode10 # https://docs.travis-ci.com/user/reference/osx/#xcode-100
 xcode_sdk:
-  - iphonesimulator
-xcode_project: ios/ShaarliOS.xcodeproj
+- iphonesimulator
+- iphonesimulator9.0
+- iphonesimulator8.4
+xcode_project: swift4/ShaarliOS.xcodeproj
 xcode_scheme:
   - ShaarliOS
-  - Share
