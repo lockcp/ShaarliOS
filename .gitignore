@@ -2,14 +2,7 @@
 */*.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad/
 */*.xcodeproj/project.xcworkspace/xcshareddata/*.xccheckout
 */*.xcodeproj/xcuserdata/*.xcuserdatad/
-ios/assets/build/
-ios/build/
 shaarli-logo.png
 build/
-appstore/Preview.html
-appstore/bak/
 appstore/
-ios/
-cgi/
-swift3/
 swift4/deploy/tmp/
