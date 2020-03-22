@@ -1,8 +1,0 @@
-commit 8225206959af5e17b6afacc6be852db3336ed4f2
-Merge: 1b95758 4cd88c1
-Author: Rad Azzouz <radazzouz@users.noreply.github.com>
-Date:   Fri Jan 15 11:13:51 2016 -0500
-
-    Merge pull request #293 from AgileBits/improvement/removed-extra-new-lines
-    
-    [IMPROVED] Removed extra new lines for a clearer code and README.
