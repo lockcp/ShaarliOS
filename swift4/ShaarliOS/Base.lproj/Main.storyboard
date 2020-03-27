@@ -136,19 +136,8 @@
                                                     <view opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bau-mA-dFY" userLabel="rows">
                                                         <rect key="frame" x="0.0" y="0.0" width="394" height="237"/>
                                                         <subviews>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WqJ-j0-Eij" userLabel="descr">
-                                                                <rect key="frame" x="0.0" y="0.0" width="394" height="146"/>
-                                                                <color key="backgroundColor" red="0.94999998807907104" green="0.94999998807907104" blue="0.94999998807907104" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardType="twitter"/>
-                                                                <connections>
-                                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="KkN-uf-NhY"/>
-                                                                </connections>
-                                                            </textView>
                                                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jqI-qe-m20" userLabel="titleText">
-                                                                <rect key="frame" x="0.0" y="147" width="394" height="44"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YNz-XB-onK">
                                                                         <rect key="frame" x="8" y="11" width="34" height="21"/>
@@ -161,7 +150,7 @@
                                                                         <color key="backgroundColor" red="0.94999998807907104" green="0.94999998807907104" blue="0.94999998807907104" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="done"/>
+                                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="next"/>
                                                                         <connections>
                                                                             <outlet property="delegate" destination="BYZ-38-t0r" id="MIm-hE-glZ"/>
                                                                         </connections>
@@ -177,6 +166,17 @@
                                                                     <constraint firstItem="YNz-XB-onK" firstAttribute="leading" secondItem="jqI-qe-m20" secondAttribute="leading" constant="8" id="uJq-7I-eby"/>
                                                                 </constraints>
                                                             </view>
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WqJ-j0-Eij" userLabel="descr">
+                                                                <rect key="frame" x="0.0" y="44" width="394" height="146"/>
+                                                                <color key="backgroundColor" red="0.94999998807907104" green="0.94999998807907104" blue="0.94999998807907104" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardType="twitter"/>
+                                                                <connections>
+                                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="KkN-uf-NhY"/>
+                                                                </connections>
+                                                            </textView>
                                                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Df1-0A-kBJ" userLabel="audience">
                                                                 <rect key="frame" x="0.0" y="192" width="394" height="44"/>
                                                                 <subviews>
@@ -211,19 +211,19 @@
                                                         </subviews>
                                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
-                                                            <constraint firstItem="WqJ-j0-Eij" firstAttribute="top" secondItem="Bau-mA-dFY" secondAttribute="top" id="6sP-Ej-vwi"/>
+                                                            <constraint firstItem="Df1-0A-kBJ" firstAttribute="top" secondItem="WqJ-j0-Eij" secondAttribute="bottom" constant="1" id="413-nM-Rxt"/>
                                                             <constraint firstAttribute="bottom" secondItem="Df1-0A-kBJ" secondAttribute="bottom" constant="1" id="Cm1-k1-YRx"/>
                                                             <constraint firstItem="Df1-0A-kBJ" firstAttribute="width" secondItem="jqI-qe-m20" secondAttribute="width" id="DDM-Ma-4pe"/>
+                                                            <constraint firstItem="jqI-qe-m20" firstAttribute="top" secondItem="Bau-mA-dFY" secondAttribute="top" id="HIH-hB-glA"/>
                                                             <constraint firstAttribute="trailing" secondItem="jqI-qe-m20" secondAttribute="trailing" id="Iy2-ve-hsx"/>
                                                             <constraint firstItem="WqJ-j0-Eij" firstAttribute="leading" secondItem="Bau-mA-dFY" secondAttribute="leading" id="Ooe-h0-inr"/>
-                                                            <constraint firstItem="jqI-qe-m20" firstAttribute="top" secondItem="WqJ-j0-Eij" secondAttribute="bottom" constant="1" id="UfS-nV-in9"/>
                                                             <constraint firstAttribute="trailing" secondItem="WqJ-j0-Eij" secondAttribute="trailing" id="Z98-nP-ZXU"/>
                                                             <constraint firstItem="Df1-0A-kBJ" firstAttribute="leading" secondItem="Bau-mA-dFY" secondAttribute="leading" id="egL-wG-KG0"/>
                                                             <constraint firstAttribute="trailing" secondItem="Df1-0A-kBJ" secondAttribute="trailing" id="fAs-5i-mUh"/>
                                                             <constraint firstItem="WqJ-j0-Eij" firstAttribute="width" secondItem="jqI-qe-m20" secondAttribute="width" id="gwR-xM-fnt"/>
                                                             <constraint firstItem="WqJ-j0-Eij" firstAttribute="width" secondItem="Bau-mA-dFY" secondAttribute="width" id="lXA-X7-9qd"/>
                                                             <constraint firstItem="jqI-qe-m20" firstAttribute="leading" secondItem="Bau-mA-dFY" secondAttribute="leading" id="lwq-ka-NAj"/>
-                                                            <constraint firstItem="Df1-0A-kBJ" firstAttribute="top" secondItem="jqI-qe-m20" secondAttribute="bottom" constant="1" id="y7E-oR-He6"/>
+                                                            <constraint firstItem="WqJ-j0-Eij" firstAttribute="top" secondItem="jqI-qe-m20" secondAttribute="bottom" constant="1" id="sr9-I9-999"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>

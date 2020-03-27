@@ -22,6 +22,7 @@
 import UIKit
 import Social
 import MobileCoreServices
+import AudioToolbox
 
 fileprivate func stringFromPrivacy(_ priv : Bool) -> String
 {
@@ -33,6 +34,14 @@ fileprivate func stringFromPrivacy(_ priv : Bool) -> String
 fileprivate func privacyFromString(_ s : String) -> Bool
 {
     return s != stringFromPrivacy(false)
+}
+
+private func play_sound_ok() {
+    AudioServicesPlaySystemSound(1001) // https://github.com/irccloud/ios/blob/6e3255eab82be047be141ced6e482ead5ac413f4/ShareExtension/ShareViewController.m#L155
+}
+
+private func play_sound_err() {
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
 }
 
 @objc (ShareVC) // https://blog.hellocode.co/post/share-extension/
@@ -171,14 +180,21 @@ class ShareVC: SLComposeServiceViewController {
         guard let dsc = textView.text else {return}
         let pri = privacyFromString((itemAudience?.value)!)
         let r = tagsNormalise(description:tit, extended:dsc, tags:[], known:[])
-        c.add(session!, current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) {
-            if $0 != "" {
+        c.add(session!, current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) { err in
+            // DispatchQueue.main.sync {
+            if err != "" {
+                play_sound_err()
                 self.showError(
                     title:NSLocalizedString("Error", comment: "ShareVC"),
-                    message:$0
+                    message:err
                 )
+            } else {
+                play_sound_ok()
             }
+            // we wait a bit until the sound is done
+            usleep(750 * 1000)
             super.didSelectPost()
+            // }
         }
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
         // self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
@@ -239,7 +255,7 @@ class ShareVC: SLComposeServiceViewController {
             self.present(alert, animated:true, completion:nil)
         }
     }
-    
+
     override func presentationAnimationDidFinish() {
         debugPrint("presentationAnimationDidFinish")
     }

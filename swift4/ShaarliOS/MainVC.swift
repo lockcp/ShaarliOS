@@ -20,9 +20,18 @@
 //
 
 import UIKit
+import AudioToolbox
+
+private func play_sound_ok() {
+    AudioServicesPlaySystemSound(1001) // https://github.com/irccloud/ios/blob/6e3255eab82be047be141ced6e482ead5ac413f4/ShareExtension/ShareViewController.m#L155
+}
+
+private func play_sound_err() {
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+}
 
 // Reading from private effective user settings. https://stackoverflow.com/a/45280879/349514
-class MainVC: UIViewController {
+class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
     // visual form center http://stackoverflow.com/a/13148012/349514
     private func constraintWithMultiplier(_ elf: NSLayoutConstraint!, multiplier: CGFloat) -> NSLayoutConstraint!
@@ -76,7 +85,7 @@ class MainVC: UIViewController {
             ? "\(b.tagsDefault) "
             : ""
         // viewShaare.alpha = 1
-        txtDescr.becomeFirstResponder()
+        txtTitle.becomeFirstResponder()
     }
 
     @IBAction func actionPost(_ sender: Any) {
@@ -107,10 +116,12 @@ class MainVC: UIViewController {
             c.add(ses, srv, ctx, ur_, r.description, r.extended, r.tags, pri) { err in
                 DispatchQueue.main.async {
                     guard "" == err else {
+                        play_sound_err()
                         self.reportPostingError(err)
                         return
                     }
                     print("set result: '\(ur_)'")
+                    play_sound_ok()
                     self.actionCancel(self)
                 }
             }
@@ -138,9 +149,8 @@ class MainVC: UIViewController {
     override func viewDidLoad() {
         debugPrint("viewDidLoad \(type(of: self))")
         super.viewDidLoad()
-        assert(nil != spiPost)
-        assert(nil != lblVersion)
-        assert(nil != lblName)
+        assert(txtTitle.delegate != nil)
+        assert(txtDescr.delegate != nil)
 
         let ad = AppDelegate.shared
         lblVersion.text = ad.semver
@@ -198,5 +208,16 @@ class MainVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let vc = segue.destination as? SettingsVC else { return }
         vc.current = current
+    }
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("textFieldShouldReturn \(type(of: self))")
+        switch textField {
+        case txtTitle: txtDescr.becomeFirstResponder()
+        default: return false
+        }
+        return true
     }
 }
