@@ -114,8 +114,6 @@ let URLEmpty = URLComponents().url!
 
 let HTTP_POST = "POST"
 let HTTP_GET = "GET"
-let KEY_HEAD_USER_AGENT = "User-Agent"
-let VAL_HEAD_USER_AGENT = "http://mro.name/ShaarliOS"
 let KEY_HEAD_CONTENT_TYPE = "Content-Type"
 let VAL_HEAD_CONTENT_TYPE = "application/x-www-form-urlencoded"
 
@@ -191,16 +189,14 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> String
     return ""
 }
 
-internal func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
+private func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
     var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)!
     uc.user = nil
     uc.password = nil
     uc.queryItems = params.count == 0
         ? nil
         : params
-    var req = URLRequest(url:uc.url!)
-    req.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
-    return req
+    return URLRequest(url:uc.url!)
 }
 
 class ShaarliHtmlClient {
@@ -232,7 +228,6 @@ class ShaarliHtmlClient {
                 lofo[KEY_FORM_PASSWORD] = endpoint.password
 
                 var req1 = URLRequest(url:http.url!)
-                req1.setValue(VAL_HEAD_USER_AGENT, forHTTPHeaderField:KEY_HEAD_USER_AGENT)
                 req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
                 req1.httpMethod = HTTP_POST
                 let formDat = formData(lofo)
@@ -297,12 +292,12 @@ class ShaarliHtmlClient {
 
     private func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
         cfg.allowsCellularAccess = true
-        cfg.httpAdditionalHeaders = [KEY_HEAD_USER_AGENT:VAL_HEAD_USER_AGENT]
+        cfg.httpAdditionalHeaders = ["User-Agent":SHAARLI_COMPANION_APP_URL]
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
         cfg.httpShouldUsePipelining = true
-        cfg.timeoutIntervalForRequest = 5.0
-        cfg.timeoutIntervalForResource = 5.0
+        cfg.timeoutIntervalForRequest = 4.0
+        cfg.timeoutIntervalForResource = 4.0
         // cfg.waitsForConnectivity = true
         cfg.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return cfg
