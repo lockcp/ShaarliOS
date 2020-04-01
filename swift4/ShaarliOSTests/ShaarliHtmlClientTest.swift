@@ -89,17 +89,55 @@ class ShaarliHtmlClientTest: XCTestCase {
     func testRegex() {
         let ra0 = "Fancy a game of Cluedo™️?".range(of: "Clue(do)?™️?", options:.regularExpression)
         XCTAssertEqual(16, ra0?.lowerBound.encodedOffset)
-        
+
         let msg = "<script>alert(\"foo\"); // bar \");"
         let ra1 = msg.range(of: PAT_WRONG_LOGIN, options:.regularExpression)!
         XCTAssertEqual("<script>alert(\"foo\");", msg[ra1])
     }
 
+    func testResponseLoginFormSunshine() {
+        let raw = dataWithContentsOfFixture(me:self, fileName: "login.0", extensio:"html")
+        let re = HTTPURLResponse(url: URLEmpty, statusCode: 200, httpVersion: "1.1", headerFields:[
+            "Content-Type":"text/html; charset=utf-8",
+            "Content-Length":"\(raw.count)",
+        ])!
+        XCTAssertEqual(200, re.statusCode)
+        XCTAssertEqual("text/html", re.mimeType)
+        XCTAssertEqual("utf-8", re.textEncodingName)
+        XCTAssertEqual(2509, re.expectedContentLength)
+        let res = check(raw, re, nil)
+        XCTAssertEqual("", res.1)
+        XCTAssertEqual(1, res.0.count)
+        guard let lifo = res.0[LOGIN_FORM] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(3, lifo.count)
+        XCTAssertEqual("http://links.mro.name/", lifo["returnurl"])
+        XCTAssertEqual("Login", lifo[""])
+        XCTAssertEqual("20119241badf78a3dcfa55ae58eab429a5d24bad", lifo["token"])
+    }
+
+    func testResponseLoginFormBanned() {
+        let raw = dataWithContentsOfFixture(me:self, fileName: "login.banned", extensio:"html")
+        let re = HTTPURLResponse(url: URLEmpty, statusCode: 200, httpVersion: "1.1", headerFields:[
+            "Content-Type":"text/html; charset=utf-8",
+            "Content-Length":"\(raw.count)",
+            ])!
+        XCTAssertEqual(200, re.statusCode)
+        XCTAssertEqual("text/html", re.mimeType)
+        XCTAssertEqual("utf-8", re.textEncodingName)
+        XCTAssertEqual(1982, re.expectedContentLength)
+        let res = check(raw, re, nil)
+        XCTAssertEqual("You have been banned from login after too many failed attempts. Try later.", res.1)
+        XCTAssertEqual(0, res.0.count)
+    }
+
     func testProbeSunshine() {
         // let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
-        // let demo = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.10.2/")! // credentials are public
+        let demo = URL(string:"https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.10.2/")! // credentials are public
         // let demo = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/")! // credentials are public
-        let demo = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarligo/")! // credentials are public
+        // let demo = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarligo/")! // credentials are public
 
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
@@ -109,10 +147,10 @@ class ShaarliHtmlClientTest: XCTestCase {
             // XCTAssertEqual("https://demo.shaarli.org/", url.absoluteString)
             // XCTAssertEqual("Shaarli demo", tit)
 
-            // XCTAssertEqual("https://demo.mro.name/shaarli-v0.10.2/", url.absoluteString)
-            // XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b/", url.absoluteString)
-            XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de/shaarligo/shaarligo.cgi", url.absoluteString)
-            XCTAssertEqual("ShaarliGo 🚀", tit)
+            XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.10.2/", url.absoluteString)
+            // XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.41b/", url.absoluteString)
+            // XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de/shaarligo/shaarligo.cgi", url.absoluteString)
+            // XCTAssertEqual("ShaarliGo 🚀", tit)
             exp.fulfill()
             return true
         }
@@ -149,7 +187,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         srv.probe(demo) { (url, pong, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
-            XCTAssertEqual("Expected status 200, got 404", err)
+            XCTAssertEqual("Expected status 200, got 404: 'not found'", err)
             exp.fulfill()
             return true
         }
@@ -172,7 +210,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient()
-        srv.get(demo, url) { (frm, url, tit, dsc, tgs, pri, err) in
+        srv.get(demo, url) { (_, frm, url, tit, dsc, tgs, pri, err) in
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", tit)
             XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", dsc, "why is dsc empty?")
@@ -187,6 +225,7 @@ class ShaarliHtmlClientTest: XCTestCase {
 
     func testPostSunshine() {
         let end = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.10.2/")! // credentials are public
         let url = URL(string:"http://idlewords.com/talks/website_obesity.htm#minimalism")!
 
         // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
@@ -202,7 +241,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp1 = self.expectation(description: "Posting")
 
         let srv = ShaarliHtmlClient()
-        srv.get(end, url) { (ctx, url, tit, dsc, tgs, pri, err0) in
+        srv.get(end, url) { (ses, ctx, url, tit, dsc, tgs, pri, err0) in
             XCTAssertEqual("", err0)
             XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm#minimalism", url.absoluteString)
             XCTAssertEqual("The Website Obesity Crisis", tit)
@@ -213,7 +252,7 @@ class ShaarliHtmlClientTest: XCTestCase {
             XCTAssertNil(ctx[LF_PRI])
             exp0.fulfill()
 
-            srv.add(end, ctx, url, tit, dsc, tgs, pri) { err1 in
+            srv.add(ses, end, ctx, url, tit, dsc, tgs, pri) { err1 in
                 XCTAssertEqual("", err1)
                 exp1.fulfill()
             }

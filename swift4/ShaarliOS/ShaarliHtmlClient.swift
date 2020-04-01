@@ -132,11 +132,12 @@ private let KEY_PAR_POST = "post"
 private let KEY_PAR_DESC = "description"
 private let CMD_DO_CFG = "configure"
 
-private let LOGIN_FORM = "loginform"
-private let KEY_FORM_LOGIN = "login"
-private let KEY_FORM_PASSWORD = "password"
+internal let LOGIN_FORM = "loginform"
+internal let KEY_FORM_LOGIN = "login"
+internal let KEY_FORM_PASSWORD = "password"
 
 internal let PAT_WRONG_LOGIN = "^<script>alert\\((?:\".*?\"|'.*?')\\);"
+private let PAT_BANNED = ">\\s*(\\S.*ou have been banned from logi.*\\S)\\s*<"
 private let STR_BANNED = "I said: NO. You are banned for the moment. Go away."
 
 private let LINK_FORM = "linkform"
@@ -172,21 +173,41 @@ func encoding(name:String?) -> String.Encoding {
     }
 }
 
-internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> String {
-    if let error = err {
-        return error.localizedDescription
+internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlFormDictDict, String) {
+    let fail : HtmlFormDictDict = [:]
+    if let err = err {
+        return (fail, err.localizedDescription)
     }
     guard let http = rep as? HTTPURLResponse else {
-        return String(format:"Not a http reponse, but %@", rep ?? "<nil>")
+        return (fail, String(format:"Not a http reponse, but %@", rep ?? "<nil>"))
     }
     if !(200...299).contains(http.statusCode) {
-        return String(format:"Expected status 200, got %d", http.statusCode)
+        let msg = HTTPURLResponse.localizedString(forStatusCode:http.statusCode)
+        return (fail, String(format:"Expected status 200, got %d: '%@'", http.statusCode, msg))
     }
-    if data?.count == 0 {
-        return "Got no data. That's not enough."
+    guard let data = data, data.count > 0 else {
+        return (fail, "Got no data. That's not enough.")
     }
-
-    return ""
+    let enco = http.textEncodingName
+    let fo = findHtmlForms(data, enco)
+    if fo.count == 0 {
+        // check several typical error scenarios why there may be no form:
+        guard let str = String(bytes: data, encoding: encoding(name:enco)), str.count > 0 else {
+            return (fo, "Got no data. That's not enough.")
+        }
+        if STR_BANNED == str {
+            return (fo, STR_BANNED)
+        }
+        if let ra = str.range(of:PAT_WRONG_LOGIN, options:.regularExpression) {
+            let err = String(str[ra]).dropFirst(15).dropLast(3)
+            return (fo, String(err))
+        }
+        if let ra = str.range(of:PAT_BANNED, options:.regularExpression) {
+            let err = String(str[ra]).dropFirst(1).dropLast(1).trimmingCharacters(in: .whitespacesAndNewlines)
+            return (fo, err)
+        }
+    }
+    return (fo, "")
 }
 
 private func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
@@ -209,50 +230,38 @@ class ShaarliHtmlClient {
         _ error: String) -> ()
     ) {
         let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString)])
+        debugPrint("loginAndGet GET \(req0)")
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
-            let err = check(data, response, erro)
-            if err != "" {
-                callback(URLEmpty, [:], err)
+            let d = check(data, response, erro)
+            debugPrint("loginAndGet GET <- \(response?.url ?? URLEmpty) d:'\(d)'")
+            if d.1 != "" {
+                callback(URLEmpty, [:], d.1)
                 return
             }
-            let http = response as! HTTPURLResponse
-            let frms = findHtmlForms(data, http.textEncodingName)
-            guard let lifo = frms[LINK_FORM] else {
+            guard let lifo = d.0[LINK_FORM] else {
                 // actually that's what we normally expect: not logged in yet.
-                guard var lofo = frms[LOGIN_FORM] else {
+                guard var lofo = d.0[LOGIN_FORM] else {
                     callback(URLEmpty, [:], "\(LOGIN_FORM) not found")
                     return
                 }
                 lofo[KEY_FORM_LOGIN] = endpoint.user
                 lofo[KEY_FORM_PASSWORD] = endpoint.password
 
-                var req1 = URLRequest(url:http.url!)
+                var req1 = URLRequest(url:response!.url!)
                 req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
                 req1.httpMethod = HTTP_POST
                 let formDat = formData(lofo)
+                debugPrint("loginAndGet POST \(req1)")
                 let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
-                    let err = check(data, response, erro)
-                    if err != "" {
-                        callback(URLEmpty, [:], err)
+                    let d = check(data, response, erro)
+                    debugPrint("loginAndGet POST <- \(response?.url ?? URLEmpty) d:'\(d)'")
+                    
+                    if d.1 != "" {
+                        callback(URLEmpty, [:], d.1)
                         return
                     }
-                    let http = response as! HTTPURLResponse
-                    let _ = http.mimeType ?? ""
-                    // print(String(bytes:data!, encoding:encoding(name:http.textEncodingName)))
-                    guard let lifo = findHtmlForms(data, http.textEncodingName)[LINK_FORM] else {
-                        let enco = encoding(name:http.textEncodingName)
-                        let str = String(bytes: data!, encoding:enco) ?? ""
-                        if let ra = str.range(of: PAT_WRONG_LOGIN, options:.regularExpression) {
-                            let err = String(str[ra]).dropFirst(15).dropLast(3)
-                            callback(URLEmpty, [:], String(err))
-                            return
-                        }
-                        if STR_BANNED == str {
-                            callback(URLEmpty, [:], STR_BANNED)
-                            return
-                        }
-
+                    guard let lifo = d.0[LINK_FORM] else {
                         callback(URLEmpty, [:], "\(LINK_FORM) not found.")
                         return
                     }
@@ -311,16 +320,18 @@ class ShaarliHtmlClient {
         _ title:String,
         _ error:String) -> Bool
     ) {
+        debugPrint("probe \(endpoint)")
         let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
 
         func callback(_ url :URL, _ title: String, _ error: String) -> () {
-            DispatchQueue.main.async {
+            DispatchQueue.main.sync {
                 let _ = completion(url, title, error)
+                // ses.invalidateAndCancel() // ses is ephemeral, no need to cancel.
             }
-            ses.invalidateAndCancel()
         }
 
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
+            debugPrint("probe <- \(lurl)")
             if err != "" {
                 callback(lurl, "", err)
                 return
@@ -329,13 +340,12 @@ class ShaarliHtmlClient {
             // do we need the evtl. rewritten endpoint url?
             let req = createReq(endpoint:endpoint, params:[URLQueryItem(name: KEY_PAR_DO, value: CMD_DO_CFG)])
             let tsk = ses.dataTask(with: req) { data, response, err in
-                let erro = check(data, response, err)
-                if erro != "" {
-                    callback(lurl, "", erro)
+                let res = check(data, response, err)
+                if res.1 != "" {
+                    callback(lurl, "", res.1)
                     return
                 }
-                let http = response as! HTTPURLResponse
-                guard let cffo = findHtmlForms(data, http.textEncodingName)[CFG_FORM] else {
+                guard let cffo = res.0[CFG_FORM] else {
                     callback(lurl, "", "\(CFG_FORM) not found.")
                     return
                 }
@@ -404,8 +414,8 @@ class ShaarliHtmlClient {
             guard let data = data
                 else { return completion("Got no response body") }
             debugPrint("response: \(response?.url ?? URLEmpty) data:\(String(data:data, encoding:.utf8) ?? "-")")
-            let erro = check(data, response, err)
-            completion(erro)
+            let res = check(data, response, err)
+            completion(res.1)
         }
         tsk.resume()
         // print("HTTP", tsk.originalRequest?.httpMethod, tsk.originalRequest?.url)

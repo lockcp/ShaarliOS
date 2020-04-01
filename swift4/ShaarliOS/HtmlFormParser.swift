@@ -22,9 +22,10 @@
 import Foundation
 
 typealias HtmlFormDict = [String:String]
+typealias HtmlFormDictDict = [String:HtmlFormDict]
 
 // internal helper uses libxml2 graceful html parsing
-func findHtmlForms(_ body:Data?, _ encoding:String?) -> [String:HtmlFormDict] {
+func findHtmlForms(_ body:Data?, _ encoding:String?) -> HtmlFormDictDict {
     return HtmlFormParser().parse(data:body, encoding:encoding)
 }
 
@@ -60,13 +61,13 @@ private func xml(encoding:String?) -> xmlCharEncoding {
 }
 
 private class HtmlFormParser {
-    private var forms : [String:HtmlFormDict] = [:]
+    private var forms : HtmlFormDictDict = [:]
     private var form : HtmlFormDict = [:]
     private var formName = ""
     private var textName = ""
     private var text = ""
 
-    func parse(data:Data?, encoding:String?) -> [String:HtmlFormDict] {
+    func parse(data:Data?, encoding:String?) -> HtmlFormDictDict {
         guard let data = data else { return [:] }
         var sax = htmlSAXHandler()
         sax.initialized = XML_SAX2_MAGIC
