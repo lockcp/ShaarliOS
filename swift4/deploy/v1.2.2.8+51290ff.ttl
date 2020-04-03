@@ -1,0 +1,10 @@
+<> doap:release <v1.2.2.8+51290ff/> .
+
+<v1.2.2.8+51290ff/>
+    a doap:Version ;
+    doap:revision "1.2.2.8+51290ff" ;
+    doap:created "2020-04-01T18:06:09+0200"^^xsd:dateTime ;
+    doap:file-release <v1.2.2.8+51290ff/manifest.plist> ;
+    doap:specification <> ;
+    foaf:img <iTunesArtwork.png> .
+

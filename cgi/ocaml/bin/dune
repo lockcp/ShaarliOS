@@ -1,5 +1,0 @@
-; https://stackoverflow.com/a/53325230/349514
-(executable 
-  (name pin4sha_cgi)
-  (libraries Lib)
-)
