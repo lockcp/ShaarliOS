@@ -337,7 +337,7 @@ class ShaarliHtmlClient {
             }
         }
 
-        loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
+        loginAndGet(ses, endpoint, endpoint) { lurl, lifo, err in
             debugPrint("probe <- \(lurl)")
             if err != "" {
                 callback(lurl, "", err)
