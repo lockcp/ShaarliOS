@@ -94,10 +94,12 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         lblTitle.text = b.title;
         lblTitle.textColor = txtUserName.textColor
 
+        let uc = URLComponents(url:b.endpoint, resolvingAgainstBaseURL:true)
+        txtUserName.text        = uc?.user
+        txtPassWord.text        = uc?.password
         txtEndpoint.text        = b.endpointStrNoScheme
         swiSecure.isOn          = b.isEndpointSecure
-        txtUserName.text        = b.endpoint.user
-        txtPassWord.text        = b.endpoint.password
+
         swiPrivateDefault.isOn  = b.privateDefault
         swiTags.isOn            = b.tagsActive
         txtTags.text            = "" == b.tagsDefault
@@ -136,7 +138,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     private func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> ArraySlice<URL> {
         var urls = ArraySlice<URL>()
-        guard var ep = URLComponents(string:"//\(base ?? "")")
+        guard let base = base
+            else { return urls }
+        guard var ep = URLComponents(string:"//\(base)")
             else { return urls }
         ep.user = uid
         ep.password = pwd
@@ -144,8 +148,8 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
             ep.path = "\(ep.path)/"
         }
 
-        ep.scheme = "https"; urls.append(ep.url!)
-        ep.scheme = "http";  urls.append(ep.url!)
+        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
         return urls
     }

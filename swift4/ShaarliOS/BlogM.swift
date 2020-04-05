@@ -51,6 +51,6 @@ struct BlogM {
     }
 
     var isEndpointSecure : Bool {
-        return "https" == endpoint.scheme
+        return HTTP_HTTPS == endpoint.scheme
     }
 }

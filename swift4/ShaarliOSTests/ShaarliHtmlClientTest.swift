@@ -85,6 +85,34 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("Hello, wÃ¶rld!", String(bytes: byt, encoding:.isoLatin1))
     }
 
+    func testUrlEscaping() {
+        var uc = URLComponents(string: "scheme://uid:pwd@host:123/path?q=s#frag")!
+        uc.user = "my uid_with_:_/_@_?_&_$_ä_🚀_end"
+        uc.password = "my pwd_with_:_/_@_?_&_$_ä_🚀_end"
+        XCTAssertEqual("scheme://my%20uid_with_%3A_%2F_%40_%3F_&_$_%C3%A4_%F0%9F%9A%80_end:my%20pwd_with_%3A_%2F_%40_%3F_&_$_%C3%A4_%F0%9F%9A%80_end@host:123/path?q=s#frag", uc.url?.absoluteString)
+        XCTAssertEqual("my pwd_with_:_/_@_?_&_$_ä_🚀_end", uc.password)
+
+        uc.scheme = HTTP_HTTPS
+        uc.host = "demo.0x4c.de"
+        uc.port = 8443
+        uc.user = "demo"
+        uc.password = "demo -/:;&@\"$#%"
+        uc.path = "/shaarli-v0.11.1-issue28/"
+        uc.query = nil
+        uc.fragment = nil
+        XCTAssertEqual("https://demo:demo%20-%2F%3A;&%40%22$%23%25@demo.0x4c.de:8443/shaarli-v0.11.1-issue28/", uc.url?.absoluteString)
+
+        let u2 = uc.url!
+        XCTAssertEqual(uc.scheme, u2.scheme)
+        XCTAssertEqual(uc.host, u2.host)
+        XCTAssertEqual(uc.port, u2.port)
+        XCTAssertEqual(uc.user, u2.user)
+        XCTAssertEqual("demo%20-%2F%3A;&%40%22$%23%25", u2.password) // URL.password is raw!
+        XCTAssertEqual("/shaarli-v0.11.1-issue28", u2.path)
+        XCTAssertEqual(uc.query, u2.query)
+        XCTAssertEqual(uc.fragment, u2.fragment)
+    }
+
     // https://nshipster.com/swift-regular-expressions/
     func testRegex() {
         let ra0 = "Fancy a game of Cluedo™️?".range(of: "Clue(do)?™️?", options:.regularExpression)

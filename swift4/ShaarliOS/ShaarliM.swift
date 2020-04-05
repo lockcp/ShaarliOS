@@ -102,9 +102,10 @@ struct ShaarliM {
         let url = blog.endpoint
         set(url.absoluteString, forKey:KEY_endpointURL) // incl. uid+pwd
         // redundant, legacy:
-        set(url.user!, forKey:KEY_userName)
-        set(url.password!, forKey:KEY_passWord)
-
+        if let uc = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+          set(uc.user!, forKey:KEY_userName)
+          set(uc.password!, forKey:KEY_passWord)
+        }
         prefs.set(blog.title, forKey:KEY_title)
         prefs.set(blog.privateDefault, forKey:KEY_privateDefault)
         prefs.set(blog.tagsActive, forKey:KEY_tagsActive)

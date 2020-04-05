@@ -112,6 +112,8 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
 
 let URLEmpty = URLComponents().url!
 
+let HTTP_HTTP = "http"
+let HTTP_HTTPS = "https"
 let HTTP_POST = "POST"
 let HTTP_GET = "GET"
 let KEY_HEAD_CONTENT_TYPE = "Content-Type"
@@ -245,9 +247,10 @@ class ShaarliHtmlClient {
                     callback(URLEmpty, [:], "\(LOGIN_FORM) not found")
                     return
                 }
-                lofo[KEY_FORM_LOGIN] = endpoint.user
-                lofo[KEY_FORM_PASSWORD] = endpoint.password
-
+                if let uc = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+                    lofo[KEY_FORM_LOGIN] = uc.user
+                    lofo[KEY_FORM_PASSWORD] = uc.password
+                }
                 var req1 = URLRequest(url:response!.url!)
                 req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
                 req1.httpMethod = HTTP_POST
@@ -276,8 +279,10 @@ class ShaarliHtmlClient {
                         return
                     }
                     uc.queryItems = nil
-                    uc.user = endpoint.user
-                    uc.password = endpoint.password
+                    if let ep = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+                        uc.user = ep.user
+                        uc.password = ep.password
+                    }
                     callback(uc.url ?? URLEmpty, lifo, "")
                 }
                 tsk1.resume()
@@ -290,8 +295,10 @@ class ShaarliHtmlClient {
                 return
             }
             uc.queryItems = nil
-            uc.user = endpoint.user
-            uc.password = endpoint.password
+            if let ep = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+                uc.user = ep.user
+                uc.password = ep.password
+            }
             callback(uc.url ?? URLEmpty, lifo, "")
             return
         }
