@@ -247,7 +247,7 @@ class ShaarliHtmlClient {
                     callback(URLEmpty, [:], "\(LOGIN_FORM) not found")
                     return
                 }
-                if let uc = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+                if let uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
                     lofo[KEY_FORM_LOGIN] = uc.user
                     lofo[KEY_FORM_PASSWORD] = uc.password
                 }
@@ -279,7 +279,7 @@ class ShaarliHtmlClient {
                         return
                     }
                     uc.queryItems = nil
-                    if let ep = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+                    if let ep = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
                         uc.user = ep.user
                         uc.password = ep.password
                     }
@@ -295,7 +295,7 @@ class ShaarliHtmlClient {
                 return
             }
             uc.queryItems = nil
-            if let ep = URLComponents(url:url, resolvingAgainstBaseURL:true) {
+            if let ep = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
                 uc.user = ep.user
                 uc.password = ep.password
             }
@@ -337,7 +337,7 @@ class ShaarliHtmlClient {
             }
         }
 
-        loginAndGet(ses, endpoint, endpoint) { lurl, lifo, err in
+        loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             debugPrint("probe <- \(lurl)")
             if err != "" {
                 callback(lurl, "", err)

@@ -248,22 +248,18 @@ class ShaarliHtmlClientTest: XCTestCase {
     }
 
     func testGetSunshine() {
-        let demo = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let end = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.11.1/")! // credentials are public
+        let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.10.4/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.10.2/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.10.2/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/")! // credentials are public
         let url = URL(string:"https://shaarli.readthedocs.io")!
-
-        // let demo = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
-        // let url = URL(string:"https://shaarli.readthedocs.io")!
-
-        // let demo = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b/")! // credentials are public
-        // let url = URL(string:"http://sebsauvage.net/wiki/doku.php?id=php:shaarli")!
-
-        // let demo = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo/shaarligo.cgi")! // credentials are public
-        // let url = URL(string:"http://sebsauvage.net/wiki/doku.php?id=php:shaarli")!
 
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient()
-        srv.get(demo, url) { (_, frm, url, tit, dsc, tgs, pri, err) in
+        srv.get(end, url) { (_, frm, url, tit, dsc, tgs, pri, err) in
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", tit)
             XCTAssertEqual("Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.\n\nTo learn how to use Shaarli, consult the link \"Documentation\" at the bottom of this page.\n\nYou use the community supported version of the original Shaarli project, by Sebastien Sauvage.", dsc, "why is dsc empty?")
@@ -277,18 +273,13 @@ class ShaarliHtmlClientTest: XCTestCase {
     }
 
     func testPostSunshine() {
-        let end = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let end = URL(string:"https://demo:demo@demo.shaarli.org/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.11.1/")! // credentials are public
+        let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.10.4/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.10.2/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.10.2/")! // credentials are public
+        // let end = URL(string:"https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/")! // credentials are public
         let url = URL(string:"http://idlewords.com/talks/website_obesity.htm#minimalism")!
-
-        // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
-        // let url = URL(string:"http://idlewords.com/talks/website_obesity.htm#minimalism")!
-
-        // let demo = URL(string:"https://tast:tust@demo.mro.name/shaarli-v0.41b/")! // credentials are public
-        // let url = URL(string:"http://sebsauvage.net/wiki/doku.php?id=php:shaarli")!
-
-        // let demo = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo/shaarligo.cgi")! // credentials are public
-        // let url = URL(string:"http://idlewords.com/talks/website_obesity.htm#minimalism")!
 
         let exp0 = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         let exp1 = self.expectation(description: "Posting")
