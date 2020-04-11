@@ -181,21 +181,21 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlF
         return (fail, err.localizedDescription)
     }
     guard let http = rep as? HTTPURLResponse else {
-        return (fail, String(format:"Not a http reponse, but %@", rep ?? "<nil>"))
+        return (fail, String(format:NSLocalizedString("Not a HTTP reponse, but %@", comment:"ShaarliHtmlClient"), rep ?? "<nil>"))
     }
     if !(200...299).contains(http.statusCode) {
         let msg = HTTPURLResponse.localizedString(forStatusCode:http.statusCode)
-        return (fail, String(format:"Expected status 200, got %d: '%@'", http.statusCode, msg))
+        return (fail, String(format:NSLocalizedString("Expected response HTTP status\n%d %@\nbut got\n%d %@", comment:"ShaarliHtmlClient"), 200, "Ok", http.statusCode, msg))
     }
     guard let data = data, data.count > 0 else {
-        return (fail, "Got no data. That's not enough.")
+        return (fail, NSLocalizedString("Got no data. That's not enough.", comment:"ShaarliHtmlClient"))
     }
     let enco = http.textEncodingName
     let fo = findHtmlForms(data, enco)
     if fo.count == 0 {
         // check several typical error scenarios why there may be no form:
         guard let str = String(bytes: data, encoding: encoding(name:enco)), str.count > 0 else {
-            return (fo, "Got no data. That's not enough.")
+            return (fo, NSLocalizedString("Got no data. That's not enough.", comment:"ShaarliHtmlClient"))
         }
         if STR_BANNED == str {
             return (fo, STR_BANNED)

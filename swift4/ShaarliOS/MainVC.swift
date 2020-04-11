@@ -23,7 +23,8 @@ import UIKit
 import AudioToolbox
 
 private func play_sound_ok() {
-    AudioServicesPlaySystemSound(1001) // https://github.com/irccloud/ios/blob/6e3255eab82be047be141ced6e482ead5ac413f4/ShareExtension/ShareViewController.m#L155
+    // https://github.com/irccloud/ios/blob/6e3255eab82be047be141ced6e482ead5ac413f4/ShareExtension/ShareViewController.m#L155
+    AudioServicesPlaySystemSound(1001)
 }
 
 private func play_sound_err() {
@@ -34,8 +35,7 @@ private func play_sound_err() {
 class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
     // visual form center http://stackoverflow.com/a/13148012/349514
-    private func constraintWithMultiplier(_ elf: NSLayoutConstraint!, multiplier: CGFloat) -> NSLayoutConstraint!
-    {
+    private func constraintWithMultiplier(_ elf: NSLayoutConstraint!, multiplier: CGFloat) -> NSLayoutConstraint! {
         return NSLayoutConstraint(
             item:elf.firstItem!,
             attribute:elf.firstAttribute,
@@ -131,7 +131,7 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     private func reportPostingError(_ err:String) {
         spiPost.stopAnimating()
         btnShaare.isEnabled = !spiPost.isAnimating
-        UIAlertView(title:"Sorry, couldn't post", message:err, delegate:nil, cancelButtonTitle:"OK").show()
+        UIAlertView(title:NSLocalizedString("Sorry, couldn't post", comment:"MainVC"), message:err, delegate:nil, cancelButtonTitle:"OK").show()
     }
 
     @IBAction func actionSafari(_ sender: Any) {

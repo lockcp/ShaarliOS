@@ -24,20 +24,19 @@ import Social
 import MobileCoreServices
 import AudioToolbox
 
-fileprivate func stringFromPrivacy(_ priv : Bool) -> String
-{
+fileprivate func stringFromPrivacy(_ priv : Bool) -> String {
     return priv
         ? NSLocalizedString("Private 🔐", comment:"ShareVC")
         : NSLocalizedString("Public 🔓", comment:"ShareVC")
 }
 
-fileprivate func privacyFromString(_ s : String) -> Bool
-{
+fileprivate func privacyFromString(_ s : String) -> Bool {
     return s != stringFromPrivacy(false)
 }
 
 private func play_sound_ok() {
-    AudioServicesPlaySystemSound(1001) // https://github.com/irccloud/ios/blob/6e3255eab82be047be141ced6e482ead5ac413f4/ShareExtension/ShareViewController.m#L155
+    // https://github.com/irccloud/ios/blob/6e3255eab82be047be141ced6e482ead5ac413f4/ShareExtension/ShareViewController.m#L155
+    AudioServicesPlaySystemSound(1001)
 }
 
 private func play_sound_err() {
@@ -92,8 +91,11 @@ class ShareVC: SLComposeServiceViewController {
         let sha = ShaarliM.shared
         // sha.defaults.removePersistentDomain(forName:"group.\(BUNDLE_ID)") // doesn't do it.
         current = sha.loadBlog(sha.defaults)
-        guard let current = current else {return}
-        let c = ShaarliHtmlClient()
+        guard let current = current else {
+            // do nothing here and let viewDidAppear display a error popup
+            return
+        }
+        let cli = ShaarliHtmlClient()
 
         textView.keyboardType = .twitter
         view.subviews.forEach({ (v) in
@@ -129,10 +131,23 @@ class ShareVC: SLComposeServiceViewController {
                     ip.loadItem(forTypeIdentifier:tUrl, options:nil) { (_url, err) in
                         guard let ws = ws else {return}
                         guard let _url = _url as? URL else {
+                            ws.showError(
+                                title:NSLocalizedString("URL Share Sheet failed", comment: "ShareVC"),
+                                message:NSLocalizedString("I got no url to share.", comment: "ShareVC"),
+                                showsettings:false
+                            )
                             return
                         }
                         guard let err = err else {
-                            c.get(current.endpoint, _url, { (ses, ctx, _url, tit, dsc, tgs, pri, err) in
+                            cli.get(current.endpoint, _url, { (ses, ctx, _url, tit, dsc, tgs, pri, err) in
+                                guard "" == err else {
+                                    ws.showError(
+                                        title:NSLocalizedString("Can't reach Shaarli", comment: "ShareVC"),
+                                        message:err,
+                                        showsettings:true
+                                    )
+                                    return
+                                }
                                 self.session = ses
                                 let r = tagsNormalise(description:tit, extended:dsc, tags:tgs, known:[])
                                 DispatchQueue.main.async {
@@ -150,8 +165,9 @@ class ShareVC: SLComposeServiceViewController {
                             return
                         }
                         ws.showError(
-                            title:NSLocalizedString("Error", comment: ""),
-                            message:err.localizedDescription
+                            title:NSLocalizedString("URL Share Sheet failed", comment: "ShareVC"),
+                            message:err.localizedDescription,
+                            showsettings:false
                         )
                     }
                 }
@@ -163,8 +179,9 @@ class ShareVC: SLComposeServiceViewController {
                             return
                         }
                         ws.showError(
-                            title:NSLocalizedString("Error", comment: ""),
-                            message:err.localizedDescription
+                            title:NSLocalizedString("TXT Share Sheet failed", comment: "ShareVC"),
+                            message:err.localizedDescription,
+                            showsettings:false
                         )
                     }
                 }
@@ -181,20 +198,20 @@ class ShareVC: SLComposeServiceViewController {
         let pri = privacyFromString((itemAudience?.value)!)
         let r = tagsNormalise(description:tit, extended:dsc, tags:[], known:[])
         c.add(session!, current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) { err in
-            // DispatchQueue.main.sync {
-            if err != "" {
+            guard err != "" else {
                 play_sound_err()
                 self.showError(
-                    title:NSLocalizedString("Error", comment: "ShareVC"),
-                    message:err
+                    title:NSLocalizedString("Share failed", comment: "ShareVC"),
+                    message:err,
+                    showsettings:false
                 )
-            } else {
-                play_sound_ok()
+                return
             }
-            // we wait a bit until the sound is done
+
+            play_sound_ok()
+            // wait until the sound finished
             usleep(750 * 1000)
             super.didSelectPost()
-            // }
         }
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
         // self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
@@ -203,14 +220,21 @@ class ShareVC: SLComposeServiceViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if nil != current {
-            wasTouched = false
+        guard nil != current else {
+            showError(
+                title:NSLocalizedString("No Shaarli found", comment:"ShareVC"),
+                message: NSLocalizedString("Please add one in the Settings.", comment:"ShareVC"),
+                showsettings:true)
             return
         }
 
+        wasTouched = false
+    }
+
+    private func showError(title:String, message:String, showsettings:Bool) {
         let alert = UIAlertController(
-            title:NSLocalizedString("No Shaarli found", comment:"ShareVC"),
-            message: NSLocalizedString("Please add one in the Settings.", comment:"ShareVC"),
+            title:title,
+            message:message,
             preferredStyle:.alert
         )
 
@@ -219,37 +243,20 @@ class ShareVC: SLComposeServiceViewController {
             style:.cancel,
             handler:{ (_) in
                 self.cancel()
-            }
-        ))
-        alert.addAction(UIAlertAction(
-            title: NSLocalizedString("Settings", comment:"ShareVC"),
-            style:.default,
-            handler:{ (_) in
-                // https://stackoverflow.com/a/44499222/349514
-                DispatchGroup().notify(queue: DispatchQueue.main) {
-                    let _ = self.openURL(URL(string:"\(SELF_URL_PREFIX):///settings")!)
-                }
-                self.cancel()
-            }
-        ))
-        DispatchQueue.main.async {
-            self.present(alert, animated:true, completion:nil)
-        }
-    }
+        }))
 
-    private func showError(title:String, message:String) {
-        let alert = UIAlertController(
-            title:title,
-            message:message,
-            preferredStyle:.alert
-        )
-        alert.addAction(UIAlertAction(
-            title:title,
-            style:.cancel,
-            handler:{ (_) in
-                self.cancel()
-            }
-        ))
+        if showsettings {
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Settings", comment:"ShareVC"),
+                style:.default,
+                handler:{ (_) in
+                    // https://stackoverflow.com/a/44499222/349514
+                    DispatchGroup().notify(queue: DispatchQueue.main) {
+                        let _ = self.openURL(URL(string:"\(SELF_URL_PREFIX):///settings")!)
+                    }
+                    self.cancel()
+            }))
+        }
 
         DispatchQueue.main.async {
             self.present(alert, animated:true, completion:nil)
