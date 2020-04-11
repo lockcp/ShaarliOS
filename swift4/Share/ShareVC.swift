@@ -223,7 +223,7 @@ class ShareVC: SLComposeServiceViewController {
         guard nil != current else {
             showError(
                 title:NSLocalizedString("No Shaarli found", comment:"ShareVC"),
-                message: NSLocalizedString("Please add one in the Settings.", comment:"ShareVC"),
+                message:NSLocalizedString("Please add one in the Settings.", comment:"ShareVC"),
                 showsettings:true)
             return
         }

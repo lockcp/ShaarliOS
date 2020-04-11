@@ -84,6 +84,45 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         togui(current)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        guard let url = UIPasteboard.general.url else {
+            return
+        }
+        let alert = UIAlertController(
+            title:NSLocalizedString("Use URL form Clipboard", comment: "SettingsVC"),
+            message:String(format:NSLocalizedString("do you want to use the URL\n'%@'\nas shaarli endpoint?", comment:"SettingsVC"), url.description),
+            preferredStyle:.alert
+        )
+        alert.addAction(UIAlertAction(
+            title:NSLocalizedString("Cancel", comment:"SettingsVC"),
+            style:.cancel,
+            handler:nil))
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Yes", comment:"SettingsVC"),
+            style:.default,
+            handler:{(_) in self.togui(url)}))
+        present(alert, animated:true, completion:nil)
+    }
+
+    private func togui(_ ur : URL?) {
+        txtUserName.text        = nil
+        txtPassWord.text        = nil
+        txtEndpoint.text        = nil
+        swiSecure.isOn          = false
+        guard let ur = ur else { return }
+        guard var uc = URLComponents(url:ur, resolvingAgainstBaseURL:true) else { return }
+        txtUserName.text        = uc.user
+        txtPassWord.text        = uc.password
+        swiSecure.isOn          = HTTP_HTTPS == uc.scheme
+        uc.password             = nil
+        uc.user                 = nil
+        uc.scheme               = nil
+        guard let su = uc.url?.absoluteString.suffix(from: .init(encodedOffset:2)) else { return }
+        txtEndpoint.text        = String(su)
+    }
+
     private func togui(_ b : BlogM?) {
         guard let b = b else {
             lblTitle.text = NSLocalizedString("No Shaarli yet.", comment:String(describing:type(of:self)))
@@ -94,11 +133,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         lblTitle.text = b.title;
         lblTitle.textColor = txtUserName.textColor
 
-        let uc = URLComponents(url:b.endpoint, resolvingAgainstBaseURL:true)
-        txtUserName.text        = uc?.user
-        txtPassWord.text        = uc?.password
-        txtEndpoint.text        = b.endpointStrNoScheme
-        swiSecure.isOn          = b.isEndpointSecure
+        togui(b.endpoint)
 
         swiPrivateDefault.isOn  = b.privateDefault
         swiTags.isOn            = b.tagsActive

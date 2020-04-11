@@ -30,27 +30,11 @@ struct BlogM {
     let tagsActive      : Bool
     let tagsDefault     : String
 
-    var endpointStrNoScheme : String? {
-        guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)
-            else {return nil}
-        uc.password = nil
-        uc.user = nil
-        uc.scheme = nil
-        guard let su = uc.url?.absoluteString.suffix(from: .init(encodedOffset:2)) else {
-            return nil
-        }
-        return String(su)
-    }
-
     var endpointAnon : URL {
         guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)
             else {return URLEmpty}
         uc.password = nil
         uc.user = nil
         return uc.url ?? URLEmpty
-    }
-
-    var isEndpointSecure : Bool {
-        return HTTP_HTTPS == endpoint.scheme
     }
 }
