@@ -21,10 +21,11 @@
 
 import Foundation
 
+// form fields only, should also keep the form action and method.
 typealias HtmlFormDict = [String:String]
 typealias HtmlFormDictDict = [String:HtmlFormDict]
 
-// internal helper uses libxml2 graceful html parsing
+// internal helper uses libxml2 graceful html parsing.
 func findHtmlForms(_ body:Data?, _ encoding:String?) -> HtmlFormDictDict {
     return HtmlFormParser().parse(data:body, encoding:encoding)
 }

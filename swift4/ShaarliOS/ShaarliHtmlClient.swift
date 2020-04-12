@@ -183,7 +183,7 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlF
     guard let http = rep as? HTTPURLResponse else {
         return (fail, String(format:NSLocalizedString("Not a HTTP reponse, but %@", comment:"ShaarliHtmlClient"), rep ?? "<nil>"))
     }
-    if !(200...299).contains(http.statusCode) {
+    guard (200...299).contains(http.statusCode) else {
         let msg = HTTPURLResponse.localizedString(forStatusCode:http.statusCode)
         return (fail, String(format:NSLocalizedString("Expected response HTTP status\n%d %@\nbut got\n%d %@", comment:"ShaarliHtmlClient"), 200, "Ok", http.statusCode, msg))
     }
@@ -197,7 +197,7 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlF
         guard let str = String(bytes: data, encoding: encoding(name:enco)), str.count > 0 else {
             return (fo, NSLocalizedString("Got no data. That's not enough.", comment:"ShaarliHtmlClient"))
         }
-        if STR_BANNED == str {
+        guard STR_BANNED != str else {
             return (fo, STR_BANNED)
         }
         if let ra = str.range(of:PAT_WRONG_LOGIN, options:.regularExpression) {
@@ -237,21 +237,28 @@ class ShaarliHtmlClient {
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
             let d = check(data, response, erro)
             debugPrint("loginAndGet GET <- \(response?.url ?? URLEmpty) d:'\(d)'")
-            if d.1 != "" {
+            guard "" == d.1 else {
                 callback(URLEmpty, [:], d.1)
                 return
             }
             guard let lifo = d.0[LINK_FORM] else {
                 // actually that's what we normally expect: not logged in yet.
                 guard var lofo = d.0[LOGIN_FORM] else {
-                    callback(URLEmpty, [:], "\(LOGIN_FORM) not found")
+                    callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LOGIN_FORM))
                     return
                 }
-                if let uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
-                    lofo[KEY_FORM_LOGIN] = uc.user
-                    lofo[KEY_FORM_PASSWORD] = uc.password
+                if let uc0 = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
+                    lofo[KEY_FORM_LOGIN] = uc0.user
+                    lofo[KEY_FORM_PASSWORD] = uc0.password
+                } else {
+                    callback(URLEmpty, [:], String(format:NSLocalizedString("Cannot parse endpoint '%@'", comment: "ShaarliHtmlClient"), endpoint.absoluteString))
+                    return
                 }
-                var req1 = URLRequest(url:response!.url!)
+                guard let u0 = response?.url else {
+                    callback(URLEmpty, [:], String(format:NSLocalizedString("Response not usable.", comment: "")))
+                    return
+                }
+                var req1 = URLRequest(url:u0)
                 req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
                 req1.httpMethod = HTTP_POST
                 let formDat = formData(lofo)
@@ -259,31 +266,28 @@ class ShaarliHtmlClient {
                 let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
                     let d = check(data, response, erro)
                     debugPrint("loginAndGet POST <- \(response?.url ?? URLEmpty) d:'\(d)'")
-                    
-                    if d.1 != "" {
+                    guard "" == d.1 else {
                         callback(URLEmpty, [:], d.1)
                         return
                     }
                     guard let lifo = d.0[LINK_FORM] else {
-                        callback(URLEmpty, [:], "\(LINK_FORM) not found.")
+                        callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LINK_FORM))
                         return
                     }
-
-                    if nil == lifo[LF_URL] {
-                        callback(URLEmpty, lifo, "\(LF_URL) not found.")
+                    guard nil != lifo[LF_URL] else {
+                        callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LF_URL))
                         return
                     }
-
-                    guard var uc = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
-                        callback(URLEmpty, lifo, "strange url")
+                    guard var uc2 = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                        callback(URLEmpty, lifo, String(format:NSLocalizedString("strange url.", comment: "ShaarliHtmlClient")))
                         return
                     }
-                    uc.queryItems = nil
+                    uc2.queryItems = nil
                     if let ep = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
-                        uc.user = ep.user
-                        uc.password = ep.password
+                        uc2.user = ep.user
+                        uc2.password = ep.password
                     }
-                    callback(uc.url ?? URLEmpty, lifo, "")
+                    callback(uc2.url ?? URLEmpty, lifo, "")
                 }
                 tsk1.resume()
                 // print("HTTP \(tsk1.originalRequest?.httpMethod) \(tsk1.originalRequest?.url)")
@@ -291,7 +295,7 @@ class ShaarliHtmlClient {
             }
 
             guard var uc = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
-                callback(URLEmpty, lifo, "strange url")
+                callback(URLEmpty, lifo, String(format:NSLocalizedString("strange url.", comment: "ShaarliHtmlClient")))
                 return
             }
             uc.queryItems = nil
@@ -325,22 +329,14 @@ class ShaarliHtmlClient {
     func probe(_ endpoint: URL, _ completion: @escaping (
         _ url:URL,
         _ title:String,
-        _ error:String) -> Bool
+        _ error:String) -> Void
     ) {
         debugPrint("probe \(endpoint)")
         let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
 
-        func callback(_ url :URL, _ title: String, _ error: String) -> () {
-            DispatchQueue.main.sync {
-                let _ = completion(url, title, error)
-                // ses.invalidateAndCancel() // ses is ephemeral, no need to cancel.
-            }
-        }
-
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
-            debugPrint("probe <- \(lurl)")
-            if err != "" {
-                callback(lurl, "", err)
+            guard "" == err else {
+                completion(lurl, "", err)
                 return
             }
             // do not call back yet, but rather call ?do=configure and report the title.
@@ -348,19 +344,15 @@ class ShaarliHtmlClient {
             let req = createReq(endpoint:endpoint, params:[URLQueryItem(name: KEY_PAR_DO, value: CMD_DO_CFG)])
             let tsk = ses.dataTask(with: req) { data, response, err in
                 let res = check(data, response, err)
-                if res.1 != "" {
-                    callback(lurl, "", res.1)
+                guard "" == res.1 else {
+                    completion(lurl, "", res.1)
                     return
                 }
                 guard let cffo = res.0[CFG_FORM] else {
-                    callback(lurl, "", "\(CFG_FORM) not found.")
+                    completion(lurl, "", String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), CFG_FORM))
                     return
                 }
-                callback(
-                    lurl,
-                    cffo[KEY_FORM_TITLE] ?? "",
-                    ""
-                )
+                completion(lurl, cffo[KEY_FORM_TITLE] ?? "", "")
             }
             tsk.resume()
         }

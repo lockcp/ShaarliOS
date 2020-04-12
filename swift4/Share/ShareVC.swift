@@ -198,7 +198,7 @@ class ShareVC: SLComposeServiceViewController {
         let pri = privacyFromString((itemAudience?.value)!)
         let r = tagsNormalise(description:tit, extended:dsc, tags:[], known:[])
         c.add(session!, current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) { err in
-            guard err != "" else {
+            guard "" == err else {
                 play_sound_err()
                 self.showError(
                     title:NSLocalizedString("Share failed", comment: "ShareVC"),

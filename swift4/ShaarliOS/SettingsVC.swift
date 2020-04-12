@@ -50,8 +50,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target:self, action:#selector(SettingsVC.actionCancel(_:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target:self, action:#selector(SettingsVC.actionSignIn(_:)))
 
-        swiSecure.isEnabled     = false
-
         view.addSubview(spiLogin)
         spiLogin.frame = view.bounds
 
@@ -164,12 +162,33 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         lblTitle.text = NSLocalizedString("…", comment:String(describing:type(of:self)))
         lblTitle.textColor = txtUserName.textColor
 
-        let urls = endpoints(txtEndpoint.text, txtUserName.text, txtPassWord.text)
-        let c = ShaarliHtmlClient()
-        c.probe(urls.first!) {
-            return self.handleCallback(c, urls, $0, $1, $2)
+        let cli = ShaarliHtmlClient()
+
+        func recurse(_ urls:ArraySlice<URL>) {
+            guard let cur = urls.first else {
+                self.failure("Oops, something went utterly wrong.")
+                return
+            }
+            cli.probe(cur) { (ur, ti, er) in
+                let res = urls.dropFirst()
+                guard false == res.isEmpty else {
+                    self.failure(er)
+                    return
+                }
+                guard "" != er else {
+                    self.success(ur, ti)
+                    return
+                }
+                recurse(res)
+            }
         }
+
+        let urls = endpoints(txtEndpoint.text, txtUserName.text, txtPassWord.text)
+        spiLogin.startAnimating()
+        recurse(urls)
     }
+
+    // MARK: - Controller Logic
 
     private func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> ArraySlice<URL> {
         var urls = ArraySlice<URL>()
@@ -179,54 +198,51 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
             else { return urls }
         ep.user = uid
         ep.password = pwd
-        if !ep.path.hasSuffix("/") {
-            ep.path = "\(ep.path)/"
-        }
 
+        if !ep.path.hasSuffix("/index.php") {
+            if !ep.path.hasSuffix("/") {
+                ep.path = "\(ep.path)/"
+            }
+            ep.path = "\(ep.path)index.php"
+        }
+        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
+
+        if ep.path.hasSuffix("/index.php") {
+            ep.path = "\(ep.path.dropLast("/index.php".count))/shaarli.cgi"
+        }
+        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
+
+        if ep.path.hasSuffix("/shaarli.cgi") {
+            ep.path = "\(ep.path.dropLast("/shaarli.cgi".count))/"
+        }
         ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
         ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
         return urls
     }
 
-    // MARK: - Controller Logic
-
-    private func handleCallback(_ c:ShaarliHtmlClient, _ urls:ArraySlice<URL>, _ ur: URL, _ ti: String, _ er: String) -> Bool {
-        guard let head = urls.first else {return false}
-        print("probed '\(head)' -> (\(ur), \(ti), \(er))")
-
-        if er != "" {
-            lblTitle.text = er
-            lblTitle.textColor = .red
-            let tail = urls.dropFirst()
-            guard let first = tail.first else {
-                spiLogin.stopAnimating()
-                return false
-            }
-            c.probe(first) {
-                return self.handleCallback(c, tail, $0, $1, $2)
-            }
-            return true
+    private func success(_ ur:URL, _ ti:String) {
+        let ad = ShaarliM.shared
+        DispatchQueue.main.sync {
+            ad.saveBlog(ad.defaults, BlogM(
+                endpoint:ur,
+                title:ti,
+                privateDefault:swiPrivateDefault.isOn,
+                tagsActive:swiTags.isOn,
+                tagsDefault:txtTags.text ?? ""
+            ))
+            navigationController?.popViewController(animated:true)
         }
-
-        self.success(ur, ti, er)
-        return false
     }
 
-    private func success(_ ur:URL, _ ti:String, _ er:String) {
-        spiLogin.stopAnimating()
-        let b = BlogM(
-            endpoint:ur,
-            title:ti,
-            privateDefault:swiPrivateDefault.isOn,
-            tagsActive:swiTags.isOn,
-            tagsDefault:txtTags.text ?? ""
-        )
-        let ad = ShaarliM.shared
-        ad.saveBlog(ad.defaults, b)
-        current = b
-        guard let nav = navigationController else { return }
-        nav.popViewController(animated:true)
+    private func failure(_ er:String) {
+        DispatchQueue.main.sync {
+            spiLogin.stopAnimating()
+            self.lblTitle.textColor = .red
+            self.lblTitle.text = er
+        }
     }
 
     // MARK: - UITextFieldDelegate
