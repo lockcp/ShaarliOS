@@ -201,24 +201,21 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         ep.user = uid
         ep.password = pwd
 
-        if !ep.path.hasSuffix("/index.php") {
-            if !ep.path.hasSuffix("/") {
-                ep.path = "\(ep.path)/"
-            }
-            ep.path = "\(ep.path)index.php"
-        }
         ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
         ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
-        if ep.path.hasSuffix("/index.php") {
-            ep.path = "\(ep.path.dropLast("/index.php".count))/shaarli.cgi"
-        }
+        let php = "/index.php"
+        let pa = ep.path.dropLast(ep.path.hasSuffix(php)
+            ? php.count
+            : ep.path.hasSuffix("/")
+            ? 1
+            : 0)
+
+        ep.path = pa + php
         ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
         ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
-        if ep.path.hasSuffix("/shaarli.cgi") {
-            ep.path = "\(ep.path.dropLast("/shaarli.cgi".count))/"
-        }
+        ep.path = pa + "/shaarli.cgi"
         ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
         ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
