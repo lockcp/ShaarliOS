@@ -216,6 +216,12 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
         ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
+        if ep.path.hasSuffix("/shaarli.cgi") {
+            ep.path = "\(ep.path.dropLast("/shaarli.cgi".count))/"
+        }
+        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
+
         return urls
     }
 
