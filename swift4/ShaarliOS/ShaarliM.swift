@@ -32,9 +32,9 @@ let green60_64_66 = UIColor.init(hue: 60/360.0, saturation: 0.64, brightness: 0.
 
 func info_to_semver(_ info : [String:Any?]?) -> String {
     guard let info = info else { return "v?.?" }
-    guard let version = info["CFBundleShortVersionString"] as! String? else { return "v?.?" } // Marketing
-    // guard let version = info["CFBundleVersion"] as! String? else { return "v?.?" }
-    guard let gitsha = info["CFBundleVersionGitSHA"] as! String? else { return "v\(version)+?" }
+    guard let version = info["CFBundleShortVersionString"] as? String else { return "v?.?" } // Marketing
+    // guard let version = info["CFBundleVersion"] as? String else { return "v?.?" }
+    guard let gitsha = info["CFBundleVersionGitSHA"] as? String else { return "v\(version)" }
     return "v\(version)+\(gitsha)"
 }
 

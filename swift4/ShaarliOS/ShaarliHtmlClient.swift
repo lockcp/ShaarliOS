@@ -315,7 +315,7 @@ class ShaarliHtmlClient {
 
     private func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
         cfg.allowsCellularAccess = true
-        cfg.httpAdditionalHeaders = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/v\(semver!)"]
+        cfg.httpAdditionalHeaders = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
         cfg.httpShouldUsePipelining = true

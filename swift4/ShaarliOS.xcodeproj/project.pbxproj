@@ -335,6 +335,7 @@
 				16F5C91F240D5395001B75D4 /* Sources */,
 				16F5C920240D5395001B75D4 /* Frameworks */,
 				16F5C921240D5395001B75D4 /* Resources */,
+				16FD65B9244469CF00E906BC /* Git Sha -> Info.plist */,
 			);
 			buildRules = (
 			);
@@ -451,6 +452,24 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		16D5E298230594F800D62C2E /* Git Sha -> Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Git Sha -> Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# write git version SHA into Info.plist\n#\n# inspired by\n# - http://kswizz.com/post/2686511526/git-xcode-versioning\n# - http://stackoverflow.com/a/12658311\ncd \"$PROJECT_DIR\"\ninfo_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\ngitsha=$(git rev-parse --short HEAD)\n# version=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleVersion\" \"$info_plist\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersionGitSHA $gitsha\" \"$info_plist\"\n# /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString '$version'\" \"$info_plist\"\n";
+		};
+		16FD65B9244469CF00E906BC /* Git Sha -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
