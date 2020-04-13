@@ -78,6 +78,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         spiLogin.stopAnimating()
+        navigationItem.rightBarButtonItem?.isEnabled = true
         txtEndpoint.becomeFirstResponder()
         togui(current)
     }
@@ -185,6 +186,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         let urls = endpoints(txtEndpoint.text, txtUserName.text, txtPassWord.text)
         spiLogin.startAnimating()
+        navigationItem.rightBarButtonItem?.isEnabled = false
         recurse(urls)
     }
 
@@ -240,6 +242,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     private func failure(_ er:String) {
         DispatchQueue.main.sync {
             spiLogin.stopAnimating()
+            navigationItem.rightBarButtonItem?.isEnabled = true
             self.lblTitle.textColor = .red
             self.lblTitle.text = er
         }
