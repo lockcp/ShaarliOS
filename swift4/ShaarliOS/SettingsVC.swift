@@ -23,22 +23,22 @@ import UIKit
 import WebKit
 
 class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelegate {
-    @IBOutlet var txtEndpoint       : UITextField!
-    @IBOutlet var swiSecure         : UISwitch!
-    @IBOutlet var txtUserName       : UITextField!
-    @IBOutlet var txtPassWord       : UITextField!
-    @IBOutlet var lblDefaultPrivate : UILabel!
-    @IBOutlet var swiPrivateDefault : UISwitch!
-    @IBOutlet var lblTitle          : UILabel!
-    @IBOutlet var swiTags           : UISwitch!
-    @IBOutlet var txtTags           : UITextField!
-    @IBOutlet var spiLogin          : UIActivityIndicatorView!
-    @IBOutlet var cellAbout         : UITableViewCell!
+    @IBOutlet private var txtEndpoint       : UITextField!
+    @IBOutlet private var swiSecure         : UISwitch!
+    @IBOutlet private var txtUserName       : UITextField!
+    @IBOutlet private var txtPassWord       : UITextField!
+    @IBOutlet private var lblDefaultPrivate : UILabel!
+    @IBOutlet private var swiPrivateDefault : UISwitch!
+    @IBOutlet private var lblTitle          : UILabel!
+    @IBOutlet private var swiTags           : UISwitch!
+    @IBOutlet private var txtTags           : UITextField!
+    @IBOutlet private var spiLogin          : UIActivityIndicatorView!
+    @IBOutlet private var cellAbout         : UITableViewCell!
     // https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
-    @IBOutlet var btn1Password      : UIButton!
+    @IBOutlet private var btn1Password      : UIButton!
 
-    let wwwAbout                    = WKWebView()
-    var current                     : BlogM?
+    private let wwwAbout                    = WKWebView()
+    var current                             : BlogM?
 
     // MARK: - Lifecycle
 

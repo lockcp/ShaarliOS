@@ -46,24 +46,24 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             constant:elf.constant)
     }
 
-    @IBOutlet var lblVersion    : UILabel!
-    @IBOutlet var lblName       : UILabel!
-    @IBOutlet var centerY       : NSLayoutConstraint!
-    @IBOutlet var vContainer    : UIView!
-    @IBOutlet var btnPetal      : UIButton!
-    @IBOutlet var btnSafari     : UIBarButtonItem!
+    @IBOutlet private var lblVersion    : UILabel!
+    @IBOutlet private var lblName       : UILabel!
+    @IBOutlet private var centerY       : NSLayoutConstraint!
+    @IBOutlet private var vContainer    : UIView!
+    @IBOutlet private var btnPetal      : UIButton!
+    @IBOutlet private var btnSafari     : UIBarButtonItem!
 
-    @IBOutlet var viewShaare    : UIView!
-    @IBOutlet var btnShaare     : UIButton!
-    @IBOutlet var txtDescr      : UITextView!
-    @IBOutlet var txtTitle      : UITextField!
-    @IBOutlet var btnAudience   : UIButton!
+    @IBOutlet private var viewShaare    : UIView!
+    @IBOutlet private var btnShaare     : UIButton!
+    @IBOutlet private var txtDescr      : UITextView!
+    @IBOutlet private var txtTitle      : UITextField!
+    @IBOutlet private var btnAudience   : UIButton!
 
     // http://spin.atomicobject.com/2014/03/05/uiscrollview-autolayout-ios/
-    @IBOutlet var activeField   : UIView!
-    @IBOutlet var scrollView    : UIScrollView!
+    @IBOutlet private var activeField   : UIView!
+    @IBOutlet private var scrollView    : UIScrollView!
 
-    @IBOutlet var spiPost       : UIActivityIndicatorView!
+    @IBOutlet private var spiPost       : UIActivityIndicatorView!
 
     var current                 : BlogM?
 

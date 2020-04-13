@@ -185,7 +185,7 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlF
     }
     guard (200...299).contains(http.statusCode) else {
         let msg = HTTPURLResponse.localizedString(forStatusCode:http.statusCode)
-        return (fail, String(format:NSLocalizedString("Expected response HTTP status\n%d %@\nbut got\n%d %@", comment:"ShaarliHtmlClient"), 200, "Ok", http.statusCode, msg))
+        return (fail, String(format:NSLocalizedString("Expected response HTTP status '%d %@' but got '%d %@'", comment:"ShaarliHtmlClient"), 200, "Ok", http.statusCode, msg))
     }
     guard let data = data, data.count > 0 else {
         return (fail, NSLocalizedString("Got no data. That's not enough.", comment:"ShaarliHtmlClient"))
@@ -238,15 +238,34 @@ class ShaarliHtmlClient {
         _ error: String) -> ()
     ) {
         let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString)])
-        debugPrint("loginAndGet GET \(req0)")
+        debugPrint("loginAndGet GET -> \(req0)")
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
+
+            func do_finish(_ lifo:HtmlFormDict) {
+                guard nil != lifo[LF_URL] else {
+                    callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LF_URL))
+                    return
+                }
+                guard var uc = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
+                    callback(URLEmpty, lifo, String(format:NSLocalizedString("strange url.", comment: "ShaarliHtmlClient")))
+                    return
+                }
+                uc.queryItems = nil
+                if let ep = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
+                    uc.user = ep.user
+                    uc.password = ep.password
+                }
+                callback(uc.url ?? URLEmpty, lifo, "")
+            }
+
             let d = check(data, response, erro)
             debugPrint("loginAndGet GET <- \(response?.url ?? URLEmpty) d:'\(d)'")
             guard "" == d.1 else {
                 callback(URLEmpty, [:], d.1)
                 return
             }
+
             guard let lifo = d.0[LINK_FORM] else {
                 // actually that's what we normally expect: not logged in yet.
                 guard var lofo = d.0[LOGIN_FORM] else {
@@ -280,36 +299,14 @@ class ShaarliHtmlClient {
                         callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LINK_FORM))
                         return
                     }
-                    guard nil != lifo[LF_URL] else {
-                        callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LF_URL))
-                        return
-                    }
-                    guard var uc2 = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
-                        callback(URLEmpty, lifo, String(format:NSLocalizedString("strange url.", comment: "ShaarliHtmlClient")))
-                        return
-                    }
-                    uc2.queryItems = nil
-                    if let ep = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
-                        uc2.user = ep.user
-                        uc2.password = ep.password
-                    }
-                    callback(uc2.url ?? URLEmpty, lifo, "")
+                    do_finish(lifo)
                 }
                 tsk1.resume()
                 // print("HTTP \(tsk1.originalRequest?.httpMethod) \(tsk1.originalRequest?.url)")
                 return
             }
 
-            guard var uc = URLComponents(url:response?.url ?? URLEmpty, resolvingAgainstBaseURL:true) else {
-                callback(URLEmpty, lifo, String(format:NSLocalizedString("strange url.", comment: "ShaarliHtmlClient")))
-                return
-            }
-            uc.queryItems = nil
-            if let ep = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
-                uc.user = ep.user
-                uc.password = ep.password
-            }
-            callback(uc.url ?? URLEmpty, lifo, "")
+            do_finish(lifo)
             return
         }
         tsk0.resume()

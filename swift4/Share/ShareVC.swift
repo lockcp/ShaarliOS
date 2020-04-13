@@ -24,13 +24,13 @@ import Social
 import MobileCoreServices
 import AudioToolbox
 
-fileprivate func stringFromPrivacy(_ priv : Bool) -> String {
+private func stringFromPrivacy(_ priv : Bool) -> String {
     return priv
         ? NSLocalizedString("Private 🔐", comment:"ShareVC")
         : NSLocalizedString("Public 🔓", comment:"ShareVC")
 }
 
-fileprivate func privacyFromString(_ s : String) -> Bool {
+private func privacyFromString(_ s : String) -> Bool {
     return s != stringFromPrivacy(false)
 }
 
@@ -46,13 +46,15 @@ private func play_sound_err() {
 @objc (ShareVC) // https://blog.hellocode.co/post/share-extension/
 class ShareVC: SLComposeServiceViewController {
 
-    var current         : BlogM?
-    var wasTouched      = false
-    var itemTitle       : SLComposeSheetConfigurationItem?
-    var itemAudience    : SLComposeSheetConfigurationItem?
-    var session         : URLSession?
-    var ctx             : HtmlFormDict = [:]
-    var url             : URL = URLEmpty
+    private let semver          =  info_to_semver(Bundle.main.infoDictionary)
+
+    private var current         : BlogM?
+    private var wasTouched      = false
+    private var itemTitle       : SLComposeSheetConfigurationItem?
+    private var itemAudience    : SLComposeSheetConfigurationItem?
+    private var session         : URLSession?
+    private var ctx             : HtmlFormDict = [:]
+    private var url             : URL = URLEmpty
 
     override func viewDidLoad() {
         debugPrint("viewDidLoad")
