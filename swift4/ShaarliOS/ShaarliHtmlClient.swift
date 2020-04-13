@@ -238,7 +238,7 @@ class ShaarliHtmlClient {
         _ error: String) -> ()
     ) {
         let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString)])
-        debugPrint("loginAndGet GET -> \(req0)")
+        debugPrint("loginAndGet \(req0.httpMethod ?? HTTP_GET)) -> \(req0)")
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
 
@@ -260,7 +260,7 @@ class ShaarliHtmlClient {
             }
 
             let d = check(data, response, erro)
-            debugPrint("loginAndGet GET <- \(response?.url ?? URLEmpty) d:'\(d)'")
+            debugPrint("loginAndGet \(HTTP_GET) <- \(response?.url ?? URLEmpty) data:'\(d)'")
             guard "" == d.1 else {
                 callback(URLEmpty, [:], d.1)
                 return
@@ -287,10 +287,10 @@ class ShaarliHtmlClient {
                 req1.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
                 req1.httpMethod = HTTP_POST
                 let formDat = formData(lofo)
-                debugPrint("loginAndGet POST \(req1)")
+                debugPrint("loginAndGet \(req1.httpMethod ?? HTTP_POST) \(req1)")
                 let tsk1 = ses.uploadTask(with: req1, from: formDat) { data, response, erro in
                     let d = check(data, response, erro)
-                    debugPrint("loginAndGet POST <- \(response?.url ?? URLEmpty) d:'\(d)'")
+                    debugPrint("loginAndGet \(HTTP_POST) <- \(response?.url ?? URLEmpty) data:'\(d)'")
                     guard "" == d.1 else {
                         callback(URLEmpty, [:], d.1)
                         return
@@ -417,7 +417,7 @@ class ShaarliHtmlClient {
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
             guard let data = data
                 else { return completion("Got no response body") }
-            debugPrint("<- POST \(response?.url ?? URLEmpty) data:\(String(data:data, encoding:.utf8) ?? "-")")
+            debugPrint("<- \(HTTP_POST) \(response?.url ?? URLEmpty) data:\(String(data:data, encoding:.utf8) ?? "-")")
             let res = check(data, response, err)
             completion(res.1)
         }
