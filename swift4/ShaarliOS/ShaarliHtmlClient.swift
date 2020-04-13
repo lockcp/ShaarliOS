@@ -407,15 +407,17 @@ class ShaarliHtmlClient {
         lifo[LF_PRI] = privat
             ? VAL_ON
             : nil
+        lifo["cancel_edit"] = nil
+        lifo["save_edit"] = "Save"
         var req = createReq(endpoint:endpoint, params:[])
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
         req.httpMethod = HTTP_POST
         let foda = formData(lifo)
-        debugPrint("\(req.httpMethod ?? "?") \(req.url ?? URLEmpty) data:\(String(data:foda, encoding:.utf8) ?? "-")")
+        debugPrint("-> \(req.httpMethod ?? "?") \(req.url ?? URLEmpty) data:\(String(data:foda, encoding:.utf8) ?? "-")")
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
             guard let data = data
                 else { return completion("Got no response body") }
-            debugPrint("response: \(response?.url ?? URLEmpty) data:\(String(data:data, encoding:.utf8) ?? "-")")
+            debugPrint("<- POST \(response?.url ?? URLEmpty) data:\(String(data:data, encoding:.utf8) ?? "-")")
             let res = check(data, response, err)
             completion(res.1)
         }
