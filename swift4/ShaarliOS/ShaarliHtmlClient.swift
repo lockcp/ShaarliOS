@@ -224,6 +224,12 @@ private func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
 
 class ShaarliHtmlClient {
 
+    let semver : String!
+
+    init(_ semver : String) {
+        self.semver = semver
+    }
+
     // prepare the login and be ready for payload - both retrieval and publication.
     // todo https://youtu.be/vDe-4o8Uwl8?t=3090
     internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
@@ -312,7 +318,7 @@ class ShaarliHtmlClient {
 
     private func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
         cfg.allowsCellularAccess = true
-        cfg.httpAdditionalHeaders = ["User-Agent":SHAARLI_COMPANION_APP_URL]
+        cfg.httpAdditionalHeaders = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/v\(semver!)"]
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
         cfg.httpShouldUsePipelining = true

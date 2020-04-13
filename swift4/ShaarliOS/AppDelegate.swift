@@ -21,20 +21,12 @@
 
 import UIKit
 
-fileprivate func _version(_ info : [String:Any?]?) -> String {
-    guard let info = info else { return "v?.?" }
-    guard let version = info["CFBundleShortVersionString"] as! String? else { return "v?.?" } // Marketing
-    // guard let version = info["CFBundleVersion"] as! String? else { return "v?.?" }
-    guard let gitsha = info["CFBundleVersionGitSHA"] as! String? else { return "v\(version)+?" }
-    return "v\(version)+\(gitsha)"
-}
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static let shared = UIApplication.shared.delegate as! AppDelegate
 
-    let semver = _version(Bundle.main.infoDictionary)
+    let semver = info_to_semver(Bundle.main.infoDictionary)
 
     var window: UIWindow?
 

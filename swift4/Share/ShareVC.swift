@@ -95,7 +95,7 @@ class ShareVC: SLComposeServiceViewController {
             // do nothing here and let viewDidAppear display a error popup
             return
         }
-        let cli = ShaarliHtmlClient()
+        let cli = ShaarliHtmlClient(semver)
 
         textView.keyboardType = .twitter
         view.subviews.forEach({ (v) in
@@ -192,7 +192,7 @@ class ShareVC: SLComposeServiceViewController {
     override func didSelectPost() {
         debugPrint("didSelectPost")
         guard let current = current else {return}
-        let c = ShaarliHtmlClient()
+        let c = ShaarliHtmlClient(semver)
         guard let tit = itemTitle?.value else {return}
         guard let dsc = textView.text else {return}
         let pri = privacyFromString((itemAudience?.value)!)

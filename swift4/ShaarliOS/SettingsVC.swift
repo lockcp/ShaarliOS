@@ -162,7 +162,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         lblTitle.text = NSLocalizedString("…", comment:String(describing:type(of:self)))
         lblTitle.textColor = txtUserName.textColor
 
-        let cli = ShaarliHtmlClient()
+        let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
 
         func recurse(_ urls:ArraySlice<URL>) {
             guard let cur = urls.first else {
