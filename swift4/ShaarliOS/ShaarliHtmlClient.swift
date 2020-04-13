@@ -407,8 +407,9 @@ class ShaarliHtmlClient {
         lifo[LF_PRI] = privat
             ? VAL_ON
             : nil
-        lifo["cancel_edit"] = nil
         lifo["save_edit"] = "Save"
+        lifo["cancel_edit"] = nil
+        lifo["delete_link"] = nil
         var req = createReq(endpoint:endpoint, params:[])
         req.setValue(VAL_HEAD_CONTENT_TYPE, forHTTPHeaderField:KEY_HEAD_CONTENT_TYPE)
         req.httpMethod = HTTP_POST
