@@ -138,7 +138,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         swiTags.isOn            = b.tagsActive
         txtTags.text            = "" == b.tagsDefault
             ? b.tagsDefault
-            : "\(b.tagsDefault) "
+            : "\(b.tagsDefault.trimmingCharacters(in:.whitespacesAndNewlines)) "
     }
 
     // MARK: - Navigation
