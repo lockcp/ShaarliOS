@@ -102,7 +102,7 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         let tit = txtTitle.text ?? "-"
         let dsc = txtDescr.text ?? "-"
         let pri = btnAudience.isSelected
-        let c = ShaarliHtmlClient("\(SHAARLI_COMPANION_APP_URL)#\(AppDelegate.shared.semver)")
+        let c = ShaarliHtmlClient(AppDelegate.shared.semver)
         c.get(srv, URLEmpty) { ses, ctx, ur_, ti_, de_, ta_, pr_, err in
             guard "" == err else {
                 DispatchQueue.main.async {
