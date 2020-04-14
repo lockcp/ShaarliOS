@@ -1,0 +1,85 @@
+@base <https://apps.apple.com/us/app/shaarlios/id1027441388?mt=8&action=write-review#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<v1.0>
+    dct:source <https://mro.name/ShaarliOS/v1.0+3f3572d6> ;
+    dct:description "" ;
+    doap:created "2015-08-12T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.1>
+    dct:source <https://mro.name/ShaarliOS/v1.1+9b428a65> ;
+    dct:description """- fix a crash (github#5)
+- fix a bug (github#7)
+- enable editing of links via re-sharing (github#4)
+- add a \"Safari\" Button to launch the Shaarli Webinterface
+- update 1Password code
+- add a today widget to quickly add notes
+- various small or internal improvements""" ;
+    doap:created "2016-02-14T23:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2>
+    dct:source <https://mro.name/ShaarliOS/v1.2+d898faa> ;
+    dct:description """Complete rewrite in swift.
+
+The next version may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-03-21T23:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2.1>
+    dct:description """Bugfix: timing issue after share sheet (seen in Firefox).
+
+The next minor version (1.3) may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-03-29T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2.2>
+    dct:description """Bugfix:&nbsp;
+- timing issue after share sheet (seen in Firefox),
+- display port number in settings.
+
+The next minor version (1.3) may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-04-02T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2.3>
+    dct:description """Bugfix:
+- username &amp; password escaping,
+- 'linkform not found' when changing settings with some backend server versions.
+
+The next minor version (1.3) may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-04-04T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2.4>
+    dct:description """Bugfix:
+- 'linkform not found' regression from username &amp; password escaping,
+
+The next minor version (1.3) may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-04-05T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2.5>
+    dct:description """Bugfix:
+- more meaningful error messages,
+- display posting errors until acknowledged,
+- don't send HTTP form field 'save_cancel' on post.
+
+The next minor version (1.3) may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-04-13T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+
+<v1.2.6>
+    dct:source <https://mro.name/ShaarliOS/v1.2.6.13+285c413> ;
+    dct:description """Bugfix:
+- also work with a personal non-HTTPS server when sharing from share sheet.
+
+The next minor version (1.3) may start the transition to using the pinboard.in/api – see details at https://mro.name/ShaarliO/api.""" ;
+    doap:created "2020-04-13T22:00:00.000Z"^^xsd:date ;
+    a doap:Version .
+

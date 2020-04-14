@@ -7,6 +7,15 @@ Share links with ease from every iOS app.
 [![App Store Badge](appstore/Download_on_the_App_Store_Badge_US-UK_135x40.svg)](https://itunes.apple.com/jp/app/ShaarliOS/id1027441388?mt=8)
 [![Build Status](https://travis-ci.org/mro/ShaarliOS.svg?branch=master)](https://travis-ci.org/mro/ShaarliOS)
 
+Please [rate the App](https://apps.apple.com/it/app/shaarlios/id1027441388?mt=8&action=write-review) – whether you like it or not.
+
+## Support
+
+If you encounter a bug, please
+[file an issue](https://github.com/mro/ShaarliOS/issues/new?&body=Thank%20you%20for%20the%20report,%20please%20add%0a%0a-%20screenshot%20showing%20the%20bug,%0a-%20App%20version,%0a-%20Shaarli%20server%20version.)
+or
+[send me an email](mailto:shaarlios-bug@mro.name?subject=[ShaarliOS]%20Bugreport&body=Thank%20you%20for%20the%20report,%20please%20add%0a%0a-%20screenshot%20showing%20the%20bug,%0a-%20App%20version,%0a-%20Shaarli%20server%20version.).
+
 ## Screenshots
 
 ![iPhone 4: Note](appstore/screenshots/en-US/1_iphone35_note.png#x200)
@@ -25,15 +34,8 @@ All
 [all current PHP versions](http://php.net/supported-versions.php), all
 [themes and templates](https://github.com/shaarli/shaarli-themes).
 
-If your version is missing or you found a Shaarli that doesn't work,
-[drop me a line](https://code.mro.name/mro/ShaarliOS/issues).
-
-## Bug Reports
-
-If you encounter a bug, I'd be grateful if you 
-[open an issue here](https://github.com/mro/ShaarliOS/issues/new?title=Bug&body=Thank%20you%20very%20much%20for%20your%20bug%20report.%20I%20am%20very%20sorry%20for%20the%20inconvenience.%0D%0A%0D%0ATo%20be%20able%20to%20quickly%20hunt%20down%20and%20eliminate%20the%20bug,%20please%20include%20some%20additional%20information:%0D%0A%0D%0A-%20can%20you%20attach%20a%20screenshot%20of%20the%20bug%20and%20the%20last%20visible%20screen%20prior%20the%20bug%20(will%20be%20treated%20confidential)?%0D%0A-%20what%20is%20the%20Shaarli%20version%20you%20use%20(preferably%20the%20download%20URL%20you%20got%20it%20from)?%0D%0A-%20which%20template%20are%20you%20using%20(if%20other%20than%20the%20default,%20also%20preferably%20the%20download%20URL)?%0D%0A-%20are%20you%20using%20https,%20if%20so:%20who%20issued%20your%20certificate?%0D%0A-%20can%20you%20attach%20device%20logs%20or%20crash%20reports?%0D%0A%0D%0AThank%20you%20very%20much,%0D%0A%20%20%20%20Marcus%20Rohrmoser)
-or — if not a github user —
-[let me know via email](mailto:shaarlios@mro.name?subject=[ShaarliOS]%20Bugreport&body=Thank%20you%20very%20much%20for%20your%20bug%20report.%20I%20am%20very%20sorry%20for%20the%20inconvenience.%0D%0A%0D%0ATo%20be%20able%20to%20quickly%20hunt%20down%20and%20eliminate%20the%20bug,%20please%20include%20some%20additional%20information:%0D%0A%0D%0A-%20can%20you%20attach%20a%20screenshot%20of%20the%20bug%20and%20the%20last%20visible%20screen%20prior%20the%20bug%20(will%20be%20treated%20confidential)?%0D%0A-%20what%20is%20the%20Shaarli%20version%20you%20use%20(preferably%20the%20download%20URL%20you%20got%20it%20from)?%0D%0A-%20which%20template%20are%20you%20using%20(if%20other%20than%20the%20default,%20also%20preferably%20the%20download%20URL)?%0D%0A-%20are%20you%20using%20https,%20if%20so:%20who%20issued%20your%20certificate?%0D%0A-%20can%20you%20attach%20device%20logs%20or%20crash%20reports?%0D%0A%0D%0AThank%20you%20very%20much,%0D%0A%20%20%20%20Marcus%20Rohrmoser).
+If your version is missing or you found a Shaarli that doesn't work, please file an
+issue.
 
 ## License
 
@@ -69,9 +71,10 @@ Other than that there's no data collection.
 
 | Quality         | very good | good | normal | irrelevant |
 |-----------------|:---------:|:----:|:------:|:----------:|
-| Functionality   |           |  ×   |        |            |
-| Reliability     |           |      |    ×   |            |
+| Functionality   |           |      |    ×   |            |
+| Reliability     |           |  ×   |        |            |
 | Usability       |     ×     |      |        |            |
 | Efficiency      |           |      |    ×   |            |
 | Changeability   |           |  ×   |        |            |
 | Portability     |           |      |        |      ×     |
+

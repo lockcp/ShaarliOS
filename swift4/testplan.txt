@@ -1,0 +1,9 @@
+
+- shaarli v0.41b, 0.10.4, 0.11.1
+- endpoint HTTP + HTTPS
+- endpoint non-default port
+- endpoint without default document (explicit index.php)
+- username with :
+- password with @ and ' '
+- Safari, Firefox
+
