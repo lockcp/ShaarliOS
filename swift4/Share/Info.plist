@@ -40,5 +40,10 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>ShareVC</string>
 	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
