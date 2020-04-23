@@ -21,6 +21,8 @@
 
 import XCTest
 
+private let AGENT = "test"
+
 class ShaarliHtmlClientTest: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -169,7 +171,7 @@ class ShaarliHtmlClientTest: XCTestCase {
 
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
-        let srv = ShaarliHtmlClient()
+        let srv = ShaarliHtmlClient(AGENT)
         srv.probe(demo) { (url, tit, err) in
             XCTAssertEqual("", err)
             // XCTAssertEqual("https://demo.shaarli.org/", url.absoluteString)
@@ -180,7 +182,7 @@ class ShaarliHtmlClientTest: XCTestCase {
             // XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de/shaarligo/shaarligo.cgi", url.absoluteString)
             // XCTAssertEqual("ShaarliGo 🚀", tit)
             exp.fulfill()
-            return true
+            return
         }
         waitForExpectations(timeout: 2, handler: nil)
     }
@@ -200,12 +202,12 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("demo%20-%2F%3A;&%40%22$%23%25", demo.password)
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
-        let srv = ShaarliHtmlClient()
+        let srv = ShaarliHtmlClient(AGENT)
         srv.probe(demo) { (url, tit, err) in
             XCTAssertEqual("", err)
             XCTAssertEqual("https://demo:demo%20-%2F%3A;&%40%22$%23%25@demo.0x4c.de:8443/shaarli-v0.11.1-issue28/", url.absoluteString)
             exp.fulfill()
-            return true
+            return
         }
         waitForExpectations(timeout: 5, handler: nil)
     }
@@ -217,14 +219,14 @@ class ShaarliHtmlClientTest: XCTestCase {
         
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         
-        let srv = ShaarliHtmlClient()
+        let srv = ShaarliHtmlClient(AGENT)
         srv.probe(demo) { (url, pong, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
             XCTAssertEqual("Wrong login/password.", err)
             // XCTAssertEqual(ShaarliHtmlClient.STR_BANNED, err)
             exp.fulfill()
-            return true
+            return
         }
         waitForExpectations(timeout: 2, handler: nil)
     }
@@ -236,13 +238,13 @@ class ShaarliHtmlClientTest: XCTestCase {
         
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         
-        let srv = ShaarliHtmlClient()
+        let srv = ShaarliHtmlClient(AGENT)
         srv.probe(demo) { (url, pong, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
-            XCTAssertEqual("Expected status 200, got 404: 'not found'", err)
+            XCTAssertEqual("Expected response HTTP status '200 Ok' but got '404 not found'", err)
             exp.fulfill()
-            return true
+            return
         }
         waitForExpectations(timeout: 2, handler: nil)
     }
@@ -258,7 +260,7 @@ class ShaarliHtmlClientTest: XCTestCase {
 
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
-        let srv = ShaarliHtmlClient()
+        let srv = ShaarliHtmlClient(AGENT)
         srv.get(end, url) { (_, frm, url, tit, dsc, tgs, pri, err) in
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("The personal, minimalist, super-fast, database free, bookmarking service", tit)
@@ -284,7 +286,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp0 = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         let exp1 = self.expectation(description: "Posting")
 
-        let srv = ShaarliHtmlClient()
+        let srv = ShaarliHtmlClient(AGENT)
         srv.get(end, url) { (ses, ctx, url, tit, dsc, tgs, pri, err0) in
             XCTAssertEqual("", err0)
             XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm#minimalism", url.absoluteString)
