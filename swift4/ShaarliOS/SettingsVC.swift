@@ -22,6 +22,45 @@
 import UIKit
 import WebKit
 
+internal func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> ArraySlice<URL> {
+        var urls = ArraySlice<URL>()
+        guard let base = base?.trimmingCharacters(in:.whitespacesAndNewlines)
+            else { return urls }
+        let base_ = base.hasPrefix(HTTP_HTTPS + "://")
+        ? String(base.dropFirst(HTTP_HTTPS.count+"://".count))
+        : base.hasPrefix(HTTP_HTTP + "://")
+        ? String(base.dropFirst(HTTP_HTTP.count+"://".count))
+        : base.hasPrefix("//")
+        ? String(base.dropFirst("//".count))
+        : base
+
+    guard var ep = URLComponents(string:"//\(base_)")
+        else { return urls }
+    ep.user = uid
+    ep.password = pwd
+
+    ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+    ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
+
+    let php = "/index.php"
+    let pa = ep.path.dropLast(ep.path.hasSuffix(php)
+        ? php.count
+        : ep.path.hasSuffix("/")
+        ? 1
+        : 0)
+
+    ep.path = pa + php
+    ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+    ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
+
+    ep.path = pa + "/shaarli.cgi"
+    ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
+    ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
+
+    return urls
+}
+
+
 class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelegate {
     @IBOutlet private var txtEndpoint       : UITextField!
     @IBOutlet private var swiSecure         : UISwitch!
@@ -191,36 +230,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     }
 
     // MARK: - Controller Logic
-
-    private func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> ArraySlice<URL> {
-        var urls = ArraySlice<URL>()
-        guard let base = base
-            else { return urls }
-        guard var ep = URLComponents(string:"//\(base)")
-            else { return urls }
-        ep.user = uid
-        ep.password = pwd
-
-        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
-        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
-
-        let php = "/index.php"
-        let pa = ep.path.dropLast(ep.path.hasSuffix(php)
-            ? php.count
-            : ep.path.hasSuffix("/")
-            ? 1
-            : 0)
-
-        ep.path = pa + php
-        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
-        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
-
-        ep.path = pa + "/shaarli.cgi"
-        ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
-        ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
-
-        return urls
-    }
 
     private func success(_ ur:URL, _ ti:String) {
         let ad = ShaarliM.shared

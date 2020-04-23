@@ -25,6 +25,7 @@
 		162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 		162BB46422C8013C005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 		1631278B2305F7AF0098B11C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168C71A722AD03EC007DF595 /* Main.storyboard */; };
+		164741522451B8550016EA9A /* SettingsVCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164741512451B8550016EA9A /* SettingsVCTest.swift */; };
 		1688469E237065CF00130588 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1688469C237065CF00130588 /* LaunchScreen.xib */; };
 		168846A22370669300130588 /* Icon-1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 168846A12370669300130588 /* Icon-1024x1024.png */; };
 		168C71A422AD03EC007DF595 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168C71A322AD03EC007DF595 /* AppDelegate.swift */; };
@@ -107,6 +108,7 @@
 		1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParser.swift; sourceTree = "<group>"; };
 		161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParserTest.swift; sourceTree = "<group>"; };
 		162BB46122C7FF28005D5578 /* urlencoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlencoding.swift; sourceTree = "<group>"; };
+		164741512451B8550016EA9A /* SettingsVCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVCTest.swift; sourceTree = "<group>"; };
 		1688469D237065CF00130588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		168846A12370669300130588 /* Icon-1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024x1024.png"; sourceTree = SOURCE_ROOT; };
 		168C71A022AD03EC007DF595 /* ShaarliOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaarliOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -231,8 +233,9 @@
 				1607F42E22AD27CD0036AC44 /* TestCase.swift */,
 				1607F42B22AD21C30036AC44 /* testdata */,
 				168C71B822AD03EE007DF595 /* ShaarliOSTests.swift */,
-				1607F42922AD121E0036AC44 /* ShaarliHtmlClientTest.swift */,
 				161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */,
+				1607F42922AD121E0036AC44 /* ShaarliHtmlClientTest.swift */,
+				164741512451B8550016EA9A /* SettingsVCTest.swift */,
 				168C71BA22AD03EE007DF595 /* Info.plist */,
 			);
 			path = ShaarliOSTests;
@@ -515,6 +518,7 @@
 				1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 				162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */,
 				1622937A240DB3E400B2017F /* KeyValueObserver.m in Sources */,
+				164741522451B8550016EA9A /* SettingsVCTest.swift in Sources */,
 				161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */,
 				168C71B922AD03EE007DF595 /* ShaarliOSTests.swift in Sources */,
 				16B094C624000F3F001B5224 /* ShaarliM.swift in Sources */,
