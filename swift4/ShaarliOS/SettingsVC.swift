@@ -23,16 +23,16 @@ import UIKit
 import WebKit
 
 internal func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> ArraySlice<URL> {
-        var urls = ArraySlice<URL>()
-        guard let base = base?.trimmingCharacters(in:.whitespacesAndNewlines)
-            else { return urls }
-        let base_ = base.hasPrefix(HTTP_HTTPS + "://")
-        ? String(base.dropFirst(HTTP_HTTPS.count+"://".count))
-        : base.hasPrefix(HTTP_HTTP + "://")
-        ? String(base.dropFirst(HTTP_HTTP.count+"://".count))
-        : base.hasPrefix("//")
-        ? String(base.dropFirst("//".count))
-        : base
+    var urls = ArraySlice<URL>()
+    guard let base = base?.trimmingCharacters(in:.whitespacesAndNewlines)
+        else { return urls }
+    let base_ = base.hasPrefix(HTTP_HTTPS + "://")
+    ? String(base.dropFirst(HTTP_HTTPS.count+"://".count))
+    : base.hasPrefix(HTTP_HTTP + "://")
+    ? String(base.dropFirst(HTTP_HTTP.count+"://".count))
+    : base.hasPrefix("//")
+    ? String(base.dropFirst("//".count))
+    : base
 
     guard var ep = URLComponents(string:"//\(base_)")
         else { return urls }
