@@ -87,7 +87,11 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target:self, action:#selector(SettingsVC.actionSignIn(_:)))
 
         view.addSubview(spiLogin)
-        spiLogin.frame = view.bounds
+        spiLogin.backgroundColor = .clear
+        spiLogin.translatesAutoresizingMaskIntoConstraints = false
+        let horizontalConstraint = spiLogin.centerXAnchor.constraint(equalTo: tableView.centerXAnchor)
+        let verticalConstraint = spiLogin.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
+        NSLayoutConstraint.activate([horizontalConstraint, verticalConstraint.withMultiplier(0.5)])
 
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiLogin, attribute:.centerX, multiplier:1.0, constant:0))
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerY, relatedBy:.equal, toItem:spiLogin, attribute:.centerY, multiplier:1.0, constant:0))
@@ -281,5 +285,17 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         wwwAbout.evaluateJavaScript(js) { res,err in print(err as Any) }
         let s = wwwAbout.scrollView.contentSize
         cellAbout.contentView.bounds = CGRect(origin: .zero, size: s)
+    }
+}
+
+extension NSLayoutConstraint {
+    func withMultiplier(_ mu : CGFloat) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item:firstItem!,
+                                  attribute:firstAttribute,
+                                  relatedBy:relation,
+                                  toItem:secondItem,
+                                  attribute:secondAttribute,
+                                  multiplier:mu,
+                                  constant:constant)
     }
 }
