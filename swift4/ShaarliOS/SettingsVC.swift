@@ -69,12 +69,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     @IBOutlet private var lblDefaultPrivate : UILabel!
     @IBOutlet private var swiPrivateDefault : UISwitch!
     @IBOutlet private var lblTitle          : UILabel!
-    @IBOutlet private var swiTags           : UISwitch!
     @IBOutlet private var txtTags           : UITextField!
     @IBOutlet private var spiLogin          : UIActivityIndicatorView!
     @IBOutlet private var cellAbout         : UITableViewCell!
-    // https://github.com/AgileBits/onepassword-app-extension#use-case-1-native-app-login
-    @IBOutlet private var btn1Password      : UIButton!
 
     private let wwwAbout                    = WKWebView()
     var current                             : BlogM?
@@ -107,11 +104,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         wwwAbout.backgroundColor = .black
         wwwAbout.customUserAgent = SHAARLI_COMPANION_APP_URL
         wwwAbout.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
-
-        btn1Password.isEnabled = false // [[OnePasswordExtension sharedExtension] isAppExtensionAvailable];
-        btn1Password.alpha = btn1Password.isEnabled
-            ? 1.0
-            : 0.5
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -174,10 +166,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         togui(b.endpoint)
 
         swiPrivateDefault.isOn  = b.privateDefault
-        swiTags.isOn            = b.tagsActive
-        txtTags.text            = "" == b.tagsDefault
-            ? b.tagsDefault
-            : "\(b.tagsDefault.trimmingCharacters(in:.whitespacesAndNewlines)) "
+        txtTags.text            = b.descPrefix
     }
 
     // MARK: - Navigation
@@ -238,8 +227,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 endpoint:ur,
                 title:ti,
                 privateDefault:swiPrivateDefault.isOn,
-                tagsActive:swiTags.isOn,
-                tagsDefault:txtTags.text ?? ""
+                descPrefix:txtTags.text ?? ""
             ))
             navigationController?.popViewController(animated:true)
         }

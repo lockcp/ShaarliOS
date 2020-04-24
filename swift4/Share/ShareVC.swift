@@ -111,14 +111,7 @@ class ShareVC: SLComposeServiceViewController {
 
         title = current.title
         itemTitle.value = contentText
-        let tagsDefault = current.tagsActive
-            ? current.tagsDefault
-            : ""
-
-        let txt = "" != tagsDefault
-            ? "\(tagsDefault) "
-            : ""
-        textView.text = "\(txt)\(NSLocalizedString("🔄", comment:"ShareVC"))"
+        textView.text = "\(current.descPrefix)\(NSLocalizedString("🔄", comment:"ShareVC"))"
         itemAudience.value = stringFromPrivacy(current.privateDefault)
 
         let tUrl = kUTTypeURL as String
@@ -160,7 +153,7 @@ class ShareVC: SLComposeServiceViewController {
                                         : itemTitle.value
                                     textView.text = "" != r.extended
                                         ? r.extended
-                                        : txt
+                                        : current.descPrefix
                                     itemAudience.value = stringFromPrivacy(pri)
                                 }
                             })

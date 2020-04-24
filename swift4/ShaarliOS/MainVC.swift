@@ -81,9 +81,7 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         btnSafari.isEnabled = btnShaare.isEnabled
         btnAudience.isSelected = b.privateDefault
         txtTitle.text = ""
-        txtDescr.text = b.tagsActive
-            ? "\(b.tagsDefault) "
-            : ""
+        txtDescr.text = b.descPrefix
         // viewShaare.alpha = 1
         txtTitle.becomeFirstResponder()
     }

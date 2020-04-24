@@ -74,8 +74,7 @@ struct ShaarliM {
     private let KEY_userName        = "userName"
     private let KEY_passWord        = "passWord"
     private let KEY_privateDefault  = "privateDefault"
-    private let KEY_tagsActive      = "tagsActive"
-    private let KEY_tagsDefault     = "tagsDefault"
+    private let KEY_descPrefix      = "tagsDefault"
 
     func loadEndpointURL() -> URL? {
         guard let url = string(forKey:KEY_endpointURL)
@@ -98,12 +97,11 @@ struct ShaarliM {
         let title = prefs.string(forKey:KEY_title)
             ?? NSLocalizedString("My Shaarli", comment:String(describing:type(of:self)))
         let pd = prefs.bool(forKey:KEY_privateDefault)
-        let ta = prefs.object(forKey:KEY_tagsActive) != nil
-            ? prefs.bool(forKey:KEY_tagsActive)
-            : true
-        let td = prefs.string(forKey:KEY_tagsDefault)
-            ?? BUNDLE_NAME
-        return BlogM(endpoint:url, title:title, privateDefault:pd, tagsActive:ta, tagsDefault:td)
+        let blank = " "
+        let td = (prefs.string(forKey:KEY_descPrefix) ?? "").trimmingCharacters(in:.whitespacesAndNewlines) + blank
+        return BlogM(endpoint:url, title:title, privateDefault:pd, descPrefix:blank == td
+            ? ""
+            : td)
     }
 
     func saveBlog(_ prefs : UserDefaults, _ blog: BlogM) {
@@ -116,7 +114,7 @@ struct ShaarliM {
         }
         prefs.set(blog.title, forKey:KEY_title)
         prefs.set(blog.privateDefault, forKey:KEY_privateDefault)
-        prefs.set(blog.tagsActive, forKey:KEY_tagsActive)
-        prefs.set(blog.tagsDefault, forKey:KEY_tagsDefault)
+        prefs.set(blog.descPrefix.trimmingCharacters(in:.whitespacesAndNewlines), forKey:KEY_descPrefix)
+        prefs.removeObject(forKey:"tagsActive")
     }
 }

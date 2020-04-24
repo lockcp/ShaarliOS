@@ -27,8 +27,7 @@ struct BlogM {
     let endpoint        : URL
     let title           : String
     let privateDefault  : Bool
-    let tagsActive      : Bool
-    let tagsDefault     : String
+    let descPrefix     : String
 
     var endpointAnon : URL {
         guard var uc = URLComponents(url:endpoint, resolvingAgainstBaseURL:true)
