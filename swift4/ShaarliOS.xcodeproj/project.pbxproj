@@ -21,9 +21,6 @@
 		1607F43822AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
 		161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */; };
 		1622937A240DB3E400B2017F /* KeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 160593372402E0F9001DB69F /* KeyValueObserver.m */; };
-		162BB46222C7FF28005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
-		162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
-		162BB46422C8013C005D5578 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 		1631278B2305F7AF0098B11C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168C71A722AD03EC007DF595 /* Main.storyboard */; };
 		164741522451B8550016EA9A /* SettingsVCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164741512451B8550016EA9A /* SettingsVCTest.swift */; };
 		1688469E237065CF00130588 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1688469C237065CF00130588 /* LaunchScreen.xib */; };
@@ -53,7 +50,6 @@
 		16F5C939240D705B001B75D4 /* ShaarliM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B094C424000F3F001B5224 /* ShaarliM.swift */; };
 		16F5C93A240D7063001B75D4 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
 		16F5C93B240D706A001B75D4 /* ShaarliHtmlClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */; };
-		16F5C93C240D7081001B75D4 /* urlencoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162BB46122C7FF28005D5578 /* urlencoding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,7 +103,6 @@
 		1607F43422AD2C000036AC44 /* Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
 		1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParser.swift; sourceTree = "<group>"; };
 		161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParserTest.swift; sourceTree = "<group>"; };
-		162BB46122C7FF28005D5578 /* urlencoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlencoding.swift; sourceTree = "<group>"; };
 		164741512451B8550016EA9A /* SettingsVCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVCTest.swift; sourceTree = "<group>"; };
 		1688469D237065CF00130588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		168846A12370669300130588 /* Icon-1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024x1024.png"; sourceTree = SOURCE_ROOT; };
@@ -219,7 +214,6 @@
 				1607F43422AD2C000036AC44 /* Bridging.h */,
 				1607F42522AD0D210036AC44 /* ShaarliHtmlClient.swift */,
 				1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */,
-				162BB46122C7FF28005D5578 /* urlencoding.swift */,
 				16B094C424000F3F001B5224 /* ShaarliM.swift */,
 				16B094C824001075001B5224 /* BlogM.swift */,
 				16F5CF3924018B38001B4D7F /* 3rd */,
@@ -498,7 +492,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				16DAA966240036C9009641CC /* SettingsVC.swift in Sources */,
-				162BB46222C7FF28005D5578 /* urlencoding.swift in Sources */,
 				16B094C524000F3F001B5224 /* ShaarliM.swift in Sources */,
 				16D5E293230581E700D62C2E /* MainVC.swift in Sources */,
 				1607F42622AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
@@ -516,7 +509,6 @@
 				1605933D2402E3D7001DB69F /* Disposable.swift in Sources */,
 				1607F42722AD0D210036AC44 /* ShaarliHtmlClient.swift in Sources */,
 				1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
-				162BB46322C7FF28005D5578 /* urlencoding.swift in Sources */,
 				1622937A240DB3E400B2017F /* KeyValueObserver.m in Sources */,
 				164741522451B8550016EA9A /* SettingsVCTest.swift in Sources */,
 				161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */,
@@ -537,7 +529,6 @@
 				16B094C724000F3F001B5224 /* ShaarliM.swift in Sources */,
 				16ECD149240E539B00C66051 /* KeychainPasswordItem.swift in Sources */,
 				16B094CB24001075001B5224 /* BlogM.swift in Sources */,
-				162BB46422C8013C005D5578 /* urlencoding.swift in Sources */,
 				1607F43822AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -552,7 +543,6 @@
 				16F5C939240D705B001B75D4 /* ShaarliM.swift in Sources */,
 				16F5C937240D7002001B75D4 /* KeychainPasswordItem.swift in Sources */,
 				16F5C93A240D7063001B75D4 /* HtmlFormParser.swift in Sources */,
-				16F5C93C240D7081001B75D4 /* urlencoding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

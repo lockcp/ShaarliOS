@@ -53,9 +53,6 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("foo", u2.user)
         XCTAssertEqual("pwd", u2.password)
 
-        let emo = URL(string: percentEncode(in:"päng 🚀")!)!
-        XCTAssertEqual("p%C3%A4ng%20%F0%9F%9A%80", emo.absoluteString)
-
         let url1 = URL(string: "a.b")!
         XCTAssertNil(url1.host)
         XCTAssertNil(url1.scheme)

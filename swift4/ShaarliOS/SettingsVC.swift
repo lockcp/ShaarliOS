@@ -82,7 +82,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = NSLocalizedString("Settings", comment:String(describing:type(of:self)))
+        title = NSLocalizedString("Settings", comment:"SettingsVC")
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target:self, action:#selector(SettingsVC.actionCancel(_:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target:self, action:#selector(SettingsVC.actionSignIn(_:)))
 
@@ -159,7 +159,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     private func togui(_ b : BlogM?) {
         guard let b = b else {
-            lblTitle.text = NSLocalizedString("No Shaarli yet.", comment:String(describing:type(of:self)))
+            lblTitle.text = NSLocalizedString("No Shaarli yet.", comment:"SettingsVC")
             lblTitle.textColor = .red
             return
         }
@@ -192,7 +192,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         print("actionSignIn \(type(of: self))")
 
         spiLogin.startAnimating()
-        lblTitle.text = NSLocalizedString("…", comment:String(describing:type(of:self)))
+        lblTitle.text = NSLocalizedString("… probing server …", comment:"SettingsVC")
         lblTitle.textColor = txtUserName.textColor
 
         let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
@@ -285,17 +285,5 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         wwwAbout.evaluateJavaScript(js) { res,err in print(err as Any) }
         let s = wwwAbout.scrollView.contentSize
         cellAbout.contentView.bounds = CGRect(origin: .zero, size: s)
-    }
-}
-
-extension NSLayoutConstraint {
-    func withMultiplier(_ mu : CGFloat) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item:firstItem!,
-                                  attribute:firstAttribute,
-                                  relatedBy:relation,
-                                  toItem:secondItem,
-                                  attribute:secondAttribute,
-                                  multiplier:mu,
-                                  constant:constant)
     }
 }

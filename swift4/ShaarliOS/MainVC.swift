@@ -34,18 +34,6 @@ private func play_sound_err() {
 // Reading from private effective user settings. https://stackoverflow.com/a/45280879/349514
 class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
-    // visual form center http://stackoverflow.com/a/13148012/349514
-    private func constraintWithMultiplier(_ elf: NSLayoutConstraint!, multiplier: CGFloat) -> NSLayoutConstraint! {
-        return NSLayoutConstraint(
-            item:elf.firstItem!,
-            attribute:elf.firstAttribute,
-            relatedBy:elf.relation,
-            toItem:elf.secondItem,
-            attribute:elf.secondAttribute,
-            multiplier:multiplier,
-            constant:elf.constant)
-    }
-
     @IBOutlet private var lblVersion    : UILabel!
     @IBOutlet private var lblName       : UILabel!
     @IBOutlet private var centerY       : NSLayoutConstraint!
@@ -169,7 +157,7 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         btnSafari.isEnabled = current?.endpoint != nil
         btnAudience.isSelected = current?.privateDefault ?? false
         if nil == current {
-            title = NSLocalizedString("-", comment:String(describing:type(of:self)))
+            title = NSLocalizedString("-", comment:"MainVC")
         }
 
         actionCancel(self)
@@ -187,7 +175,7 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
             // logo to bottom
             self.view.removeConstraint(self.centerY)
-            self.centerY = self.constraintWithMultiplier(self.centerY, multiplier:0.75)!
+            self.centerY = self.centerY.withMultiplier(0.75)
             self.view.addConstraint(self.centerY)
             // self.view.layoutIfNeeded()
             self.viewShaare.alpha = 1
@@ -217,5 +205,19 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         default: return false
         }
         return true
+    }
+}
+
+// visual form center http://stackoverflow.com/a/13148012/349514
+extension NSLayoutConstraint {
+    func withMultiplier(_ mu : CGFloat) -> NSLayoutConstraint {
+        return NSLayoutConstraint(
+            item:firstItem!,
+            attribute:firstAttribute,
+            relatedBy:relation,
+            toItem:secondItem,
+            attribute:secondAttribute,
+            multiplier:mu,
+            constant:constant)
     }
 }
