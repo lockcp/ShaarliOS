@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urls = urlt?[0]["CFBundleURLSchemes"] as? [String]
         assert(SELF_URL_PREFIX == urls?[0], "CFBundleURLTypes"+"/"+"CFBundleURLSchemes")
 
-        UIView.setAnimationsEnabled(false) // nil != launchOptions[UIApplicationLaunchOptionsURLKey]];
+        // UIView.setAnimationsEnabled(false) // nil != launchOptions[UIApplicationLaunchOptionsURLKey]];
 
         return true
     }

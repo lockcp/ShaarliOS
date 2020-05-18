@@ -88,13 +88,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         view.addSubview(spiLogin)
         spiLogin.backgroundColor = .clear
-        spiLogin.translatesAutoresizingMaskIntoConstraints = false
-        let horizontalConstraint = spiLogin.centerXAnchor.constraint(equalTo: tableView.centerXAnchor)
-        let verticalConstraint = spiLogin.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
-        NSLayoutConstraint.activate([horizontalConstraint, verticalConstraint.withMultiplier(0.5)])
-
-        // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiLogin, attribute:.centerX, multiplier:1.0, constant:0))
-        // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerY, relatedBy:.equal, toItem:spiLogin, attribute:.centerY, multiplier:1.0, constant:0))
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
         cellAbout.contentView.addSubview(wwwAbout)
@@ -120,6 +113,11 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        spiLogin.translatesAutoresizingMaskIntoConstraints = false
+        let horizontalConstraint = spiLogin.centerXAnchor.constraint(equalTo: lblTitle.centerXAnchor)
+        let verticalConstraint = spiLogin.centerYAnchor.constraint(equalTo: lblTitle.centerYAnchor)
+        NSLayoutConstraint.activate([horizontalConstraint, verticalConstraint])
 
         guard let url = UIPasteboard.general.url else {
             return
@@ -191,9 +189,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     @IBAction func actionSignIn(_ sender: Any) {
         print("actionSignIn \(type(of: self))")
 
-        spiLogin.startAnimating()
-        lblTitle.text = NSLocalizedString("… probing server …", comment:"SettingsVC")
         lblTitle.textColor = txtUserName.textColor
+        lblTitle.text = NSLocalizedString("… probing server …", comment:"SettingsVC")//
+        spiLogin.startAnimating()
 
         let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
 
@@ -203,13 +201,13 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 return
             }
             cli.probe(cur) { (ur, ti, er) in
+                guard "" != er else {
+                    self.success(ur, ti)
+                    return
+                }
                 let res = urls.dropFirst()
                 guard false == res.isEmpty else {
                     self.failure(er)
-                    return
-                }
-                guard "" != er else {
-                    self.success(ur, ti)
                     return
                 }
                 recurse(res)

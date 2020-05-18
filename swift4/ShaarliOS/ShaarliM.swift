@@ -24,7 +24,7 @@ import UIKit
 
 let BUNDLE_ID = "name.mro.ShaarliOS"
 let BUNDLE_NAME = "#Shaarli💫"
-let SELF_URL_PREFIX = "name-mro-shaarlios"
+let SELF_URL_PREFIX = BUNDLE_ID
 let SHAARLI_COMPANION_APP_URL = "https://mro.name/ShaarliOS"
 
 let green = UIColor.init(hue: 87/360.0, saturation: 0.58, brightness: 0.68, alpha:1)
