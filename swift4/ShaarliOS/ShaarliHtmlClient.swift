@@ -105,12 +105,15 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
         let hashpre = "" == isTag(word:Substring($1))
         ? tpf
         : ""
-        return "\($0) \(hashpre)\($1)"
+        let tg = "\(hashpre)\($1)"
+        return "" == $0
+        ? tg
+        : "\($0) \(tg)"
     }
     func trim(_ s:String) -> String { return s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
     return (
         description:trim(ds),
-        extended:trim("\(ex)\(miss)"),
+        extended:trim("\(ex)\n\(miss)"),
         tags:tags
     )
 }

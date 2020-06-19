@@ -130,7 +130,7 @@ class ShaarliOSTests: XCTestCase {
     func testTagsNormalise() {
         let n0 = tagsNormalise(description:"#A", extended:"#B #C", tags:["a", "c", "D"], known:["c"])
         XCTAssertEqual("#A", n0.description)
-        XCTAssertEqual("#B #C #D", n0.extended)
+        XCTAssertEqual("#B #C\n#D", n0.extended)
         XCTAssertEqual(["B", "D", "a", "c"], n0.tags.sorted())
 
         let n1 = tagsNormalise(description:"", extended:"📱 #Shaarli💫", tags:[], known:[])
