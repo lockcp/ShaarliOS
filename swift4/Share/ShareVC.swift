@@ -226,33 +226,33 @@ class ShareVC: SLComposeServiceViewController {
     }
 
     private func showError(title:String, message:String, showsettings:Bool) {
-        let alert = UIAlertController(
-            title:title,
-            message:message,
-            preferredStyle:.alert
-        )
+        DispatchQueue.main.async {
+            let alert = UIAlertController(
+                title:title,
+                message:message,
+                preferredStyle:.alert
+            )
 
-        alert.addAction(UIAlertAction(
-            title: NSLocalizedString("Cancel", comment:"ShareVC"),
-            style:.cancel,
-            handler:{ (_) in
-                self.cancel()
-        }))
-
-        if showsettings {
             alert.addAction(UIAlertAction(
-                title: NSLocalizedString("Settings", comment:"ShareVC"),
-                style:.default,
+                title: NSLocalizedString("Cancel", comment:"ShareVC"),
+                style:.cancel,
                 handler:{ (_) in
-                    // https://stackoverflow.com/a/44499222/349514
-                    DispatchGroup().notify(queue: DispatchQueue.main) {
-                        let _ = self.openURL(URL(string:"\(SELF_URL_PREFIX):///settings")!)
-                    }
                     self.cancel()
             }))
-        }
 
-        DispatchQueue.main.async {
+            if showsettings {
+                alert.addAction(UIAlertAction(
+                    title: NSLocalizedString("Settings", comment:"ShareVC"),
+                    style:.default,
+                    handler:{ (_) in
+                        // https://stackoverflow.com/a/44499222/349514
+                        DispatchGroup().notify(queue: DispatchQueue.main) {
+                            let _ = self.openURL(URL(string:"\(SELF_URL_PREFIX):///settings")!)
+                        }
+                        self.cancel()
+                }))
+            }
+
             self.present(alert, animated:true, completion:nil)
         }
     }
