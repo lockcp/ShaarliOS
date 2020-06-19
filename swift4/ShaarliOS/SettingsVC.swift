@@ -190,7 +190,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         print("actionSignIn \(type(of: self))")
 
         lblTitle.textColor = txtUserName.textColor
-        lblTitle.text = NSLocalizedString("… probing server …", comment:"SettingsVC")//
+        lblTitle.text = NSLocalizedString("", comment:"SettingsVC")// … probing server …
         spiLogin.startAnimating()
 
         let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
