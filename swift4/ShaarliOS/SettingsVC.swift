@@ -168,7 +168,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         togui(b.endpoint)
 
         swiPrivateDefault.isOn  = b.privateDefault
-        txtTags.text            = b.descPrefix
+        txtTags.text            = b.tagsDefault
     }
 
     // MARK: - Navigation
@@ -229,7 +229,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 endpoint:ur,
                 title:ti,
                 privateDefault:swiPrivateDefault.isOn,
-                descPrefix:txtTags.text ?? ""
+                tagsDefault:txtTags.text ?? ""
             ))
             navigationController?.popViewController(animated:true)
         }

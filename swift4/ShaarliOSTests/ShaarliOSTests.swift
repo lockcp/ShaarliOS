@@ -132,6 +132,16 @@ class ShaarliOSTests: XCTestCase {
         XCTAssertEqual("#A", n0.description)
         XCTAssertEqual("#B #C #D", n0.extended)
         XCTAssertEqual(["B", "D", "a", "c"], n0.tags.sorted())
+
+        let n1 = tagsNormalise(description:"", extended:"📱 #Shaarli💫", tags:[], known:[])
+        XCTAssertEqual("", n1.description)
+        XCTAssertEqual("📱 #Shaarli💫", n1.extended)
+        XCTAssertEqual(["Shaarli💫", "📱"], n1.tags)
+
+        let n2 = tagsNormalise(description:"", extended:"", tags:n1.tags, known:[])
+        XCTAssertEqual("", n2.description)
+        XCTAssertEqual("#Shaarli💫 📱", n2.extended)
+        XCTAssertEqual(["Shaarli💫", "📱"], n2.tags)
     }
 
     func testPerformanceExample() {

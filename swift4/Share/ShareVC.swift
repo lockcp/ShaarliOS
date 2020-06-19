@@ -111,7 +111,8 @@ class ShareVC: SLComposeServiceViewController {
 
         title = current.title
         itemTitle.value = contentText
-        textView.text = "\(current.descPrefix)\(NSLocalizedString("🔄", comment:"ShareVC"))"
+        let preset = tagsNormalise(description:itemTitle.value, extended:current.tagsDefault, tags:[], known:[])
+        textView.text = "\(preset.extended) \(NSLocalizedString("🔄", comment:"ShareVC"))"
         itemAudience.value = stringFromPrivacy(current.privateDefault)
 
         let tUrl = kUTTypeURL as String
@@ -144,16 +145,14 @@ class ShareVC: SLComposeServiceViewController {
                                     return
                                 }
                                 self.session = ses
-                                let r = tagsNormalise(description:tit, extended:dsc, tags:tgs, known:[])
+                                let r = tagsNormalise(description:tit, extended:dsc, tags:tgs.union(preset.tags), known:[])
                                 DispatchQueue.main.async {
                                     ws.ctx = ctx
                                     ws.url = _url
                                     itemTitle.value = "" != r.description
                                         ? r.description
                                         : itemTitle.value
-                                    textView.text = "" != r.extended
-                                        ? r.extended
-                                        : current.descPrefix
+                                    textView.text = r.extended
                                     itemAudience.value = stringFromPrivacy(pri)
                                 }
                             })

@@ -101,11 +101,16 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
     // let kndi = known.reduce(into:[:], foldr) // may be large
     // should we replace values from tags with corresponding from kndi now?
 
-    let miss = tadi.filter{ !txke.contains($0.0) }.values.sorted().reduce("") { "\($0) \(tpf)\($1)" }
+    let miss = tadi.filter{ !txke.contains($0.0) }.values.sorted().reduce("") {
+        let hashpre = "" == isTag(word:Substring($1))
+        ? tpf
+        : ""
+        return "\($0) \(hashpre)\($1)"
+    }
     func trim(_ s:String) -> String { return s.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
     return (
         description:trim(ds),
-        extended:"\(trim(ex))\(miss)",
+        extended:trim("\(ex)\(miss)"),
         tags:tags
     )
 }
