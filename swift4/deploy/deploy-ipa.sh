@@ -2,7 +2,7 @@
 
 host="darknet.mro.name"
 baseurl="https://${host}/dev/"
-basedir="/var/www/lighttpd/${host}/public_html/dev/"
+basedir="/var/www/vhosts/${host}/pages/dev/"
 
 # DO EDIT ABOVE
 # DO NOT EDIT BELOW
