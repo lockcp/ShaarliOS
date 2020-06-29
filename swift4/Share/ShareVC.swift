@@ -199,6 +199,7 @@ class ShareVC: SLComposeServiceViewController {
                     message:err,
                     showsettings:false
                 )
+                usleep(750 * 1000)
                 return
             }
 
