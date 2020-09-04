@@ -135,7 +135,7 @@ class ShareVC: SLComposeServiceViewController {
                             return
                         }
                         guard let err = err else {
-                            cli.get(current.endpoint, _url, { (ses, ctx, _url, tit, dsc, tgs, pri, err) in
+                            cli.get(current.endpoint, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, err) in
                                 guard "" == err else {
                                     ws.showError(
                                         title:NSLocalizedString("Can't reach Shaarli", comment: "ShareVC"),

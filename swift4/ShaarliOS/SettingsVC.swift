@@ -201,12 +201,13 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 return
             }
             cli.probe(cur) { (ur, ti, er) in
-                guard "" != er else {
+                guard !ShaarliHtmlClient.isOk(er) else {
                     self.success(ur, ti)
                     return
                 }
                 let res = urls.dropFirst()
-                guard false == res.isEmpty else {
+                let tryNext = !res.isEmpty // todo: and not banned
+                guard tryNext else {
                     self.failure(er)
                     return
                 }
