@@ -117,7 +117,13 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     private func reportPostingError(_ err:String) {
         spiPost.stopAnimating()
         btnShaare.isEnabled = !spiPost.isAnimating
-        UIAlertView(title:NSLocalizedString("Sorry, couldn't post", comment:"MainVC"), message:err, delegate:nil, cancelButtonTitle:"OK").show()
+        let alert = UIAlertController(
+            title:NSLocalizedString("Sorry, couldn't post", comment:"MainVC"),
+            message:err,
+            preferredStyle:.alert
+        )
+        alert.addAction(UIAlertAction(title:NSLocalizedString("OK", comment:"MainVC"), style:.cancel, handler:nil))
+        present(alert, animated:true, completion:nil)
     }
 
     @IBAction func actionSafari(_ sender: Any) {
