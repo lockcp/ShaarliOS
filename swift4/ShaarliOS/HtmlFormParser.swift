@@ -23,6 +23,7 @@ import Foundation
 
 // form fields only, should also keep the form action and method.
 typealias HtmlFormDict = [String:String]
+// lut form names -> form fields
 typealias HtmlFormDictDict = [String:HtmlFormDict]
 
 // internal helper uses libxml2 graceful html parsing.
@@ -68,6 +69,7 @@ private class HtmlFormParser {
     private var textName = ""
     private var text = ""
 
+    // returns all input fields per form but ignores attributes as method and action.
     func parse(data:Data?, encoding:String?) -> HtmlFormDictDict {
         guard let data = data else { return [:] }
         var sax = htmlSAXHandler()

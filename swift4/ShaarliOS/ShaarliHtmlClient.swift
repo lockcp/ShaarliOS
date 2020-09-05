@@ -246,7 +246,7 @@ class ShaarliHtmlClient {
     // prepare the login and be ready for payload - both retrieval and publication.
     // todo https://youtu.be/vDe-4o8Uwl8?t=3090
     internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
-        _ lurl: URL,
+        _ action: URL,
         _ lifo: HtmlFormDict,
         _ error: String) -> ()
     ) {
@@ -255,12 +255,13 @@ class ShaarliHtmlClient {
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
 
-            func do_finish(_ act:URL?, _ lifo:HtmlFormDict) {
+            func do_finish(_ lifobase:URL?, _ lifo:HtmlFormDict) {
                 guard nil != lifo[LF_URL] else {
                     callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LF_URL))
                     return
                 }
-                callback(act ?? URLEmpty, lifo, "")
+                // assume link form action == link form html base url
+                callback(lifobase ?? URLEmpty, lifo, "")
             }
 
             let d = check(data, response, erro)
@@ -368,7 +369,7 @@ class ShaarliHtmlClient {
 
     func get(_ endpoint: URL, _ url: URL, _ completion: @escaping (
         _ ses: URLSession,
-        _ act:URL,
+        _ action:URL,
         _ ctx: HtmlFormDict,
         _ url:URL,
         _ description: String,
@@ -379,11 +380,11 @@ class ShaarliHtmlClient {
     ) {
         let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
 
-        loginAndGet(ses, endpoint, url) { act, lifo, err in
+        loginAndGet(ses, endpoint, url) { action, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
             completion(
                 ses,
-                act,
+                action,
                 lifo,
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",

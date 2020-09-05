@@ -48,11 +48,12 @@ class ShareVC: SLComposeServiceViewController {
 
     private let semver          =  info_to_semver(Bundle.main.infoDictionary)
 
-    private var current         : BlogM?
+    private var current         : BlogM? // may become local if not for missing cfg error
     private var wasTouched      = false
     private var itemTitle       : SLComposeSheetConfigurationItem?
     private var itemAudience    : SLComposeSheetConfigurationItem?
     private var session         : URLSession?
+    private var action          : URL = URLEmpty
     private var ctx             : HtmlFormDict = [:]
     private var url             : URL = URLEmpty
 
@@ -127,6 +128,7 @@ class ShareVC: SLComposeServiceViewController {
                     ip.loadItem(forTypeIdentifier:tUrl, options:nil) { (_url, err) in
                         guard let ws = ws else {return}
                         guard let _url = _url as? URL else {
+                            play_sound_err()
                             ws.showError(
                                 title:NSLocalizedString("URL Share Sheet failed", comment: "ShareVC"),
                                 message:NSLocalizedString("I got no url to share.", comment: "ShareVC"),
@@ -137,6 +139,7 @@ class ShareVC: SLComposeServiceViewController {
                         guard let err = err else {
                             cli.get(current.endpoint, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, err) in
                                 guard "" == err else {
+                                    play_sound_err()
                                     ws.showError(
                                         title:NSLocalizedString("Can't reach Shaarli", comment: "ShareVC"),
                                         message:err,
@@ -144,9 +147,19 @@ class ShareVC: SLComposeServiceViewController {
                                     )
                                     return
                                 }
+                                guard URLEmpty != act else {
+                                    play_sound_err()
+                                    ws.showError(
+                                        title:NSLocalizedString("Can't post to Shaarli", comment: "ShareVC"),
+                                        message:NSLocalizedString("the Shaarli responded an empty linkform action, I don't know where to post to.", comment: "ShareVC"),
+                                        showsettings:true
+                                    )
+                                    return
+                                }
                                 self.session = ses
                                 let r = tagsNormalise(description:tit, extended:dsc, tags:tgs.union(preset.tags), known:[])
                                 DispatchQueue.main.async {
+                                    ws.action = act
                                     ws.ctx = ctx
                                     ws.url = _url
                                     itemTitle.value = "" != r.description
@@ -185,13 +198,12 @@ class ShareVC: SLComposeServiceViewController {
 
     override func didSelectPost() {
         debugPrint("didSelectPost")
-        guard let current = current else {return}
         let c = ShaarliHtmlClient(semver)
         guard let tit = itemTitle?.value else {return}
         guard let dsc = textView.text else {return}
         let pri = privacyFromString((itemAudience?.value)!)
         let r = tagsNormalise(description:tit, extended:dsc, tags:[], known:[])
-        c.add(session!, current.endpoint, ctx, url, r.description, r.extended, r.tags, pri) { err in
+        c.add(session!, action, ctx, url, r.description, r.extended, r.tags, pri) { err in
             guard "" == err else {
                 play_sound_err()
                 self.showError(
