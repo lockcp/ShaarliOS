@@ -53,10 +53,6 @@ internal func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> A
     ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
     ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
 
-    ep.path = pa + "/shaarli.cgi"
-    ep.scheme = HTTP_HTTPS; urls.append(ep.url!)
-    ep.scheme = HTTP_HTTP;  urls.append(ep.url!)
-
     return urls
 }
 

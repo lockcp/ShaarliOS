@@ -424,7 +424,7 @@ class ShaarliHtmlClient {
         let foda = formData(lifo)
         debugPrint("-> \(req.httpMethod ?? "?") \(req.url ?? URLEmpty) data:\(String(data:foda, encoding:.utf8) ?? "-")")
         let tsk = ses.uploadTask(with: req, from: foda) { data, response, err in
-            debugPrint("<- \(HTTP_POST) \(response?.url ?? URLEmpty) data:\(data == nil ? "-" : String(data:data!, encoding:.utf8)))")
+            debugPrint("<- \(HTTP_POST) \(response?.url ?? URLEmpty) data:\(data == nil ? "-" : String(data:data!, encoding:.utf8) ?? ""))")
             let res = check(data, response, err)
             completion(res.1)
         }
