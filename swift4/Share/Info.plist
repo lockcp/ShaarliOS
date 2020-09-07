@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.2.9</string>
 	<key>CFBundleVersion</key>
-	<string>17</string>
+	<string>18</string>
 	<key>CFBundleVersionGitSHA</key>
 	<string>bbeef</string>
 	<key>NSAppTransportSecurity</key>

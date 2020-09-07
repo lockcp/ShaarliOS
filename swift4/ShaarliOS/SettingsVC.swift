@@ -59,6 +59,8 @@ internal func endpoints(_ base : String?, _ uid : String?, _ pwd : String?) -> A
 
 class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelegate {
     @IBOutlet private var txtEndpoint       : UITextField!
+    @IBOutlet private var sldTimeout        : UISlider!
+    @IBOutlet private var txtTimeout        : UITextField!
     @IBOutlet private var swiSecure         : UISwitch!
     @IBOutlet private var txtUserName       : UITextField!
     @IBOutlet private var txtPassWord       : UITextField!
@@ -84,6 +86,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         view.addSubview(spiLogin)
         spiLogin.backgroundColor = .clear
+        sldTimeout.value = Float(timeoutDefaultValue)
+        sldTimeout.minimumValue = Float(timeoutMinimumValue)
+        sldTimeout.maximumValue = Float(timeoutMaximumValue)
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
         cellAbout.contentView.addSubview(wwwAbout)
@@ -163,6 +168,8 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         togui(b.endpoint)
 
+        sldTimeout.value        = Float(b.timeout)
+        sldTimeoutChanged(self)
         swiPrivateDefault.isOn  = b.privateDefault
         txtTags.text            = b.tagsDefault
     }
@@ -190,15 +197,16 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         spiLogin.startAnimating()
 
         let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
+        let tim = TimeInterval(sldTimeout.value)
 
         func recurse(_ urls:ArraySlice<URL>) {
             guard let cur = urls.first else {
                 self.failure("Oops, something went utterly wrong.")
                 return
             }
-            cli.probe(cur) { (ur, ti, er) in
+            cli.probe(cur, tim) { (ur, ti, er) in
                 guard !ShaarliHtmlClient.isOk(er) else {
-                    self.success(ur, ti)
+                    self.success(ur, ti, tim)
                     return
                 }
                 let res = urls.dropFirst()
@@ -219,12 +227,13 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     // MARK: - Controller Logic
 
-    private func success(_ ur:URL, _ ti:String) {
+    private func success(_ ur:URL, _ ti:String, _ tim:TimeInterval) {
         let ad = ShaarliM.shared
         DispatchQueue.main.sync {
             ad.saveBlog(ad.defaults, BlogM(
                 endpoint:ur,
                 title:ti,
+                timeout:tim,
                 privateDefault:swiPrivateDefault.isOn,
                 tagsDefault:txtTags.text ?? ""
             ))
@@ -241,18 +250,40 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         }
     }
 
+    // MARK: - UISliderDelegate
+
+    @IBAction func sldTimeoutChanged(_ sender: Any) {
+        txtTimeout.text = String(format:"%.1f", sldTimeout.value)
+    }
+
     // MARK: - UITextFieldDelegate
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("textFieldShouldReturn \(type(of: self))")
         switch textField {
-        case txtEndpoint: txtUserName.becomeFirstResponder()
+        case txtEndpoint,
+             txtTimeout:  txtUserName.becomeFirstResponder()
         case txtUserName: txtPassWord.becomeFirstResponder()
         case txtPassWord: txtTags.becomeFirstResponder()
         case txtTags: actionSignIn(textField) // keyboard doesn't show 'Done', but just in case... dispatch async?
         default: return false
         }
         return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("textFieldShouldReturn \(type(of: self))")
+        switch textField {
+        case txtTimeout:
+                        guard let va = Float(txtTimeout.text ?? "") else {
+                            sldTimeout.value = Float(timeoutDefaultValue)
+                            sldTimeoutChanged(self)
+                            return
+                        }
+                        sldTimeout.value = Float(timeoutFromDouble(Double(va)))
+                        sldTimeoutChanged(self)
+        default: break
+        }
     }
 
     // MARK: - WKWebViewDelegate

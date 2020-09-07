@@ -26,6 +26,7 @@ import Foundation
 struct BlogM {
     let endpoint        : URL
     let title           : String
+    let timeout         : TimeInterval
     let privateDefault  : Bool
     let tagsDefault     : String
 
@@ -36,4 +37,18 @@ struct BlogM {
         uc.user = nil
         return uc.url ?? URLEmpty
     }
+}
+
+internal let timeoutMinimumValue : TimeInterval = 0.2
+internal let timeoutMaximumValue : TimeInterval = 15.0
+internal let timeoutDefaultValue : TimeInterval = 4.0
+
+internal func timeoutFromDouble(_ raw : Double) -> TimeInterval {
+    raw <= 0.0
+        ? timeoutDefaultValue
+        : raw <= timeoutMinimumValue
+        ? timeoutMinimumValue
+        : raw >= timeoutMaximumValue
+        ? timeoutMaximumValue
+        : raw
 }

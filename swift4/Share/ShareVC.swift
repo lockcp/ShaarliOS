@@ -137,7 +137,7 @@ class ShareVC: SLComposeServiceViewController {
                             return
                         }
                         guard let err = err else {
-                            cli.get(current.endpoint, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, err) in
+                            cli.get(current.endpoint, current.timeout, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, err) in
                                 guard "" == err else {
                                     play_sound_err()
                                     ws.showError(

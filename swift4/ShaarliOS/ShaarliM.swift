@@ -73,6 +73,7 @@ struct ShaarliM {
     private let KEY_endpointURL     = "endpointURL"
     private let KEY_userName        = "userName"
     private let KEY_passWord        = "passWord"
+    private let KEY_timeout         = "timeout"
     private let KEY_privateDefault  = "privateDefault"
     private let KEY_tagsDefault     = "tagsDefault"
 
@@ -96,10 +97,11 @@ struct ShaarliM {
         guard let url = loadEndpointURL() else { return nil }
         let title = prefs.string(forKey:KEY_title)
             ?? NSLocalizedString("My Shaarli", comment:String(describing:type(of:self)))
+        let to = timeoutFromDouble(prefs.double(forKey:KEY_timeout))
         let pd = prefs.bool(forKey:KEY_privateDefault)
         let blank = " "
         let td = (prefs.string(forKey:KEY_tagsDefault) ?? "").trimmingCharacters(in:.whitespacesAndNewlines) + blank
-        return BlogM(endpoint:url, title:title, privateDefault:pd, tagsDefault:blank == td
+        return BlogM(endpoint:url, title:title, timeout:to, privateDefault:pd, tagsDefault:blank == td
             ? ""
             : td)
     }
@@ -113,6 +115,7 @@ struct ShaarliM {
           set(uc.password!, forKey:KEY_passWord)
         }
         prefs.set(blog.title, forKey:KEY_title)
+        prefs.set(blog.timeout, forKey:KEY_timeout)
         prefs.set(blog.privateDefault, forKey:KEY_privateDefault)
         prefs.set(blog.tagsDefault.trimmingCharacters(in:.whitespacesAndNewlines), forKey:KEY_tagsDefault)
         prefs.removeObject(forKey:"tagsActive")

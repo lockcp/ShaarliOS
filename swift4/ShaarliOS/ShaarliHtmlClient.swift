@@ -318,14 +318,14 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
-    private func cfg(_ cfg:URLSessionConfiguration) -> URLSessionConfiguration {
+    private func cfg(_ cfg:URLSessionConfiguration, _ to: TimeInterval) -> URLSessionConfiguration {
         cfg.allowsCellularAccess = true
         cfg.httpAdditionalHeaders = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
         cfg.httpShouldUsePipelining = true
-        cfg.timeoutIntervalForRequest = 4.0
-        cfg.timeoutIntervalForResource = 4.0
+        cfg.timeoutIntervalForRequest = to
+        cfg.timeoutIntervalForResource = to
         // cfg.waitsForConnectivity = true
         cfg.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return cfg
@@ -334,13 +334,13 @@ class ShaarliHtmlClient {
     // We need the name of the server. Reliably. So we have to look at ?do=configure.
     // That's where it's in a HTML form.
     // so we pretend to ?post= in order to get past the login and then ?do=configure.
-    func probe(_ endpoint: URL, _ completion: @escaping (
+    func probe(_ endpoint: URL, _ to: TimeInterval, _ completion: @escaping (
         _ url:URL,
         _ title:String,
         _ error:String) -> Void
     ) {
         debugPrint("probe \(endpoint)")
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, to))
 
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             let base = endpoint
@@ -367,7 +367,7 @@ class ShaarliHtmlClient {
         }
     }
 
-    func get(_ endpoint: URL, _ url: URL, _ completion: @escaping (
+    func get(_ endpoint: URL, _ to: TimeInterval, _ url: URL, _ completion: @escaping (
         _ ses: URLSession,
         _ action:URL,
         _ ctx: HtmlFormDict,
@@ -378,7 +378,7 @@ class ShaarliHtmlClient {
         _ privat: Bool,
         _ error: String)->()
     ) {
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral))
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, to))
 
         loginAndGet(ses, endpoint, url) { action, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
