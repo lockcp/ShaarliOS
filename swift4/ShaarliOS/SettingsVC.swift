@@ -86,9 +86,10 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         view.addSubview(spiLogin)
         spiLogin.backgroundColor = .clear
-        sldTimeout.value = Float(timeoutDefaultValue)
+        txtTimeout.placeholder = NSLocalizedString("sec", comment:"SettingsVC")
         sldTimeout.minimumValue = Float(timeoutMinimumValue)
         sldTimeout.maximumValue = Float(timeoutMaximumValue)
+        sldTimeout.value = Float(timeoutDefaultValue)
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
         cellAbout.contentView.addSubview(wwwAbout)
@@ -183,6 +184,10 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     // MARK: - Actions
 
+    @IBAction func sldTimeoutChanged(_ sender: Any) {
+        txtTimeout.text = String(format:"%.1f", sldTimeout.value)
+    }
+
     @IBAction func actionCancel(_ sender: Any) {
         print("actionCancel \(type(of: self))")
         guard let navigationController = navigationController else { return }
@@ -248,12 +253,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
             self.lblTitle.textColor = .red
             self.lblTitle.text = er
         }
-    }
-
-    // MARK: - UISliderDelegate
-
-    @IBAction func sldTimeoutChanged(_ sender: Any) {
-        txtTimeout.text = String(format:"%.1f", sldTimeout.value)
     }
 
     // MARK: - UITextFieldDelegate
