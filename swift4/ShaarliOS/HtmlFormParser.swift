@@ -43,23 +43,8 @@ internal func atts2dict(_ atts: (Int) -> String?) -> HtmlFormDict {
     return ret
 }
 
-// https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L33
-private func decode(_ bytes:UnsafePointer<xmlChar>?) -> String? {
-    guard let bytes = bytes else { return nil }
-    guard let (str, _) = String.decodeCString(bytes, as:UTF8.self, repairingInvalidCodeUnits:false) else { return nil }
-    return str
-}
-
 private func me(_ ptr : UnsafeRawPointer?) -> HtmlFormParser {
     return Unmanaged<HtmlFormParser>.fromOpaque(ptr!).takeUnretainedValue()
-}
-
-private func xml(encoding:String?) -> xmlCharEncoding {
-    switch encoding {
-    case "utf-8":   return XML_CHAR_ENCODING_UTF8
-    default:        print(encoding as Any)
-                    return XML_CHAR_ENCODING_ERROR
-    }
 }
 
 private class HtmlFormParser {
@@ -68,8 +53,11 @@ private class HtmlFormParser {
     private var formName = ""
     private var textName = ""
     private var text = ""
+    private let enc0 = String.Encoding.utf8
+    private let enc1 = UTF8.self
 
     // returns all input fields per form but ignores attributes as method and action.
+    // encoding must be utf-8, all others produce just errors.
     func parse(data:Data?, encoding:String?) -> HtmlFormDictDict {
         guard let data = data else { return [:] }
         var sax = htmlSAXHandler()
@@ -90,6 +78,21 @@ private class HtmlFormParser {
         htmlParseChunk(ctxt, "", 0, 1)
 
         return forms
+    }
+
+    private func xml(encoding:String?) -> xmlCharEncoding {
+        switch encoding {
+        case "utf-8":   return XML_CHAR_ENCODING_UTF8
+        default:        print(encoding as Any)
+                        return XML_CHAR_ENCODING_ERROR
+        }
+    }
+
+    // https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/XMLParser.swift#L33
+    private func decode(_ bytes:UnsafePointer<xmlChar>?) -> String? {
+        guard let bytes = bytes else { return nil }
+        guard let (str, _) = String.decodeCString(bytes, as:enc1, repairingInvalidCodeUnits:false) else { return nil }
+        return str
     }
 
     private func startElement(name: UnsafePointer<xmlChar>? , atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
@@ -142,7 +145,7 @@ private class HtmlFormParser {
             return
         }
         let d = Data(bytes: ch!, count:Int(len)) // clamp
-        let s = String(data: d, encoding: .utf8) ?? "<utf8 decoding issue>"
+        let s = String(data: d, encoding:enc0) ?? "<\(enc0) decoding issue>"
         text.append(s)
     }
 }

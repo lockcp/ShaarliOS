@@ -30,17 +30,24 @@ class HtmlFormParserTest: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testEncodings() {
+        XCTAssertEqual("<Unicode (UTF-8)>", "<\(String.Encoding.utf8)>")
+        XCTAssertEqual("<UTF8>", "<\(UTF8.self)>")
+        // You can convert this string to a CFStringEncoding value by calling CFStringConvertIANACharSetNameToEncoding(_:).
+        // You can subsequently convert that value to an NSStringEncoding value by calling CFStringConvertEncodingToNSStringEncoding(_:).
+    }
+
     func testAtt2dict() {
-        var ar0:[String?] = [nil]
+        let ar0:[String?] = [nil]
         let di0 = atts2dict({ ar0[$0] })
         XCTAssertEqual([:], di0)
 
-        var ar1 = ["name", "lf_tags", "value", "opensource software", "foo", nil, nil]
+        let ar1 = ["name", "lf_tags", "value", "opensource software", "foo", nil, nil]
         let di1 = atts2dict({ ar1[$0] })
         XCTAssertEqual("lf_tags", di1["name"])
         XCTAssertEqual("opensource software", di1["value"])
         
-        var ar2 = ["type", "checkbox", "name", "Kenntnisse_in", "checked", nil, "value", "HTML", nil]
+        let ar2 = ["type", "checkbox", "name", "Kenntnisse_in", "checked", nil, "value", "HTML", nil]
         let di2 = atts2dict({ ar2[$0] })
         XCTAssertEqual("Kenntnisse_in", di2["name"])
         XCTAssertEqual("HTML", di2["value"])
