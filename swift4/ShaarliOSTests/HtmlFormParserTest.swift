@@ -105,6 +105,17 @@ class HtmlFormParserTest: XCTestCase {
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["configform"]!
+        XCTAssertEqual(4, frm.count)
+        XCTAssertEqual("Uhu", frm["title"], "title")
+        XCTAssertEqual(nil, frm["continent"], "continent")
+        XCTAssertEqual(nil, frm["city"], "city")
+    }
+
+    func testConfigForm1() {
+        let raw = dataWithContentsOfFixture(me:self, fileName: "configform.1", extensio:"html")
+        let frms = findHtmlForms(raw, "utf-8")
+        XCTAssertEqual(1, frms.count)
+        let frm = frms["configform"]!
         XCTAssertEqual(3, frm.count)
         XCTAssertEqual("🚀 Uhu", frm["title"], "title")
         XCTAssertEqual(nil, frm["continent"], "continent")
