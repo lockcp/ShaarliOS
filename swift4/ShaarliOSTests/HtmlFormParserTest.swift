@@ -93,12 +93,51 @@ class HtmlFormParserTest: XCTestCase {
         XCTAssertEqual("opensource software", frm["lf_tags"], "lf_tags")
     }
 
-    func testCinfigForm0() {
+    func testConfigForm0() {
         let raw = dataWithContentsOfFixture(me:self, fileName: "configform.0", extensio:"html")
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["configform"]!
         XCTAssertEqual(3, frm.count)
         XCTAssertEqual("🚀 Uhu", frm["title"], "title")
+        XCTAssertEqual(nil, frm["continent"], "continent")
+        XCTAssertEqual(nil, frm["city"], "city")
+    }
+
+    func testAlgebraicSumType() {
+        // https://www.metaltoad.com/blog/sum-algebraic-data-types-haskell-and-swift
+        // For simplicity sake dictionaries are good enough. Instead https://developer.apple.com/documentation/swift/keyvaluepairs
+        enum FieldValue : Equatable {
+            case text(String)
+            case onoff(Bool)
+            case option([String:Bool])
+        }
+        typealias FieldName = String
+        typealias Frm = [FieldName:FieldValue]
+
+        let f : Frm = [
+            "foo":FieldValue.text("Foo"),
+            "bar":FieldValue.onoff(false),
+            "baz":FieldValue.option(["Europe":true, "Africa":false]),
+        ]
+        XCTAssertEqual(3, f.count, "count")
+        XCTAssertEqual(FieldValue.text("Foo"), f["foo"], "text")
+        XCTAssertEqual(FieldValue.onoff(false), f["bar"], "bool")
+
+        switch f["foo"]! {
+        case .text(let x): XCTAssertEqual("Foo", x)
+        default: XCTFail()
+        }
+        switch f["bar"]! {
+        case .onoff(let x): XCTAssertEqual(false, x)
+        default: XCTFail()
+        }
+        switch f["baz"]! {
+        case .option(let x):
+            XCTAssertEqual(2, x.count)
+            XCTAssertEqual(true, x["Europe"])
+            XCTAssertEqual(false, x["Africa"])
+        default: XCTFail()
+        }
     }
 }
