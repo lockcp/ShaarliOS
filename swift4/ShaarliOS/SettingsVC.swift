@@ -206,9 +206,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 self.failure("Oops, something went utterly wrong.")
                 return
             }
-            cli.probe(cur, tim) { (ur, ti, pride, er) in
+            cli.probe(cur, tim) { (ur, ti, pride, tizo, er) in
                 guard !ShaarliHtmlClient.isOk(er) else {
-                    self.success(ur, ti, pride, tim)
+                    self.success(ur, ti, pride, tizo, tim)
                     return
                 }
                 let res = urls.dropFirst()
@@ -229,7 +229,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     // MARK: - Controller Logic
 
-    private func success(_ ur:URL, _ ti:String, _ pride:Bool, _ tim:TimeInterval) {
+    private func success(_ ur:URL, _ ti:String, _ pride:Bool, _ tizo:TimeZone?, _ tim:TimeInterval) {
         let ad = ShaarliM.shared
         DispatchQueue.main.sync {
             ad.saveBlog(ad.defaults, BlogM(
@@ -237,6 +237,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 title:ti,
                 timeout:tim,
                 privateDefault:pride,
+                timezone:tizo,
                 tagsDefault:txtTags.text ?? ""
             ))
             navigationController?.popViewController(animated:true)

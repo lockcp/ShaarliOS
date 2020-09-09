@@ -155,6 +155,8 @@ private let KEY_FORM_TITLE = "title"
 
 private let CFG_FORM = "configform"
 private let KEY_FORM_PRIDE = "privateLinkByDefault"
+private let KEY_FORM_CONT = "continent"
+private let KEY_FORM_CITY = "city"
 
 // Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
 // https://stackoverflow.com/a/50116064
@@ -339,6 +341,7 @@ class ShaarliHtmlClient {
         _ url:URL,
         _ title:String,
         _ pride:Bool,
+        _ tizo:TimeZone?,
         _ error:String) -> Void
     ) {
         debugPrint("probe \(endpoint)")
@@ -347,7 +350,7 @@ class ShaarliHtmlClient {
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             let base = endpoint
             guard ShaarliHtmlClient.isOk(err) else {
-                completion(URLEmpty, "", false, err)
+                completion(URLEmpty, "", false, nil, err)
                 return
             }
             // do not call back yet, but rather call ?do=configure and report the title.
@@ -356,14 +359,15 @@ class ShaarliHtmlClient {
             let tsk = ses.dataTask(with: req) { data, response, err in
                 let res = check(data, response, err)
                 guard "" == res.1 else {
-                    completion(URLEmpty, "", false, res.1)
+                    completion(URLEmpty, "", false, nil, res.1)
                     return
                 }
                 guard let cffo = res.0[CFG_FORM] else {
-                    completion(URLEmpty, "", false, String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), CFG_FORM))
+                    completion(URLEmpty, "", false, nil, String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), CFG_FORM))
                     return
                 }
-                completion(base, cffo[KEY_FORM_TITLE] ?? "", cffo[KEY_FORM_PRIDE] != nil, "")
+                let tizo = TimeZone(identifier:"\(cffo[KEY_FORM_CONT] ?? "")/\(cffo[KEY_FORM_CITY] ?? "")")
+                completion(base, cffo[KEY_FORM_TITLE] ?? "", cffo[KEY_FORM_PRIDE] != nil, tizo, "")
             }
             tsk.resume()
         }

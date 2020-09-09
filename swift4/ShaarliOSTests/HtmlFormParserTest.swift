@@ -111,6 +111,10 @@ class HtmlFormParserTest: XCTestCase {
         XCTAssertEqual("checked", frm["privateLinkByDefault"], "privateLinkByDefault")
         XCTAssertEqual("Europe", frm["continent"], "continent")
         XCTAssertEqual("Amsterdam", frm["city"], "city")
+
+        let tz = TimeZone(identifier: "Europe/Amsterdam")
+        XCTAssertEqual("GMT+2", tz?.abbreviation())
+        XCTAssertEqual("Europe/Amsterdam", tz?.identifier)
     }
 
     func testConfigForm1() {

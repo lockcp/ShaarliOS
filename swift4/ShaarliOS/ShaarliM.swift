@@ -75,6 +75,7 @@ struct ShaarliM {
     private let KEY_passWord        = "passWord"
     private let KEY_timeout         = "timeout"
     private let KEY_privateDefault  = "privateDefault"
+    private let KEY_timezone        = "timezone"
     private let KEY_tagsDefault     = "tagsDefault"
 
     func loadEndpointURL() -> URL? {
@@ -99,9 +100,10 @@ struct ShaarliM {
             ?? NSLocalizedString("My Shaarli", comment:String(describing:type(of:self)))
         let to = timeoutFromDouble(prefs.double(forKey:KEY_timeout))
         let pd = prefs.bool(forKey:KEY_privateDefault)
+        let tizo = TimeZone(identifier:prefs.string(forKey:KEY_timezone) ?? "")
         let blank = " "
         let td = (prefs.string(forKey:KEY_tagsDefault) ?? "").trimmingCharacters(in:.whitespacesAndNewlines) + blank
-        return BlogM(endpoint:url, title:title, timeout:to, privateDefault:pd, tagsDefault:blank == td
+        return BlogM(endpoint:url, title:title, timeout:to, privateDefault:pd, timezone:tizo, tagsDefault:blank == td
             ? ""
             : td)
     }
@@ -117,6 +119,7 @@ struct ShaarliM {
         prefs.set(blog.title, forKey:KEY_title)
         prefs.set(blog.timeout, forKey:KEY_timeout)
         prefs.set(blog.privateDefault, forKey:KEY_privateDefault)
+        prefs.set(blog.timezone?.identifier, forKey:KEY_timezone)
         prefs.set(blog.tagsDefault.trimmingCharacters(in:.whitespacesAndNewlines), forKey:KEY_tagsDefault)
         prefs.removeObject(forKey:"tagsActive")
     }

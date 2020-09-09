@@ -28,6 +28,7 @@ struct BlogM {
     let title           : String
     let timeout         : TimeInterval
     let privateDefault  : Bool
+    let timezone        : TimeZone?
     let tagsDefault     : String
 
     var endpointAnon : URL {
