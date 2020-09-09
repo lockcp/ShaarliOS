@@ -48,14 +48,12 @@ class SettingsVCTest: XCTestCase {
             "demo.0x4c.de/shaarli-v0.41b",
             ] {
                 let ep = endpoints(txt, "demo", "demodemodemo")
-                XCTAssertEqual(6, ep.count)
+                XCTAssertEqual(4, ep.count)
                 XCTAssertEqual([
                     "https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b",
                     "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b",
                     "https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/index.php",
-                    "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/index.php",
-                    "https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/shaarli.cgi",
-                    "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/shaarli.cgi"
+                    "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/index.php"
                     ], ep.map({ $0.absoluteString }))
         }
         for txt in [
@@ -66,14 +64,12 @@ class SettingsVCTest: XCTestCase {
             "demo.0x4c.de/shaarli-v0.41b/",
             ] {
                 let ep = endpoints(txt, "demo", "demodemodemo")
-                XCTAssertEqual(6, ep.count)
+                XCTAssertEqual(4, ep.count)
                 XCTAssertEqual([
                     "https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/",
                     "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/",
                     "https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/index.php",
-                    "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/index.php",
-                    "https://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/shaarli.cgi",
-                    "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/shaarli.cgi"
+                    "http://demo:demodemodemo@demo.0x4c.de/shaarli-v0.41b/index.php"
                     ], ep.map({ $0.absoluteString }))
         }
     }

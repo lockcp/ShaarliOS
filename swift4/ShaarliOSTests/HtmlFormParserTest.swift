@@ -105,8 +105,10 @@ class HtmlFormParserTest: XCTestCase {
         let frms = findHtmlForms(raw, "utf-8")
         XCTAssertEqual(1, frms.count)
         let frm = frms["configform"]!
-        XCTAssertEqual(4, frm.count)
+        XCTAssertEqual(5, frm.count)
         XCTAssertEqual("Uhu", frm["title"], "title")
+        XCTAssertEqual("0e6d94f5ccd8a2e0c0111706a26a3e9158db705f", frm["token"], "token")
+        XCTAssertEqual("checked", frm["privateLinkByDefault"], "privateLinkByDefault")
         XCTAssertEqual(nil, frm["continent"], "continent")
         XCTAssertEqual(nil, frm["city"], "city")
     }

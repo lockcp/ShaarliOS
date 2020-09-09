@@ -632,65 +632,15 @@
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" id="9Sp-l1-IgA">
-                                        <rect key="frame" x="0.0" y="392" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="center" tableViewCell="9Sp-l1-IgA" id="FRl-ym-ySC">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="private" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67x-by-XUB">
-                                                    <rect key="frame" x="16" y="12" width="60" height="20.5"/>
-                                                    <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
-                                                    </accessibility>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="L6m-mx-9RA"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gXU-ES-Y7N">
-                                                    <rect key="frame" x="84" y="6.5" width="51" height="31"/>
-                                                    <accessibility key="accessibilityConfiguration" label="private posts by default"/>
-                                                    <color key="onTintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="default for new posts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkE-fF-4kw">
-                                                    <rect key="frame" x="141" y="13" width="163" height="18"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
-                                                    </accessibility>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstItem="67x-by-XUB" firstAttribute="centerY" secondItem="kkE-fF-4kw" secondAttribute="centerY" id="59P-Sr-7RY"/>
-                                                <constraint firstItem="kkE-fF-4kw" firstAttribute="leading" secondItem="gXU-ES-Y7N" secondAttribute="trailing" constant="8" symbolic="YES" id="Fjh-PX-Qim"/>
-                                                <constraint firstItem="67x-by-XUB" firstAttribute="leading" secondItem="FRl-ym-ySC" secondAttribute="leadingMargin" id="KCV-5a-Kss"/>
-                                                <constraint firstItem="kkE-fF-4kw" firstAttribute="trailing" secondItem="FRl-ym-ySC" secondAttribute="trailingMargin" id="Vld-ip-cm3"/>
-                                                <constraint firstItem="gXU-ES-Y7N" firstAttribute="leading" secondItem="67x-by-XUB" secondAttribute="trailing" constant="8" symbolic="YES" id="Yjn-iK-tLX"/>
-                                                <constraint firstItem="67x-by-XUB" firstAttribute="centerY" secondItem="FRl-ym-ySC" secondAttribute="centerY" id="afA-SG-JAS"/>
-                                                <constraint firstItem="67x-by-XUB" firstAttribute="centerY" secondItem="gXU-ES-Y7N" secondAttribute="centerY" id="oLU-zx-X2S"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" id="TCH-5B-Ogg">
-                                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="392" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="center" tableViewCell="TCH-5B-Ogg" id="RID-lm-Kz6">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="tags" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q1q-rl-TAt">
-                                                    <rect key="frame" x="16" y="12" width="60" height="20.5"/>
+                                                    <rect key="frame" x="8" y="12" width="60" height="20.5"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
@@ -703,7 +653,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="📱 #Shaarli💫" borderStyle="roundedRect" placeholder="preset #tag #othertag" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h3u-lJ-Kgr">
-                                                    <rect key="frame" x="84" y="5.5" width="220" height="34"/>
+                                                    <rect key="frame" x="76" y="5.5" width="236" height="34"/>
                                                     <color key="backgroundColor" red="0.3333333432674408" green="0.3333333432674408" blue="0.3333333432674408" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration" label="prefix"/>
@@ -733,7 +683,7 @@
                             <tableViewSection id="JyZ-Cf-X4N">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" rowHeight="945" id="b1j-7X-9IY">
-                                        <rect key="frame" x="0.0" y="536" width="320" height="945"/>
+                                        <rect key="frame" x="0.0" y="492" width="320" height="945"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="center" tableViewCell="b1j-7X-9IY" id="HGz-Md-au5">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="945"/>
@@ -756,11 +706,9 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="cellAbout" destination="b1j-7X-9IY" id="0OH-Zp-2I5"/>
-                        <outlet property="lblDefaultPrivate" destination="kkE-fF-4kw" id="OEO-f1-Cxv"/>
                         <outlet property="lblTitle" destination="Dve-Iu-CxP" id="STE-AW-usf"/>
                         <outlet property="sldTimeout" destination="Rgd-6x-kLb" id="UE2-jk-fkL"/>
                         <outlet property="spiLogin" destination="RF2-Yn-Jd5" id="AZb-oF-UrU"/>
-                        <outlet property="swiPrivateDefault" destination="gXU-ES-Y7N" id="TJX-HZ-uZ9"/>
                         <outlet property="swiSecure" destination="7Tf-dV-ff2" id="0U3-zf-cKt"/>
                         <outlet property="txtEndpoint" destination="GIi-0Q-V5p" id="efS-2l-aOm"/>
                         <outlet property="txtPassWord" destination="L7z-8R-XqD" id="eeK-2f-qU4"/>
@@ -785,7 +733,7 @@
             <objects>
                 <navigationController id="8e5-sY-NGX" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6c0-1J-3vh">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

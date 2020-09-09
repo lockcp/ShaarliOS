@@ -173,7 +173,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient(AGENT)
-        srv.probe(demo, TO) { (url, tit, err) in
+        srv.probe(demo, TO) { (url, tit, pride, err) in
             XCTAssertEqual("", err)
             // XCTAssertEqual("https://demo.shaarli.org/", url.absoluteString)
             XCTAssertEqual("Shaarli Next", tit)
@@ -183,6 +183,7 @@ class ShaarliHtmlClientTest: XCTestCase {
             // XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de:8443/shaarli-v0.41b/", url.absoluteString)
             // XCTAssertEqual("https://demo:demodemodemo@demo.0x4c.de/shaarligo/shaarligo.cgi", url.absoluteString)
             // XCTAssertEqual("ShaarliGo 🚀", tit)
+            XCTAssertEqual(true, pride)
             exp.fulfill()
             return
         }
@@ -205,9 +206,10 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient(AGENT)
-        srv.probe(demo, TO) { (url, tit, err) in
+        srv.probe(demo, TO) { (url, tit, pride, err) in
             XCTAssertEqual("", err)
             XCTAssertEqual("https://demo:demo%20-%2F%3A;&%40%22$%23%25@demo.0x4c.de:8443/shaarli-v0.11.1-issue28/", url.absoluteString)
+            XCTAssertEqual(false, pride)
             exp.fulfill()
             return
         }
@@ -222,10 +224,11 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         
         let srv = ShaarliHtmlClient(AGENT)
-        srv.probe(demo, TO) { (url, pong, err) in
+        srv.probe(demo, TO) { (url, pong, pride, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
             XCTAssertEqual("Wrong login/password.", err)
+            XCTAssertEqual(false, pride)
             // XCTAssertEqual(ShaarliHtmlClient.STR_BANNED, err)
             exp.fulfill()
             return
@@ -241,10 +244,11 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Probing") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
         
         let srv = ShaarliHtmlClient(AGENT)
-        srv.probe(demo, TO) { (url, pong, err) in
+        srv.probe(demo, TO) { (url, pong, pride, err) in
             XCTAssertEqual(URLEmpty, url)
             XCTAssertEqual("", pong)
             XCTAssertEqual("Expected response HTTP status '200 Ok' but got '404 not found'", err)
+            XCTAssertEqual(false, pride)
             exp.fulfill()
             return
         }

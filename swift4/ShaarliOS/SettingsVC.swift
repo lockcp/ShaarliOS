@@ -64,8 +64,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     @IBOutlet private var swiSecure         : UISwitch!
     @IBOutlet private var txtUserName       : UITextField!
     @IBOutlet private var txtPassWord       : UITextField!
-    @IBOutlet private var lblDefaultPrivate : UILabel!
-    @IBOutlet private var swiPrivateDefault : UISwitch!
     @IBOutlet private var lblTitle          : UILabel!
     @IBOutlet private var txtTags           : UITextField!
     @IBOutlet private var spiLogin          : UIActivityIndicatorView!
@@ -171,7 +169,6 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         sldTimeout.value        = Float(b.timeout)
         sldTimeoutChanged(self)
-        swiPrivateDefault.isOn  = b.privateDefault
         txtTags.text            = b.tagsDefault
     }
 
@@ -209,9 +206,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
                 self.failure("Oops, something went utterly wrong.")
                 return
             }
-            cli.probe(cur, tim) { (ur, ti, er) in
+            cli.probe(cur, tim) { (ur, ti, pride, er) in
                 guard !ShaarliHtmlClient.isOk(er) else {
-                    self.success(ur, ti, tim)
+                    self.success(ur, ti, pride, tim)
                     return
                 }
                 let res = urls.dropFirst()
@@ -232,14 +229,14 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     // MARK: - Controller Logic
 
-    private func success(_ ur:URL, _ ti:String, _ tim:TimeInterval) {
+    private func success(_ ur:URL, _ ti:String, _ pride:Bool, _ tim:TimeInterval) {
         let ad = ShaarliM.shared
         DispatchQueue.main.sync {
             ad.saveBlog(ad.defaults, BlogM(
                 endpoint:ur,
                 title:ti,
                 timeout:tim,
-                privateDefault:swiPrivateDefault.isOn,
+                privateDefault:pride,
                 tagsDefault:txtTags.text ?? ""
             ))
             navigationController?.popViewController(animated:true)
