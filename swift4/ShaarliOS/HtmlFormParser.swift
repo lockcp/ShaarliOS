@@ -26,6 +26,8 @@ typealias HtmlFormDict = [String:String]
 // lut form names -> form fields
 typealias HtmlFormDictDict = [String:HtmlFormDict]
 
+internal let SelectedItemSep = " "
+
 // internal helper uses libxml2 graceful html parsing.
 func findHtmlForms(_ body:Data?, _ encoding:String?) -> HtmlFormDictDict {
     return HtmlFormParser().parse(data:body, encoding:encoding)
@@ -53,6 +55,8 @@ private class HtmlFormParser {
     private var formName = ""
     private var textName = ""
     private var text = ""
+    private var selectName = ""
+    private var selected : [String] = []
     private let enc0 = String.Encoding.utf8
     private let enc1 = UTF8.self
 
@@ -95,46 +99,57 @@ private class HtmlFormParser {
         return str
     }
 
-    private func startElement(name: UnsafePointer<xmlChar>? , atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
-        guard let atts = atts else { return }
+    private func elm(_ name: UnsafePointer<xmlChar>?) -> String? {
         // https://github.com/MaddTheSane/chmox/blob/3263ddf09276f6a47961cc4b87762f58b88772d0/CHMTableOfContents.swift#L75
-        guard let nam_ = UnsafeRawPointer(name)?.assumingMemoryBound(to: Int8.self) else { return }
-        if 0 != strcmp("form", nam_) && 0 != strcmp("input", nam_) && 0 != strcmp("textarea", nam_) {
-            return
-        }
-        guard let elm = decode(name) else { return }
+        guard let nam_ = UnsafeRawPointer(name)?.assumingMemoryBound(to: Int8.self) else { return nil }
+        // filter element names
+        return 0 != strcmp("form", nam_) && 0 != strcmp("input", nam_) && 0 != strcmp("textarea", nam_) && 0 != strcmp("select", nam_) && 0 != strcmp("option", nam_)
+            ? nil
+            : decode(name)
+    }
+
+    private func startElement(name: UnsafePointer<xmlChar>?, atts:UnsafePointer<UnsafePointer<xmlChar>?>?) {
+        guard let elm = elm(name) else { return }
+        guard let atts = atts else { return }
         let att = atts2dict({ decode(atts[$0]) })
         let nam = att["name"] ?? att["id"] ?? ""
         switch elm {
         case "form":
             formName = nam
-            form = [:]
+            form.removeAll()
         case "textarea":
             textName = nam
-            text = ""
+            text.removeAll()
         case "input":
             form[nam] = "checkbox" == att["type"]
                 ? ("off" == att["checked"] ? nil : att["checked"])
                 : att["value"]
+        case "select":
+            selectName = nam
+            selected.removeAll()
+        case "option":
+            if att["selected"] != nil {
+                selected.append(att["value"] ?? "")
+            }
         default:
             break
         }
     }
 
     private func endElement(name:UnsafePointer<xmlChar>?) {
-        // https://github.com/MaddTheSane/chmox/blob/3263ddf09276f6a47961cc4b87762f58b88772d0/CHMTableOfContents.swift#L75
-        guard let nam_ = UnsafeRawPointer(name)?.assumingMemoryBound(to: Int8.self) else { return }
-        if 0 != strcmp("form", nam_) && 0 != strcmp("input", nam_) && 0 != strcmp("textarea", nam_) {
-            return
-        }
-        let elm = decode(name)
-        switch elm {
+        switch elm(name) {
         case "form":
             forms[formName] = form
-            formName = ""
+            formName.removeAll()
+            form.removeAll()
         case "textarea":
             form[textName] = text
-            textName = ""
+            textName.removeAll()
+            text.removeAll()
+        case "select":
+            form[selectName] = selected.joined(separator:SelectedItemSep)
+            selectName.removeAll()
+            selected.removeAll()
         default:
             break
         }
