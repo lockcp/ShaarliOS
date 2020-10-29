@@ -45,7 +45,7 @@ internal let timeoutMaximumValue : TimeInterval = 15.0
 internal let timeoutDefaultValue : TimeInterval = 4.0
 
 internal func timeoutFromDouble(_ raw : Double) -> TimeInterval {
-    raw <= 0.0
+    return raw <= 0.0
         ? timeoutDefaultValue
         : raw <= timeoutMinimumValue
         ? timeoutMinimumValue
