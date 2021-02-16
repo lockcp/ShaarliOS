@@ -321,9 +321,22 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
-    private func cfg(_ cfg:URLSessionConfiguration, _ to: TimeInterval) -> URLSessionConfiguration {
+    private func hdrs(_ cre: URLCredential?) -> [String:String] {
+        var ret = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
+        guard let cre = cre else { return ret }
+        guard cre.user?.count != 0 else { return ret }
+        guard cre.hasPassword else { return ret }
+        // pre-authenticate HTTP Basic Auth https://tools.ietf.org/html/rfc7617
+        // https://gist.github.com/maximbilan/444db1e05babf5b08abae220102fdb8a
+        let uidPwd = "\(cre.user ?? ""):\(cre.password ?? "")"
+        let b64 = uidPwd.data(using:.utf8)!.base64EncodedString()
+        ret["Authorization"] = "Basic \(b64)"
+        return ret
+    }
+
+    private func cfg(_ cfg:URLSessionConfiguration, _ cre: URLCredential?, _ to: TimeInterval) -> URLSessionConfiguration {
+        cfg.httpAdditionalHeaders = hdrs(cre)
         cfg.allowsCellularAccess = true
-        cfg.httpAdditionalHeaders = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
         cfg.httpShouldUsePipelining = true
@@ -337,7 +350,9 @@ class ShaarliHtmlClient {
     // We need the name of the server. Reliably. So we have to look at ?do=configure.
     // That's where it's in a HTML form.
     // so we pretend to ?post= in order to get past the login and then ?do=configure.
-    func probe(_ endpoint: URL, _ to: TimeInterval, _ completion: @escaping (
+    //
+    // The URLCredential are for an optional additional HTTP Basic Auth.
+    func probe(_ endpoint: URL, _ cre: URLCredential?,_ to: TimeInterval, _ completion: @escaping (
         _ url:URL,
         _ title:String,
         _ pride:Bool,
@@ -345,7 +360,7 @@ class ShaarliHtmlClient {
         _ error:String) -> Void
     ) {
         debugPrint("probe \(endpoint)")
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, to))
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, cre, to))
 
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             let base = endpoint
@@ -373,7 +388,7 @@ class ShaarliHtmlClient {
         }
     }
 
-    func get(_ endpoint: URL, _ to: TimeInterval, _ url: URL, _ completion: @escaping (
+    func get(_ endpoint: URL, _ cre: URLCredential?, _ to: TimeInterval, _ url: URL, _ completion: @escaping (
         _ ses: URLSession,
         _ action:URL,
         _ ctx: HtmlFormDict,
@@ -384,7 +399,7 @@ class ShaarliHtmlClient {
         _ privat: Bool,
         _ error: String)->()
     ) {
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, to))
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, cre, to))
 
         loginAndGet(ses, endpoint, url) { action, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }

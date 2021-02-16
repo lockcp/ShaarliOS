@@ -103,7 +103,7 @@ struct ShaarliM {
         let tizo = TimeZone(identifier:prefs.string(forKey:KEY_timezone) ?? "")
         let blank = " "
         let td = (prefs.string(forKey:KEY_tagsDefault) ?? "").trimmingCharacters(in:.whitespacesAndNewlines) + blank
-        return BlogM(endpoint:url, title:title, timeout:to, privateDefault:pd, timezone:tizo, tagsDefault:blank == td
+        return BlogM(endpoint:url, credential:nil, title:title, timeout:to, privateDefault:pd, timezone:tizo, tagsDefault:blank == td
             ? ""
             : td)
     }

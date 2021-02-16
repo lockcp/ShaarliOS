@@ -64,6 +64,8 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     @IBOutlet private var swiSecure         : UISwitch!
     @IBOutlet private var txtUserName       : UITextField!
     @IBOutlet private var txtPassWord       : UITextField!
+    @IBOutlet private var txtBasicUid       : UITextField!
+    @IBOutlet private var txtBasicPwd       : UITextField!
     @IBOutlet private var lblTitle          : UILabel!
     @IBOutlet private var txtTags           : UITextField!
     @IBOutlet private var spiLogin          : UIActivityIndicatorView!
@@ -88,6 +90,10 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         sldTimeout.minimumValue = Float(timeoutMinimumValue)
         sldTimeout.maximumValue = Float(timeoutMaximumValue)
         sldTimeout.value = Float(timeoutDefaultValue)
+
+        [txtEndpoint, txtBasicUid, txtBasicPwd, txtTimeout, txtUserName, txtPassWord, txtTags].forEach {
+            $0.setValue($0.textColor?.withAlphaComponent(0.4), forKeyPath:"placeholderLabel.textColor")
+        }
 
         guard let url = Bundle(for:type(of:self)).url(forResource:"about", withExtension:"html") else { return }
         cellAbout.contentView.addSubview(wwwAbout)
@@ -139,9 +145,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     }
 
     private func togui(_ ur : URL?) {
+        txtEndpoint.text        = nil
         txtUserName.text        = nil
         txtPassWord.text        = nil
-        txtEndpoint.text        = nil
         swiSecure.isOn          = false
         guard let ur = ur else { return }
         guard var uc = URLComponents(url:ur, resolvingAgainstBaseURL:true) else { return }
@@ -162,11 +168,17 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
             return
         }
 
-        lblTitle.text = b.title;
-        lblTitle.textColor = txtUserName.textColor
-
+        lblTitle.textColor      = txtUserName.textColor
+        lblTitle.text           = b.title;
+        txtBasicUid.text        = nil
+        txtBasicPwd.text        = nil
+        if let cred = b.credential {
+            if cred.hasPassword {
+                txtBasicUid.text  = cred.user
+                txtBasicPwd.text  = cred.password
+            }
+        }
         togui(b.endpoint)
-
         sldTimeout.value        = Float(b.timeout)
         sldTimeoutChanged(self)
         txtTags.text            = b.tagsDefault
@@ -200,15 +212,19 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
         let tim = TimeInterval(sldTimeout.value)
-
+        let cre = txtBasicUid.text?.count == 0
+            ? nil
+            : URLCredential(user: txtBasicUid.text ?? "",
+                            password:txtBasicPwd.text ?? "",
+                            persistence:.permanent)
         func recurse(_ urls:ArraySlice<URL>) {
             guard let cur = urls.first else {
                 self.failure("Oops, something went utterly wrong.")
                 return
             }
-            cli.probe(cur, tim) { (ur, ti, pride, tizo, er) in
+            cli.probe(cur, cre, tim) { (ur, ti, pride, tizo, er) in
                 guard !ShaarliHtmlClient.isOk(er) else {
-                    self.success(ur, ti, pride, tizo, tim)
+                    self.success(ur, cre, ti, pride, tizo, tim)
                     return
                 }
                 let res = urls.dropFirst()
@@ -229,11 +245,12 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
     // MARK: - Controller Logic
 
-    private func success(_ ur:URL, _ ti:String, _ pride:Bool, _ tizo:TimeZone?, _ tim:TimeInterval) {
+    private func success(_ ur:URL, _ cre:URLCredential?, _ ti:String, _ pride:Bool, _ tizo:TimeZone?, _ tim:TimeInterval) {
         let ad = ShaarliM.shared
         DispatchQueue.main.sync {
             ad.saveBlog(ad.defaults, BlogM(
                 endpoint:ur,
+                credential:cre,
                 title:ti,
                 timeout:tim,
                 privateDefault:pride,
@@ -259,7 +276,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         print("textFieldShouldReturn \(type(of: self))")
         switch textField {
         case txtEndpoint,
+             txtBasicPwd,
              txtTimeout:  txtUserName.becomeFirstResponder()
+        case txtBasicUid: txtBasicPwd.becomeFirstResponder()
         case txtUserName: txtPassWord.becomeFirstResponder()
         case txtPassWord: txtTags.becomeFirstResponder()
         case txtTags: actionSignIn(textField) // keyboard doesn't show 'Done', but just in case... dispatch async?

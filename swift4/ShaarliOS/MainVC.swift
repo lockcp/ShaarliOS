@@ -86,11 +86,12 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         guard let current = current else { return }
         let srv = current.endpoint
         let tim = current.timeout
+        let cre = current.credential
         let tit = txtTitle.text ?? "-"
         let dsc = txtDescr.text ?? "-"
         let pri = btnAudience.isSelected
         let c = ShaarliHtmlClient(AppDelegate.shared.semver)
-        c.get(srv, tim, URLEmpty) { ses, act, ctx, ur_, ti_, de_, ta_, pr_, err in
+        c.get(srv, cre, tim, URLEmpty) { ses, act, ctx, ur_, ti_, de_, ta_, pr_, err in
             guard "" == err else {
                 DispatchQueue.main.async {
                     self.reportPostingError(err)

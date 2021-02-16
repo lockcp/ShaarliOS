@@ -25,6 +25,7 @@ import Foundation
  */
 struct BlogM {
     let endpoint        : URL
+    let credential      : URLCredential? // optional additional HTTP Basic
     let title           : String
     let timeout         : TimeInterval
     let privateDefault  : Bool
