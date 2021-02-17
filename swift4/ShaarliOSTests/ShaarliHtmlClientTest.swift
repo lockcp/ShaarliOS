@@ -292,15 +292,17 @@ class ShaarliHtmlClientTest: XCTestCase {
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.4/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name:8443/shaarli-v0.10.2/")! // credentials are public
-        let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b/")! // credentials are public
+        let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b-basic/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo")! // credentials are public
         let url = URL(string:"https://shaarli.readthedocs.io")!
+
+        let cre = URLCredential(user:"demO", password:"demOdemOdemO", persistence:.forSession)
 
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient(AGENT)
-        srv.get(end, nil, TO, url) { (_, act, frm, url, tit, dsc, tgs, pri, err) in
-            XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b/?post=https%3A%2F%2Fshaarli.readthedocs.io", act.absoluteString)
+        srv.get(end, cre, TO, url) { (_, act, frm, url, tit, dsc, tgs, pri, err) in
+            XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b-basic/?post=https%3A%2F%2Fshaarli.readthedocs.io", act.absoluteString)
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("", tit)
             XCTAssertEqual([], tgs)

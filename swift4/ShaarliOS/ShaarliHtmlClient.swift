@@ -234,6 +234,20 @@ private func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
     return URLRequest(url:uc.url!)
 }
 
+// a credential-supplying delegate. Otherwise we would have to feed a credential with
+// matching port and realm into the URLSessionConfiguration.urlCredentialStorage.
+// That's IMO too picky for NSURLAuthenticationMethodHTTPBasic
+internal class dlgt : NSObject, URLSessionTaskDelegate {
+    private let cre : URLCredential?
+    internal init(_ cre: URLCredential?) {
+        self.cre = cre
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        completionHandler(.useCredential, cre)
+    }
+}
+
 class ShaarliHtmlClient {
 
     static func isOk(_ err: String) -> Bool {
@@ -321,11 +335,7 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
-    private func cfg(_ cfg:URLSessionConfiguration, _ cre: URLCredential?, _ to: TimeInterval) -> URLSessionConfiguration {
-        var ret : [String:String] = [:] //"User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
-        ret["Authorization"] = httpBasic(cre)
-        ret["X-Authorization"] = httpBasic(cre)
-        cfg.httpAdditionalHeaders = ret
+    private func cfg(_ cfg:URLSessionConfiguration, _ to: TimeInterval) -> URLSessionConfiguration {
         cfg.allowsCellularAccess = true
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
@@ -350,7 +360,7 @@ class ShaarliHtmlClient {
         _ error:String) -> Void
     ) {
         debugPrint("probe \(endpoint)")
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, cre, to))
+        let ses = URLSession(configuration:cfg(.ephemeral, to), delegate:dlgt(cre), delegateQueue: nil)
 
         loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
             let base = endpoint
@@ -389,7 +399,7 @@ class ShaarliHtmlClient {
         _ privat: Bool,
         _ error: String)->()
     ) {
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, cre, to))
+        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, to), delegate:dlgt(cre), delegateQueue:nil)
 
         loginAndGet(ses, endpoint, url) { action, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }

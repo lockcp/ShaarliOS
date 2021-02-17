@@ -39,6 +39,9 @@ func info_to_semver(_ info : [String:Any?]?) -> String {
 }
 
 // HTTP Basic Auth https://tools.ietf.org/html/rfc7617
+//
+// Apple URL Loading system is jealous and purges the Authorization header
+// on iOS 10 and 12 devices. So we have to resort to use a URLSessionTaskDelegate 
 func httpBasic(_ cre: URLCredential?) -> String? {
     guard let cre = cre else { return nil }
     guard cre.user?.count != 0 else { return nil }
@@ -52,7 +55,7 @@ func httpBasic(_ cre: URLCredential?) -> String? {
 
 // HTTP Basic Auth https://tools.ietf.org/html/rfc7617
 //
-// empty password is allowd, empty user not.
+// empty password is allowed, empty user not.
 func httpBasic(_ str: String?) -> URLCredential? {
     // https://gist.github.com/maximbilan/444db1e05babf5b08abae220102fdb8a
     guard let str = str else { return nil }
