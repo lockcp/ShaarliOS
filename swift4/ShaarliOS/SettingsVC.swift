@@ -157,7 +157,8 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         uc.password             = nil
         uc.user                 = nil
         uc.scheme               = nil
-        guard let su = uc.url?.absoluteString.suffix(from: .init(encodedOffset:2)) else { return }
+        guard let s = uc.url?.absoluteString else { return }
+        let su = s.suffix(from:.init(utf16Offset:2, in:s))
         txtEndpoint.text        = String(su)
     }
 
@@ -212,11 +213,9 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
 
         let cli = ShaarliHtmlClient(AppDelegate.shared.semver)
         let tim = TimeInterval(sldTimeout.value)
-        let cre = txtBasicUid.text?.count == 0
-            ? nil
-            : URLCredential(user: txtBasicUid.text ?? "",
+        let cre = URLCredential(user:txtBasicUid.text ?? "",
                             password:txtBasicPwd.text ?? "",
-                            persistence:.permanent)
+                            persistence:.forSession)
         func recurse(_ urls:ArraySlice<URL>) {
             guard let cur = urls.first else {
                 self.failure("Oops, something went utterly wrong.")
@@ -281,14 +280,16 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
         case txtBasicUid: txtBasicPwd.becomeFirstResponder()
         case txtUserName: txtPassWord.becomeFirstResponder()
         case txtPassWord: txtTags.becomeFirstResponder()
-        case txtTags: actionSignIn(textField) // keyboard doesn't show 'Done', but just in case... dispatch async?
+        case txtTags:
+            txtTags.resignFirstResponder()
+            actionSignIn(textField) // keyboard doesn't show 'Done', but just in case... dispatch async?
         default: return false
         }
         return true
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("textFieldShouldReturn \(type(of: self))")
+        print("textFieldDidEndEditing \(type(of: self))")
         switch textField {
         case txtTimeout:
                         guard let va = Float(txtTimeout.text ?? "") else {

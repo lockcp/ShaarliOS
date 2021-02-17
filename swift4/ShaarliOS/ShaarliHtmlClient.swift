@@ -322,8 +322,9 @@ class ShaarliHtmlClient {
     }
 
     private func cfg(_ cfg:URLSessionConfiguration, _ cre: URLCredential?, _ to: TimeInterval) -> URLSessionConfiguration {
-        var ret = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
+        var ret : [String:String] = [:] //"User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
         ret["Authorization"] = httpBasic(cre)
+        ret["X-Authorization"] = httpBasic(cre)
         cfg.httpAdditionalHeaders = ret
         cfg.allowsCellularAccess = true
         cfg.httpMaximumConnectionsPerHost = 1

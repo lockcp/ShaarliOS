@@ -57,11 +57,11 @@ func httpBasic(_ str: String?) -> URLCredential? {
     // https://gist.github.com/maximbilan/444db1e05babf5b08abae220102fdb8a
     guard let str = str else { return nil }
     guard str.hasPrefix("Basic ") else { return nil }
-    let sub = str.substring(from:.init(encodedOffset:6))
-    guard let dat = Data(base64Encoded:sub) else { return nil }
+    let sub = str.suffix(from:.init(utf16Offset:6, in:str))
+    guard let dat = Data(base64Encoded:String(sub)) else { return nil }
     guard let up = String(data:dat, encoding:.utf8) else { return nil }
     let arr = up.split(separator:":", maxSplits:1, omittingEmptySubsequences:false)
-    return URLCredential(user:String(arr[0]), password:String(arr[1]), persistence:.permanent)
+    return URLCredential(user:String(arr[0]), password:String(arr[1]), persistence:.forSession)
 }
 
 struct ShaarliM {

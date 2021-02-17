@@ -68,7 +68,7 @@ class ShaarliHtmlClientTest: XCTestCase {
     }
 
     func testBasic() {
-        let str = httpBasic(URLCredential(user:"usr", password:"pwd", persistence:.permanent))
+        let str = httpBasic(URLCredential(user:"usr", password:"pwd", persistence:.forSession))
         XCTAssertEqual("Basic dXNyOnB3ZA==", str)
         guard let cre = httpBasic(str) else {
             XCTFail()
@@ -81,7 +81,9 @@ class ShaarliHtmlClientTest: XCTestCase {
         let c : URLCredential? = nil
         XCTAssertNil(httpBasic(c))
         XCTAssertNil(httpBasic(URLCredential(user:"", password:"uhu", persistence:.permanent)))
-        XCTAssertEqual("Basic dWh1Og==", httpBasic(URLCredential(user:"uhu", password:"", persistence:.permanent)))
+        XCTAssertEqual("Basic dWh1Og==", httpBasic(URLCredential(user:"uhu", password:"", persistence:.forSession)))
+        
+        XCTAssertEqual("Basic ZGVtTzpkZW1PZGVtT2RlbU8=", httpBasic(URLCredential(user:"demO", password:"demOdemOdemO", persistence:.forSession)))
     }
 
     func testFormString() {

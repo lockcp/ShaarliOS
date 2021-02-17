@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="8e5-sY-NGX">
-    <device id="retina3_5" orientation="portrait" appearance="light"/>
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
@@ -16,17 +16,17 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rQJ-UL-hmb">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright © 2015-2021 Marcus Rohrmoser. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8Qn-Qu-RaH">
-                                <rect key="frame" x="8" y="451" width="304" height="21"/>
+                                <rect key="frame" x="8" y="539" width="304" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iT6-oo-ncS" userLabel="logo and version">
-                                <rect key="frame" x="81.5" y="101" width="157.5" height="182"/>
+                                <rect key="frame" x="81.5" y="136" width="157.5" height="182"/>
                                 <subviews>
                                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-1024x1024.png" translatesAutoresizingMaskIntoConstraints="NO" id="5bo-AP-x4y">
                                         <rect key="frame" x="0.0" y="0.0" width="157.5" height="121"/>
@@ -80,7 +80,7 @@
                                 </constraints>
                             </view>
                             <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="8lW-JY-vCF" userLabel="modal">
-                                <rect key="frame" x="0.0" y="50" width="320" height="430"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                                 <subviews>
                                     <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oAX-bs-Vuq" userLabel="post">
                                         <rect key="frame" x="8" y="20" width="304" height="283"/>
@@ -338,7 +338,7 @@
             <objects>
                 <tableViewController id="kT6-WH-0iV" customClass="SettingsVC" customModule="ShaarliOS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="tQc-DR-X4s" propertyAccessControl="none">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -502,7 +502,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="http user" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="MEv-Ol-cU8" userLabel="Txt Basic Uid">
-                                                    <rect key="frame" x="84" y="5" width="104" height="34"/>
+                                                    <rect key="frame" x="84" y="5" width="106" height="34"/>
                                                     <color key="backgroundColor" red="0.3333333432674408" green="0.3333333432674408" blue="0.3333333432674408" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration" label="username"/>
@@ -514,7 +514,7 @@
                                                     </connections>
                                                 </textField>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="http pass" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="KoW-FF-kSM" userLabel="Txt Basic Pwd">
-                                                    <rect key="frame" x="196" y="5" width="104" height="34"/>
+                                                    <rect key="frame" x="198" y="5" width="106" height="34"/>
                                                     <color key="backgroundColor" red="0.33333334329999997" green="0.33333334329999997" blue="0.33333334329999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration" label="username"/>
@@ -535,7 +535,7 @@
                                                 <constraint firstItem="MEv-Ol-cU8" firstAttribute="firstBaseline" secondItem="3rz-Bh-jel" secondAttribute="firstBaseline" id="b6r-KC-iLO"/>
                                                 <constraint firstItem="3rz-Bh-jel" firstAttribute="centerY" secondItem="qNn-El-0Rn" secondAttribute="centerY" id="fkK-9i-XHY"/>
                                                 <constraint firstItem="MEv-Ol-cU8" firstAttribute="leading" secondItem="3rz-Bh-jel" secondAttribute="trailing" constant="8" symbolic="YES" id="hKO-fP-4gj"/>
-                                                <constraint firstAttribute="trailing" secondItem="KoW-FF-kSM" secondAttribute="trailing" constant="20" symbolic="YES" id="uVK-Oj-iY4"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="KoW-FF-kSM" secondAttribute="trailing" id="uVK-Oj-iY4"/>
                                                 <constraint firstItem="3rz-Bh-jel" firstAttribute="leading" secondItem="qNn-El-0Rn" secondAttribute="leadingMargin" id="wgd-kX-VdG"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -563,18 +563,18 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="1" maxValue="15" translatesAutoresizingMaskIntoConstraints="NO" id="Rgd-6x-kLb">
-                                                    <rect key="frame" x="148.5" y="7" width="157.5" height="31"/>
+                                                    <rect key="frame" x="150.5" y="7" width="155.5" height="31"/>
                                                     <connections>
                                                         <action selector="sldTimeoutChanged:" destination="kT6-WH-0iV" eventType="valueChanged" id="Uws-R2-nR8"/>
                                                     </connections>
                                                 </slider>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="4.0" borderStyle="roundedRect" placeholder="sec" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1dg-Xj-sRG">
-                                                    <rect key="frame" x="87.5" y="5" width="55" height="34"/>
+                                                    <rect key="frame" x="87.5" y="5" width="57" height="34"/>
                                                     <color key="backgroundColor" red="0.33333334329999997" green="0.33333334329999997" blue="0.33333334329999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration" label="server endpoint url"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="55" id="LSl-gA-FSQ"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="55" id="LSl-gA-FSQ"/>
                                                     </constraints>
                                                     <color key="textColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -699,7 +699,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="tags" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q1q-rl-TAt">
-                                                    <rect key="frame" x="8" y="12" width="60" height="20.5"/>
+                                                    <rect key="frame" x="16" y="12" width="60" height="20.5"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
@@ -712,7 +712,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="📱 #Shaarli💫" borderStyle="roundedRect" placeholder="preset #tag #othertag" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h3u-lJ-Kgr">
-                                                    <rect key="frame" x="76" y="5" width="236" height="34"/>
+                                                    <rect key="frame" x="84" y="5" width="220" height="34"/>
                                                     <color key="backgroundColor" red="0.3333333432674408" green="0.3333333432674408" blue="0.3333333432674408" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.50196078430000002" green="0.67843137249999996" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <accessibility key="accessibilityConfiguration" label="prefix"/>
