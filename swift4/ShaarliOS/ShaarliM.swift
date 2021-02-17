@@ -38,6 +38,32 @@ func info_to_semver(_ info : [String:Any?]?) -> String {
     return "v\(version)+\(gitsha)"
 }
 
+// HTTP Basic Auth https://tools.ietf.org/html/rfc7617
+func httpBasic(_ cre: URLCredential?) -> String? {
+    guard let cre = cre else { return nil }
+    guard cre.user?.count != 0 else { return nil }
+    guard cre.hasPassword else { return nil }
+    // pre-authenticate HTTP Basic Auth https://tools.ietf.org/html/rfc7617
+    // https://gist.github.com/maximbilan/444db1e05babf5b08abae220102fdb8a
+    let uidPwd = "\(cre.user ?? ""):\(cre.password ?? "")"
+    let b64 = uidPwd.data(using:.utf8)!.base64EncodedString()
+    return "Basic \(b64)"
+}
+
+// HTTP Basic Auth https://tools.ietf.org/html/rfc7617
+//
+// empty password is allowd, empty user not.
+func httpBasic(_ str: String?) -> URLCredential? {
+    // https://gist.github.com/maximbilan/444db1e05babf5b08abae220102fdb8a
+    guard let str = str else { return nil }
+    guard str.hasPrefix("Basic ") else { return nil }
+    let sub = str.substring(from:.init(encodedOffset:6))
+    guard let dat = Data(base64Encoded:sub) else { return nil }
+    guard let up = String(data:dat, encoding:.utf8) else { return nil }
+    let arr = up.split(separator:":", maxSplits:1, omittingEmptySubsequences:false)
+    return URLCredential(user:String(arr[0]), password:String(arr[1]), persistence:.permanent)
+}
+
 struct ShaarliM {
 
     static let shared = ShaarliM()
@@ -70,6 +96,7 @@ struct ShaarliM {
     }
 
     private let KEY_title           = "title"
+    private let KEY_auth            = "httpAuth"
     private let KEY_endpointURL     = "endpointURL"
     private let KEY_userName        = "userName"
     private let KEY_passWord        = "passWord"
@@ -96,6 +123,7 @@ struct ShaarliM {
 
     func loadBlog(_ prefs :UserDefaults) -> BlogM? {
         guard let url = loadEndpointURL() else { return nil }
+        let cre = httpBasic(prefs.string(forKey:KEY_auth))
         let title = prefs.string(forKey:KEY_title)
             ?? NSLocalizedString("My Shaarli", comment:String(describing:type(of:self)))
         let to = timeoutFromDouble(prefs.double(forKey:KEY_timeout))
@@ -103,7 +131,7 @@ struct ShaarliM {
         let tizo = TimeZone(identifier:prefs.string(forKey:KEY_timezone) ?? "")
         let blank = " "
         let td = (prefs.string(forKey:KEY_tagsDefault) ?? "").trimmingCharacters(in:.whitespacesAndNewlines) + blank
-        return BlogM(endpoint:url, credential:nil, title:title, timeout:to, privateDefault:pd, timezone:tizo, tagsDefault:blank == td
+        return BlogM(endpoint:url, credential:cre, title:title, timeout:to, privateDefault:pd, timezone:tizo, tagsDefault:blank == td
             ? ""
             : td)
     }
@@ -116,6 +144,7 @@ struct ShaarliM {
           set(uc.user!, forKey:KEY_userName)
           set(uc.password!, forKey:KEY_passWord)
         }
+        prefs.set(httpBasic(blog.credential), forKey:KEY_auth)
         prefs.set(blog.title, forKey:KEY_title)
         prefs.set(blog.timeout, forKey:KEY_timeout)
         prefs.set(blog.privateDefault, forKey:KEY_privateDefault)

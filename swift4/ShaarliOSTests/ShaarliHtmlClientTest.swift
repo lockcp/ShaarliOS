@@ -67,6 +67,23 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("", cre.password)
     }
 
+    func testBasic() {
+        let str = httpBasic(URLCredential(user:"usr", password:"pwd", persistence:.permanent))
+        XCTAssertEqual("Basic dXNyOnB3ZA==", str)
+        guard let cre = httpBasic(str) else {
+            XCTFail()
+            return
+        }
+        XCTAssertTrue(cre.hasPassword)
+        XCTAssertEqual("usr", cre.user)
+        XCTAssertEqual("pwd", cre.password)
+
+        let c : URLCredential? = nil
+        XCTAssertNil(httpBasic(c))
+        XCTAssertNil(httpBasic(URLCredential(user:"", password:"uhu", persistence:.permanent)))
+        XCTAssertEqual("Basic dWh1Og==", httpBasic(URLCredential(user:"uhu", password:"", persistence:.permanent)))
+    }
+
     func testFormString() {
         let a = [
             URLQueryItem(name: "1", value: "a&b"),

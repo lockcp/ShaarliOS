@@ -321,21 +321,10 @@ class ShaarliHtmlClient {
         // print("HTTP \(tsk0.originalRequest?.httpMethod) \(tsk0.originalRequest?.url)")
     }
 
-    private func hdrs(_ cre: URLCredential?) -> [String:String] {
-        var ret = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
-        guard let cre = cre else { return ret }
-        guard cre.user?.count != 0 else { return ret }
-        guard cre.hasPassword else { return ret }
-        // pre-authenticate HTTP Basic Auth https://tools.ietf.org/html/rfc7617
-        // https://gist.github.com/maximbilan/444db1e05babf5b08abae220102fdb8a
-        let uidPwd = "\(cre.user ?? ""):\(cre.password ?? "")"
-        let b64 = uidPwd.data(using:.utf8)!.base64EncodedString()
-        ret["Authorization"] = "Basic \(b64)"
-        return ret
-    }
-
     private func cfg(_ cfg:URLSessionConfiguration, _ cre: URLCredential?, _ to: TimeInterval) -> URLSessionConfiguration {
-        cfg.httpAdditionalHeaders = hdrs(cre)
+        var ret = ["User-Agent":"\(SHAARLI_COMPANION_APP_URL)/\(semver!)"]
+        ret["Authorization"] = httpBasic(cre)
+        cfg.httpAdditionalHeaders = ret
         cfg.allowsCellularAccess = true
         cfg.httpMaximumConnectionsPerHost = 1
         cfg.httpShouldSetCookies = true
