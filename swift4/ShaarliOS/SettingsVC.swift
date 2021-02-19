@@ -274,14 +274,13 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("textFieldShouldReturn \(type(of: self))")
         switch textField {
-        case txtEndpoint,
-             txtBasicPwd,
-             txtTimeout:  txtUserName.becomeFirstResponder()
-        case txtBasicUid: txtBasicPwd.becomeFirstResponder()
-        case txtUserName: txtPassWord.becomeFirstResponder()
-        case txtPassWord: txtTags.becomeFirstResponder()
-        case txtTags:
-            txtTags.resignFirstResponder()
+        case txtEndpoint:   txtUserName.becomeFirstResponder()
+        case txtUserName:   txtPassWord.becomeFirstResponder()
+        case txtPassWord:   txtTags.becomeFirstResponder()
+        case txtTags:       txtTimeout.becomeFirstResponder()
+        case txtTimeout:    txtBasicUid.becomeFirstResponder()
+        case txtBasicUid:   txtBasicPwd.becomeFirstResponder()
+        case txtBasicPwd:   textField.resignFirstResponder()
             actionSignIn(textField) // keyboard doesn't show 'Done', but just in case... dispatch async?
         default: return false
         }

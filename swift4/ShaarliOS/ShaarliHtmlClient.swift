@@ -399,7 +399,7 @@ class ShaarliHtmlClient {
         _ privat: Bool,
         _ error: String)->()
     ) {
-        let ses = URLSession(configuration:cfg(URLSessionConfiguration.ephemeral, to), delegate:dlgt(cre), delegateQueue:nil)
+        let ses = URLSession(configuration:cfg(.ephemeral, to), delegate:dlgt(cre), delegateQueue:nil)
 
         loginAndGet(ses, endpoint, url) { action, lifo, err in
             let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
