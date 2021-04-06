@@ -157,15 +157,16 @@ class ShareVC: SLComposeServiceViewController {
                                     return
                                 }
                                 self.session = ses
-                                let r = tagsNormalise(description:tit, extended:dsc, tags:tgs.union(preset.tags), known:[])
+                                let v = "" == tit && "" == dsc
+                                    ? (itemTitle.value, preset.extended)
+                                    : (tit, dsc)
+                                let r = tagsNormalise(description:v.0, extended:v.1, tags:tgs.union(preset.tags), known:[])
                                 DispatchQueue.main.async {
                                     ws.action = act
                                     ws.ctx = ctx
                                     ws.url = _url
-                                    itemTitle.value = "" != r.description
-                                        ? r.description
-                                        : itemTitle.value
-                                    textView.text = r.extended
+                                    itemTitle.value = r.description
+                                    textView.text = "\(r.extended) "
                                     itemAudience.value = stringFromPrivacy(pri)
                                 }
                             })

@@ -139,6 +139,8 @@ internal let VAL_OFF = "off"
 
 private let KEY_PAR_DO = "do"
 private let KEY_PAR_POST = "post"
+private let KEY_PAR_SCRAPE = "scrape"
+private let KEY_VAL_NO = "no"
 private let KEY_PAR_DESC = "description"
 private let CMD_DO_CFG = "configure"
 
@@ -267,7 +269,7 @@ class ShaarliHtmlClient {
         _ lifo: HtmlFormDict,
         _ error: String) -> ()
     ) {
-        let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name: KEY_PAR_POST, value: url.absoluteString)])
+        let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name:KEY_PAR_POST, value:url.absoluteString), URLQueryItem(name:KEY_PAR_SCRAPE, value:KEY_VAL_NO)])
         debugPrint("loginAndGet \(req0.httpMethod ?? HTTP_GET)) -> \(req0)")
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
