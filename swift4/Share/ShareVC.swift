@@ -116,17 +116,96 @@ class ShareVC: SLComposeServiceViewController {
         textView.text = "\(preset.extended) \(NSLocalizedString("🔄", comment:"ShareVC"))"
         itemAudience.value = stringFromPrivacy(current.privateDefault)
 
+        let tPli = kUTTypePropertyList as String
         let tUrl = kUTTypeURL as String
         let tTxt = kUTTypeText as String
+        let RK = NSExtensionJavaScriptPreprocessingResultsKey as String
         weak var ws = self
         for _item in (extensionContext?.inputItems)! {
             let item = _item as! NSExtensionItem
             for ip in (item.attachments!) {
+                guard let ws = ws else {return}
                 // let ip = _ip as! NSItemProvider // required for Xcode <10
+                if( ip.hasItemConformingToTypeIdentifier(tPli)) {
+                    ip.loadItem(forTypeIdentifier:tPli, options:nil) { (_dic, err) in
+                        guard let _dic = (_dic as? NSDictionary)?[RK] as? [String:String] else {
+                            play_sound_err()
+                            ws.showError(
+                                title:NSLocalizedString("URL Share Sheet failed", comment: "ShareVC"),
+                                message:NSLocalizedString("I got no dictionary to share.", comment: "ShareVC"),
+                                showsettings:false
+                            )
+                            return
+                        }
+                        let kUrl = "url"
+                        let kTit = "title"
+                        let kDsc = "description"
+                        let kTgs = "keywords"
+                        let kImg = "image"
+                        guard let _url = URL(string:_dic[kUrl] ?? "") else {
+                            play_sound_err()
+                            ws.showError(
+                                title:NSLocalizedString("URL Share Sheet failed", comment: "ShareVC"),
+                                message:NSLocalizedString("I got no url to share.", comment: "ShareVC"),
+                                showsettings:false
+                            )
+                            return
+                        }
+                        guard let err = err else {
+                            let t0 = Date()
+                            cli.get(current.endpoint, current.credential, current.timeout, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, tim, seti, err) in
+                                guard "" == err else {
+                                    play_sound_err()
+                                    ws.showError(
+                                        title:NSLocalizedString("Can't reach Shaarli", comment: "ShareVC"),
+                                        message:err,
+                                        showsettings:true
+                                    )
+                                    return
+                                }
+                                guard URLEmpty != act else {
+                                    play_sound_err()
+                                    ws.showError(
+                                        title:NSLocalizedString("Can't post to Shaarli", comment: "ShareVC"),
+                                        message:NSLocalizedString("the Shaarli responded an empty linkform action, I don't know where to post to.", comment: "ShareVC"),
+                                        showsettings:true
+                                    )
+                                    return
+                                }
+                                self.session = ses
+                                // should 'old' come out of get( callback(... old) )?
+                                let old = isOld(t0, seti, cli.timeShaarli(current.timezone, tim))
+                                let dti = _dic[kTit] ?? ""
+                                let dde = _dic[kDsc] ?? ""
+                                // let dim = URL(string:_dic[kImg] ?? "", relativeTo:_url)
+                                let v = old || ("" != tit || "" != dsc)
+                                    ? (tit, dsc, tgs)
+                                    : (dti == "" && dde == ""
+                                        ? (itemTitle.value ?? "", preset.extended, [])
+                                        : (dti, dde, tagsSplit(_dic[kTgs])) )
+                                let r = tagsNormalise(description:v.0, extended:v.1, tags:v.2.union(preset.tags), known:[])
+                                DispatchQueue.main.async {
+                                    ws.action = act
+                                    ws.ctx = ctx
+                                    ws.url = _url
+                                    itemTitle.value = r.description
+                                    textView.text = "\(r.extended) "
+                                    itemAudience.value = stringFromPrivacy(pri)
+                                }
+                            })
+                            return
+                        }
+                        ws.showError(
+                            title:NSLocalizedString("URL Share Sheet failed", comment: "ShareVC"),
+                            message:err.localizedDescription,
+                            showsettings:false
+                        )
+                    }
+                }
                 // see predicate from http://stackoverflow.com/a/27932776
-                if( ip.hasItemConformingToTypeIdentifier(tUrl) ) {
+                else if( ip.hasItemConformingToTypeIdentifier(tUrl) ) {
+                    // maybe this whole block can go away
                     ip.loadItem(forTypeIdentifier:tUrl, options:nil) { (_url, err) in
-                        guard let ws = ws else {return}
                         guard let _url = _url as? URL else {
                             play_sound_err()
                             ws.showError(
@@ -137,7 +216,7 @@ class ShareVC: SLComposeServiceViewController {
                             return
                         }
                         guard let err = err else {
-                            cli.get(current.endpoint, current.credential, current.timeout, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, err) in
+                            cli.get(current.endpoint, current.credential, current.timeout, _url, { (ses, act, ctx, _url, tit, dsc, tgs, pri, tim, seti, err) in
                                 guard "" == err else {
                                     play_sound_err()
                                     ws.showError(
@@ -179,9 +258,8 @@ class ShareVC: SLComposeServiceViewController {
                         )
                     }
                 }
-                if( ip.hasItemConformingToTypeIdentifier(tTxt) ) {
+                else if( ip.hasItemConformingToTypeIdentifier(tTxt) ) {
                     ip.loadItem(forTypeIdentifier:tTxt, options:nil) { (_txt, err) in
-                        guard let ws = ws else {return}
                         guard let err = err else {
                             debugPrint("done. title:\(itemTitle.value ?? "-") txt:\(String(describing: _txt))")
                             return

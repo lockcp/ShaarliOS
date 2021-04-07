@@ -118,6 +118,10 @@ func tagsNormalise(description ds: String, extended ex: String, tags ta: Set<Str
     )
 }
 
+func tagsSplit(_ s:String?) -> Set<String> {
+    return Set(s?.split(whereSeparator:{ $0 == "," || $0 == " " }).map({ String($0) }) ?? [])
+}
+
 let URLEmpty = URLComponents().url!
 
 let HTTP_HTTP = "http"
@@ -132,7 +136,7 @@ let LF_TIT = "lf_title"
 let LF_DSC = "lf_description"
 let LF_TGS = "lf_tags"
 let LF_PRI = "lf_private"
-//let LF_TIM = "lf_linkdate"
+let LF_TIM = "lf_linkdate"
 internal let VAL_ON = "on"
 internal let VAL_OFF = "off"
 
@@ -204,6 +208,7 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlF
     guard let data = data, data.count > 0 else {
         return (fail, NSLocalizedString("Got no data. That's not enough.", comment:"ShaarliHtmlClient"))
     }
+    // debugPrint("\(http.allHeaderFields["Date"])")
     let enco = http.textEncodingName
     let fo = findHtmlForms(data, enco)
     if fo.count == 0 {
@@ -224,6 +229,37 @@ internal func check(_ data: Data?, _ rep: URLResponse?, _ err: Error?) -> (HtmlF
         }
     }
     return (fo, "")
+}
+
+private func serverTime(_ rep : URLResponse?) -> Date? {
+    guard let http = rep as? HTTPURLResponse else {return nil}
+    let str0 = http.allHeaderFields["Date"] as? String
+    guard let str = str0, str != "" else {return nil}
+    // https://blog.mro.name/2009/08/nsdateformatter-http-header/
+    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
+    let fmt = DateFormatter()
+    fmt.timeZone = TimeZone(secondsFromGMT:0)
+    fmt.locale = Locale(identifier: "en_US_POSIX")
+    fmt.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'" // rfc1123
+    guard let ret = fmt.date(from:str) else {
+        fmt.dateFormat = "EEEE',' dd'-'MMM'-'yy HH':'mm':'ss z" // rfc850
+        guard let ret = fmt.date(from:str) else {
+            fmt.dateFormat = "EEE MMM d HH':'mm':'ss yyyy" // asctime
+            return fmt.date(from:str)
+        }
+        return ret
+    }
+    return ret
+}
+
+internal func isOld(_ reqSrt : Date, _ srvNow : Date?, _ shaarli : Date? ) -> Bool {
+    // not getting a time we assume the entry is recent and overwrite in case :-(
+    guard let shaarli = shaarli else {return false}
+    guard let srvNow = srvNow else {
+        // webserver doesn't tell it's current time
+        return shaarli.timeIntervalSince(reqSrt) < 0 // post is older than request start (comparing client and server time)
+    }
+    return -shaarli.timeIntervalSince(srvNow) >= -reqSrt.timeIntervalSinceNow // post is older than request start (comparing server and server time)
 }
 
 private func createReq(endpoint: URL, params:[URLQueryItem]) -> URLRequest {
@@ -256,7 +292,7 @@ class ShaarliHtmlClient {
         return err.isEmpty
     }
 
-    let semver : String!
+    let semver  : String!
 
     init(_ semver : String) {
         self.semver = semver
@@ -267,44 +303,46 @@ class ShaarliHtmlClient {
     internal func loginAndGet(_ ses: URLSession, _ endpoint: URL, _ url: URL, _ callback: @escaping (
         _ action: URL,
         _ lifo: HtmlFormDict,
+        _ serverTime: Date?,
         _ error: String) -> ()
     ) {
         let req0 = createReq(endpoint: endpoint, params: [URLQueryItem(name:KEY_PAR_POST, value:url.absoluteString), URLQueryItem(name:KEY_PAR_SCRAPE, value:KEY_VAL_NO)])
         debugPrint("loginAndGet \(req0.httpMethod ?? HTTP_GET)) -> \(req0)")
         // https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
         let tsk0 = ses.dataTask(with: req0) { data, response, erro in
+            let seti = serverTime(response)
 
             func do_finish(_ lifobase:URL?, _ lifo:HtmlFormDict) {
                 guard nil != lifo[LF_URL] else {
-                    callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LF_URL))
+                    callback(URLEmpty, [:], seti, String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LF_URL))
                     return
                 }
                 // assume link form action == link form html base url
-                callback(lifobase ?? URLEmpty, lifo, "")
+                callback(lifobase ?? URLEmpty, lifo, seti, "")
             }
 
             let d = check(data, response, erro)
             debugPrint("loginAndGet \(HTTP_GET) <- \(response?.url ?? URLEmpty) data:'\(d)'")
             guard "" == d.1 else {
-                callback(URLEmpty, [:], d.1)
+                callback(URLEmpty, [:], seti, d.1)
                 return
             }
 
             guard let lifo = d.0[LINK_FORM] else {
                 // actually that's what we normally expect: not logged in yet.
                 guard var lofo = d.0[LOGIN_FORM] else {
-                    callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LOGIN_FORM))
+                    callback(URLEmpty, [:], seti, String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LOGIN_FORM))
                     return
                 }
                 if let uc0 = URLComponents(url:endpoint, resolvingAgainstBaseURL:true) {
                     lofo[KEY_FORM_LOGIN] = uc0.user
                     lofo[KEY_FORM_PASSWORD] = uc0.password
                 } else {
-                    callback(URLEmpty, [:], String(format:NSLocalizedString("Cannot parse endpoint '%@'", comment: "ShaarliHtmlClient"), endpoint.absoluteString))
+                    callback(URLEmpty, [:], seti, String(format:NSLocalizedString("Cannot parse endpoint '%@'", comment: "ShaarliHtmlClient"), endpoint.absoluteString))
                     return
                 }
                 guard let u0 = response?.url else {
-                    callback(URLEmpty, [:], String(format:NSLocalizedString("Response not usable.", comment: "")))
+                    callback(URLEmpty, [:], seti, String(format:NSLocalizedString("Response not usable.", comment: "")))
                     return
                 }
                 var req1 = URLRequest(url:u0)
@@ -316,11 +354,11 @@ class ShaarliHtmlClient {
                     let d = check(data, response, erro)
                     debugPrint("loginAndGet \(HTTP_POST) <- \(response?.url ?? URLEmpty) data:'\(d)'")
                     guard "" == d.1 else {
-                        callback(URLEmpty, [:], d.1)
+                        callback(URLEmpty, [:], seti, d.1)
                         return
                     }
                     guard let lifo = d.0[LINK_FORM] else {
-                        callback(URLEmpty, [:], String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LINK_FORM))
+                        callback(URLEmpty, [:], seti, String(format:NSLocalizedString("%@ not found.", comment: "ShaarliHtmlClient"), LINK_FORM))
                         return
                     }
                     do_finish(response?.url, lifo)
@@ -364,7 +402,7 @@ class ShaarliHtmlClient {
         debugPrint("probe \(endpoint)")
         let ses = URLSession(configuration:cfg(.ephemeral, to), delegate:dlgt(cre), delegateQueue: nil)
 
-        loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, err in
+        loginAndGet(ses, endpoint, URLEmpty) { lurl, lifo, seti, err in
             let base = endpoint
             guard ShaarliHtmlClient.isOk(err) else {
                 completion(URLEmpty, "", false, nil, err)
@@ -399,12 +437,12 @@ class ShaarliHtmlClient {
         _ extended: String,
         _ tags: Set<String>,
         _ privat: Bool,
+        _ time: String?,
+        _ servertime: Date?,
         _ error: String)->()
     ) {
         let ses = URLSession(configuration:cfg(.ephemeral, to), delegate:dlgt(cre), delegateQueue:nil)
-
-        loginAndGet(ses, endpoint, url) { action, lifo, err in
-            let tags = (lifo[LF_TGS] ?? "").replacingOccurrences(of: ",", with: " ").split(separator:" ").map { String($0) }
+        loginAndGet(ses, endpoint, url) { action, lifo, serverTime, err in
             completion(
                 ses,
                 action,
@@ -412,8 +450,10 @@ class ShaarliHtmlClient {
                 URL(string:lifo[LF_URL] ?? "") ?? URLEmpty,
                 lifo[LF_TIT] ?? "",
                 lifo[LF_DSC] ?? "",
-                Set(tags),
+                tagsSplit(lifo[LF_TGS]),
                 (lifo[LF_PRI] ?? VAL_OFF) != VAL_OFF,
+                lifo[LF_TIM],
+                serverTime,
                 err
             )
         }
@@ -453,6 +493,16 @@ class ShaarliHtmlClient {
         }
         tsk.resume()
         // print("HTTP", tsk.originalRequest?.httpMethod, tsk.originalRequest?.url)
+    }
+
+    // don't loop that
+    func timeShaarli(_ tz:TimeZone?, _ str:String?) -> Date? {
+        guard let str = str, str != "" else {return nil}
+        let fmt = DateFormatter()
+        // fmt.locale = Locale(identifier: "en_US_POSIX")
+        fmt.dateFormat = "yyyyMMdd_HHmmss"
+        fmt.timeZone = tz
+        return fmt.date(from:str)
     }
 }
 

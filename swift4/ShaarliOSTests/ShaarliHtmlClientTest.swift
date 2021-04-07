@@ -301,7 +301,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp = self.expectation(description: "Reading") // https://medium.com/@johnsundell/unit-testing-asynchronous-swift-code-9805d1d0ac5e
 
         let srv = ShaarliHtmlClient(AGENT)
-        srv.get(end, cre, TO, url) { (_, act, frm, url, tit, dsc, tgs, pri, err) in
+        srv.get(end, cre, TO, url) { (_, act, frm, url, tit, dsc, tgs, pri, tim, seti, err) in
             XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b-basic/?post=https%3A%2F%2Fshaarli.readthedocs.io", act.absoluteString)
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("", tit)
@@ -328,7 +328,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         let exp1 = self.expectation(description: "Posting")
 
         let srv = ShaarliHtmlClient(AGENT)
-        srv.get(end, nil, TO, url) { (ses, act, frm, url, tit, dsc, tgs, pri, err0) in
+        srv.get(end, nil, TO, url) { (ses, act, frm, url, tit, dsc, tgs, pri, tim, seti, err0) in
             XCTAssertEqual("", err0)
             // XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm#minimalism", url.absoluteString)
             XCTAssertEqual("http://idlewords.com/talks/website_obesity.htm?foo=bar#minimalism", url.absoluteString)
@@ -346,5 +346,15 @@ class ShaarliHtmlClientTest: XCTestCase {
             }
         }
         waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    func testTime() {
+        let cli = ShaarliHtmlClient(AGENT)
+        let tz = TimeZone(secondsFromGMT:2*60*60)!
+
+        XCTAssertNil(cli.timeShaarli(tz, nil))
+        XCTAssertNil(cli.timeShaarli(tz, "bogus"))
+        XCTAssertNil(cli.timeShaarli(tz, ""))
+        XCTAssertEqual("2021-04-07 14:15:06 +0000", cli.timeShaarli(tz, "20210407_161506")?.description)
     }
 }

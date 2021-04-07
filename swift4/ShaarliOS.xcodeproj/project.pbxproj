@@ -20,6 +20,7 @@
 		1607F43722AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
 		1607F43822AD2D8B0036AC44 /* HtmlFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */; };
 		161FACA922AEBAED00C96B96 /* HtmlFormParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */; };
+		162268BF261DB7DD001F550F /* Scraper.js in Resources */ = {isa = PBXBuildFile; fileRef = 162268BE261DB7DD001F550F /* Scraper.js */; };
 		1622937A240DB3E400B2017F /* KeyValueObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 160593372402E0F9001DB69F /* KeyValueObserver.m */; };
 		1631278B2305F7AF0098B11C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168C71A722AD03EC007DF595 /* Main.storyboard */; };
 		164741522451B8550016EA9A /* SettingsVCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164741512451B8550016EA9A /* SettingsVCTest.swift */; };
@@ -103,6 +104,7 @@
 		1607F43422AD2C000036AC44 /* Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
 		1607F43522AD2D8B0036AC44 /* HtmlFormParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParser.swift; sourceTree = "<group>"; };
 		161FACA822AEBA9200C96B96 /* HtmlFormParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlFormParserTest.swift; sourceTree = "<group>"; };
+		162268BE261DB7DD001F550F /* Scraper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Scraper.js; sourceTree = "<group>"; };
 		164741512451B8550016EA9A /* SettingsVCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVCTest.swift; sourceTree = "<group>"; };
 		1688469D237065CF00130588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		168846A12370669300130588 /* Icon-1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024x1024.png"; sourceTree = SOURCE_ROOT; };
@@ -250,6 +252,7 @@
 				16F5C932240D53F7001B75D4 /* Share.entitlements */,
 				16F5C92A240D5395001B75D4 /* Info.plist */,
 				16F5C925240D5395001B75D4 /* ShareVC.swift */,
+				162268BE261DB7DD001F550F /* Scraper.js */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				162268BF261DB7DD001F550F /* Scraper.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

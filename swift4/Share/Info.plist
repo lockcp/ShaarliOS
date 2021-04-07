@@ -31,6 +31,8 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
+			<key>NSExtensionJavaScriptPreprocessingFile</key>
+			<string>Scraper</string>
 			<key>NSExtensionActivationRule</key>
 			<string>SUBQUERY(extensionItems, $extensionItem, 
 	SUBQUERY($extensionItem.attachments, $attachment, 
