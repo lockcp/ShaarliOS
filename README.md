@@ -25,7 +25,7 @@ or
 
 ## Compatibility
 
-> !! future verions (1.4+) shall use an API, see https://mro.name/ShaarliO/api
+> !! future verions (1.5+) shall use an API, see https://mro.name/ShaarliO/api
 
 All
 [proper Shaarli versions](https://travis-ci.org/mro/Shaarli-API-test), both
