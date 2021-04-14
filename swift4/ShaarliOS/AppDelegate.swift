@@ -33,9 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         UINavigationBar.appearance().barTintColor = .darkGray
-        UINavigationBar.appearance().tintColor = green
-        // UIBarButtonItem.appearance().tintColor = green
-        UIButton.appearance().tintColor = green
+        UINavigationBar.appearance().tintColor = ShaarliM.buttonColor
+        // UIBarButtonItem.appearance().tintColor = ShaarliM.buttonColor
+        UIButton.appearance().tintColor = ShaarliM.buttonColor
+        UILabel.appearance(whenContainedInInstancesOf: [SettingsVC.self]).textColor = ShaarliM.labelColor
 
         let info = Bundle.main.infoDictionary ?? [:]
         assert(BUNDLE_ID == info["CFBundleIdentifier"] as? String, "CFBundleIdentifier")

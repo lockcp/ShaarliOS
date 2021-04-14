@@ -150,6 +150,10 @@ class MainVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         lblVersion.text = ad.semver
         lblName.text = BUNDLE_NAME
 
+        [txtTitle].forEach {
+            $0.setValue($0.textColor?.withAlphaComponent(0.4), forKeyPath:"placeholderLabel.textColor")
+        }
+
         view.addSubview(spiPost)
         spiPost.frame = view.bounds
         // view.addConstraint(NSLayoutConstraint(item:view, attribute:.centerX, relatedBy:.equal, toItem:spiPost, attribute:.centerX, multiplier:1.0, constant:0))

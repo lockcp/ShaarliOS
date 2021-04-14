@@ -169,7 +169,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
             return
         }
 
-        lblTitle.textColor      = txtUserName.textColor
+        lblTitle.textColor      = ShaarliM.labelColor
         lblTitle.text           = b.title;
         txtBasicUid.text        = nil
         txtBasicPwd.text        = nil
@@ -207,7 +207,7 @@ class SettingsVC: UITableViewController, UITextFieldDelegate, WKNavigationDelega
     @IBAction func actionSignIn(_ sender: Any) {
         print("actionSignIn \(type(of: self))")
 
-        lblTitle.textColor = txtUserName.textColor
+        lblTitle.textColor = ShaarliM.labelColor
         lblTitle.text = NSLocalizedString("", comment:"SettingsVC")// … probing server …
         spiLogin.startAnimating()
 
