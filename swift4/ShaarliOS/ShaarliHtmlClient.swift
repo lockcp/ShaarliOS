@@ -164,18 +164,26 @@ private let KEY_FORM_PRIDE = "privateLinkByDefault"
 private let KEY_FORM_CONT = "continent"
 private let KEY_FORM_CITY = "city"
 
-// Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
-// https://stackoverflow.com/a/50116064
-func formString(_ form: [URLQueryItem]) -> String {
-    var uc = URLComponents()
-    uc.queryItems = form
-    return uc.percentEncodedQuery!
-}
+// unreserved https://www.ietf.org/rfc/rfc2396.txt
+private let rfc2396_unreserved = [
+    "abcdefghijklmnopqrstuvwxyz",
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "0123456789",
+    "-_.!~*'()"
+].reduce(CharacterSet(), { $0.union(CharacterSet.init(charactersIn:$1)) })
 
+// https://www.w3.org/TR/2009/REC-xforms-20091020/#serialize-urlencode
+// curl encodes some more (all but alnum?), but I go with the standard.
+//
+// obsoletes: Not fully compliant https://useyourloaf.com/blog/how-to-percent-encode-a-url-string/
+// and https://stackoverflow.com/a/50116064
 func formData(_ form:HtmlFormDict) -> Data {
-    let qi = form.map { URLQueryItem(name:$0, value:$1) }
-    let str = formString(qi)
-    return str.data(using: .ascii)!
+    func rfc2396(_ stst : String?) -> String {
+        return stst?.addingPercentEncoding(withAllowedCharacters:rfc2396_unreserved) ?? ""
+    }
+    return form
+        .reduce("") { "\($0)\($0 == "" ? "" : "&")\(rfc2396($1.key))=\(rfc2396($1.value))" }
+        .data(using:.ascii)!
 }
 
 func encoding(name:String?) -> String.Encoding {

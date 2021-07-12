@@ -86,15 +86,6 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual("Basic ZGVtTzpkZW1PZGVtT2RlbU8=", httpBasic(URLCredential(user:"demO", password:"demOdemOdemO", persistence:.forSession)))
     }
 
-    func testFormString() {
-        let a = [
-            URLQueryItem(name: "1", value: "a&b"),
-            URLQueryItem(name: "2=2", value: "c=c"),
-            URLQueryItem(name: "3", value: "d\nd")
-        ]
-        XCTAssertEqual("1=a%26b&2%3D2=c%3Dc&3=d%0Ad", formString(a))
-    }
-
     func testFormData() {
         XCTAssertEqual("1=a%26b", String(data: formData(["1":"a&b"]), encoding: .ascii))
         XCTAssertEqual("2%3D2=c%3Dc", String(data: formData(["2=2":"c=c"]), encoding: .ascii))
@@ -103,6 +94,17 @@ class ShaarliHtmlClientTest: XCTestCase {
         var frm = ["3":"d\nd", LF_PRI:"on"]
         frm[LF_PRI] = nil
         XCTAssertEqual("3=d%0Ad", String(data: formData(frm), encoding: .ascii))
+    }
+
+    func testFormDataIssue59() {
+        let pwd = ":8-$;(B%Z_rM]]?i?p{'+]1|xQk008]$,L}\\z2HxTB^%YpEl"
+        let pw1 = ":8-$;(B%Z_rM]]?i?p{\'+]1|xQk008]$,L}\\z2HxTB^%YpEl"
+        XCTAssertEqual(pw1, pwd, "literal escaping")
+        // $ curl --trace-ascii - --data-urlencode password=':8-$;(B%Z_rM]]?i?p{\'+]1|xQk008]$,L}\\z2HxTB^%YpEl' https://demo.mro.name/
+        let pwcurl = "%3A8-%24%3B%28B%25Z_rM%5D%5D%3Fi%3Fp%7B%27%2B%5D1%7CxQk008%5D%24%2CL%7D%5Cz2HxTB%5E%25YpEl"
+        let pwok__ = "%3A8-%24%3B(B%25Z_rM%5D%5D%3Fi%3Fp%7B\'%2B%5D1%7CxQk008%5D%24%2CL%7D%5Cz2HxTB%5E%25YpEl"
+
+        XCTAssertEqual("password=\(pwok__)", String(data: formData(["password":pwd]), encoding: .ascii))
     }
 
     func testEncoding() {
@@ -292,7 +294,7 @@ class ShaarliHtmlClientTest: XCTestCase {
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.4/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.10.2/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name:8443/shaarli-v0.10.2/")! // credentials are public
-        let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b-basic/")! // credentials are public
+        let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarli-v0.41b/")! // credentials are public
         // let end = URL(string:"https://demo:demodemodemo@demo.mro.name/shaarligo")! // credentials are public
         let url = URL(string:"https://shaarli.readthedocs.io")!
 
@@ -302,7 +304,7 @@ class ShaarliHtmlClientTest: XCTestCase {
 
         let srv = ShaarliHtmlClient(AGENT)
         srv.get(end, cre, TO, url) { (_, act, frm, url, tit, dsc, tgs, pri, tim, seti, err) in
-            XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b-basic/?post=https%3A%2F%2Fshaarli.readthedocs.io", act.absoluteString)
+            XCTAssertEqual("https://demo.mro.name/shaarli-v0.41b/?post=https%3A%2F%2Fshaarli.readthedocs.io", act.absoluteString)
             XCTAssertEqual("https://shaarli.readthedocs.io", url.absoluteString)
             XCTAssertEqual("", tit)
             XCTAssertEqual([], tgs)
