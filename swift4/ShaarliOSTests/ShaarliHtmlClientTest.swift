@@ -102,9 +102,8 @@ class ShaarliHtmlClientTest: XCTestCase {
         XCTAssertEqual(pw1, pwd, "literal escaping")
         // $ curl --trace-ascii - --data-urlencode password=':8-$;(B%Z_rM]]?i?p{\'+]1|xQk008]$,L}\\z2HxTB^%YpEl' https://demo.mro.name/
         let pwcurl = "%3A8-%24%3B%28B%25Z_rM%5D%5D%3Fi%3Fp%7B%27%2B%5D1%7CxQk008%5D%24%2CL%7D%5Cz2HxTB%5E%25YpEl"
-        let pwok__ = "%3A8-%24%3B(B%25Z_rM%5D%5D%3Fi%3Fp%7B\'%2B%5D1%7CxQk008%5D%24%2CL%7D%5Cz2HxTB%5E%25YpEl"
 
-        XCTAssertEqual("password=\(pwok__)", String(data: formData(["password":pwd]), encoding: .ascii))
+        XCTAssertEqual("password=\(pwcurl)", String(data: formData(["password":pwd]), encoding: .ascii))
     }
 
     func testEncoding() {
