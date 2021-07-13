@@ -3,7 +3,7 @@
 //  SettingsVCTest
 //
 //  Created by Marcus Rohrmoser on 23.04.20.
-//  Copyright © 2020-2020 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
+//  Copyright © 2020-2021 Marcus Rohrmoser mobile Software http://mro.name/me. All rights reserved.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
