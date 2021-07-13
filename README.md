@@ -4,17 +4,16 @@
 Share links with ease from every iOS app.
 
 ![Icon](shaarli-petal.svg)
-[![App Store Badge](appstore/Download_on_the_App_Store_Badge_US-UK_135x40.svg)](https://itunes.apple.com/jp/app/ShaarliOS/id1027441388?mt=8)
-[![Build Status](https://travis-ci.org/mro/ShaarliOS.svg?branch=master)](https://travis-ci.org/mro/ShaarliOS)
+[![App Store Badge](appstore/Download_on_the_App_Store_Badge_US-UK_135x40.svg)](https://itunes.apple.com/us/app/ShaarliOS/id1027441388?mt=8)
 
-Please [rate the App](https://apps.apple.com/it/app/shaarlios/id1027441388?mt=8&action=write-review) – whether you like it or not.
+Please [rate the App ⭐️](https://apps.apple.com/us/app/shaarlios/id1027441388?mt=8&action=write-review) – whether you like it or not. Each rating is valuable.
 
 ## Support
 
 If you encounter a bug, please
-[file an issue](https://github.com/mro/ShaarliOS/issues/new?&body=Thank%20you%20for%20the%20report,%20please%20add%0a%0a-%20screenshot%20showing%20the%20bug,%0a-%20App%20version,%0a-%20Shaarli%20server%20version.)
+[file an issue 🐞](https://github.com/mro/ShaarliOS/issues/new?&body=Thank%20you%20for%20the%20report,%20please%20add%0a%0a-%20screenshot%20showing%20the%20bug,%0a-%20App%20version,%0a-%20Shaarli%20server%20version.)
 or
-[send me an email](mailto:shaarlios-bug@mro.name?subject=[ShaarliOS]%20Bugreport&body=Thank%20you%20for%20the%20report,%20please%20add%0a%0a-%20screenshot%20showing%20the%20bug,%0a-%20App%20version,%0a-%20Shaarli%20server%20version.).
+[send me an email 📧](mailto:shaarlios-bug@mro.name?subject=[ShaarliOS]%20Bugreport&body=Thank%20you%20for%20the%20report,%20please%20add%0a%0a-%20screenshot%20showing%20the%20bug,%0a-%20App%20version,%0a-%20Shaarli%20server%20version.).
 
 ## Screenshots
 
@@ -63,9 +62,9 @@ except the material used and listed above, I'm happy to thank
 
 When getting the App from the App Store, the terms and conditions of Apple apply https://www.apple.com/de/legal/privacy/
 
-The terms of the server you post to also apply.
+When posting, the terms of your own server (the one you post to) also apply.
 
-Other than that there's no data collection.
+The App itself collects no data.
 
 ## Design Goals
 
@@ -77,4 +76,3 @@ Other than that there's no data collection.
 | Efficiency      |           |      |    ×   |            |
 | Changeability   |           |  ×   |        |            |
 | Portability     |           |      |        |      ×     |
-
