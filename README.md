@@ -17,10 +17,7 @@ or
 
 ## Screenshots
 
-![iPhone 4: Note](appstore/screenshots/en-US/1_iphone35_note.png#x200)
-![iPhone 4: Share Settings](appstore/screenshots/en-US/2_iphone35_share_sheet.png#x200)
-![iPhone 4: Share](appstore/screenshots/en-US/3_iphone35_share.png#x200)
-![iPhad 2: Note](appstore/screenshots/en-US/1_ipad_note.png#x200)
+<img title="iPhone 4: Note" src="appstore/screenshots/en-US/1_iphone35_note.png" width="200px"/> <img title="iPhone 4: Share Settings" src="appstore/screenshots/en-US/2_iphone35_share_sheet.png" width="200px"/> <img title="iPhone 4: Share" src="appstore/screenshots/en-US/3_iphone35_share.png" width="200px"/> <img title="iPad 2: Note" src="appstore/screenshots/en-US/1_ipad_note.png" width="400px"/>
 
 ## Compatibility
 
